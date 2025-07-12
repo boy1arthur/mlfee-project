@@ -79,11 +79,13 @@
     <nav class="side-nav fixed right-0 top-0 w-64 h-full bg-gray-800/90 backdrop-blur-lg border-l-2 border-gray-700 z-[1000] shadow-2xl transition-transform duration-300 ease-in-out translate-x-full">
         <h3 class="text-center text-xl font-bold text-yellow-400 mt-16 mb-8">메뉴</h3>
         <a href="/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">홈</a>
-        <a href="https://mlfee.vercel.app/updates" target="_blank" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">업데이트</a>
+        <!-- "업데이트"와 "문의" 버튼을 사이드 메뉴로 이동 -->
+        <a href="#" id="openNoticeModalBtn" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">업데이트</a>
         <a href="/calc/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">수수료 계산기</a>
         <a href="/timer/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">리저 타이머</a>
-        <a href="https://mlfee.vercel.app/guide" target="_blank" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">설명서</a>
-        <a href="https://mlfee.vercel.app/contact" target="_blank" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">문의</a>
+        <!-- 설명서 링크를 YouTube 링크로 변경 -->
+        <a href="https://www.youtube.com/embed/aZr12ddzMSA" target="_blank" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">설명서</a>
+        <a href="#" id="openContactModalBtn" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">문의</a>
     </nav>
     
     <div class="main-content transition-all duration-300 ease-in-out">
@@ -103,17 +105,10 @@
                 <header class="text-center mb-8">
                     <h1 class="text-3xl sm:text-4xl font-black gradient-text">💰 메랜 계산기, 분배 시간 줄이고 사냥 가세요!</h1>
                     <div class="mt-4 flex justify-center items-center space-x-4 md:space-x-6 text-base">
-                        <button id="openNoticeModalBtn" class="text-yellow-400 hover:text-yellow-300 transition duration-300 font-semibold flex items-center space-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>
-                            <span>업데이트</span>
-                        </button>
+                        <!-- "업데이트"와 "문의" 버튼 제거 -->
                         <button id="openVideoModalBtn" class="text-yellow-400 hover:text-yellow-300 transition duration-300 font-semibold flex items-center space-x-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>
                             <span>사용법</span>
-                        </button>
-                        <button id="openContactModalBtn" class="text-yellow-400 hover:text-yellow-300 transition duration-300 font-semibold flex items-center space-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
-                            <span>문의</span>
                         </button>
                     </div>
                 </header>
@@ -194,7 +189,7 @@
         <div class="bg-gray-800/80 backdrop-blur-lg rounded-lg shadow-xl w-full max-w-3xl relative border border-gray-700">
             <button id="closeVideoModalBtn" class="absolute -top-2 -right-2 text-white bg-red-500 rounded-full w-8 h-8 flex items-center justify-center text-2xl font-bold hover:bg-red-600 transition">&times;</button>
             <div class="aspect-w-16 aspect-h-9">
-                <iframe id="youtubePlayer" src="https://youtu.be/aZr12ddzMSA?si=pRlkztl-EzhBBqp0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full rounded-lg"></iframe>
+                <iframe id="youtubePlayer" src="https://www.youtube.com/embed/aZr12ddzMSA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full rounded-lg"></iframe>
             </div>
         </div>
     </div>
@@ -214,6 +209,11 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M12.01,2C6.48,2,2,6.04,2,11.05c0,3.33,1.97,6.25,4.8,7.74L6,22l3.42-2.35C10.43,19.88,11.21,20,12.01,20c5.52,0,10-4.04,10-8.95S17.53,2,12.01,2z"/></svg>
                     카카오톡 오픈채팅 문의
                 </a>
+                <!-- 디스코드 링크 업데이트 -->
+                <a href="https://discord.com/users/930037107823636540" target="_blank" class="w-full flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    디스코드 프로필 문의
+                </a>
             </div>
         </div>
     </div>
@@ -222,14 +222,16 @@
             <button id="closeNoticeModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">&times;</button>
             <h3 class="text-2xl font-bold text-yellow-400 border-b border-gray-600 pb-3 mb-4">📢 업데이트 소식</h3>
             <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-4">
+                <!-- 기존 업데이트 내용 -->
                 <div>
                     <p class="font-bold text-lg text-green-400">[v2.2] 택배 분배 기능 개선</p>
                     <p class="text-base text-gray-300 ml-2">- 택배 거래 시, '본인 포함' 여부를 선택하여 택배비와 실제 분배 인원(N 또는 N-1)이 연동되어 정확하게 계산되도록 수정했습니다.</p>
                 </div>
+                <!-- 추가된 레이드 크로니클 정보 -->
                 <div>
-                    <p class="font-bold text-lg text-green-400">[v2.1] 상세 비교 기능 개선</p>
-                    <p class="text-base text-gray-300 ml-2">- '방식별 상세 비교' 표에서 각 분할 방식의 상세 조합과 수수료율(%)을 모두 보여주도록 개선했습니다.</p>
-                    <p class="text-base text-gray-300 ml-2">- 🥇(가장 빠른 방법)과 🥈(가장 알뜰한 방법) 아이콘을 도입하여 최적의 전략을 쉽게 찾을 수 있도록 했습니다.</p>
+                    <p class="font-bold text-lg text-blue-400">[New] 레이드 크로니클 (비숍 리저 타이머) 추가</p>
+                    <p class="text-base text-gray-300 ml-2">- 자쿰, 혼테일 등 레이드 도우미로 리저 타이머를 추가했습니다.</p>
+                    <p class="text-base text-gray-300 ml-2">- 리저 타이머, 레이드 경과 시간, 리저 권장, 예상 시간을 제공합니다.</p>
                 </div>
             </div>
         </div>
@@ -260,7 +262,7 @@
             const videoModal = document.getElementById('videoModal');
             const closeVideoModalBtn = document.getElementById('closeVideoModalBtn');
             const youtubePlayer = document.getElementById('youtubePlayer');
-            const originalVideoSrc = youtubePlayer.src;
+            const originalVideoSrc = "https://www.youtube.com/embed/aZr12ddzMSA"; 
             const openContactModalBtn = document.getElementById('openContactModalBtn');
             const contactModal = document.getElementById('contactModal');
             const closeContactModalBtn = document.getElementById('closeContactModalBtn');
@@ -588,4 +590,4 @@
         });
     </script>
 </body>
-</ht
+</html>
