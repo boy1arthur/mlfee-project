@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLFEE(메피) 허브 | 메이플랜드 필수 도구</title>
+    <meta name="description" content="원정, 더 이상 어렵지 않아요! MLFEE(메피)에서 수수료 계산기와 리저렉션 타이머 등 다양한 편의 도구를 만나보세요.">
+    <meta name="keywords" content="메이플랜드, 메랜 수수료 계산기, 리저렉션 타이머, 원정대, 메피, MLFEE">
+    <meta property="og:title" content="MLFEE(메피) 메이플랜드 필수 도구">
+    <meta property="og:description" content="자쿰, 혼테일 원정을 위한 필수 도구! 수수료 계산과 리저 타이머, 이제 더 쉬워집니다.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet" />
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615"
+     crossorigin="anonymous"></script>
+     
+    <style>
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            background-color: #0a0e1a;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+        .card-hover { 
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out; 
+        }
+        .card-hover:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 0 15px rgba(251, 191, 36, 0.2);
+        }
+        .tool-card:hover {
+            border-color: rgba(234, 179, 8, 0.5);
+        }
+        
+        /* 햄버거 메뉴 아이콘 스타일 */
+        .hamburger-icon span {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(2) {
+            opacity: 0;
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+        
+        .shine-effect {
+            position: relative;
+            background: linear-gradient(to right, #FBBF24, #F59E0B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .shine-effect::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            background-size: 200% 100%;
+            animation: shine 5s linear infinite;
+        }
+        @keyframes shine {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        .title-container {
+            position: relative;
+            display: inline-block;
+            padding: 1rem 0;
+        }
+        /* 구분선 색상 수정 */
+        .title-container::before, .title-container::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 500px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+        }
+        .title-container::before { top: 0; }
+        .title-container::after { bottom: 0; }
+
+        .cta-button-wrapper {
+            position: relative;
+            display: inline-block;
+            padding: 10px;
+        }
+        .cta-button-wrapper::before, .cta-button-wrapper::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-style: solid;
+            border-color: rgba(251, 191, 36, 0.7);
+            transition: all 0.3s ease;
+        }
+        .cta-button-wrapper::before {
+            top: 0;
+            left: 0;
+            border-width: 2px 0 0 2px;
+        }
+        .cta-button-wrapper::after {
+            bottom: 0;
+            right: 0;
+            border-width: 0 2px 2px 0;
+        }
+        .cta-button-wrapper:hover::before, .cta-button-wrapper:hover::after {
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+        }
+
+        .aspect-w-16 { position: relative; padding-bottom: 56.25%; }
+        .aspect-w-16 > * { position: absolute; height: 100%; width: 100%; top: 0; right: 0; bottom: 0; left: 0; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white antialiased">
+    
+    <div class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
+        <div class="hamburger-icon space-y-1.5">
+            <span class="block w-6 h-0.5 bg-white"></span>
+            <span class="block w-6 h-0.5 bg-white"></span>
+            <span class="block w-6 h-0.5 bg-white"></span>
+        </div>
+    </div>
+
+    <nav class="side-nav fixed right-0 top-0 w-64 h-full bg-gray-800/90 backdrop-blur-lg border-l-2 border-gray-700 z-[1000] shadow-2xl transition-transform duration-300 ease-in-out translate-x-full">
+        <h3 class="text-center text-xl font-bold text-yellow-400 mt-16 mb-8">메뉴</h3>
+        <a href="/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">홈</a>
+        <a href="https://mlfee.vercel.app/updates" target="_blank" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">업데이트</a>
+        <a href="/calc/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">수수료 계산기</a>
+        <a href="/timer/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">리저 타이머</a>
+        <a href="#" id="guideLink" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">설명서</a>
+        <a href="#" id="contactLink" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">문의</a>
+    </nav>
+
+    <div class="main-content transition-all duration-300 ease-in-out">
+        <header class="text-center py-12">
+            <div class="container mx-auto px-4">
+                <a href="/" class="inline-block text-3xl sm:text-4xl font-bold text-yellow-400">
+                    <span class="text-red-500">MLFEE(메피)</span> 메이플랜드 필수도구
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero text-center py-16 sm:py-24">
+                <div class="container mx-auto px-4">
+                    <div class="title-container">
+                        <h1 class="text-4xl sm:text-6xl font-black leading-tight shine-effect">
+                            원클릭으로 수작 분배하고<br>생명의 시간을 지켜라!
+                        </h1>
+                    </div>
+                    <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto my-10">
+                        레이드, 더 이상 어렵지 않아요!<br>스마트한 메피 유틸과 함께라면 당신도 최고의 원정대원!
+                    </p>
+                    <div class="cta-button-wrapper">
+                        <a href="#tool-showcase" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-4 px-8 rounded-lg text-xl transition duration-300 inline-block shadow-lg hover:shadow-yellow-500/50">
+                            도구함 열어보기
+                        </a>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="ad-container min-h-[90px] flex justify-center items-center my-12 mx-4">
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-client="ca-pub-8602495420447615"
+                     data-ad-slot="1234567890"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            </div>
+
+            <section class="tool-showcase py-20" id="tool-showcase">
+                <div class="container mx-auto px-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <a href="/calc/" class="tool-link block">
+                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
+                                <div class="visual-content text-red-500 mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h3m-3-7h3m-6.128 9.872A3 3 0 006.872 21h10.256a3 3 0 002.872-3.128V7.128A3 3 0 0017.128 4H6.872a3 3 0 00-2.872 3.128v10.744z" /></svg>
+                                </div>
+                                <h2 class="text-2xl font-bold mb-4 text-red-400">메랜 수수료 계산기</h2>
+                                <p class="text-gray-400">메소 수작 계산부터, N인 파티 분배까지 원클릭 계산! 택배기능까지 포함!</p>
+                            </div>
+                        </a>
+
+                        <a href="/timer/" class="tool-link block">
+                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
+                                <div class="visual-content text-blue-500 mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                </div>
+                                <h2 class="text-2xl font-bold mb-4 text-blue-400">비숍 리저 타이머</h2>
+                                <p class="text-gray-400">제한시간 15분! 비숍의 리저 쿨타임을 정확히 체크해서, 쿨타임 관리와 사이클 경고까지 완벽 대응. 최고의 리저 서포트 타이머!</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center py-10 mt-10 border-t border-gray-800">
+            <div class="container mx-auto px-4">
+                <p class="text-gray-500">소년아서 제작</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Modals Start -->
+    <div id="guideModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-3xl relative">
+            <button id="closeGuideModalBtn" class="absolute -top-3 -right-3 text-white bg-red-500 rounded-full w-9 h-9 flex items-center justify-center text-2xl font-bold hover:bg-red-600 transition">&times;</button>
+            <div class="aspect-w-16">
+                <iframe id="youtubePlayer" src="https://www.youtube.com/embed/JyAnBHyeN4g" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full rounded-lg"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-sm text-center p-8 relative border border-gray-700">
+            <button id="closeContactModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
+            <h3 class="text-2xl font-bold text-yellow-400">문의하기</h3>
+            <div class="space-y-4 mt-6">
+                <a href="mailto:esgroup129@gmail.com" class="w-full flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
+                    이메일
+                </a>
+                <a href="https://open.kakao.com/o/s4YH6WFh" target="_blank" class="w-full flex items-center justify-center bg-[#FEE500] hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-lg transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M12.01,2C6.48,2,2,6.04,2,11.05c0,3.33,1.97,6.25,4.8,7.74L6,22l3.42-2.35C10.43,19.88,11.21,20,12.01,20c5.52,0,10-4.04,10-8.95S17.53,2,12.01,2z"/></svg>
+                    카카오톡 오픈채팅
+                </a>
+                <a href="https://discord.com/users/930037107823636540" target="_blank" class="w-full flex items-center justify-center bg-[#5865F2] hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.037c-1.02 3.626-1.222 7.79- .284 11.654a.052.052 0 0 0 .016.053c.087.063.18.129.27.195a.05.05 0 0 0 .051.007c2.175-1.566 3.971-4.42 3.971-4.42s.709.64 2.274.64c1.566 0 2.274-.64 2.274-.64s1.796 2.854 3.97 4.42a.05.05 0 0 0 .051-.007c.09-.066.183-.132.27-.195a.052.052 0 0 0 .016-.053c.938-3.864.736-8.028-.284-11.654a.041.041 0 0 0-.021-.037zM8.02 10.842c-.837 0-1.518-.682-1.518-1.518s.681-1.518 1.518-1.518c.837 0 1.518.682 1.518 1.518s-.681 1.518-1.518 1.518zm3.515 0c-.837 0-1.518-.682-1.518-1.518s.681-1.518 1.518-1.518c.837 0 1.518.682 1.518 1.518s-.681 1.518-1.518 1.518z"/>
+                    </svg>
+                    디스코드
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Modals End -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.querySelector('.nav-toggle');
+            const sideNav = document.querySelector('.side-nav');
+            const mainContent = document.querySelector('.main-content');
+
+            navToggle.addEventListener('click', () => {
+                sideNav.classList.toggle('translate-x-full');
+                navToggle.classList.toggle('active');
+            });
+
+            const guideLink = document.getElementById('guideLink');
+            const contactLink = document.getElementById('contactLink');
+            const guideModal = document.getElementById('guideModal');
+            const contactModal = document.getElementById('contactModal');
+            const closeGuideModalBtn = document.getElementById('closeGuideModalBtn');
+            const closeContactModalBtn = document.getElementById('closeContactModalBtn');
+            const youtubePlayer = document.getElementById('youtubePlayer');
+            const originalVideoSrc = youtubePlayer.src;
+
+            function openModal(modal) { modal.classList.remove('hidden'); }
+            function closeModal(modal) {
+                modal.classList.add('hidden');
+                if (modal === guideModal) {
+                    youtubePlayer.src = '';
+                    youtubePlayer.src = originalVideoSrc;
+                }
+            }
+
+            guideLink.addEventListener('click', (e) => { e.preventDefault(); openModal(guideModal); });
+            contactLink.addEventListener('click', (e) => { e.preventDefault(); openModal(contactModal); });
+            closeGuideModalBtn.addEventListener('click', () => closeModal(guideModal));
+            closeContactModalBtn.addEventListener('click', () => closeModal(contactModal));
+            guideModal.addEventListener('click', (e) => { if (e.target === guideModal) closeModal(guideModal); });
+            contactModal.addEventListener('click', (e) => { if (e.target === contactModal) closeModal(contactModal); });
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth <= 768) {
+                    mainContent.style.marginRight = '0';
+                } else {
+                    mainContent.style.marginRight = sideNav.classList.contains('translate-x-full') ? '0' : '256px';
+                }
+            });
+            
+            try {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {
+                console.error('AdSense push error:', e);
+            }
+        });
+    </script>
+</body>
+</html>
