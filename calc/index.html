@@ -267,6 +267,27 @@
             const openNoticeModalBtn = document.getElementById('openNoticeModalBtn');
             const noticeModal = document.getElementById('noticeModal');
             const closeNoticeModalBtn = document.getElementById('closeNoticeModalBtn');
+            const navToggle = document.querySelector('.nav-toggle');
+            const sideNav = document.querySelector('.side-nav');
+            const mainContent = document.querySelector('.main-content');
+
+            navToggle.addEventListener('click', () => {
+                sideNav.classList.toggle('translate-x-full');
+                navToggle.classList.toggle('active');
+                if (window.innerWidth > 768) {
+                    mainContent.style.marginRight = sideNav.classList.contains('translate-x-full') ? '0' : '256px';
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth <= 768) {
+                    mainContent.style.marginRight = '0';
+                } else {
+                    if (!sideNav.classList.contains('translate-x-full')) {
+                        mainContent.style.marginRight = '256px';
+                    }
+                }
+            });
 
             const formatNumber = (num) => num.toLocaleString('ko-KR');
             const parseNumber = (str) => Number(String(str).replace(/,/g, ''));
@@ -567,4 +588,4 @@
         });
     </script>
 </body>
-</html>
+</ht
