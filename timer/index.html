@@ -65,66 +65,100 @@
         .modal-content { @apply bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-md text-center border border-slate-700; animation: slideIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Navigation Styles */
+        .hamburger-icon span {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(2) {
+            opacity: 0;
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-200 flex items-center justify-center min-h-screen p-4">
 
-    <div class="w-full max-w-4xl mx-auto">
-        <div class="bg-gray-800/50 rounded-2xl shadow-2xl p-6 relative backdrop-blur-sm border border-slate-700">
-            <div class="absolute top-4 right-4 flex gap-2">
-                <button id="muteBtn" class="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-semibold py-1 px-3 rounded-full transition-colors">소리 끄기</button>
-                <button id="resetBtn" class="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-semibold py-1 px-3 rounded-full transition-colors">초기화</button>
-            </div>
-            
-            <div class="text-center mb-6">
-                <h1 class="text-5xl font-black gradient-text tracking-wider">레이드 크로니클</h1>
-                <div id="totalTime" class="mt-2">
-                    <span class="text-lg font-semibold text-slate-400">레이드 경과</span>
-                    <p class="text-4xl font-bold tracking-wider font-mono text-slate-200">00:00</p>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-t border-b border-slate-700 py-6">
-                <div class="text-center">
-                    <p class="text-base text-slate-400 mb-1">현재 시각 (KST)</p>
-                    <p id="kstTime" class="text-5xl font-bold tracking-wider font-mono text-teal-300">00:00:00</p>
-                </div>
-                <div class="space-y-4">
-                    <div id="resDeadlineDisplay" class="text-center cursor-pointer hidden" title="클릭하여 복사">
-                        <p class="text-base text-yellow-400 mb-1">리저 사용 권장 시각 (~1분 전)</p>
-                        <p id="resDeadlineTime" class="text-5xl font-bold tracking-wider font-mono text-yellow-300">00:00:00</p>
-                    </div>
-                    <div id="nextResDeadlineDisplay" class="text-center cursor-pointer hidden" title="클릭하여 복사">
-                        <p class="text-base text-slate-400 mb-1">다음 리저 예상 시각</p>
-                        <p id="nextResDeadlineTime" class="text-4xl font-bold tracking-wider font-mono text-slate-400">00:00:00</p>
-                    </div>
-                </div>
-            </div>
+    <div class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
+        <div class="hamburger-icon space-y-1.5">
+            <span class="block w-6 h-0.5 bg-white"></span>
+            <span class="block w-6 h-0.5 bg-white"></span>
+            <span class="block w-6 h-0.5 bg-white"></span>
+        </div>
+    </div>
 
-            <div id="control-panel" class="flex flex-col items-center justify-center min-h-[200px]"></div>
-            
-            <div id="resGaugeContainer" class="hidden pt-4 mt-4">
-                <div class="flex justify-between items-center mb-1">
-                    <span class="text-lg text-emerald-400 font-bold">리저렉션 유효 시간</span>
-                    <span id="resurrectionTime" class="text-2xl font-bold tracking-wider text-emerald-400 font-mono">--:--</span>
-                </div>
-                <div class="w-full bg-slate-700 rounded-full h-4 overflow-hidden">
-                    <div id="resGaugeBar" class="h-4 rounded-full transition-all duration-500"></div>
-                </div>
-            </div>
-            
-            <div id="briefing" class="mt-6 text-center text-slate-300 font-semibold h-6 text-lg"></div>
+    <nav class="side-nav fixed right-0 top-0 w-64 h-full bg-gray-800/90 backdrop-blur-lg border-l-2 border-gray-700 z-[1000] shadow-2xl transition-transform duration-300 ease-in-out translate-x-full">
+        <h3 class="text-center text-xl font-bold text-yellow-400 mt-16 mb-8">메뉴</h3>
+        <a href="/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">홈</a>
+        <a href="https://mlfee.vercel.app/updates" target="_blank" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">업데이트</a>
+        <a href="/calc/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">수수료 계산기</a>
+        <a href="/timer/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">리저 타이머</a>
+        <a href="#" id="guideLink" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">설명서</a>
+        <a href="#" id="contactLink" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">문의</a>
+    </nav>
 
-            <div id="bishopSection" class="hidden mt-8">
-                <div class="overflow-x-auto bg-slate-900/70 rounded-lg p-2">
-                    <table class="w-full text-left text-xl"><thead class="border-b border-slate-700"><tr class="text-base text-slate-400"><th class="p-3">순번</th><th class="p-3">비숍</th><th class="p-3">상태</th><th class="p-3">쿨타임</th><th class="p-3">사용 시각</th></tr></thead><tbody id="bishop-list"></tbody></table>
+    <div class="main-content transition-all duration-300 ease-in-out w-full">
+        <div class="w-full max-w-4xl mx-auto">
+            <div class="bg-gray-800/50 rounded-2xl shadow-2xl p-6 relative backdrop-blur-sm border border-slate-700">
+                <div class="absolute top-4 right-4 flex gap-2">
+                    <button id="muteBtn" class="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-semibold py-1 px-3 rounded-full transition-colors">소리 끄기</button>
+                    <button id="resetBtn" class="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-semibold py-1 px-3 rounded-full transition-colors">초기화</button>
                 </div>
-            </div>
-            
-            <div class="mt-8 bg-slate-900/70 rounded-lg">
-                <h2 class="p-4 font-bold text-lg text-slate-300 text-center border-b border-slate-700">이벤트 로그</h2>
-                <div id="eventLog" class="p-3 space-y-2 overflow-y-auto h-48 text-base">
-                    <!-- Log messages will be appended here -->
+                
+                <div class="text-center mb-6">
+                    <h1 class="text-5xl font-black gradient-text tracking-wider">레이드 크로니클</h1>
+                    <div id="totalTime" class="mt-2">
+                        <span class="text-lg font-semibold text-slate-400">레이드 경과</span>
+                        <p class="text-4xl font-bold tracking-wider font-mono text-slate-200">00:00</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-t border-b border-slate-700 py-6">
+                    <div class="text-center">
+                        <p class="text-base text-slate-400 mb-1">현재 시각 (KST)</p>
+                        <p id="kstTime" class="text-5xl font-bold tracking-wider font-mono text-teal-300">00:00:00</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div id="resDeadlineDisplay" class="text-center cursor-pointer hidden" title="클릭하여 복사">
+                            <p class="text-base text-yellow-400 mb-1">리저 사용 권장 시각 (~1분 전)</p>
+                            <p id="resDeadlineTime" class="text-5xl font-bold tracking-wider font-mono text-yellow-300">00:00:00</p>
+                        </div>
+                        <div id="nextResDeadlineDisplay" class="text-center cursor-pointer hidden" title="클릭하여 복사">
+                            <p class="text-base text-slate-400 mb-1">다음 리저 예상 시각</p>
+                            <p id="nextResDeadlineTime" class="text-4xl font-bold tracking-wider font-mono text-slate-400">00:00:00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="control-panel" class="flex flex-col items-center justify-center min-h-[200px]"></div>
+                
+                <div id="resGaugeContainer" class="hidden pt-4 mt-4">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-lg text-emerald-400 font-bold">리저렉션 유효 시간</span>
+                        <span id="resurrectionTime" class="text-2xl font-bold tracking-wider text-emerald-400 font-mono">--:--</span>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-4 overflow-hidden">
+                        <div id="resGaugeBar" class="h-4 rounded-full transition-all duration-500"></div>
+                    </div>
+                </div>
+                
+                <div id="briefing" class="mt-6 text-center text-slate-300 font-semibold h-6 text-lg"></div>
+
+                <div id="bishopSection" class="hidden mt-8">
+                    <div class="overflow-x-auto bg-slate-900/70 rounded-lg p-2">
+                        <table class="w-full text-left text-xl"><thead class="border-b border-slate-700"><tr class="text-base text-slate-400"><th class="p-3">순번</th><th class="p-3">비숍</th><th class="p-3">상태</th><th class="p-3">쿨타임</th><th class="p-3">사용 시각</th></tr></thead><tbody id="bishop-list"></tbody></table>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-slate-900/70 rounded-lg">
+                    <h2 class="p-4 font-bold text-lg text-slate-300 text-center border-b border-slate-700">이벤트 로그</h2>
+                    <div id="eventLog" class="p-3 space-y-2 overflow-y-auto h-48 text-base">
+                        <!-- Log messages will be appended here -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -132,7 +166,7 @@
 
     <div id="warningModal" class="modal-backdrop hidden">
         <div class="modal-content">
-            <h3 class="text-3xl font-bold text-amber-400 mb-4"⚠️ 주의: 사이클 경고</h3>
+            <h3 class="text-3xl font-bold text-amber-400 mb-4">⚠️ 주의: 사이클 경고</h3>
             <p id="warningText" class="text-slate-300 mb-8 text-lg"></p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <button id="confirmUseAnywayBtn" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full transition-colors">네, 사용합니다</button>
@@ -160,6 +194,9 @@
                 resGaugeBar: document.getElementById('resGaugeBar'), eventLog: document.getElementById('eventLog'),
                 resDeadlineDisplay: document.getElementById('resDeadlineDisplay'), resDeadlineTime: document.getElementById('resDeadlineTime'),
                 nextResDeadlineDisplay: document.getElementById('nextResDeadlineDisplay'), nextResDeadlineTime: document.getElementById('nextResDeadlineTime'),
+                navToggle: document.querySelector('.nav-toggle'),
+                sideNav: document.querySelector('.side-nav'),
+                mainContent: document.querySelector('.main-content'),
             };
             
             function speak(text, onEndCallback = null) {
@@ -217,19 +254,11 @@
                 
                 if (state === 'res-active') {
                     dom.resGaugeBar.style.width = `${(resSeconds / RES_DURATION) * 100}%`;
-                    
-                    // 게이지 색상 변경 로직
                     const gaugeClasses = dom.resGaugeBar.classList;
                     gaugeClasses.remove('bg-gradient-to-r', 'from-emerald-500', 'to-teal-600', 'from-yellow-500', 'to-orange-500', 'from-red-500', 'to-red-600');
-                    
-                    if (resSeconds <= 60) { // 1분 이하: 빨간색
-                        gaugeClasses.add('bg-gradient-to-r', 'from-red-500', 'to-red-600');
-                    } else if (resSeconds <= 300) { // 5분 이하: 주황색
-                        gaugeClasses.add('bg-gradient-to-r', 'from-yellow-500', 'to-orange-500');
-                    } else { // 5분 초과: 초록색
-                        gaugeClasses.add('bg-gradient-to-r', 'from-emerald-500', 'to-teal-600');
-                    }
-
+                    if (resSeconds <= 60) { gaugeClasses.add('bg-gradient-to-r', 'from-red-500', 'to-red-600'); } 
+                    else if (resSeconds <= 300) { gaugeClasses.add('bg-gradient-to-r', 'from-yellow-500', 'to-orange-500'); } 
+                    else { gaugeClasses.add('bg-gradient-to-r', 'from-emerald-500', 'to-teal-600'); }
                 } else {
                     dom.resDeadlineDisplay.classList.add('hidden');
                     dom.nextResDeadlineDisplay.classList.add('hidden');
@@ -273,26 +302,19 @@
                 bishops = [{ name: '비숍A', cooldown: 0, usedAt: null }, { name: '비숍B', cooldown: 0, usedAt: null }, { name: '비숍C', cooldown: 0, usedAt: null }];
                 currentBishopIndex = 0;
                 addLog('레이드가 시작되었습니다.', 'system');
-                
                 if (!timerInterval) timerInterval = setInterval(runTimers, 1000);
-                
                 speak('레이드 시작', () => {
                     if (state !== 'running') return; 
                     addLog('5초 후, 사망자 타이머가 자동으로 시작됩니다.', 'info');
                     speak('5초 후, 자동 시작');
                     autoDeathTimeoutId = setTimeout(handleDeath, 5000);
                 });
-                
                 render();
             }
 
             function handleDeath() {
-                if (autoDeathTimeoutId) {
-                    clearTimeout(autoDeathTimeoutId);
-                    autoDeathTimeoutId = null;
-                }
+                if (autoDeathTimeoutId) { clearTimeout(autoDeathTimeoutId); autoDeathTimeoutId = null; }
                 if (state !== 'running') return;
-
                 const timeSinceLastUse = totalSeconds - lastResUseTimestamp;
                 if (lastResUseTimestamp !== -1 && timeSinceLastUse < IDEAL_CYCLE_TIME) {
                     dom.warningText.textContent = `이전 리저렉션 사용 후 10분이 지나지 않았습니다. (남은 권장 시간: ${formatTime(IDEAL_CYCLE_TIME - timeSinceLastUse, false)}) 지금 사용하면 사이클이 꼬일 수 있습니다.`;
@@ -310,12 +332,10 @@
                 resSeconds = RES_DURATION;
                 currentDeadline = new Date(Date.now() + (RES_DURATION - 60) * 1000);
                 nextDeadline = new Date(currentDeadline.getTime() + 14 * 60 * 1000);
-                
                 dom.resDeadlineTime.textContent = formatClockTime(currentDeadline);
                 dom.nextResDeadlineTime.textContent = formatClockTime(nextDeadline);
                 dom.resDeadlineDisplay.classList.remove('hidden');
                 dom.nextResDeadlineDisplay.classList.remove('hidden');
-
                 addLog('사망자 발생. 타이머 시작.');
                 speak('사망, 리저 타이머 시작');
                 render();
@@ -323,22 +343,18 @@
 
             function handleUseResurrection() {
                 if (state !== 'res-active' || bishops[currentBishopIndex].cooldown > 0) return;
-                
                 const currentBishop = bishops[currentBishopIndex];
                 const deadlineMinutes = currentDeadline.getMinutes();
                 addLog(`${currentBishop.name} 리저 사용.`, 'success');
                 speak(`${currentBishop.name}, ${deadlineMinutes}분 리저 사용`);
-
                 state = 'running';
                 resSeconds = 0;
                 currentBishop.cooldown = BISHOP_COOLDOWN;
                 currentBishop.usedAt = formatClockTime(new Date());
                 lastResUseTimestamp = totalSeconds;
                 currentBishopIndex = (currentBishopIndex + 1) % bishops.length;
-                
                 autoDeathTimeoutId = setTimeout(handleDeath, 3000);
                 addLog('3초 후, 다음 사망자 타이머가 자동으로 시작됩니다.', 'info');
-
                 render();
             }
 
@@ -346,12 +362,10 @@
                 if (state !== 'initial' && !confirm("정말로 모든 진행 상황을 초기화하시겠습니까?")) return;
                 clearInterval(timerInterval);
                 if(autoDeathTimeoutId) clearTimeout(autoDeathTimeoutId);
-                timerInterval = null;
-                autoDeathTimeoutId = null;
+                timerInterval = null; autoDeathTimeoutId = null;
                 state = 'initial';
                 totalSeconds = 0; resSeconds = 0; bishops = []; lastResUseTimestamp = -1;
-                currentDeadline = null;
-                nextDeadline = null;
+                currentDeadline = null; nextDeadline = null;
                 dom.eventLog.innerHTML = '';
                 addLog('시스템이 초기화되었습니다.', 'system');
                 render();
@@ -360,11 +374,7 @@
             function handleCopy() {
                 if (!currentDeadline || !nextDeadline) return;
                 const resUsedCount = bishops.filter(b => b.usedAt !== null).length;
-                const currentResNumber = resUsedCount + 1;
-                const nextResNumber = currentResNumber + 1;
-                
-                const textToCopy = `[${currentResNumber}리저 ~${formatClockTime(currentDeadline)}] (다음 ${nextResNumber}리저 예상 ~${formatClockTime(nextDeadline)})`;
-                
+                const textToCopy = `[${resUsedCount + 1}리저 ~${formatClockTime(currentDeadline)}] (다음 ${resUsedCount + 2}리저 예상 ~${formatClockTime(nextDeadline)})`;
                 const textArea = document.createElement("textarea");
                 textArea.value = textToCopy;
                 document.body.appendChild(textArea);
@@ -387,7 +397,6 @@
                     if (targetId === 'deathBtn') handleDeath();
                     if (targetId === 'useResBtn') handleUseResurrection();
                 });
-                
                 dom.bishopList.addEventListener('blur', e => {
                     if (e.target.classList.contains('bishop-name')) {
                         const index = parseInt(e.target.dataset.index);
@@ -401,11 +410,9 @@
                         }
                     }
                 }, true);
-
                 dom.bishopList.addEventListener('keydown', e => {
                     if (e.target.classList.contains('bishop-name') && e.key === 'Enter') {
-                        e.preventDefault();
-                        e.target.blur();
+                        e.preventDefault(); e.target.blur();
                     }
                 });
             }
@@ -415,26 +422,34 @@
                 isMuted = !isMuted;
                 dom.muteBtn.textContent = isMuted ? '소리 켜기' : '소리 끄기';
                 const statusText = `음성 안내 ${isMuted ? '끄기' : '켜기'}`;
-                addLog(statusText);
-                speak(statusText);
+                addLog(statusText); speak(statusText);
             });
             dom.confirmUseBtn.addEventListener('click', forceActivateResurrection);
             dom.cancelUseBtn.addEventListener('click', () => dom.warningModal.classList.add('hidden'));
             dom.resDeadlineDisplay.addEventListener('click', handleCopy);
             dom.nextResDeadlineDisplay.addEventListener('click', handleCopy);
 
+            // Navigation Toggle
+            dom.navToggle.addEventListener('click', () => {
+                dom.sideNav.classList.toggle('translate-x-full');
+                dom.navToggle.classList.toggle('active');
+            });
+
             render();
             updateKstClock();
             setInterval(updateKstClock, 1000);
             addLog('레이드 크로니클이 준비되었습니다.', 'system');
             
-            // 애드센스 광고 로드
-            document.querySelectorAll('.adsbygoogle').forEach(() => {
-                try {
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                } catch (e) {
-                    console.error('AdSense push error:', e);
-                }
+            window.addEventListener('load', () => {
+                document.querySelectorAll('.adsbygoogle').forEach(ad => {
+                    if (ad.offsetWidth > 0) {
+                        try {
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        } catch (e) {
+                            console.error('AdSense push error:', e);
+                        }
+                    }
+                });
             });
         });
     </script>
