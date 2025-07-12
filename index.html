@@ -33,7 +33,6 @@
             border-color: rgba(234, 179, 8, 0.5);
         }
         
-        /* 햄버거 메뉴 아이콘 스타일 */
         .hamburger-icon span {
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
         }
@@ -75,7 +74,6 @@
             display: inline-block;
             padding: 1rem 0;
         }
-        /* 구분선 색상 수정 */
         .title-container::before, .title-container::after {
             content: '';
             position: absolute;
@@ -89,37 +87,36 @@
         .title-container::before { top: 0; }
         .title-container::after { bottom: 0; }
 
-        .cta-button-wrapper {
-            position: relative;
-            display: inline-block;
-            padding: 10px;
-        }
-        .cta-button-wrapper::before, .cta-button-wrapper::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-style: solid;
-            border-color: rgba(251, 191, 36, 0.7);
-            transition: all 0.3s ease;
-        }
-        .cta-button-wrapper::before {
-            top: 0;
-            left: 0;
-            border-width: 2px 0 0 2px;
-        }
-        .cta-button-wrapper::after {
-            bottom: 0;
-            right: 0;
-            border-width: 0 2px 2px 0;
-        }
-        .cta-button-wrapper:hover::before, .cta-button-wrapper:hover::after {
-            width: calc(100% - 20px);
-            height: calc(100% - 20px);
-        }
-
         .aspect-w-16 { position: relative; padding-bottom: 56.25%; }
         .aspect-w-16 > * { position: absolute; height: 100%; width: 100%; top: 0; right: 0; bottom: 0; left: 0; }
+        
+        #tool-showcase {
+            transition: opacity 0.5s ease, max-height 0.8s ease, transform 0.5s ease;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transform: translateY(2rem);
+        }
+        #tool-showcase.is-visible {
+            max-height: 1000px; 
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #tool-showcase .tool-link {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        #tool-showcase.is-visible .tool-link {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #tool-showcase.is-visible .tool-link:nth-child(1) {
+            transition-delay: 0.2s;
+        }
+        #tool-showcase.is-visible .tool-link:nth-child(2) {
+            transition-delay: 0.4s;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white antialiased">
@@ -162,8 +159,8 @@
                     <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto my-10">
                         레이드, 더 이상 어렵지 않아요!<br>스마트한 메피 유틸과 함께라면 당신도 최고의 원정대원!
                     </p>
-                    <div class="cta-button-wrapper">
-                        <a href="#tool-showcase" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-4 px-8 rounded-lg text-xl transition duration-300 inline-block shadow-lg hover:shadow-yellow-500/50">
+                    <div>
+                        <a href="#tool-showcase" id="openToolboxBtn" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-4 px-8 rounded-lg text-xl transition duration-300 inline-block shadow-lg hover:shadow-yellow-500/50">
                             도구함 열어보기
                         </a>
                     </div>
@@ -251,13 +248,24 @@
         document.addEventListener('DOMContentLoaded', () => {
             const navToggle = document.querySelector('.nav-toggle');
             const sideNav = document.querySelector('.side-nav');
-            const mainContent = document.querySelector('.main-content');
+            const openToolboxBtn = document.getElementById('openToolboxBtn');
+            const toolShowcase = document.getElementById('tool-showcase');
 
             navToggle.addEventListener('click', () => {
                 sideNav.classList.toggle('translate-x-full');
                 navToggle.classList.toggle('active');
             });
 
+            openToolboxBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toolShowcase.classList.remove('hidden');
+                setTimeout(() => {
+                    toolShowcase.classList.add('is-visible');
+                    toolShowcase.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 50);
+            });
+
+            // Modal Logic
             const guideLink = document.getElementById('guideLink');
             const contactLink = document.getElementById('contactLink');
             const guideModal = document.getElementById('guideModal');
@@ -284,18 +292,25 @@
             contactModal.addEventListener('click', (e) => { if (e.target === contactModal) closeModal(contactModal); });
 
             window.addEventListener('resize', () => {
+                const mainContent = document.querySelector('.main-content');
                 if (window.innerWidth <= 768) {
                     mainContent.style.marginRight = '0';
                 } else {
                     mainContent.style.marginRight = sideNav.classList.contains('translate-x-full') ? '0' : '256px';
                 }
             });
-            
-            try {
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            } catch (e) {
-                console.error('AdSense push error:', e);
-            }
+        });
+
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.adsbygoogle').forEach(ad => {
+                if (ad.offsetWidth > 0) {
+                    try {
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    } catch (e) {
+                        console.error('AdSense push error:', e);
+                    }
+                }
+            });
         });
     </script>
 </body>
