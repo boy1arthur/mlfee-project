@@ -1,1 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>레이드 크로니클 (UI 최종 개선)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Google AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615"
+     crossorigin="anonymous"></script>
 
+    <style>
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+            background-color: #0a0e1a;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+        
+        .main-control-btn {
+            @apply w-full max-w-lg text-6xl sm:text-8xl font-black py-10 sm:py-12 px-6 rounded-full shadow-lg border-4 transition-all duration-200 relative overflow-hidden;
+        }
+        .main-control-btn:not(:disabled):active { @apply transform scale-95 shadow-inner; }
+        .main-control-btn:disabled { @apply bg-slate-700 border-slate-600 text-slate-500 cursor-not-allowed opacity-70; }
+
+        /* Refined Button Styles */
+        .btn-start {
+            @apply bg-gradient-to-br from-cyan-500 to-teal-600 border-cyan-400/50 text-white;
+            animation: pulse-start 3s infinite ease-in-out;
+        }
+        
+        .btn-death {
+            @apply bg-gradient-to-br from-red-500 to-red-700 border-red-400/50 text-white;
+            animation: pulse-danger 1.8s infinite;
+        }
+        .btn-death:hover:not(:disabled) { animation-play-state: paused; }
+
+        .btn-res {
+            @apply bg-gradient-to-br from-teal-400 to-cyan-500 border-teal-300/50 text-white;
+            animation: pulse-success 1.5s infinite;
+        }
+        .btn-res:hover:not(:disabled) { animation-play-state: paused; }
+
+        /* Refined Animations */
+        @keyframes pulse-start {
+            0%, 100% { box-shadow: 0 0 20px rgba(22, 163, 165, 0.2), inset 0 2px 4px rgba(255,255,255,0.1); }
+            50% { box-shadow: 0 0 35px rgba(22, 163, 165, 0.4), inset 0 2px 4px rgba(255,255,255,0.1); }
+        }
+        @keyframes pulse-danger { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        @keyframes pulse-success { 0% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.5), 0 0 25px rgba(45, 212, 191, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(45, 212, 191, 0), 0 0 25px rgba(45, 212, 191, 0.4); } 100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0), 0 0 25px rgba(45, 212, 191, 0.4); } }
+        
+        .gradient-text {
+            background: linear-gradient(to right, #2DD4BF, #22D3EE);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .status-cooldown { color: #f97316; }
+
+        .modal-backdrop { @apply fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-50; animation: fadeIn 0.3s ease-out; }
+        .modal-content { @apply bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-md text-center border border-slate-700; animation: slideIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-200 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-4xl mx-auto">
+        <div class="bg-gray-800/50 rounded-2xl shadow-2xl p-6 relative backdrop-blur-sm border border-slate-700">
+            <div class="absolute top-4 right-4 flex gap-2">
+                <button id="muteBtn" class="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-semibold py-1 px-3 rounded-full transition-colors">소리 끄기</button>
+                <button id="resetBtn" class="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-semibold py-1 px-3 rounded-full transition-colors">초기화</button>
+            </div>
+            
+            <div class="text-center mb-6">
+                <h1 class="text-5xl font-black gradient-text tracking-wider">레이드 크로니클</h1>
+                <div id="totalTime" class="mt-2">
+                    <span class="text-lg font-semibold text-slate-400">레이드 경과</span>
+                    <p class="text-4xl font-bold tracking-wider font-mono text-slate-200">00:00</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-t border-b border-slate-700 py-6">
+                <div class="text-center">
+                    <p class="text-base text-slate-400 mb-1">현재 시각 (KST)</p>
+                    <p id="kstTime" class="text-5xl font-bold tracking-wider font-mono text-teal-300">00:00:00</p>
+                </div>
+                <div class="space-y-4">
+                    <div id="resDeadlineDisplay" class="text-center cursor-pointer hidden" title="클릭하여 복사">
+                        <p class="text-base text-yellow-400 mb-1">리저 사용 권장 시각 (~1분 전)</p>
+                        <p id="resDeadlineTime" class="text-5xl font-bold tracking-wider font-mono text-yellow-300">00:00:00</p>
+                    </div>
+                    <div id="nextResDeadlineDisplay" class="text-center cursor-pointer hidden" title="클릭하여 복사">
+                        <p class="text-base text-slate-400 mb-1">다음 리저 예상 시각</p>
+                        <p id="nextResDeadlineTime" class="text-4xl font-bold tracking-wider font-mono text-slate-400">00:00:00</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="control-panel" class="flex flex-col items-center justify-center min-h-[200px]"></div>
+            
+            <div id="resGaugeContainer" class="hidden pt-4 mt-4">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-lg text-emerald-400 font-bold">리저렉션 유효 시간</span>
+                    <span id="resurrectionTime" class="text-2xl font-bold tracking-wider text-emerald-400 font-mono">--:--</span>
+                </div>
+                <div class="w-full bg-slate-700 rounded-full h-4 overflow-hidden">
+                    <div id="resGaugeBar" class="h-4 rounded-full transition-all duration-500"></div>
+                </div>
+            </div>
+            
+            <div id="briefing" class="mt-6 text-center text-slate-300 font-semibold h-6 text-lg"></div>
+
+            <div id="bishopSection" class="hidden mt-8">
+                <div class="overflow-x-auto bg-slate-900/70 rounded-lg p-2">
+                    <table class="w-full text-left text-xl"><thead class="border-b border-slate-700"><tr class="text-base text-slate-400"><th class="p-3">순번</th><th class="p-3">비숍</th><th class="p-3">상태</th><th class="p-3">쿨타임</th><th class="p-3">사용 시각</th></tr></thead><tbody id="bishop-list"></tbody></table>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-slate-900/70 rounded-lg">
+                <h2 class="p-4 font-bold text-lg text-slate-300 text-center border-b border-slate-700">이벤트 로그</h2>
+                <div id="eventLog" class="p-3 space-y-2 overflow-y-auto h-48 text-base">
+                    <!-- Log messages will be appended here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="warningModal" class="modal-backdrop hidden">
+        <div class="modal-content">
+            <h3 class="text-3xl font-bold text-amber-400 mb-4"⚠️ 주의: 사이클 경고</h3>
+            <p id="warningText" class="text-slate-300 mb-8 text-lg"></p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button id="confirmUseAnywayBtn" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full transition-colors">네, 사용합니다</button>
+                <button id="cancelUseBtn" class="bg-slate-600 hover:bg-slate-500 text-white font-bold py-3 px-8 rounded-full transition-colors">아니요, 대기합니다</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let timerInterval = null, totalSeconds = 0, resSeconds = 0, bishops = [], currentBishopIndex = 0, lastResUseTimestamp = -1, state = 'initial', isMuted = false;
+            let autoDeathTimeoutId = null; 
+            let currentDeadline = null;
+            let nextDeadline = null;
+            const RES_DURATION = 15 * 60, BISHOP_COOLDOWN = 30 * 60, IDEAL_CYCLE_TIME = BISHOP_COOLDOWN / 3;
+
+            const dom = {
+                totalTime: document.getElementById('totalTime'), resTime: document.getElementById('resurrectionTime'),
+                controlPanel: document.getElementById('control-panel'), bishopSection: document.getElementById('bishopSection'),
+                bishopList: document.getElementById('bishop-list'), resetBtn: document.getElementById('resetBtn'),
+                muteBtn: document.getElementById('muteBtn'), briefing: document.getElementById('briefing'),
+                warningModal: document.getElementById('warningModal'), warningText: document.getElementById('warningText'),
+                confirmUseBtn: document.getElementById('confirmUseAnywayBtn'), cancelUseBtn: document.getElementById('cancelUseBtn'),
+                kstTime: document.getElementById('kstTime'), resGaugeContainer: document.getElementById('resGaugeContainer'),
+                resGaugeBar: document.getElementById('resGaugeBar'), eventLog: document.getElementById('eventLog'),
+                resDeadlineDisplay: document.getElementById('resDeadlineDisplay'), resDeadlineTime: document.getElementById('resDeadlineTime'),
+                nextResDeadlineDisplay: document.getElementById('nextResDeadlineDisplay'), nextResDeadlineTime: document.getElementById('nextResDeadlineTime'),
+            };
+            
+            function speak(text, onEndCallback = null) {
+                if (isMuted || !('speechSynthesis' in window)) {
+                    if(onEndCallback) onEndCallback();
+                    return;
+                }
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ko-KR';
+                utterance.rate = 1.4; 
+                utterance.pitch = 1.0;
+                if (onEndCallback) utterance.onend = onEndCallback;
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(utterance);
+            }
+
+            function formatTime(s, showSeconds = true) {
+                if (s <= 0 || isNaN(s)) return showSeconds ? '00:00:00' : '00:00';
+                const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+                return showSeconds ? `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}` : `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+            }
+            
+            function formatClockTime(date) { return date.toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
+            
+            function addLog(message, type = 'info') {
+                const colors = { info: 'text-slate-400', success: 'text-cyan-400', warning: 'text-orange-400', system: 'text-amber-400' };
+                const logEntry = document.createElement('div');
+                logEntry.innerHTML = `<span class="font-mono text-slate-500">[${formatClockTime(new Date())}]</span> <span class="${colors[type]}">${message}</span>`;
+                dom.eventLog.appendChild(logEntry);
+                dom.eventLog.scrollTop = dom.eventLog.scrollHeight;
+            }
+
+            function updateKstClock() { dom.kstTime.textContent = formatClockTime(new Date()); }
+
+            function runTimers() {
+                if (state !== 'initial') totalSeconds++;
+                if (state === 'res-active') {
+                    resSeconds--;
+                    if (resSeconds === 10) { speak('리저 사용 10초 전'); addLog('리저렉션 만료 10초 전!', 'warning'); }
+                    if (resSeconds <= 0) { speak('리저 시간 만료'); addLog('리저렉션 시간 만료.', 'warning'); state = 'running'; }
+                }
+                bishops.forEach(b => {
+                    if (b.cooldown > 0) {
+                        b.cooldown--;
+                        if (b.cooldown === 0) { speak('쿨타임 종료'); addLog(`${b.name} 쿨타임 종료.`, 'success'); }
+                    }
+                });
+                render();
+            }
+
+            function render() {
+                dom.totalTime.querySelector('p').textContent = formatTime(totalSeconds, false);
+                dom.resTime.textContent = formatTime(resSeconds, false);
+                dom.resGaugeContainer.classList.toggle('hidden', state !== 'res-active');
+                
+                if (state === 'res-active') {
+                    dom.resGaugeBar.style.width = `${(resSeconds / RES_DURATION) * 100}%`;
+                    
+                    // 게이지 색상 변경 로직
+                    const gaugeClasses = dom.resGaugeBar.classList;
+                    gaugeClasses.remove('bg-gradient-to-r', 'from-emerald-500', 'to-teal-600', 'from-yellow-500', 'to-orange-500', 'from-red-500', 'to-red-600');
+                    
+                    if (resSeconds <= 60) { // 1분 이하: 빨간색
+                        gaugeClasses.add('bg-gradient-to-r', 'from-red-500', 'to-red-600');
+                    } else if (resSeconds <= 300) { // 5분 이하: 주황색
+                        gaugeClasses.add('bg-gradient-to-r', 'from-yellow-500', 'to-orange-500');
+                    } else { // 5분 초과: 초록색
+                        gaugeClasses.add('bg-gradient-to-r', 'from-emerald-500', 'to-teal-600');
+                    }
+
+                } else {
+                    dom.resDeadlineDisplay.classList.add('hidden');
+                    dom.nextResDeadlineDisplay.classList.add('hidden');
+                }
+
+                let buttonHTML = '', briefingText = '';
+                switch (state) {
+                    case 'initial':
+                        buttonHTML = `<button id="startRaidBtn" class="main-control-btn btn-start">레이드 시작</button>`;
+                        briefingText = "레이드 시작 버튼을 눌러주세요.";
+                        dom.bishopSection.classList.add('hidden');
+                        dom.totalTime.querySelector('p').textContent = '00:00';
+                        break;
+                    case 'running':
+                        buttonHTML = `<button id="deathBtn" class="main-control-btn btn-death">사망자 발생</button>`;
+                        briefingText = `🟢 다음 리저: ${bishops.length > 0 ? bishops[currentBishopIndex].name : ''}`;
+                        dom.bishopSection.classList.remove('hidden');
+                        break;
+                    case 'res-active':
+                        const bishop = bishops[currentBishopIndex];
+                        buttonHTML = `<button id="useResBtn" class="main-control-btn btn-res" ${bishop.cooldown > 0 ? 'disabled' : ''}>${bishop.name} 리저 사용</button>`;
+                        briefingText = bishop.cooldown > 0 ? `🔴 ${bishop.name} 쿨타임! (${formatTime(bishop.cooldown, false)} 남음)` : `🚨 ${bishop.name}님, 리저렉션을 사용해주세요!`;
+                        dom.bishopSection.classList.remove('hidden');
+                        break;
+                }
+                dom.controlPanel.innerHTML = buttonHTML;
+                dom.briefing.textContent = briefingText;
+
+                dom.bishopList.innerHTML = '';
+                bishops.forEach((b, i) => {
+                    const statusText = b.cooldown > 0 ? '쿨타임' : '대기';
+                    const statusClass = b.cooldown > 0 ? 'status-cooldown' : '';
+                    dom.bishopList.innerHTML += `<tr class="border-b border-slate-700/50"><td class="p-3">${i + 1}</td><td class="p-3 bishop-name cursor-pointer hover:bg-slate-700 rounded-md" contenteditable="true" data-index="${i}">${b.name}</td><td class="p-3 ${statusClass}">${statusText}</td><td class="p-3 font-mono">${b.cooldown > 0 ? formatTime(b.cooldown, false) : '사용 가능'}</td><td class="p-3 font-mono">${b.usedAt || '--:--:--'}</td></tr>`;
+                });
+                
+                attachEventListeners();
+            }
+            
+            function handleStartRaid() {
+                state = 'running';
+                bishops = [{ name: '비숍A', cooldown: 0, usedAt: null }, { name: '비숍B', cooldown: 0, usedAt: null }, { name: '비숍C', cooldown: 0, usedAt: null }];
+                currentBishopIndex = 0;
+                addLog('레이드가 시작되었습니다.', 'system');
+                
+                if (!timerInterval) timerInterval = setInterval(runTimers, 1000);
+                
+                speak('레이드 시작', () => {
+                    if (state !== 'running') return; 
+                    addLog('5초 후, 사망자 타이머가 자동으로 시작됩니다.', 'info');
+                    speak('5초 후, 자동 시작');
+                    autoDeathTimeoutId = setTimeout(handleDeath, 5000);
+                });
+                
+                render();
+            }
+
+            function handleDeath() {
+                if (autoDeathTimeoutId) {
+                    clearTimeout(autoDeathTimeoutId);
+                    autoDeathTimeoutId = null;
+                }
+                if (state !== 'running') return;
+
+                const timeSinceLastUse = totalSeconds - lastResUseTimestamp;
+                if (lastResUseTimestamp !== -1 && timeSinceLastUse < IDEAL_CYCLE_TIME) {
+                    dom.warningText.textContent = `이전 리저렉션 사용 후 10분이 지나지 않았습니다. (남은 권장 시간: ${formatTime(IDEAL_CYCLE_TIME - timeSinceLastUse, false)}) 지금 사용하면 사이클이 꼬일 수 있습니다.`;
+                    dom.warningModal.classList.remove('hidden');
+                    addLog('사이클 경고 발생!', 'warning');
+                    speak('주의, 사이클 경고');
+                } else {
+                    forceActivateResurrection();
+                }
+            }
+
+            function forceActivateResurrection() {
+                dom.warningModal.classList.add('hidden');
+                state = 'res-active';
+                resSeconds = RES_DURATION;
+                currentDeadline = new Date(Date.now() + (RES_DURATION - 60) * 1000);
+                nextDeadline = new Date(currentDeadline.getTime() + 14 * 60 * 1000);
+                
+                dom.resDeadlineTime.textContent = formatClockTime(currentDeadline);
+                dom.nextResDeadlineTime.textContent = formatClockTime(nextDeadline);
+                dom.resDeadlineDisplay.classList.remove('hidden');
+                dom.nextResDeadlineDisplay.classList.remove('hidden');
+
+                addLog('사망자 발생. 타이머 시작.');
+                speak('사망, 리저 타이머 시작');
+                render();
+            }
+
+            function handleUseResurrection() {
+                if (state !== 'res-active' || bishops[currentBishopIndex].cooldown > 0) return;
+                
+                const currentBishop = bishops[currentBishopIndex];
+                const deadlineMinutes = currentDeadline.getMinutes();
+                addLog(`${currentBishop.name} 리저 사용.`, 'success');
+                speak(`${currentBishop.name}, ${deadlineMinutes}분 리저 사용`);
+
+                state = 'running';
+                resSeconds = 0;
+                currentBishop.cooldown = BISHOP_COOLDOWN;
+                currentBishop.usedAt = formatClockTime(new Date());
+                lastResUseTimestamp = totalSeconds;
+                currentBishopIndex = (currentBishopIndex + 1) % bishops.length;
+                
+                autoDeathTimeoutId = setTimeout(handleDeath, 3000);
+                addLog('3초 후, 다음 사망자 타이머가 자동으로 시작됩니다.', 'info');
+
+                render();
+            }
+
+            function handleReset() {
+                if (state !== 'initial' && !confirm("정말로 모든 진행 상황을 초기화하시겠습니까?")) return;
+                clearInterval(timerInterval);
+                if(autoDeathTimeoutId) clearTimeout(autoDeathTimeoutId);
+                timerInterval = null;
+                autoDeathTimeoutId = null;
+                state = 'initial';
+                totalSeconds = 0; resSeconds = 0; bishops = []; lastResUseTimestamp = -1;
+                currentDeadline = null;
+                nextDeadline = null;
+                dom.eventLog.innerHTML = '';
+                addLog('시스템이 초기화되었습니다.', 'system');
+                render();
+            }
+            
+            function handleCopy() {
+                if (!currentDeadline || !nextDeadline) return;
+                const resUsedCount = bishops.filter(b => b.usedAt !== null).length;
+                const currentResNumber = resUsedCount + 1;
+                const nextResNumber = currentResNumber + 1;
+                
+                const textToCopy = `[${currentResNumber}리저 ~${formatClockTime(currentDeadline)}] (다음 ${nextResNumber}리저 예상 ~${formatClockTime(nextDeadline)})`;
+                
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    addLog(`'${textToCopy}' 복사 완료.`, 'info');
+                    speak('복사 완료');
+                } catch (err) {
+                    console.error('복사 실패:', err);
+                    addLog('복사에 실패했습니다.', 'warning');
+                }
+                document.body.removeChild(textArea);
+            }
+
+            function attachEventListeners() {
+                dom.controlPanel.addEventListener('click', (e) => {
+                    const targetId = e.target.id || e.target.closest('button')?.id;
+                    if (targetId === 'startRaidBtn') handleStartRaid();
+                    if (targetId === 'deathBtn') handleDeath();
+                    if (targetId === 'useResBtn') handleUseResurrection();
+                });
+                
+                dom.bishopList.addEventListener('blur', e => {
+                    if (e.target.classList.contains('bishop-name')) {
+                        const index = parseInt(e.target.dataset.index);
+                        const newName = e.target.textContent.trim();
+                        if (newName && bishops[index] && bishops[index].name !== newName) {
+                            addLog(`'${bishops[index].name}'의 이름이 '${newName}'(으)로 변경되었습니다.`);
+                            bishops[index].name = newName;
+                            render();
+                        } else if (bishops[index]) {
+                            e.target.textContent = bishops[index].name;
+                        }
+                    }
+                }, true);
+
+                dom.bishopList.addEventListener('keydown', e => {
+                    if (e.target.classList.contains('bishop-name') && e.key === 'Enter') {
+                        e.preventDefault();
+                        e.target.blur();
+                    }
+                });
+            }
+            
+            dom.resetBtn.addEventListener('click', handleReset);
+            dom.muteBtn.addEventListener('click', () => {
+                isMuted = !isMuted;
+                dom.muteBtn.textContent = isMuted ? '소리 켜기' : '소리 끄기';
+                const statusText = `음성 안내 ${isMuted ? '끄기' : '켜기'}`;
+                addLog(statusText);
+                speak(statusText);
+            });
+            dom.confirmUseBtn.addEventListener('click', forceActivateResurrection);
+            dom.cancelUseBtn.addEventListener('click', () => dom.warningModal.classList.add('hidden'));
+            dom.resDeadlineDisplay.addEventListener('click', handleCopy);
+            dom.nextResDeadlineDisplay.addEventListener('click', handleCopy);
+
+            render();
+            updateKstClock();
+            setInterval(updateKstClock, 1000);
+            addLog('레이드 크로니클이 준비되었습니다.', 'system');
+            
+            // 애드센스 광고 로드
+            document.querySelectorAll('.adsbygoogle').forEach(() => {
+                try {
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                } catch (e) {
+                    console.error('AdSense push error:', e);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
