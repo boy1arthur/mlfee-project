@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="google-site-verification" content="googlef09844df4586c2f0" />
-    <meta name="description" content="메이플랜드 유저 필수! 수수료 작, N인 파티 분배, 역산까지 가장 빠르고 정확하게 계산하여 소중한 메소를 아껴보세요.">
-    <meta name="keywords" content="메이플랜드, 메랜, 수수료 계산기, 수작 계산기, N빵, 분배, 정산, 역산, 소년아서">
-    <title>메랜 수작계산기 - 수수료 작, N빵 분배 자동 계산</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLFEE(메피) 허브 | 메이플랜드 필수 도구</title>
+    <meta name="description" content="원정, 더 이상 어렵지 않아요! MLFEE(메피)에서 수수료 계산기와 리저렉션 타이머 등 다양한 편의 도구를 만나보세요.">
+    <meta name="keywords" content="메이플랜드, 메랜 수수료 계산기, 리저렉션 타이머, 원정대, 메피, MLFEE">
+    <meta property="og:title" content="MLFEE(메피) 메이플랜드 필수 도구">
+    <meta property="og:description" content="자쿰, 혼테일 원정을 위한 필수 도구! 수수료 계산과 리저 타이머, 이제 더 쉬워집니다.">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet" />
     
-    <!-- Google AdSense Script -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615"
      crossorigin="anonymous"></script>
      
@@ -21,31 +22,17 @@
             background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
             background-size: 40px 40px;
         }
-        .card-style {
-            background-color: rgba(23, 25, 43, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        .card-hover { 
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out; 
         }
-        .card-style:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 0 20px rgba(251, 191, 36, 0.1);
+        .card-hover:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 0 15px rgba(251, 191, 36, 0.2);
         }
-        .gradient-text {
-            background: linear-gradient(to right, #FBBF24, #F59E0B);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .tool-card:hover {
+            border-color: rgba(234, 179, 8, 0.5);
         }
-        .summary-highlight { animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.02); opacity: 0.95; } }
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type=number] { -moz-appearance: textfield; }
-        .advanced-table { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
-        .advanced-table-toggle { cursor: pointer; }
-
-        /* Navigation Styles */
+        
         .hamburger-icon span {
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
         }
@@ -58,16 +45,82 @@
         .nav-toggle.active .hamburger-icon span:nth-child(3) {
             transform: translateY(-8px) rotate(-45deg);
         }
+        
+        .shine-effect {
+            position: relative;
+            background: linear-gradient(to right, #FBBF24, #F59E0B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .shine-effect::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            background-size: 200% 100%;
+            animation: shine 5s linear infinite;
+        }
+        @keyframes shine {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
 
-        @layer base {
-            .aspect-w-16 { position: relative; padding-bottom: 56.25%; }
-            .aspect-h-9 { /* No styles needed here */ }
-            .aspect-w-16 > * { position: absolute; height: 100%; width: 100%; top: 0; right: 0; bottom: 0; left: 0; }
+        .title-container {
+            position: relative;
+            display: inline-block;
+            padding: 1rem 0;
+        }
+        .title-container::before, .title-container::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 500px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+        }
+        .title-container::before { top: 0; }
+        .title-container::after { bottom: 0; }
+
+        .aspect-w-16 { position: relative; padding-bottom: 56.25%; }
+        .aspect-w-16 > * { position: absolute; height: 100%; width: 100%; top: 0; right: 0; bottom: 0; left: 0; }
+        
+        #tool-showcase {
+            transition: opacity 0.5s ease, max-height 0.8s ease, transform 0.5s ease;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transform: translateY(2rem);
+        }
+        #tool-showcase.is-visible {
+            max-height: 1000px; 
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #tool-showcase .tool-link {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        #tool-showcase.is-visible .tool-link {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #tool-showcase.is-visible .tool-link:nth-child(1) {
+            transition-delay: 0.2s;
+        }
+        #tool-showcase.is-visible .tool-link:nth-child(2) {
+            transition-delay: 0.4s;
         }
     </style>
 </head>
 <body class="bg-gray-900 text-white antialiased">
-
+    
     <div class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
         <div class="hamburger-icon space-y-1.5">
             <span class="block w-6 h-0.5 bg-white"></span>
@@ -82,510 +135,183 @@
         <a href="https://mlfee.vercel.app/updates" target="_blank" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">업데이트</a>
         <a href="/calc/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">수수료 계산기</a>
         <a href="/timer/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">리저 타이머</a>
-        <a href="https://mlfee.vercel.app/guide" target="_blank" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">설명서</a>
-        <a href="https://mlfee.vercel.app/contact" target="_blank" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">문의</a>
+        <a href="#" id="guideLink" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">설명서</a>
+        <a href="#" id="contactLink" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">문의</a>
     </nav>
-    
+
     <div class="main-content transition-all duration-300 ease-in-out">
-        <div class="max-w-screen-xl mx-auto flex justify-center gap-8 px-4">
-            <aside class="hidden lg:block w-[160px] pt-24 flex-shrink-0">
-                <div class="sticky top-8">
-                    <div class="w-full h-[600px] bg-gray-800/50 backdrop-blur-sm rounded-lg flex items-center justify-center border border-gray-700">
-                        <ins class="adsbygoogle"
-                             style="display:inline-block;width:160px;height:600px"
-                             data-ad-client="ca-pub-8602495420447615"
-                             data-ad-slot="1111111111"></ins>
+        <header class="text-center py-12">
+            <div class="container mx-auto px-4">
+                <a href="/" class="inline-block text-3xl sm:text-4xl font-bold text-yellow-400">
+                    <span class="text-red-500">MLFEE(메피)</span> 메이플랜드 필수도구
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero text-center py-16 sm:py-24">
+                <div class="container mx-auto px-4">
+                    <div class="title-container">
+                        <h1 class="text-4xl sm:text-6xl font-black leading-tight shine-effect">
+                            원클릭으로 수작 분배하고<br>생명의 시간을 지켜라!
+                        </h1>
+                    </div>
+                    <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto my-10">
+                        레이드, 더 이상 어렵지 않아요!<br>스마트한 메피 유틸과 함께라면 당신도 최고의 원정대원!
+                    </p>
+                    <div>
+                        <a href="#tool-showcase" id="openToolboxBtn" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-4 px-8 rounded-lg text-xl transition duration-300 inline-block shadow-lg hover:shadow-yellow-500/50">
+                            도구함 열어보기
+                        </a>
                     </div>
                 </div>
-            </aside>
-
-            <main class="w-full max-w-4xl py-4 sm:py-6 md:py-8">
-                <header class="text-center mb-8">
-                    <h1 class="text-3xl sm:text-4xl font-black gradient-text">💰 메랜 계산기, 분배 시간 줄이고 사냥 가세요!</h1>
-                    <div class="mt-4 flex justify-center items-center space-x-4 md:space-x-6 text-base">
-                        <button id="openNoticeModalBtn" class="text-yellow-400 hover:text-yellow-300 transition duration-300 font-semibold flex items-center space-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>
-                            <span>업데이트</span>
-                        </button>
-                        <button id="openVideoModalBtn" class="text-yellow-400 hover:text-yellow-300 transition duration-300 font-semibold flex items-center space-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>
-                            <span>사용법</span>
-                        </button>
-                        <button id="openContactModalBtn" class="text-yellow-400 hover:text-yellow-300 transition duration-300 font-semibold flex items-center space-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
-                            <span>문의</span>
-                        </button>
-                    </div>
-                </header>
-
-                <div class="my-8 text-center min-h-[90px]">
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-8602495420447615"
-                         data-ad-slot="2222222222"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                </div>
-
-                <div class="card-style p-6 sm:p-8 rounded-2xl shadow-2xl">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-                        <div>
-                            <label for="totalAmount" class="block text-sm font-medium text-gray-300 mb-2">총 거래 금액 (메소)</label>
-                            <input type="text" id="totalAmount" placeholder="예: 100,000,000" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
-                        </div>
-                        <div>
-                            <label for="transactionType" class="block text-sm font-medium text-gray-300 mb-2">거래 방식</label>
-                            <select id="transactionType" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
-                                <option value="general">일반 거래</option>
-                                <option value="parcel">택배 거래</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="numPeople" class="block text-sm font-medium text-gray-300 mb-2">분배 인원 (N명)</label>
-                            <input type="number" id="numPeople" placeholder="1명 (기본)" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
-                        </div>
-                    </div>
-                    
-                    <div id="parcelOptions" class="mt-4 hidden">
-                        <label for="includeSelf" class="flex items-center space-x-2 text-sm text-gray-400 cursor-pointer">
-                            <input type="checkbox" id="includeSelf" checked class="w-4 h-4 text-yellow-500 bg-gray-600 border-gray-500 rounded focus:ring-yellow-600">
-                            <span>본인 포함 분배 (총액을 N명으로 나눔)</span>
-                        </label>
-                    </div>
-                    
-                    <div id="error-message" class="text-red-400 text-sm mt-4 text-center hidden"></div>
-
-                    <div class="mt-6">
-                        <button id="calculateBtn" class="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-6 rounded-lg transition duration-300 shadow-lg hover:shadow-yellow-500/50">지금 계산하기</button>
-                    </div>
-                </div>
-
-                <div id="resultArea" class="mt-8 hidden"></div>
-
-                <div class="my-8 text-center min-h-[90px]">
-                     <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-8602495420447615"
-                         data-ad-slot="4444444444"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                </div>
-
-                <footer class="text-center mt-12 mb-6 text-sm text-gray-500">
-                    <p>제작자: 소년아서</p>
-                </footer>
-            </main>
+            </section>
             
-            <aside class="hidden lg:block w-[160px] pt-24 flex-shrink-0">
-                 <div class="sticky top-8">
-                    <div class="w-full h-[600px] bg-gray-800/50 backdrop-blur-sm rounded-lg flex items-center justify-center border border-gray-700">
-                        <ins class="adsbygoogle"
-                             style="display:inline-block;width:160px;height:600px"
-                             data-ad-client="ca-pub-8602495420447615"
-                             data-ad-slot="3333333333"></ins>
+            <div class="ad-container min-h-[90px] flex justify-center items-center my-12 mx-4">
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-client="ca-pub-8602495420447615"
+                     data-ad-slot="1234567890"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            </div>
+
+            <section class="tool-showcase py-20" id="tool-showcase">
+                <div class="container mx-auto px-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <a href="/calc/" class="tool-link block">
+                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
+                                <div class="visual-content text-red-500 mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h3m-3-7h3m-6.128 9.872A3 3 0 006.872 21h10.256a3 3 0 002.872-3.128V7.128A3 3 0 0017.128 4H6.872a3 3 0 00-2.872 3.128v10.744z" /></svg>
+                                </div>
+                                <h2 class="text-2xl font-bold mb-4 text-red-400">메랜 수수료 계산기</h2>
+                                <p class="text-gray-400">메소 수작 계산부터, N인 파티 분배까지 원클릭 계산! 택배기능까지 포함!</p>
+                            </div>
+                        </a>
+
+                        <a href="/timer/" class="tool-link block">
+                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
+                                <div class="visual-content text-blue-500 mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                </div>
+                                <h2 class="text-2xl font-bold mb-4 text-blue-400">비숍 리저 타이머</h2>
+                                <p class="text-gray-400">제한시간 15분! 비숍의 리저 쿨타임을 정확히 체크해서, 쿨타임 관리와 사이클 경고까지 완벽 대응. 최고의 리저 서포트 타이머!</p>
+                            </div>
+                        </a>
                     </div>
                 </div>
-            </aside>
-        </div>
-    </div>
+            </section>
+        </main>
 
-    <!-- 모달 HTML -->
-    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-gray-800/80 backdrop-blur-lg rounded-lg shadow-xl w-full max-w-3xl relative border border-gray-700">
-            <button id="closeVideoModalBtn" class="absolute -top-2 -right-2 text-white bg-red-500 rounded-full w-8 h-8 flex items-center justify-center text-2xl font-bold hover:bg-red-600 transition">&times;</button>
-            <div class="aspect-w-16 aspect-h-9">
-                <iframe id="youtubePlayer" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full rounded-lg"></iframe>
+        <footer class="text-center py-10 mt-10 border-t border-gray-800">
+            <div class="container mx-auto px-4">
+                <p class="text-gray-500">소년아서 제작</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Modals Start -->
+    <div id="guideModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-3xl relative">
+            <button id="closeGuideModalBtn" class="absolute -top-3 -right-3 text-white bg-red-500 rounded-full w-9 h-9 flex items-center justify-center text-2xl font-bold hover:bg-red-600 transition">&times;</button>
+            <div class="aspect-w-16">
+                <iframe id="youtubePlayer" src="https://www.youtube.com/embed/JyAnBHyeN4g" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full rounded-lg"></iframe>
             </div>
         </div>
     </div>
+
     <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-gray-800/80 backdrop-blur-lg rounded-lg shadow-xl w-full max-w-sm text-center p-8 relative border border-gray-700">
-            <button id="closeContactModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">&times;</button>
+        <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-sm text-center p-8 relative border border-gray-700">
+            <button id="closeContactModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
             <h3 class="text-2xl font-bold text-yellow-400">문의하기</h3>
-            <p class="text-gray-300 mt-4 mb-6">
-                광고제안, 그외 문의는 아래 채널로 연락 주세요.
-            </p>
-            <div class="space-y-4">
+            <div class="space-y-4 mt-6">
                 <a href="mailto:esgroup129@gmail.com" class="w-full flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
-                    이메일로 문의하기
+                    이메일
                 </a>
-                 <a href="https://open.kakao.com/o/s4YH6WFh" target="_blank" class="w-full flex items-center justify-center bg-[#FEE500] hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-lg transition">
+                <a href="https://open.kakao.com/o/s4YH6WFh" target="_blank" class="w-full flex items-center justify-center bg-[#FEE500] hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-lg transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M12.01,2C6.48,2,2,6.04,2,11.05c0,3.33,1.97,6.25,4.8,7.74L6,22l3.42-2.35C10.43,19.88,11.21,20,12.01,20c5.52,0,10-4.04,10-8.95S17.53,2,12.01,2z"/></svg>
-                    카카오톡 오픈채팅 문의
+                    카카오톡 오픈채팅
+                </a>
+                <a href="https://discord.com/users/930037107823636540" target="_blank" class="w-full flex items-center justify-center bg-[#5865F2] hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.037c-1.02 3.626-1.222 7.79- .284 11.654a.052.052 0 0 0 .016.053c.087.063.18.129.27.195a.05.05 0 0 0 .051.007c2.175-1.566 3.971-4.42 3.971-4.42s.709.64 2.274.64c1.566 0 2.274-.64 2.274-.64s1.796 2.854 3.97 4.42a.05.05 0 0 0 .051-.007c.09-.066.183-.132.27-.195a.052.052 0 0 0 .016-.053c.938-3.864.736-8.028-.284-11.654a.041.041 0 0 0-.021-.037zM8.02 10.842c-.837 0-1.518-.682-1.518-1.518s.681-1.518 1.518-1.518c.837 0 1.518.682 1.518 1.518s-.681 1.518-1.518 1.518zm3.515 0c-.837 0-1.518-.682-1.518-1.518s.681-1.518 1.518-1.518c.837 0 1.518.682 1.518 1.518s-.681 1.518-1.518 1.518z"/>
+                    </svg>
+                    디스코드
                 </a>
             </div>
         </div>
     </div>
-    <div id="noticeModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-gray-800/80 backdrop-blur-lg rounded-lg shadow-xl w-full max-w-lg text-left p-8 relative border border-gray-700">
-            <button id="closeNoticeModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">&times;</button>
-            <h3 class="text-2xl font-bold text-yellow-400 border-b border-gray-600 pb-3 mb-4">📢 업데이트 소식</h3>
-            <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-4">
-                <div>
-                    <p class="font-bold text-lg text-green-400">[v2.2] 택배 분배 기능 개선</p>
-                    <p class="text-base text-gray-300 ml-2">- 택배 거래 시, '본인 포함' 여부를 선택하여 택배비와 실제 분배 인원(N 또는 N-1)이 연동되어 정확하게 계산되도록 수정했습니다.</p>
-                </div>
-                <div>
-                    <p class="font-bold text-lg text-green-400">[v2.1] 상세 비교 기능 개선</p>
-                    <p class="text-base text-gray-300 ml-2">- '방식별 상세 비교' 표에서 각 분할 방식의 상세 조합과 수수료율(%)을 모두 보여주도록 개선했습니다.</p>
-                    <p class="text-base text-gray-300 ml-2">- 🥇(가장 빠른 방법)과 🥈(가장 알뜰한 방법) 아이콘을 도입하여 최적의 전략을 쉽게 찾을 수 있도록 했습니다.</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Modals End -->
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const GENERAL_FEES_SORTED = [
-                [100000000, 0.06], [25000000, 0.05], [10000000, 0.04], 
-                [5000000, 0.03], [1000000, 0.018], [100000, 0.008], [0, 0.0]
-            ];
-            const PARCEL_FEES_SORTED = [
-                [100000000, 0.07], [25000000, 0.06], [10000000, 0.05], 
-                [5000000, 0.04], [1000000, 0.027], [100000, 0.012], [0, 0.0]
-            ];
-            const SPLIT_UNITS = [24999999, 9999999, 4999999, 999999];
-            const DELIVERY_FEE = 5000;
-
-            const totalAmountInput = document.getElementById('totalAmount');
-            const transactionTypeSelect = document.getElementById('transactionType');
-            const numPeopleInput = document.getElementById('numPeople');
-            const calculateBtn = document.getElementById('calculateBtn');
-            const resultArea = document.getElementById('resultArea');
-            const errorMessageDiv = document.getElementById('error-message');
-            const parcelOptionsDiv = document.getElementById('parcelOptions');
-            const includeSelfCheckbox = document.getElementById('includeSelf');
-            const openVideoModalBtn = document.getElementById('openVideoModalBtn');
-            const videoModal = document.getElementById('videoModal');
-            const closeVideoModalBtn = document.getElementById('closeVideoModalBtn');
-            const youtubePlayer = document.getElementById('youtubePlayer');
-            const originalVideoSrc = youtubePlayer.src;
-            const openContactModalBtn = document.getElementById('openContactModalBtn');
-            const contactModal = document.getElementById('contactModal');
-            const closeContactModalBtn = document.getElementById('closeContactModalBtn');
-            const openNoticeModalBtn = document.getElementById('openNoticeModalBtn');
-            const noticeModal = document.getElementById('noticeModal');
-            const closeNoticeModalBtn = document.getElementById('closeNoticeModalBtn');
             const navToggle = document.querySelector('.nav-toggle');
             const sideNav = document.querySelector('.side-nav');
-            const mainContent = document.querySelector('.main-content');
+            const openToolboxBtn = document.getElementById('openToolboxBtn');
+            const toolShowcase = document.getElementById('tool-showcase');
 
             navToggle.addEventListener('click', () => {
                 sideNav.classList.toggle('translate-x-full');
                 navToggle.classList.toggle('active');
-                if (window.innerWidth > 768) {
-                    mainContent.style.marginRight = sideNav.classList.contains('translate-x-full') ? '0' : '256px';
-                }
             });
 
-            window.addEventListener('resize', () => {
-                if (window.innerWidth <= 768) {
-                    mainContent.style.marginRight = '0';
-                } else {
-                    if (!sideNav.classList.contains('translate-x-full')) {
-                        mainContent.style.marginRight = '256px';
-                    }
-                }
+            openToolboxBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toolShowcase.classList.remove('hidden');
+                setTimeout(() => {
+                    toolShowcase.classList.add('is-visible');
+                    toolShowcase.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 50);
             });
 
-            const formatNumber = (num) => num.toLocaleString('ko-KR');
-            const parseNumber = (str) => Number(String(str).replace(/,/g, ''));
+            // Modal Logic
+            const guideLink = document.getElementById('guideLink');
+            const contactLink = document.getElementById('contactLink');
+            const guideModal = document.getElementById('guideModal');
+            const contactModal = document.getElementById('contactModal');
+            const closeGuideModalBtn = document.getElementById('closeGuideModalBtn');
+            const closeContactModalBtn = document.getElementById('closeContactModalBtn');
+            const youtubePlayer = document.getElementById('youtubePlayer');
+            const originalVideoSrc = youtubePlayer.src;
 
-            function getFeeRate(amount, feeSchedule) {
-                for (const [threshold, rate] of feeSchedule) {
-                    if (amount >= threshold) return rate;
-                }
-                return 0.0;
-            }
-
-            function calculateFee(amount, feeSchedule) {
-                const rate = getFeeRate(amount, feeSchedule);
-                return Math.floor(amount * rate);
-            }
-            
-            function getOptimalSplit(amount, feeSchedule, units) {
-                let remainingAmount = amount;
-                let totalFee = 0;
-                let tradesHTML = '';
-                let tradeCount = 0;
-
-                for (const unit of units) {
-                     const count = Math.floor(remainingAmount / unit);
-                     if (count > 0) {
-                         totalFee += count * calculateFee(unit, feeSchedule);
-                         remainingAmount -= count * unit;
-                         const rate = (getFeeRate(unit, feeSchedule) * 100).toFixed(1);
-                         tradesHTML += `<p class="text-sm">${formatNumber(unit)} x ${count}회 <span class="text-xs text-gray-400">(${rate}%)</span></p>`;
-                         tradeCount += count;
-                     }
-                }
-                if (remainingAmount > 0) {
-                    const feeForRemainder = calculateFee(remainingAmount, feeSchedule);
-                    if(feeForRemainder >= 0){
-                        totalFee += feeForRemainder;
-                        const rate = (getFeeRate(remainingAmount, feeSchedule) * 100).toFixed(1);
-                        tradesHTML += `<p class="text-sm">${formatNumber(remainingAmount)} x 1회 <span class="text-xs text-gray-400">(${rate}%)</span></p>`;
-                        tradeCount += 1;
-                    }
-                }
-                return { fee: totalFee, html: tradesHTML, tradeCount: tradeCount };
-            }
-            
-            function generateDetailedResultsHTML(amount, feeSchedule) {
-                const scenarios = [{
-                    name: '한 번에 거래',
-                    fee: calculateFee(amount, feeSchedule),
-                    tradeCount: 1,
-                    netAmount: amount - calculateFee(amount, feeSchedule),
-                    html: `<p class="text-lg">적용 수수료율: <span class="font-bold text-white">${(getFeeRate(amount, feeSchedule) * 100).toFixed(1)}%</span></p>`
-                }];
-
-                for (let i = 0; i < SPLIT_UNITS.length; i++) {
-                    const currentUnits = SPLIT_UNITS.slice(i);
-                    if (amount > currentUnits[0]) {
-                        const result = getOptimalSplit(amount, feeSchedule, currentUnits);
-                        scenarios.push({
-                            name: `${formatNumber(currentUnits[0])} 단위부터`,
-                            fee: result.fee,
-                            tradeCount: result.tradeCount,
-                            netAmount: amount - result.fee,
-                            html: result.html
-                        });
-                    }
-                }
-
-                const splitScenarios = scenarios.slice(1);
-                let cheapestMethod = scenarios[0];
-                let fastestMethod = scenarios[0];
-
-                if (splitScenarios.length > 0) {
-                    cheapestMethod = splitScenarios.reduce((prev, curr) => prev.fee <= curr.fee ? prev : curr);
-                    fastestMethod = splitScenarios.reduce((prev, curr) => prev.tradeCount < curr.tradeCount ? prev : curr);
-                }
-                
-                const noSujakFee = scenarios[0].fee;
-                const savings = noSujakFee - cheapestMethod.fee;
-                const fastestSujak = getOptimalSplit(amount, feeSchedule, SPLIT_UNITS);
-
-                const tableRowsHTML = scenarios.map(s => {
-                    const isFastest = s.name !== '한 번에 거래' && s.tradeCount === fastestMethod.tradeCount;
-                    const isCheapest = s.name !== '한 번에 거래' && s.fee === cheapestMethod.fee;
-                    let icon = '';
-                    if (isFastest && isCheapest) {
-                        icon = '🥇';
-                    } else if (isFastest) {
-                        icon = '🥇';
-                    } else if (isCheapest) {
-                        icon = '🥈';
-                    }
-
-                    return `
-                        <tr class="border-b border-gray-700 last:border-b-0 hover:bg-gray-700/50 align-top">
-                            <td class="p-3 text-left">
-                                <p class="font-semibold text-lg">${s.name} ${icon}</p>
-                                <div class="text-gray-400 pl-2 text-base">${s.html}</div>
-                            </td>
-                            <td class="p-3 text-center text-lg">${s.tradeCount}</td>
-                            <td class="p-3 text-right text-lg font-semibold ${isCheapest ? 'text-green-400' : ''}">${formatNumber(s.fee)}</td>
-                            <td class="p-3 text-right text-lg">${formatNumber(s.netAmount)}</td>
-                        </tr>
-                    `;
-                }).join('');
-
-                return `
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="card-style p-6 rounded-2xl result-card">
-                            <h3 class="text-xl font-bold text-red-400 border-b border-gray-600 pb-3 mb-4">한 번에 거래 시 (노수작)</h3>
-                            <div class="space-y-2">
-                                ${scenarios[0].html}
-                                <p class="text-lg mt-1">총 수수료: <span class="font-bold text-red-400">${formatNumber(noSujakFee)} 메소</span></p>
-                                <p class="text-lg mt-1">실수령액: <span class="font-bold text-white">${formatNumber(amount - noSujakFee)} 메소</span></p>
-                            </div>
-                        </div>
-                        <div class="card-style p-6 rounded-2xl result-card">
-                            <h3 class="text-xl font-bold text-green-400 border-b border-gray-600 pb-3 mb-4">수수료 작 (빠른-최적)</h3>
-                            <div class="space-y-1">
-                                ${fastestSujak.html}
-                                <hr class="border-gray-700 my-2">
-                                <p class="text-lg">총 수수료: <span class="font-bold">${formatNumber(fastestSujak.fee)} 메소</span></p>
-                                <p class="text-lg mt-1">실수령액: <span class="font-bold">${formatNumber(amount - fastestSujak.fee)} 메소</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="advancedTableToggle" class="advanced-table-toggle mt-6 card-style p-4 rounded-2xl result-card">
-                        <h3 class="text-xl font-bold text-yellow-400 flex justify-between items-center">
-                            <span>방식별 상세 비교</span>
-                            <span id="toggleIcon">▼</span>
-                        </h3>
-                    </div>
-                    <div id="advancedTable" class="advanced-table bg-gray-800/50 backdrop-blur-sm rounded-b-2xl border-x border-b border-gray-700">
-                        <div class="p-6">
-                            <p class="text-sm text-gray-400 mb-4">🥇: 가장 빠른 방법(거래 횟수 최소), 🥈: 가장 알뜰한 방법(수수료 최소)</p>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-base">
-                                    <thead class="border-b-2 border-gray-600">
-                                        <tr>
-                                            <th class="p-3 text-left">수작 조합</th>
-                                            <th class="p-3">횟수</th>
-                                            <th class="p-3 text-right">총 수수료</th>
-                                            <th class="p-3 text-right">실수령액</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${tableRowsHTML}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-8 bg-gradient-to-r from-green-500 to-teal-500 text-white p-6 rounded-2xl text-center shadow-2xl summary-highlight">
-                        ${savings > 0 ? `<h2>👑 최적의 방법(${cheapestMethod.name})으로 약 <span class="underline">${formatNumber(savings)} 메소</span>를 절약할 수 있어요!</h2>` : `<h2>이 금액은 분할 거래의 이득이 없습니다.</h2>`}
-                    </div>
-                `;
-            }
-
-            function performCalculation() {
-                errorMessageDiv.classList.add('hidden');
-                totalAmountInput.classList.remove('border-red-500');
-
-                const amount = parseNumber(totalAmountInput.value);
-                const numPeople = Number(numPeopleInput.value) || 1;
-                
-                if (isNaN(amount) || amount <= 0) {
-                    errorMessageDiv.textContent = '올바른 금액을 입력해주세요.';
-                    errorMessageDiv.classList.remove('hidden');
-                    totalAmountInput.classList.add('border-red-500');
-                    totalAmountInput.focus();
-                    return;
-                }
-
-                const feeSchedule = transactionTypeSelect.value === 'general' ? GENERAL_FEES_SORTED : PARCEL_FEES_SORTED;
-                let finalHtml = '';
-                let calculationAmount = amount;
-
-                if (numPeople > 1) {
-                    const includeSelf = includeSelfCheckbox.checked;
-                    const distributionPeople = includeSelf ? numPeople : numPeople - 1;
-                    
-                    if (distributionPeople <= 0) {
-                        errorMessageDiv.textContent = '본인을 제외하면 분배할 인원이 없습니다.';
-                        errorMessageDiv.classList.remove('hidden');
-                        return;
-                    }
-
-                    let distributableAmount = amount;
-                    let deliveryFeeCost = 0;
-                    if (transactionTypeSelect.value === 'parcel') {
-                        const deliveryRecipients = includeSelf ? numPeople - 1 : numPeople;
-                        if (deliveryRecipients > 0) {
-                            deliveryFeeCost = DELIVERY_FEE * deliveryRecipients;
-                            if (amount < deliveryFeeCost) {
-                                errorMessageDiv.textContent = '총 금액이 택배비 총합보다 적습니다.';
-                                errorMessageDiv.classList.remove('hidden');
-                                return;
-                            }
-                            distributableAmount -= deliveryFeeCost;
-                        }
-                    }
-
-                    calculationAmount = Math.floor(distributableAmount / distributionPeople);
-                    const remainder = distributableAmount % distributionPeople;
-                    
-                    const summaryHeader = `
-                        <div class="card-style p-6 rounded-2xl mb-6">
-                            <h3 class="text-xl font-bold text-cyan-400 border-b border-gray-600 pb-2 mb-4">👥 ${distributionPeople}인 분할 결과 요약</h3>
-                            <div class="space-y-2 text-gray-300">
-                                <p class="text-base">총 수익: <span class="font-bold text-white">${formatNumber(amount)} 메소</span></p>
-                                ${deliveryFeeCost > 0 ? `<p class="text-base text-red-500">택배비 차감: -${formatNumber(deliveryFeeCost)} 메소</p>` : ''}
-                                <p class="text-lg">분배 가능 총액: <span class="font-bold text-white">${formatNumber(distributableAmount)} 메소</span></p>
-                                <p class="text-lg">1인당 지급액: <span class="font-bold text-yellow-400">${formatNumber(calculationAmount)}</span> 메소</p>
-                                ${remainder > 0 ? `<p class="text-base text-yellow-400 mt-2">※ 정산 후 ${formatNumber(remainder)} 메소가 남습니다.</p>` : ''}
-                            </div>
-                            <p class="text-center text-gray-500 text-xs mt-4">▼ 아래는 1인당 지급액 기준 상세 비교입니다 ▼</p>
-                        </div>
-                    `;
-                    
-                    const detailedHtml = generateDetailedResultsHTML(calculationAmount, feeSchedule);
-                    finalHtml = summaryHeader + detailedHtml;
-
-                } else {
-                    finalHtml = generateDetailedResultsHTML(amount, feeSchedule);
-                }
-                
-                resultArea.innerHTML = finalHtml;
-                resultArea.classList.remove('hidden');
-                
-                const advancedTableToggle = document.getElementById('advancedTableToggle');
-                if(advancedTableToggle) {
-                    const advancedTable = document.getElementById('advancedTable');
-                    const toggleIcon = document.getElementById('toggleIcon');
-                    advancedTableToggle.addEventListener('click', () => {
-                        if (advancedTable.style.maxHeight) {
-                            advancedTable.style.maxHeight = null;
-                            toggleIcon.textContent = '▼';
-                        } else {
-                            advancedTable.style.maxHeight = advancedTable.scrollHeight + "px";
-                            toggleIcon.textContent = '▲';
-                        }
-                    });
-                }
-            }
-
-            calculateBtn.addEventListener('click', performCalculation);
-            
-            totalAmountInput.addEventListener('input', (e) => {
-                const value = e.target.value;
-                const numValue = parseNumber(value);
-                if (!isNaN(numValue)) {
-                    e.target.value = formatNumber(numValue);
-                }
-            });
-
-            function toggleParcelOptions() {
-                const numPeople = Number(numPeopleInput.value) || 1;
-                if (transactionTypeSelect.value === 'parcel' && numPeople > 1) {
-                    parcelOptionsDiv.classList.remove('hidden');
-                } else {
-                    parcelOptionsDiv.classList.add('hidden');
-                }
-            }
-
-            transactionTypeSelect.addEventListener('change', toggleParcelOptions);
-            numPeopleInput.addEventListener('input', toggleParcelOptions);
-            
-            openVideoModalBtn.addEventListener('click', () => videoModal.classList.remove('hidden'));
-            closeVideoModalBtn.addEventListener('click', () => closeModal(videoModal));
-            videoModal.addEventListener('click', (e) => { if (e.target === videoModal) closeModal(videoModal); });
-
-            openContactModalBtn.addEventListener('click', () => contactModal.classList.remove('hidden'));
-            closeContactModalBtn.addEventListener('click', () => closeModal(contactModal));
-            contactModal.addEventListener('click', (e) => { if (e.target === contactModal) closeModal(contactModal); });
-            
-            openNoticeModalBtn.addEventListener('click', () => noticeModal.classList.remove('hidden'));
-            closeNoticeModalBtn.addEventListener('click', () => closeModal(noticeModal));
-            noticeModal.addEventListener('click', (e) => { if (e.target === noticeModal) closeModal(noticeModal); });
-
+            function openModal(modal) { modal.classList.remove('hidden'); }
             function closeModal(modal) {
                 modal.classList.add('hidden');
-                if (modal === videoModal) {
+                if (modal === guideModal) {
                     youtubePlayer.src = '';
                     youtubePlayer.src = originalVideoSrc;
                 }
             }
 
-            window.addEventListener('load', () => {
-                document.querySelectorAll('.adsbygoogle').forEach(ad => {
-                    if (ad.offsetWidth > 0) {
-                        try {
-                            (adsbygoogle = window.adsbygoogle || []).push({});
-                        } catch (e) {
-                            console.error('AdSense push error:', e);
-                        }
+            guideLink.addEventListener('click', (e) => { e.preventDefault(); openModal(guideModal); });
+            contactLink.addEventListener('click', (e) => { e.preventDefault(); openModal(contactModal); });
+            closeGuideModalBtn.addEventListener('click', () => closeModal(guideModal));
+            closeContactModalBtn.addEventListener('click', () => closeModal(contactModal));
+            guideModal.addEventListener('click', (e) => { if (e.target === guideModal) closeModal(guideModal); });
+            contactModal.addEventListener('click', (e) => { if (e.target === contactModal) closeModal(contactModal); });
+
+            window.addEventListener('resize', () => {
+                const mainContent = document.querySelector('.main-content');
+                if (window.innerWidth <= 768) {
+                    mainContent.style.marginRight = '0';
+                } else {
+                    mainContent.style.marginRight = sideNav.classList.contains('translate-x-full') ? '0' : '256px';
+                }
+            });
+        });
+
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.adsbygoogle').forEach(ad => {
+                if (ad.offsetWidth > 0) {
+                    try {
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    } catch (e) {
+                        console.error('AdSense push error:', e);
                     }
-                });
+                }
             });
         });
     </script>
 </body>
-</ht
+</html>
