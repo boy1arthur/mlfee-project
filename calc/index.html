@@ -22,7 +22,7 @@
             background-size: 40px 40px;
         }
         .card-style {
-            background-color: rgba(23, 25, 43, 0.5); /* Glassmorphism Effect */
+            background-color: rgba(23, 25, 43, 0.7);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -44,6 +44,21 @@
         input[type=number] { -moz-appearance: textfield; }
         .advanced-table { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
         .advanced-table-toggle { cursor: pointer; }
+
+        /* Navigation Styles */
+        .hamburger-icon span {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(2) {
+            opacity: 0;
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
         @layer base {
             .aspect-w-16 { position: relative; padding-bottom: 56.25%; }
             .aspect-h-9 { /* No styles needed here */ }
@@ -52,109 +67,126 @@
     </style>
 </head>
 <body class="bg-gray-900 text-white antialiased">
-    <div class="max-w-screen-xl mx-auto flex justify-center gap-8 px-4">
-        <aside class="hidden lg:block w-[160px] pt-24 flex-shrink-0">
-            <div class="sticky top-8">
-                <div class="w-full h-[600px] bg-gray-800/50 backdrop-blur-sm rounded-lg flex items-center justify-center border border-gray-700">
-                    <!-- 좌측 광고 (160x600) -->
+
+    <div class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
+        <div class="hamburger-icon space-y-1.5">
+            <span class="block w-6 h-0.5 bg-white"></span>
+            <span class="block w-6 h-0.5 bg-white"></span>
+            <span class="block w-6 h-0.5 bg-white"></span>
+        </div>
+    </div>
+
+    <nav class="side-nav fixed right-0 top-0 w-64 h-full bg-gray-800/90 backdrop-blur-lg border-l-2 border-gray-700 z-[1000] shadow-2xl transition-transform duration-300 ease-in-out translate-x-full">
+        <h3 class="text-center text-xl font-bold text-yellow-400 mt-16 mb-8">메뉴</h3>
+        <a href="/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">홈</a>
+        <a href="https://mlfee.vercel.app/updates" target="_blank" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">업데이트</a>
+        <a href="/calc/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">수수료 계산기</a>
+        <a href="/timer/" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">리저 타이머</a>
+        <a href="https://mlfee.vercel.app/guide" target="_blank" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">설명서</a>
+        <a href="https://mlfee.vercel.app/contact" target="_blank" class="block py-4 px-8 text-gray-300 hover:bg-gray-700 hover:text-yellow-400 transition">문의</a>
+    </nav>
+    
+    <div class="main-content transition-all duration-300 ease-in-out">
+        <div class="max-w-screen-xl mx-auto flex justify-center gap-8 px-4">
+            <aside class="hidden lg:block w-[160px] pt-24 flex-shrink-0">
+                <div class="sticky top-8">
+                    <div class="w-full h-[600px] bg-gray-800/50 backdrop-blur-sm rounded-lg flex items-center justify-center border border-gray-700">
+                        <ins class="adsbygoogle"
+                             style="display:inline-block;width:160px;height:600px"
+                             data-ad-client="ca-pub-8602495420447615"
+                             data-ad-slot="1111111111"></ins>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="w-full max-w-4xl py-4 sm:py-6 md:py-8">
+                <header class="text-center mb-8">
+                    <h1 class="text-3xl sm:text-4xl font-black gradient-text">💰 메랜 계산기, 분배 시간 줄이고 사냥 가세요!</h1>
+                    <div class="mt-4 flex justify-center items-center space-x-4 md:space-x-6 text-base">
+                        <button id="openNoticeModalBtn" class="text-yellow-400 hover:text-yellow-300 transition duration-300 font-semibold flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>
+                            <span>업데이트</span>
+                        </button>
+                        <button id="openVideoModalBtn" class="text-yellow-400 hover:text-yellow-300 transition duration-300 font-semibold flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>
+                            <span>사용법</span>
+                        </button>
+                        <button id="openContactModalBtn" class="text-yellow-400 hover:text-yellow-300 transition duration-300 font-semibold flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
+                            <span>문의</span>
+                        </button>
+                    </div>
+                </header>
+
+                <div class="my-8 text-center min-h-[90px]">
                     <ins class="adsbygoogle"
-                         style="display:inline-block;width:160px;height:600px"
+                         style="display:block"
                          data-ad-client="ca-pub-8602495420447615"
-                         data-ad-slot="1111111111"></ins> <!-- 실제 광고 슬롯 ID로 변경하세요 -->
+                         data-ad-slot="2222222222"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
                 </div>
-            </div>
-        </aside>
 
-        <main class="w-full max-w-4xl py-4 sm:py-6 md:py-8">
-            <header class="text-center mb-8">
-                <h1 class="text-3xl sm:text-4xl font-black gradient-text">💰 메랜 계산기, 분배 시간 줄이고 사냥 가세요!</h1>
-                <div class="mt-4 flex justify-center items-center space-x-4 md:space-x-6 text-base">
-                    <button id="openNoticeModalBtn" class="text-yellow-400 hover:text-yellow-300 transition duration-300 font-semibold flex items-center space-x-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>
-                        <span>업데이트</span>
-                    </button>
-                    <button id="openVideoModalBtn" class="text-yellow-400 hover:text-yellow-300 transition duration-300 font-semibold flex items-center space-x-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>
-                        <span>사용법</span>
-                    </button>
-                    <button id="openContactModalBtn" class="text-yellow-400 hover:text-yellow-300 transition duration-300 font-semibold flex items-center space-x-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
-                        <span>문의</span>
-                    </button>
-                </div>
-            </header>
-
-            <div class="my-8 text-center min-h-[90px]">
-                <!-- 상단 광고 (728x90) -->
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-8602495420447615"
-                     data-ad-slot="2222222222"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-            </div>
-
-            <div class="card-style p-6 sm:p-8 rounded-2xl shadow-2xl">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-                    <div>
-                        <label for="totalAmount" class="block text-sm font-medium text-gray-300 mb-2">총 거래 금액 (메소)</label>
-                        <input type="text" id="totalAmount" placeholder="예: 100,000,000" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                <div class="card-style p-6 sm:p-8 rounded-2xl shadow-2xl">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                        <div>
+                            <label for="totalAmount" class="block text-sm font-medium text-gray-300 mb-2">총 거래 금액 (메소)</label>
+                            <input type="text" id="totalAmount" placeholder="예: 100,000,000" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                        </div>
+                        <div>
+                            <label for="transactionType" class="block text-sm font-medium text-gray-300 mb-2">거래 방식</label>
+                            <select id="transactionType" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                                <option value="general">일반 거래</option>
+                                <option value="parcel">택배 거래</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="numPeople" class="block text-sm font-medium text-gray-300 mb-2">분배 인원 (N명)</label>
+                            <input type="number" id="numPeople" placeholder="1명 (기본)" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                        </div>
                     </div>
-                    <div>
-                        <label for="transactionType" class="block text-sm font-medium text-gray-300 mb-2">거래 방식</label>
-                        <select id="transactionType" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
-                            <option value="general">일반 거래</option>
-                            <option value="parcel">택배 거래</option>
-                        </select>
+                    
+                    <div id="parcelOptions" class="mt-4 hidden">
+                        <label for="includeSelf" class="flex items-center space-x-2 text-sm text-gray-400 cursor-pointer">
+                            <input type="checkbox" id="includeSelf" checked class="w-4 h-4 text-yellow-500 bg-gray-600 border-gray-500 rounded focus:ring-yellow-600">
+                            <span>본인 포함 분배 (총액을 N명으로 나눔)</span>
+                        </label>
                     </div>
-                    <div>
-                        <label for="numPeople" class="block text-sm font-medium text-gray-300 mb-2">분배 인원 (N명)</label>
-                        <input type="number" id="numPeople" placeholder="1명 (기본)" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                    
+                    <div id="error-message" class="text-red-400 text-sm mt-4 text-center hidden"></div>
+
+                    <div class="mt-6">
+                        <button id="calculateBtn" class="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-6 rounded-lg transition duration-300 shadow-lg hover:shadow-yellow-500/50">지금 계산하기</button>
                     </div>
                 </div>
-                
-                <div id="parcelOptions" class="mt-4 hidden">
-                    <label for="includeSelf" class="flex items-center space-x-2 text-sm text-gray-400 cursor-pointer">
-                        <input type="checkbox" id="includeSelf" checked class="w-4 h-4 text-yellow-500 bg-gray-600 border-gray-500 rounded focus:ring-yellow-600">
-                        <span>본인 포함 분배 (총액을 N명으로 나눔)</span>
-                    </label>
-                </div>
-                
-                <div id="error-message" class="text-red-400 text-sm mt-4 text-center hidden"></div>
 
-                <div class="mt-6">
-                    <button id="calculateBtn" class="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-6 rounded-lg transition duration-300 shadow-lg hover:shadow-yellow-500/50">지금 계산하기</button>
-                </div>
-            </div>
+                <div id="resultArea" class="mt-8 hidden"></div>
 
-            <div id="resultArea" class="mt-8 hidden"></div>
-
-            <div class="my-8 text-center min-h-[90px]">
-                <!-- 하단 광고 -->
-                 <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-8602495420447615"
-                     data-ad-slot="4444444444"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-            </div>
-
-            <footer class="text-center mt-12 mb-6 text-sm text-gray-500">
-                <p>제작자: 소년아서</p>
-            </footer>
-        </main>
-        
-        <aside class="hidden lg:block w-[160px] pt-24 flex-shrink-0">
-             <div class="sticky top-8">
-                <div class="w-full h-[600px] bg-gray-800/50 backdrop-blur-sm rounded-lg flex items-center justify-center border border-gray-700">
-                    <!-- 우측 광고 (160x600) -->
-                    <ins class="adsbygoogle"
-                         style="display:inline-block;width:160px;height:600px"
+                <div class="my-8 text-center min-h-[90px]">
+                     <ins class="adsbygoogle"
+                         style="display:block"
                          data-ad-client="ca-pub-8602495420447615"
-                         data-ad-slot="3333333333"></ins>
+                         data-ad-slot="4444444444"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
                 </div>
-            </div>
-        </aside>
+
+                <footer class="text-center mt-12 mb-6 text-sm text-gray-500">
+                    <p>제작자: 소년아서</p>
+                </footer>
+            </main>
+            
+            <aside class="hidden lg:block w-[160px] pt-24 flex-shrink-0">
+                 <div class="sticky top-8">
+                    <div class="w-full h-[600px] bg-gray-800/50 backdrop-blur-sm rounded-lg flex items-center justify-center border border-gray-700">
+                        <ins class="adsbygoogle"
+                             style="display:inline-block;width:160px;height:600px"
+                             data-ad-client="ca-pub-8602495420447615"
+                             data-ad-slot="3333333333"></ins>
+                    </div>
+                </div>
+            </aside>
+        </div>
     </div>
 
     <!-- 모달 HTML -->
@@ -521,13 +553,16 @@
                 }
             }
 
-            // Push ads only after the page is fully loaded
-            document.querySelectorAll('.adsbygoogle').forEach(() => {
-                try {
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                } catch (e) {
-                    console.error('AdSense push error:', e);
-                }
+            window.addEventListener('load', () => {
+                document.querySelectorAll('.adsbygoogle').forEach(ad => {
+                    if (ad.offsetWidth > 0) {
+                        try {
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        } catch (e) {
+                            console.error('AdSense push error:', e);
+                        }
+                    }
+                });
             });
         });
     </script>
