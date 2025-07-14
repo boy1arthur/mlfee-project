@@ -316,15 +316,6 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-1">평가</label>
-                    <div class="flex gap-4">
-                        <input type="radio" id="rating-like" name="rating" value="like" class="hidden peer/like" required>
-                        <label for="rating-like" class="w-full text-center py-2 px-4 rounded-lg border-2 border-slate-600 cursor-pointer peer-checked/like:bg-sky-600 peer-checked/like:border-sky-500 peer-checked/like:text-white transition-colors"><i class="fas fa-thumbs-up mr-2"></i>추천</label>
-                        <input type="radio" id="rating-dislike" name="rating" value="dislike" class="hidden peer/dislike">
-                        <label for="rating-dislike" class="w-full text-center py-2 px-4 rounded-lg border-2 border-slate-600 cursor-pointer peer-checked/dislike:bg-red-600 peer-checked/dislike:border-red-500 peer-checked/dislike:text-white transition-colors"><i class="fas fa-thumbs-down mr-2"></i>비추천</label>
-                    </div>
-                </div>
-                <div>
                     <label for="reviewText" class="block text-sm font-medium text-gray-300 mb-1">후기 내용</label>
                     <textarea id="reviewText" rows="4" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500"></textarea>
                 </div>
@@ -354,6 +345,10 @@
             <h3 class="text-3xl font-bold text-sky-400 mb-6 text-center">업데이트 내역</h3>
             <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-4 text-slate-300">
                  <div class="p-4 bg-slate-700/50 rounded-lg">
+                     <p class="font-bold text-lg text-white">2024-07-19: 후기 시스템 간소화</p>
+                     <p class="mt-1">- 후기 작성 시 '추천/비추천' 평가 기능을 제거하여 더 간단하게 후기를 남길 수 있도록 변경했습니다.</p>
+                 </div>
+                 <div class="p-4 bg-slate-700/50 rounded-lg">
                      <p class="font-bold text-lg text-white">2024-07-18: 공략 가이드 그래픽 복원</p>
                      <p class="mt-1">- 깨진 이미지 링크를 제거하고, 원래의 SVG 그래픽으로 복원하여 안정성을 높였습니다.</p>
                  </div>
@@ -362,10 +357,6 @@
                      <p class="mt-1">- 모든 팝업창(모달)이 화면 중앙에 안정적으로 표시되도록 수정했습니다.</p>
                      <p class="mt-1">- 후기 삭제 시 구식 알림창 대신 세련된 확인창이 나타나도록 개선했습니다.</p>
                  </div>
-                 <div class="p-4 bg-slate-700/50 rounded-lg">
-                    <p class="font-bold text-lg text-white">2024-07-16: 콘텐츠 강화</p>
-                    <p class="mt-1">- 애드센스 승인을 위해 공략 및 가이드 콘텐츠를 대폭 보강했습니다.</p>
-                </div>
             </div>
         </div>
     </div>
@@ -459,9 +450,9 @@
 
             // --- Review System (localStorage) ---
             const defaultReviews = [
-                { id: 'default1', name: 'AA 법사z', info: 'Lv. ?? 아크메이지', rating: 'like', text: '레이드 크로니클 덕분에 자쿰 원정 처음으로 안 짤리고 깼어요. 오더가 정말 편해집니다. 강추!', avatar: 'https://placehold.co/40x40/3b82f6/ffffff?text=M' },
-                { id: 'default2', name: 'ㅁㅁ공대장', info: '자쿰 원정대', rating: 'like', text: 'N빵마스터 없었을 땐 매번 계산기 두들기느라 힘들었는데, 이젠 클릭 한 번이면 끝이네요. 시간 엄청 아꼈어요.', avatar: 'https://placehold.co/40x40/ef4444/ffffff?text=L' },
-                { id: 'default3', name: 'DD 프리', info: 'Lv. ?? 비숍', rating: 'like', text: '파티원들한테 리저 시간 브리핑해주기 너무 편해요. 시간 클릭하면 바로 복사되는 기능 만든 분은 천재이신 듯.', avatar: 'https://placehold.co/40x40/22c55e/ffffff?text=B' }
+                { id: 'default1', name: 'AA 법사z', info: 'Lv. ?? 아크메이지', text: '레이드 크로니클 덕분에 자쿰 원정 처음으로 안 짤리고 깼어요. 오더가 정말 편해집니다. 강추!', avatar: 'https://placehold.co/40x40/3b82f6/ffffff?text=M' },
+                { id: 'default2', name: 'ㅁㅁ공대장', info: '자쿰 원정대', text: 'N빵마스터 없었을 땐 매번 계산기 두들기느라 힘들었는데, 이젠 클릭 한 번이면 끝이네요. 시간 엄청 아꼈어요.', avatar: 'https://placehold.co/40x40/ef4444/ffffff?text=L' },
+                { id: 'default3', name: 'DD 프리', info: 'Lv. ?? 비숍', text: '파티원들한테 리저 시간 브리핑해주기 너무 편해요. 시간 클릭하면 바로 복사되는 기능 만든 분은 천재이신 듯.', avatar: 'https://placehold.co/40x40/22c55e/ffffff?text=B' }
             ];
 
             function getReviews() {
@@ -490,10 +481,6 @@
                 }
 
                 reviews.forEach(review => {
-                    const ratingIcon = review.rating === 'like'
-                        ? `<div class="text-sky-400 text-xl"><i class="fas fa-thumbs-up mr-2"></i>추천</div>`
-                        : `<div class="text-red-400 text-xl"><i class="fas fa-thumbs-down mr-2"></i>비추천</div>`;
-                    
                     const avatarChar = getAvatarChar(review.name);
                     const avatarUrl = review.avatar || `https://placehold.co/40x40/6366f1/ffffff?text=${avatarChar}`;
 
@@ -502,7 +489,6 @@
                     reviewCard.innerHTML = `
                         <button class="delete-review-btn absolute top-2 right-3 text-gray-500 hover:text-white text-2xl transition-colors" data-id="${review.id}">&times;</button>
                         <div class="flex-grow">
-                            <div class="mb-4">${ratingIcon}</div>
                             <p class="text-gray-300 mb-6 break-words">${review.text}</p>
                         </div>
                         <div class="flex items-center mt-auto">
@@ -555,18 +541,11 @@
                     e.preventDefault();
                     const name = document.getElementById('reviewerName').value;
                     const info = document.getElementById('reviewerInfo').value;
-                    const ratingRadio = document.querySelector('input[name="rating"]:checked');
                     const text = document.getElementById('reviewText').value;
-
-                    if (!ratingRadio) {
-                        showConfirmation('알림', '평가를 선택해주세요.', { okText: '확인' });
-                        return;
-                    }
                     
                     const newReview = { 
                         id: `user_${Date.now()}`,
                         name, info, 
-                        rating: ratingRadio.value, 
                         text, 
                         avatar: `https://placehold.co/40x40/6366f1/ffffff?text=${getAvatarChar(name)}`,
                         isUser: true 
@@ -640,4 +619,4 @@
         });
     </script>
 </body>
-</html>
+</ht
