@@ -88,7 +88,7 @@
 </head>
 <body class="bg-gray-900 text-white antialiased">
 
-    <!-- ########## 사이드바 메뉴 HTML (요청대로 최종 수정) ########## -->
+    <!-- ########## 사이드바 메뉴 HTML ########## -->
     <div id="sidebar-toggle" class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
         <div class="hamburger-icon space-y-1.5">
             <span class="block w-6 h-0.5 bg-white"></span>
@@ -104,7 +104,7 @@
         <a href="https://www.mlfee.com/calc/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
         <a href="https://www.mlfee.com/timer/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
         <a href="#calculator-guide" id="guide-link" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
-        <a href="mailto:esgroup129@gmail.com" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의</a>
+        <a href="#" id="contact-link" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의</a>
     </nav>
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-50 hidden"></div>
     <!-- ########## 사이드바 메뉴 HTML 끝 ########## -->
@@ -208,13 +208,37 @@
 
                 <footer class="text-center mt-10 mb-6 text-sm text-gray-500">
                     <div class="flex justify-center space-x-4 mb-4">
-                        <a href="/about.html" class="hover:text-sky-400 transition">사이트 소개</a>
-                        <a href="/terms.html" class="hover:text-sky-400 transition">이용약관</a>
-                        <a href="/privacy.html" class="hover:text-sky-400 transition">개인정보처리방침</a>
+                        <a href="https://mlfee.com/about.html" class="hover:text-sky-400 transition">사이트 소개</a>
+                        <a href="https://mlfee.com/terms.html" class="hover:text-sky-400 transition">이용약관</a>
+                        <a href="https://mlfee.com/privacy.html" class="hover:text-sky-400 transition">개인정보처리방침</a>
                     </div>
                     <p>제작자: 소년아서</p>
                 </footer>
             </main>
+        </div>
+    </div>
+
+    <!-- ########## 문의하기 모달 HTML ########## -->
+    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-[1002]">
+        <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-sm text-center p-8 relative border border-gray-700">
+            <button id="closeContactModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
+            <h3 class="text-2xl font-bold text-yellow-400">문의하기</h3>
+            <div class="space-y-4 mt-6">
+                <a href="mailto:esgroup129@gmail.com" class="w-full flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
+                    이메일
+                </a>
+                <a href="https://open.kakao.com/o/s4YH6WFh" target="_blank" class="w-full flex items-center justify-center bg-[#FEE500] hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-lg transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M12.01,2C6.48,2,2,6.04,2,11.05c0,3.33,1.97,6.25,4.8,7.74L6,22l3.42-2.35C10.43,19.88,11.21,20,12.01,20c5.52,0,10-4.04,10-8.95S17.53,2,12.01,2z"/></svg>
+                    카카오톡 오픈채팅
+                </a>
+                <a href="https://discord.com/users/930037107823636540" target="_blank" class="w-full flex items-center justify-center bg-[#5865F2] hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.037c-1.02 3.626-1.222 7.79- .284 11.654a.052.052 0 0 0 .016.053c.087.063.18.129.27.195a.05.05 0 0 0 .051.007c2.175-1.566 3.971-4.42 3.971-4.42s.709.64 2.274.64c1.566 0 2.274-.64 2.274-.64s1.796 2.854 3.97 4.42a.05.05 0 0 0 .051-.007c.09-.066.183-.132.27-.195a.052.052 0 0 0 .016-.053c.938-3.864.736-8.028-.284-11.654a.041.041 0 0 0-.021-.037zM8.02 10.842c-.837 0-1.518-.682-1.518-1.518s.681-1.518 1.518-1.518c.837 0 1.518.682 1.518 1.518s-.681 1.518-1.518 1.518zm3.515 0c-.837 0-1.518-.682-1.518-1.518s.681-1.518 1.518-1.518c.837 0 1.518.682 1.518 1.518s-.681 1.518-1.518 1.518z"/>
+                    </svg>
+                    디스코드
+                </a>
+            </div>
         </div>
     </div>
 
@@ -247,10 +271,13 @@
             const parcelOptionsDiv = document.getElementById('parcelOptions');
             const includeSelfCheckbox = document.getElementById('includeSelf');
 
-            // ########## 사이드바 DOM 요소 캐싱 ##########
+            // ########## 사이드바 및 모달 DOM 요소 캐싱 ##########
             const sidebarToggle = document.getElementById('sidebar-toggle');
             const sidebar = document.getElementById('sidebar');
             const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const contactLink = document.getElementById('contact-link');
+            const contactModal = document.getElementById('contactModal');
+            const closeContactModalBtn = document.getElementById('closeContactModalBtn');
 
             // ########## 헬퍼 함수 ##########
             const formatNumber = (num) => num.toLocaleString('ko-KR');
@@ -573,17 +600,11 @@
                 parcelOptionsDiv.classList.toggle('hidden', transactionTypeSelect.value !== 'parcel');
             });
 
-            // ########## 사이드바 이벤트 리스너 (링크 클릭시 닫기 기능 추가) ##########
+            // ########## 사이드바 및 모달 이벤트 리스너 ##########
             function closeSidebar() {
                 sidebar.classList.add('translate-x-full');
-                sidebarOverlay.classList.add('hidden');
                 sidebarToggle.classList.remove('active');
-            }
-
-            function openSidebar() {
-                sidebar.classList.remove('translate-x-full');
-                sidebarOverlay.classList.remove('hidden');
-                sidebarToggle.classList.add('active');
+                sidebarOverlay.classList.add('hidden');
             }
 
             sidebarToggle.addEventListener('click', () => {
@@ -591,14 +612,33 @@
                 if (isSidebarOpen) {
                     closeSidebar();
                 } else {
-                    openSidebar();
+                    sidebar.classList.remove('translate-x-full');
+                    sidebarToggle.classList.add('active');
+                    sidebarOverlay.classList.remove('hidden');
                 }
             });
 
             sidebarOverlay.addEventListener('click', closeSidebar);
             
             document.querySelectorAll('#sidebar a').forEach(link => {
-                link.addEventListener('click', closeSidebar);
+                if (link.id !== 'contact-link') { // 문의 링크는 모달을 띄우므로 제외
+                    link.addEventListener('click', closeSidebar);
+                }
+            });
+
+            // 문의 모달 로직
+            contactLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                closeSidebar();
+                contactModal.classList.remove('hidden');
+            });
+            closeContactModalBtn.addEventListener('click', () => {
+                contactModal.classList.add('hidden');
+            });
+            contactModal.addEventListener('click', (e) => {
+                if(e.target === contactModal) {
+                    contactModal.classList.add('hidden');
+                }
             });
 
 
@@ -608,4 +648,4 @@
         });
     </script>
 </body>
-</ht
+</html>
