@@ -67,14 +67,6 @@
             @apply absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-blue-500 rounded-full;
         }
         
-        /* Star Rating Styles */
-        .star-rating { @apply flex flex-row-reverse justify-end; }
-        .star-rating input { @apply hidden; }
-        .star-rating label { @apply text-3xl text-gray-500 cursor-pointer transition-colors duration-200; }
-        .star-rating input:checked ~ label,
-        .star-rating label:hover,
-        .star-rating label:hover ~ label { @apply text-yellow-400; }
-
         .modal-backdrop { @apply fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002]; animation: fadeIn 0.3s ease-out; }
         .modal-content { @apply bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full text-center border border-slate-700; animation: slideIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -323,13 +315,16 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-1">별점</label>
-                    <div class="star-rating">
-                        <input type="radio" id="5-stars" name="rating" value="5" required/><label for="5-stars" class="fas fa-star"></label>
-                        <input type="radio" id="4-stars" name="rating" value="4" /><label for="4-stars" class="fas fa-star"></label>
-                        <input type="radio" id="3-stars" name="rating" value="3" /><label for="3-stars" class="fas fa-star"></label>
-                        <input type="radio" id="2-stars" name="rating" value="2" /><label for="2-stars" class="fas fa-star"></label>
-                        <input type="radio" id="1-star" name="rating" value="1" /><label for="1-star" class="fas fa-star"></label>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">평가</label>
+                    <div class="flex gap-4">
+                        <input type="radio" id="rating-like" name="rating" value="like" class="hidden peer/like" required>
+                        <label for="rating-like" class="w-full text-center py-2 px-4 rounded-lg border-2 border-slate-600 cursor-pointer peer-checked/like:bg-sky-600 peer-checked/like:border-sky-500 peer-checked/like:text-white transition-colors">
+                            <i class="fas fa-thumbs-up mr-2"></i>추천
+                        </label>
+                        <input type="radio" id="rating-dislike" name="rating" value="dislike" class="hidden peer/dislike">
+                        <label for="rating-dislike" class="w-full text-center py-2 px-4 rounded-lg border-2 border-slate-600 cursor-pointer peer-checked/dislike:bg-red-600 peer-checked/dislike:border-red-500 peer-checked/dislike:text-white transition-colors">
+                            <i class="fas fa-thumbs-down mr-2"></i>비추천
+                        </label>
                     </div>
                 </div>
                 <div>
@@ -365,6 +360,22 @@
             </div>
         </div>
     </div>
+    <div id="updatesModal" class="modal-backdrop hidden">
+        <div class="modal-content max-w-2xl text-left">
+            <button id="closeUpdatesModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
+            <h3 class="text-3xl font-bold text-sky-400 mb-6 text-center">업데이트 내역</h3>
+            <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-4 text-slate-300">
+                <div class="p-4 bg-slate-700/50 rounded-lg">
+                    <p class="font-bold text-lg text-white">2024-07-16: 후기 시스템 개선</p>
+                    <p class="mt-1">- 후기 작성 시 닉네임을 익명화하여 개인정보를 보호합니다.</p>
+                </div>
+                <div class="p-4 bg-slate-700/50 rounded-lg">
+                    <p class="font-bold text-lg text-white">2024-07-15: 콘텐츠 강화</p>
+                    <p class="mt-1">- 애드센스 승인을 위해 공략 및 가이드 콘텐츠를 대폭 보강했습니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -381,13 +392,15 @@
             }
 
             // Adsense script loader
-            try {
-                document.querySelectorAll('.adsbygoogle').forEach(ad => {
-                     (adsbygoogle = window.adsbygoogle || []).push({});
-                });
-            } catch (e) {
-                console.error('AdSense push error:', e);
-            }
+            window.addEventListener('load', () => {
+                try {
+                    document.querySelectorAll('.adsbygoogle').forEach(ad => {
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    });
+                } catch (e) {
+                    console.error('AdSense push error:', e);
+                }
+            });
 
             // Review System Logic
             const reviewList = document.getElementById('review-list');
@@ -397,9 +410,9 @@
             const closeReviewModalBtn = document.getElementById('closeReviewModalBtn');
 
             const defaultReviews = [
-                { name: 'AA 법사z', info: 'Lv. ?? 아크메이지', rating: 5, text: '레이드 크로니클 덕분에 자쿰 원정 처음으로 안 짤리고 깼어요. 오더가 정말 편해집니다. 강추!', avatar: 'https://placehold.co/40x40/3b82f6/ffffff?text=M' },
-                { name: 'ㅁㅁ공대장', info: '자쿰 원정대', rating: 5, text: 'N빵마스터 없었을 땐 매번 계산기 두들기느라 힘들었는데, 이젠 클릭 한 번이면 끝이네요. 시간 엄청 아꼈어요.', avatar: 'https://placehold.co/40x40/ef4444/ffffff?text=L' },
-                { name: 'DD 프리', info: 'Lv. ?? 비숍', rating: 5, text: '파티원들한테 리저 시간 브리핑해주기 너무 편해요. 시간 클릭하면 바로 복사되는 기능 만든 분은 천재이신 듯.', avatar: 'https://placehold.co/40x40/22c55e/ffffff?text=B' }
+                { id: 'default1', name: 'AA 법사z', info: 'Lv. ?? 아크메이지', rating: 'like', text: '레이드 크로니클 덕분에 자쿰 원정 처음으로 안 짤리고 깼어요. 오더가 정말 편해집니다. 강추!', avatar: 'https://placehold.co/40x40/3b82f6/ffffff?text=M' },
+                { id: 'default2', name: 'ㅁㅁ공대장', info: '자쿰 원정대', rating: 'like', text: 'N빵마스터 없었을 땐 매번 계산기 두들기느라 힘들었는데, 이젠 클릭 한 번이면 끝이네요. 시간 엄청 아꼈어요.', avatar: 'https://placehold.co/40x40/ef4444/ffffff?text=L' },
+                { id: 'default3', name: 'DD 프리', info: 'Lv. ?? 비숍', rating: 'like', text: '파티원들한테 리저 시간 브리핑해주기 너무 편해요. 시간 클릭하면 바로 복사되는 기능 만든 분은 천재이신 듯.', avatar: 'https://placehold.co/40x40/22c55e/ffffff?text=B' }
             ];
 
             function getReviews() {
@@ -424,18 +437,22 @@
                 const reviews = getReviews();
                 reviewList.innerHTML = '';
                 reviews.forEach(review => {
-                    const stars = Array(5).fill(0).map((_, i) => 
-                        `<i class="fas fa-star ${i < review.rating ? 'text-yellow-400' : 'text-gray-600'}"></i>`
-                    ).join('');
+                    let ratingIcon = '';
+                    if (review.rating === 'like') {
+                        ratingIcon = `<div class="text-sky-400 text-xl"><i class="fas fa-thumbs-up mr-2"></i>추천</div>`;
+                    } else {
+                        ratingIcon = `<div class="text-red-400 text-xl"><i class="fas fa-thumbs-down mr-2"></i>비추천</div>`;
+                    }
 
                     const avatarChar = getAvatarChar(review.name);
                     const avatarUrl = review.avatar || `https://placehold.co/40x40/6366f1/ffffff?text=${avatarChar}`;
 
                     const reviewCard = document.createElement('div');
-                    reviewCard.className = 'bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col';
+                    reviewCard.className = 'bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col relative';
                     reviewCard.innerHTML = `
+                        <button class="delete-review-btn absolute top-2 right-3 text-gray-500 hover:text-white text-2xl transition-colors" data-id="${review.id}">&times;</button>
                         <div class="flex-grow">
-                            <div class="mb-4">${stars}</div>
+                            <div class="mb-4">${ratingIcon}</div>
                             <p class="text-gray-300 mb-6">${review.text}</p>
                         </div>
                         <div class="flex items-center mt-auto">
@@ -447,6 +464,27 @@
                         </div>
                     `;
                     reviewList.appendChild(reviewCard);
+                });
+            }
+
+            function deleteReview(reviewId) {
+                const password = prompt("관리자 암호를 입력하세요:");
+                if (password === "admin1234") {
+                    let reviews = getReviews();
+                    reviews = reviews.filter(review => review.id !== reviewId);
+                    saveReviews(reviews);
+                    renderReviews();
+                } else if (password !== null) {
+                    alert("암호가 틀렸습니다.");
+                }
+            }
+
+            if(reviewList) {
+                reviewList.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('delete-review-btn')) {
+                        const reviewId = e.target.dataset.id;
+                        deleteReview(reviewId);
+                    }
                 });
             }
 
@@ -479,7 +517,15 @@
                     const text = document.getElementById('reviewText').value;
 
                     const avatarChar = getAvatarChar(name);
-                    const newReview = { name, info, rating, text, avatar: `https://placehold.co/40x40/6366f1/ffffff?text=${avatarChar}` };
+                    const newReview = { 
+                        id: `user_${Date.now()}`,
+                        name, 
+                        info, 
+                        rating, 
+                        text, 
+                        avatar: `https://placehold.co/40x40/6366f1/ffffff?text=${avatarChar}`,
+                        isUser: true 
+                    };
                     
                     const reviews = getReviews();
                     reviews.push(newReview);
@@ -503,20 +549,25 @@
             const contactLink = document.getElementById('contactLink');
             const contactModal = document.getElementById('contactModal');
             const closeContactModalBtn = document.getElementById('closeContactModalBtn');
+            const updatesLink = document.getElementById('updatesLink');
+            const updatesModal = document.getElementById('updatesModal');
+            const closeUpdatesModalBtn = document.getElementById('closeUpdatesModalBtn');
 
             function closeSidebar() {
-                sidebar.classList.add('translate-x-full');
-                sidebarToggle.classList.remove('active');
-                sidebarOverlay.classList.add('hidden');
+                if (sidebar) sidebar.classList.add('translate-x-full');
+                if (sidebarToggle) sidebarToggle.classList.remove('active');
+                if (sidebarOverlay) sidebarOverlay.classList.add('hidden');
             }
 
-            sidebarToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('translate-x-full');
-                sidebarToggle.classList.toggle('active');
-                sidebarOverlay.classList.toggle('hidden');
-            });
+            if(sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('translate-x-full');
+                    sidebarToggle.classList.toggle('active');
+                    sidebarOverlay.classList.toggle('hidden');
+                });
+            }
 
-            sidebarOverlay.addEventListener('click', closeSidebar);
+            if(sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
             
             const guideLink = document.getElementById('guideLink');
             if(guideLink) {
@@ -529,24 +580,47 @@
                     closeSidebar(); 
                 });
             }
+            
+            if(updatesLink) {
+                updatesLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    closeSidebar();
+                    setTimeout(() => {
+                        if(updatesModal) updatesModal.classList.remove('hidden');
+                    }, 300);
+                });
+            }
+            
+            if(closeUpdatesModalBtn) {
+                closeUpdatesModalBtn.addEventListener('click', () => updatesModal.classList.add('hidden'));
+            }
+            if(updatesModal) {
+                updatesModal.addEventListener('click', (e) => { if(e.target === updatesModal) updatesModal.classList.add('hidden'); });
+            }
 
-            contactLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeSidebar();
-                setTimeout(() => {
-                    contactModal.classList.remove('hidden');
-                }, 300);
-            });
+            if(contactLink) {
+                contactLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    closeSidebar();
+                    setTimeout(() => {
+                        if(contactModal) contactModal.classList.remove('hidden');
+                    }, 300);
+                });
+            }
 
-            closeContactModalBtn.addEventListener('click', () => {
-                contactModal.classList.add('hidden');
-            });
-
-            contactModal.addEventListener('click', (e) => {
-                if (e.target === contactModal) {
+            if(closeContactModalBtn) {
+                closeContactModalBtn.addEventListener('click', () => {
                     contactModal.classList.add('hidden');
-                }
-            });
+                });
+            }
+
+            if(contactModal) {
+                contactModal.addEventListener('click', (e) => {
+                    if (e.target === contactModal) {
+                        contactModal.classList.add('hidden');
+                    }
+                });
+            }
         });
     </script>
 </body>
