@@ -67,6 +67,14 @@
             @apply absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-blue-500 rounded-full;
         }
         
+        /* Star Rating Styles */
+        .star-rating { @apply flex flex-row-reverse justify-end; }
+        .star-rating input { @apply hidden; }
+        .star-rating label { @apply text-3xl text-gray-500 cursor-pointer transition-colors duration-200; }
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label { @apply text-yellow-400; }
+
         .modal-backdrop { @apply fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002]; animation: fadeIn 0.3s ease-out; }
         .modal-content { @apply bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full text-center border border-slate-700; animation: slideIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -468,14 +476,26 @@
             }
 
             function deleteReview(reviewId) {
-                const password = prompt("관리자 암호를 입력하세요:");
-                if (password === "admin1234") {
-                    let reviews = getReviews();
-                    reviews = reviews.filter(review => review.id !== reviewId);
-                    saveReviews(reviews);
-                    renderReviews();
-                } else if (password !== null) {
-                    alert("암호가 틀렸습니다.");
+                const reviews = getReviews();
+                const reviewToDelete = reviews.find(r => r.id === reviewId);
+                
+                if (!reviewToDelete) return;
+
+                if (reviewToDelete.isUser) {
+                    if (confirm('이 후기를 삭제하시겠습니까?')) {
+                        const newReviews = reviews.filter(review => review.id !== reviewId);
+                        saveReviews(newReviews);
+                        renderReviews();
+                    }
+                } else {
+                    const password = prompt("기본 후기는 관리자만 삭제할 수 있습니다.\n관리자 암호를 입력하세요:");
+                    if (password === "admin1234") {
+                        const newReviews = reviews.filter(review => review.id !== reviewId);
+                        saveReviews(newReviews);
+                        renderReviews();
+                    } else if (password !== null) {
+                        alert("암호가 틀렸습니다.");
+                    }
                 }
             }
 
