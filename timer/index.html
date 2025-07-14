@@ -45,6 +45,11 @@
 
         .status-cooldown { color: #f97316; }
 
+        .modal-backdrop { @apply fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002]; animation: fadeIn 0.3s ease-out; }
+        .modal-content { @apply bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full text-center border border-slate-700; animation: slideIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
         .summary-container {
             max-height: 0;
             overflow: hidden;
@@ -89,7 +94,7 @@
         <a href="#how-to-guide" id="guideLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
         <a href="#" id="contactLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의</a>
     </nav>
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-50 hidden"></div>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[999] hidden"></div>
 
     <!-- App Container -->
     <div id="app" class="w-full max-w-4xl mx-auto">
@@ -192,7 +197,7 @@
     </div>
     
     <!-- Modals -->
-    <div id="contactModal" class="modal-backdrop hidden">
+    <div id="contactModal" class="modal-backdrop items-center justify-center hidden">
         <div class="modal-content max-w-sm">
             <button id="closeContactModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
             <h3 class="text-2xl font-bold text-yellow-400">문의하기</h3>
@@ -246,9 +251,7 @@
                 sidebarOverlay: document.getElementById('sidebar-overlay'),
                 guideLink: document.getElementById('guideLink'),
                 contactLink: document.getElementById('contactLink'),
-                guideModal: document.getElementById('guideModal'),
                 contactModal: document.getElementById('contactModal'),
-                closeGuideModalBtn: document.getElementById('closeGuideModalBtn'),
                 closeContactModalBtn: document.getElementById('closeContactModalBtn'),
             };
 
@@ -521,11 +524,14 @@
                 dom.summaryContent.innerHTML = summaryHtml;
                 dom.summaryContainer.classList.add('expanded');
                 
-                document.getElementById('copySummaryBtn').addEventListener('click', () => {
-                    const bishopResText = raidState.bishops.map(b => `${b.name}: ${b.resCount}회`).join(' / ');
-                    const textToCopy = `총 시간: ${formatTime(finalSeconds, false)}, 총 데카: ${totalDeaths}회 / ${bishopResText}`;
-                    copyToClipboard(textToCopy, "간편 요약이 복사되었습니다.");
-                });
+                const copyBtn = document.getElementById('copySummaryBtn');
+                if(copyBtn) {
+                    copyBtn.addEventListener('click', () => {
+                        const bishopResText = raidState.bishops.map(b => `${b.name}: ${b.resCount}회`).join(' / ');
+                        const textToCopy = `총 시간: ${formatTime(finalSeconds, false)}, 총 데카: ${totalDeaths}회 / ${bishopResText}`;
+                        copyToClipboard(textToCopy, "간편 요약이 복사되었습니다.");
+                    });
+                }
 
                 render(raidState);
             }
@@ -596,7 +602,6 @@
             function attachEventListeners() {
                  if (dom.resetBtn) dom.resetBtn.addEventListener('click', handleReset);
                  if (dom.endRaidBtn) dom.endRaidBtn.addEventListener('click', handleEndRaid);
-                 if (dom.closeSummaryBtn) dom.closeSummaryBtn.addEventListener('click', () => dom.summaryModal.classList.add('hidden'));
                  if (dom.muteBtn) dom.muteBtn.addEventListener('click', () => {
                     isMuted = !isMuted;
                     dom.muteBtn.textContent = isMuted ? '소리 켜기' : '소리 끄기';
@@ -650,18 +655,22 @@
                     });
                 }
                 if (dom.sidebarOverlay) {
-                    dom.sidebarOverlay.addEventListener('click', () => {
-                        dom.sidebar.classList.add('translate-x-full');
-                        dom.sidebarToggle.classList.remove('active');
-                        dom.sidebarOverlay.classList.add('hidden');
-                    });
+                    dom.sidebarOverlay.addEventListener('click', closeSidebar);
                 }
                 if(dom.guideLink) dom.guideLink.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('how-to-guide').scrollIntoView({ behavior: 'smooth' }); closeSidebar(); });
-                if(dom.contactLink) dom.contactLink.addEventListener('click', (e) => { e.preventDefault(); dom.contactModal.classList.remove('hidden'); closeSidebar(); });
-                if(dom.closeGuideModalBtn) dom.closeGuideModalBtn.addEventListener('click', () => dom.guideModal.classList.add('hidden'));
+                if(dom.contactLink) {
+                    dom.contactLink.addEventListener('click', (e) => { 
+                        e.preventDefault(); 
+                        closeSidebar();
+                        setTimeout(() => {
+                            dom.contactModal.classList.remove('hidden');
+                        }, 300);
+                    });
+                }
                 if(dom.closeContactModalBtn) dom.closeContactModalBtn.addEventListener('click', () => dom.contactModal.classList.add('hidden'));
-                if(dom.guideModal) dom.guideModal.addEventListener('click', (e) => { if(e.target === dom.guideModal) dom.guideModal.classList.add('hidden'); });
                 if(dom.contactModal) dom.contactModal.addEventListener('click', (e) => { if(e.target === dom.contactModal) dom.contactModal.classList.add('hidden'); });
+                if(dom.summaryModal) dom.closeSummaryBtn.addEventListener('click', () => dom.summaryModal.classList.add('hidden'));
+
             }
             
             function closeSidebar() {
