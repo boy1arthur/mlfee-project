@@ -70,31 +70,43 @@
             overflow: hidden;
             transition: max-height 0.5s ease-in-out;
         }
+
+        /* Navigation Styles */
+        .hamburger-icon span {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(2) {
+            opacity: 0;
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white antialiased">
 
-    <!-- ########## 사이드바 메뉴 HTML (링크 최종 수정) ########## -->
-    <button id="sidebar-toggle" class="fixed top-4 right-4 z-50 p-2 rounded-md bg-gray-800/50 text-white hover:bg-gray-700/70 transition">
-        <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-    </button>
-    
-    <div id="sidebar" class="fixed top-0 right-0 h-full w-72 bg-gray-900/80 backdrop-blur-lg shadow-2xl z-40 transform translate-x-full transition-transform duration-300 ease-in-out">
-        <div class="p-6">
-            <h2 class="text-2xl font-bold gradient-text mb-8">N빵마스터</h2>
-            <nav>
-                <ul class="space-y-2">
-                    <li><a href="https://mlfee.com" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">홈</a></li>
-                    <li><a href="https://www.mlfee.com/calc/" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">N빵마스터 (수작계산기)</a></li>
-                    <li><a href="https://www.mlfee.com/timer/" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">레이드 크로니클 (타이머)</a></li>
-                    <li><a href="#calculator-guide" id="guide-link" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">사용방법</a></li>
-                    <li><a href="mailto:esgroup129@gmail.com" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">문의</a></li>
-                </ul>
-            </nav>
+    <!-- ########## 사이드바 메뉴 HTML (요청대로 최종 수정) ########## -->
+    <div id="sidebar-toggle" class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
+        <div class="hamburger-icon space-y-1.5">
+            <span class="block w-6 h-0.5 bg-white"></span>
+            <span class="block w-6 h-0.5 bg-white"></span>
+            <span class="block w-6 h-0.5 bg-white"></span>
         </div>
     </div>
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden"></div>
+
+    <nav id="sidebar" class="fixed right-0 top-0 w-72 h-full bg-gray-800/90 backdrop-blur-lg border-l-2 border-gray-700 z-[1000] shadow-2xl transition-transform duration-300 ease-in-out translate-x-full">
+        <h3 class="text-center text-2xl font-bold gradient-text mt-16 mb-8">메뉴</h3>
+        <a href="https://mlfee.com" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">홈</a>
+        <a href="https://mlfee.vercel.app/updates" target="_blank" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">업데이트</a>
+        <a href="https://www.mlfee.com/calc/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
+        <a href="https://www.mlfee.com/timer/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
+        <a href="#calculator-guide" id="guide-link" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
+        <a href="mailto:esgroup129@gmail.com" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의</a>
+    </nav>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-50 hidden"></div>
     <!-- ########## 사이드바 메뉴 HTML 끝 ########## -->
     
     <div class="main-content transition-all duration-300 ease-in-out">
@@ -196,9 +208,9 @@
 
                 <footer class="text-center mt-10 mb-6 text-sm text-gray-500">
                     <div class="flex justify-center space-x-4 mb-4">
-                        <a href="about.html" class="hover:text-sky-400 transition">사이트 소개</a>
-                        <a href="terms.html" class="hover:text-sky-400 transition">이용약관</a>
-                        <a href="privacy.html" class="hover:text-sky-400 transition">개인정보처리방침</a>
+                        <a href="/about.html" class="hover:text-sky-400 transition">사이트 소개</a>
+                        <a href="/terms.html" class="hover:text-sky-400 transition">이용약관</a>
+                        <a href="/privacy.html" class="hover:text-sky-400 transition">개인정보처리방침</a>
                     </div>
                     <p>제작자: 소년아서</p>
                 </footer>
@@ -237,11 +249,8 @@
 
             // ########## 사이드바 DOM 요소 캐싱 ##########
             const sidebarToggle = document.getElementById('sidebar-toggle');
-            const menuIcon = document.getElementById('menu-icon');
-            const closeIcon = document.getElementById('close-icon');
             const sidebar = document.getElementById('sidebar');
             const sidebarOverlay = document.getElementById('sidebar-overlay');
-            const guideLink = document.getElementById('guide-link');
 
             // ########## 헬퍼 함수 ##########
             const formatNumber = (num) => num.toLocaleString('ko-KR');
@@ -568,15 +577,13 @@
             function closeSidebar() {
                 sidebar.classList.add('translate-x-full');
                 sidebarOverlay.classList.add('hidden');
-                menuIcon.classList.remove('hidden');
-                closeIcon.classList.add('hidden');
+                sidebarToggle.classList.remove('active');
             }
 
             function openSidebar() {
                 sidebar.classList.remove('translate-x-full');
                 sidebarOverlay.classList.remove('hidden');
-                menuIcon.classList.add('hidden');
-                closeIcon.classList.remove('hidden');
+                sidebarToggle.classList.add('active');
             }
 
             sidebarToggle.addEventListener('click', () => {
@@ -589,7 +596,10 @@
             });
 
             sidebarOverlay.addEventListener('click', closeSidebar);
-            guideLink.addEventListener('click', closeSidebar);
+            
+            document.querySelectorAll('#sidebar a').forEach(link => {
+                link.addEventListener('click', closeSidebar);
+            });
 
 
             // 애드센스 스크립트 로드
@@ -598,4 +608,4 @@
         });
     </script>
 </body>
-</html>
+</ht
