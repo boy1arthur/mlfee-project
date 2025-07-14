@@ -15,6 +15,7 @@
      crossorigin="anonymous"></script>
      
     <style>
+        html { scroll-behavior: smooth; }
         body { 
             font-family: 'Noto Sans KR', sans-serif; 
             background-color: #0a0e1a;
@@ -49,7 +50,6 @@
         input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
         
-        /* 모드 전환 토글 스위치 스타일 */
         .mode-switch { display: flex; background-color: #1f2937; border-radius: 9999px; padding: 0.25rem; }
         .mode-switch button {
             flex: 1;
@@ -65,7 +65,6 @@
             color: white;
             box-shadow: 0 2px 10px rgba(56, 189, 248, 0.3);
         }
-        /* 상세 비교 테이블 토글 스타일 */
         .collapsible-content {
             max-height: 0;
             overflow: hidden;
@@ -75,24 +74,22 @@
 </head>
 <body class="bg-gray-900 text-white antialiased">
 
-    <!-- ########## 사이드바 메뉴 HTML 시작 (아이콘 수정) ########## -->
+    <!-- ########## 사이드바 메뉴 HTML (링크 최종 수정) ########## -->
     <button id="sidebar-toggle" class="fixed top-4 right-4 z-50 p-2 rounded-md bg-gray-800/50 text-white hover:bg-gray-700/70 transition">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
     </button>
     
     <div id="sidebar" class="fixed top-0 right-0 h-full w-72 bg-gray-900/80 backdrop-blur-lg shadow-2xl z-40 transform translate-x-full transition-transform duration-300 ease-in-out">
         <div class="p-6">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-2xl font-bold gradient-text">메뉴</h2>
-                <button id="sidebar-close" class="p-2 text-gray-400 hover:text-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
+            <h2 class="text-2xl font-bold gradient-text mb-8">N빵마스터</h2>
             <nav>
-                <ul class="space-y-4">
-                    <li><a href="about.html" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">사이트 소개</a></li>
-                    <li><a href="terms.html" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">이용약관</a></li>
-                    <li><a href="privacy.html" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">개인정보처리방침</a></li>
+                <ul class="space-y-2">
+                    <li><a href="https://mlfee.com" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">홈</a></li>
+                    <li><a href="https://www.mlfee.com/calc/" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">N빵마스터 (수작계산기)</a></li>
+                    <li><a href="https://www.mlfee.com/timer/" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">레이드 크로니클 (타이머)</a></li>
+                    <li><a href="#calculator-guide" id="guide-link" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">사용방법</a></li>
+                    <li><a href="mailto:esgroup129@gmail.com" class="block py-2 px-4 text-lg text-gray-300 hover:bg-sky-500/20 hover:text-white rounded-lg transition">문의</a></li>
                 </ul>
             </nav>
         </div>
@@ -119,7 +116,6 @@
 
                 <!-- 계산기 입력부 -->
                 <div class="card-style p-6 sm:p-8 rounded-2xl shadow-2xl">
-                    <!-- 모드 전환 스위치 추가 -->
                     <div class="mode-switch mb-6">
                         <button id="mode-standard" class="active">정산 모드</button>
                         <button id="mode-reverse">역산 모드</button>
@@ -160,10 +156,8 @@
                 <!-- 결과 표시 영역 -->
                 <div id="resultArea" class="mt-4 hidden"></div>
                 
-                <!-- 구분선 -->
                 <div class="w-full h-px bg-gradient-to-r from-transparent via-sky-800 to-transparent my-8"></div>
 
-                <!-- 가이드 콘텐츠 (복구 및 상시 노출) -->
                 <div id="calculator-guide" class="mt-6">
                     <div class="card-style p-6 sm:p-8 rounded-2xl">
                         <h2 class="text-2xl font-bold gradient-text mb-4 text-center">N빵마스터 활용 가이드</h2>
@@ -191,7 +185,6 @@
                     </div>
                 </div>
 
-                <!-- 중앙 하단 광고 -->
                 <div class="my-6 text-center ad-placeholder">
                        <ins class="adsbygoogle"
                              style="display:block; width:100%;"
@@ -202,7 +195,6 @@
                 </div>
 
                 <footer class="text-center mt-10 mb-6 text-sm text-gray-500">
-                    <!-- 필수 페이지 링크 추가 -->
                     <div class="flex justify-center space-x-4 mb-4">
                         <a href="about.html" class="hover:text-sky-400 transition">사이트 소개</a>
                         <a href="terms.html" class="hover:text-sky-400 transition">이용약관</a>
@@ -245,10 +237,11 @@
 
             // ########## 사이드바 DOM 요소 캐싱 ##########
             const sidebarToggle = document.getElementById('sidebar-toggle');
-            const sidebarClose = document.getElementById('sidebar-close');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
             const sidebar = document.getElementById('sidebar');
             const sidebarOverlay = document.getElementById('sidebar-overlay');
-            const mainContent = document.querySelector('.main-content');
+            const guideLink = document.getElementById('guide-link');
 
             // ########## 헬퍼 함수 ##########
             const formatNumber = (num) => num.toLocaleString('ko-KR');
@@ -350,7 +343,6 @@
                 return estimatedTotal;
             }
 
-            // ########## 결과 HTML 생성 함수 (기존과 동일) ##########
             function generateDetailedResultsHTML(amount, feeSchedule, isParcel) {
                 const scenarios = [];
                 if (isParcel) {
@@ -390,7 +382,7 @@
                     let icon = '';
                     if (isFastest && isCheapest) icon = '🥇';
                     else if (isFastest) icon = '🥇';
-                    else if (isCheapest) icon = '�';
+                    else if (isCheapest) icon = '🥈';
 
                     return `
                         <tr class="border-b border-gray-700 last:border-b-0 hover:bg-gray-700/50 align-top">
@@ -455,7 +447,6 @@
                 `;
             }
 
-            // ########## 메인 계산 실행 함수 (기존과 동일) ##########
             function performCalculation() {
                 errorMessageDiv.classList.add('hidden');
                 mainAmountInput.classList.remove('border-red-500');
@@ -573,20 +564,33 @@
                 parcelOptionsDiv.classList.toggle('hidden', transactionTypeSelect.value !== 'parcel');
             });
 
-            // ########## 사이드바 이벤트 리스너 ##########
-            function openSidebar() {
-                sidebar.classList.remove('translate-x-full');
-                sidebarOverlay.classList.remove('hidden');
-            }
-
+            // ########## 사이드바 이벤트 리스너 (링크 클릭시 닫기 기능 추가) ##########
             function closeSidebar() {
                 sidebar.classList.add('translate-x-full');
                 sidebarOverlay.classList.add('hidden');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
             }
 
-            sidebarToggle.addEventListener('click', openSidebar);
-            sidebarClose.addEventListener('click', closeSidebar);
+            function openSidebar() {
+                sidebar.classList.remove('translate-x-full');
+                sidebarOverlay.classList.remove('hidden');
+                menuIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            }
+
+            sidebarToggle.addEventListener('click', () => {
+                const isSidebarOpen = !sidebar.classList.contains('translate-x-full');
+                if (isSidebarOpen) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+
             sidebarOverlay.addEventListener('click', closeSidebar);
+            guideLink.addEventListener('click', closeSidebar);
+
 
             // 애드센스 스크립트 로드
             (adsbygoogle = window.adsbygoogle || []).push({});
@@ -595,4 +599,3 @@
     </script>
 </body>
 </html>
-�
