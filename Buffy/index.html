@@ -3,16 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>메피 버피 (UI/기능 개선)</title>
+    <title>MLFEE(메피) 허브 | 메이플랜드 필수 도구</title>
+    <meta name="description" content="원정, 더 이상 어렵지 않아요! MLFEE(메피)에서 수수료 계산기, 리저렉션 타이머, 버프 타이머 등 다양한 편의 도구를 만나보세요.">
+    <meta name="keywords" content="메이플랜드, 메랜 수수료 계산기, 리저렉션 타이머, 버프 타이머, 메피, MLFEE, 자쿰, 혼테일, 공략">
+    <meta property="og:title" content="MLFEE(메피) 메이플랜드 필수 도구">
+    <meta property="og:description" content="자쿰, 혼테일 원정을 위한 필수 도구! 수수료 계산, 리저 타이머, 버프 관리까지 더 쉬워집니다.">
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615"
+     crossorigin="anonymous"></script>
+     
     <style>
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background: #1a202c;
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            background-color: #0a0e1a;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+            color: #d1d5db;
         }
+        .card-hover { 
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out; 
+        }
+        .card-hover:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+        .tool-card:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        
+        .shine-effect {
+            position: relative;
+            background: linear-gradient(to right, #38BDF8, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .shine-effect::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            background-size: 200% 100%;
+            animation: shine 5s linear infinite;
+        }
+        @keyframes shine {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        .section-title.text-4xl::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6rem;
+            height: 0.25rem;
+            background-color: #3b82f6;
+            border-radius: 9999px;
+        }
+        
+        /* Modal Animation */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+        
+        .modal-entering { animation: fadeIn 0.3s ease-out forwards; }
+        .modal-entering .modal-content { animation: slideIn 0.3s ease-out forwards; }
+        .modal-exiting { animation: fadeOut 0.3s ease-in forwards; }
+        .modal-exiting .modal-content { animation: slideOut 0.3s ease-in forwards; }
+
+        /* Sidebar Animation */
+        .hamburger-icon span {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .nav-toggle.active .hamburger-icon span:nth-child(2) { opacity: 0; }
+        .nav-toggle.active .hamburger-icon span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* Mepi Buffy Styles */
         .app-container, .stopwatch-panel {
             background: linear-gradient(145deg, #2d3748, #1a202c);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -47,349 +122,899 @@
             color: white;
             font-weight: bold;
         }
-        .section-title {
+        #buff-timer .section-title {
             color: #90cdf4; /* blue-300 */
             text-shadow: 0 0 5px rgba(144, 205, 244, 0.5);
         }
     </style>
 </head>
-<body class="text-gray-200 flex items-center justify-center min-h-screen p-4">
-
-    <div class="flex flex-col md:flex-row gap-4">
-        <!-- Main Buff Timer Panel -->
-        <div class="app-container w-full max-w-sm rounded-2xl p-4 space-y-4">
-            <header class="text-center">
-                <h1 class="text-2xl font-bold text-blue-400">메피 버피</h1>
-                <p id="realtime-clock" class="text-md text-gray-400 font-mono"></p>
-                <p id="session-end-time" class="text-sm text-cyan-300 font-semibold h-5"></p>
-            </header>
-
-            <div id="global-controls" class="grid grid-cols-2 gap-2">
-                <button id="global-start-btn" class="btn bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded-lg flex items-center justify-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /></svg>
-                    <span>버프 시작</span>
-                </button>
-                <button id="global-stop-btn" class="btn bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-lg flex items-center justify-center space-x-2">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" /></svg>
-                    <span>버프 정지</span>
-                </button>
-            </div>
-
-            <div class="space-y-2">
-                <div id="active-timers-container" class="space-y-2">
-                    <p id="no-timers-message" class="text-gray-500 text-center py-4">활성화된 타이머가 없습니다.</p>
-                </div>
-            </div>
-            
-            <div class="space-y-4 pt-4 border-t border-gray-700/50">
-                 <h2 class="section-title text-lg font-semibold text-center">스킬 추가하기</h2>
-                <button id="preset-holy-symbol" class="btn w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-2 px-4 rounded-lg flex items-center justify-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L12 22M22 12L2 12"/></svg>
-                    <span>홀리심볼</span>
-                </button>
-                <div class="bg-gray-800 p-3 rounded-lg space-y-3">
-                    <h3 class="font-semibold text-white flex items-center space-x-2 justify-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                        <span>샤프 아이즈</span>
-                    </h3>
-                    <div id="sharp-eyes-levels" class="grid grid-cols-3 gap-2">
-                        <button data-level="10" data-duration="100" class="level-btn btn bg-gray-700 hover:bg-gray-600 py-1 text-sm rounded-md">Lv.10</button>
-                        <button data-level="20" data-duration="200" class="level-btn btn bg-gray-700 hover:bg-gray-600 py-1 text-sm rounded-md">Lv.20</button>
-                        <button data-level="30" data-duration="300" class="level-btn btn bg-gray-700 hover:bg-gray-600 py-1 text-sm rounded-md active">Lv.30</button>
-                    </div>
-                     <button id="add-sharp-eyes" class="btn w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded-md flex items-center justify-center space-x-2 text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-                        <span>추가</span>
-                    </button>
-                </div>
-                <form id="custom-timer-form" class="space-y-2">
-                    <input type="text" id="custom-name" placeholder="자유 스킬 이름" required class="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 text-sm">
-                    <input type="number" id="custom-duration" placeholder="지속 시간 (초)" min="1" required class="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 text-sm">
-                    <button type="submit" class="btn w-full bg-teal-600 hover:bg-teal-500 font-bold py-2 rounded-md flex items-center justify-center space-x-2 text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-                        <span>추가</span>
-                    </button>
-                </form>
-            </div>
+<body class="antialiased">
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar-toggle" class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
+        <div class="hamburger-icon space-y-1.5">
+            <span class="block w-6 h-0.5 bg-white"></span>
+            <span class="block w-6 h-0.5 bg-white"></span>
+            <span class="block w-6 h-0.5 bg-white"></span>
         </div>
+    </div>
+    <nav id="sidebar" class="fixed right-0 top-0 w-72 h-full bg-gray-800/90 backdrop-blur-lg border-l-2 border-gray-700 z-[1000] shadow-2xl transition-transform duration-300 ease-in-out translate-x-full">
+        <h3 class="text-center text-2xl font-bold text-blue-400 mt-16 mb-8">메뉴</h3>
+        <a href="https://mlfee.com" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">홈</a>
+        <a href="#" id="updatesLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">업데이트</a>
+        <a href="https://www.mlfee.com/calc/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
+        <a href="https://www.mlfee.com/timer/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
+        <a href="#guides" id="guideLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
+        <a href="#" id="contactLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의</a>
+    </nav>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[999] hidden"></div>
+    
+    <div class="main-content transition-all duration-300 ease-in-out">
+        <header class="text-center py-12">
+            <div class="container mx-auto px-4">
+                <a href="/" class="inline-block text-3xl sm:text-4xl font-bold text-blue-400">
+                    <span class="text-white">MLFEE</span>(메피) <span class="text-slate-400">메이플랜드 필수도구</span>
+                </a>
+            </div>
+        </header>
 
-        <!-- Buff Cast Stopwatch Panel -->
-        <div class="stopwatch-panel w-full max-w-sm rounded-2xl p-4 flex flex-col justify-center items-center space-y-4">
-            <h2 class="text-xl font-bold text-indigo-300 text-center">버프 시전 시간</h2>
-            <p id="cast-time-display" class="font-mono text-5xl text-white">0.00<span class="text-3xl opacity-70">s</span></p>
-            <div class="grid grid-cols-2 gap-2 w-full">
-                <button id="cast-time-toggle-btn" class="btn bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg flex items-center justify-center space-x-2">
-                    <span id="cast-time-toggle-text">시작</span>
-                </button>
-                <button id="cast-time-reset-btn" class="btn bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 rounded-lg flex items-center justify-center space-x-2">
-                    <span>초기화</span>
-                </button>
+        <main>
+            <section class="hero text-center py-16 sm:py-24">
+                <div class="container mx-auto px-4">
+                    <h1 class="text-4xl sm:text-6xl font-black leading-tight shine-effect">
+                        원정, 더 이상 어렵지 않아요!
+                    </h1>
+                    <p class="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto my-10">
+                        복잡한 수수료 계산, 아슬아슬한 리저렉션 관리, 정신없는 버프 리필까지...<br>
+                        메피의 스마트한 도구들과 함께라면, 당신도 최고의 원정대원이 될 수 있습니다.
+                    </p>
+                    <div>
+                        <a href="#tools" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition duration-300 inline-block shadow-lg hover:shadow-blue-500/50">
+                            핵심 도구 바로가기
+                        </a>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="container mx-auto px-4 my-12">
+                <div class="ad-container w-full min-h-[90px] bg-slate-900/50 rounded-lg flex justify-center items-center">
+                    <ins class="adsbygoogle"
+                         style="display:block; width:100%; text-align:center;"
+                         data-ad-client="ca-pub-8602495420447615"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                </div>
+            </div>
+
+            <section id="tools" class="py-20">
+                <div class="container mx-auto px-4">
+                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">MLFEE 핵심 도구</span></h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <a href="/calc/" class="tool-link block">
+                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
+                                <div class="text-red-500 mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h3m-3-7h3m-6.128 9.872A3 3 0 006.872 21h10.256a3 3 0 002.872-3.128V7.128A3 3 0 0017.128 4H6.872a3 3 0 00-2.872 3.128v10.744z" /></svg>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-4 text-red-400 text-center">N빵마스터 (수수료 계산기)</h3>
+                                <p class="text-gray-400">메소 수수료 '수작'부터 N인 파티 분배, 택배 정산, 목표 금액 역산까지 원클릭으로 해결하세요.</p>
+                            </div>
+                        </a>
+                        <a href="/timer/" class="tool-link block">
+                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
+                                <div class="text-blue-500 mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-4 text-blue-400 text-center">레이드 크로니클 (리저 타이머)</h3>
+                                <p class="text-gray-400">비숍의 리저렉션 쿨타임을 정확히 체크하고, 다음 예상 시간을 공유하여 안정적인 레이드를 운영하세요.</p>
+                            </div>
+                        </a>
+                        <a href="#buff-timer" class="tool-link block">
+                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
+                                <div class="text-green-500 mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-4 text-green-400 text-center">메피 버피 (실시간 버프 관리)</h3>
+                                <p class="text-gray-400">홀리심볼, 샤프 아이즈 등 주요 버프 스킬의 주기를 관리하고, 음성으로 리필 타이밍을 알려드립니다.</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="guides" class="py-20 bg-gray-900/50">
+                <div class="container mx-auto px-4">
+                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">원정대 필승 공략집</span></h2>
+                    <div class="space-y-16">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                            <div>
+                                <h3 class="text-3xl font-bold text-white mb-4">수수료, 아는 만큼 아낀다!</h3>
+                                <p class="mb-6 text-lg">고가의 아이템을 거래할 때, 6%에 달하는 수수료는 큰 부담입니다. 하지만 메이플랜드의 수수료 시스템은 금액 구간별로 세율이 다르다는 점을 이용하면, 거래를 여러 번에 나누어 총 수수료를 획기적으로 줄일 수 있습니다. 이것이 바로 '수작'의 핵심 원리입니다.</p>
+                                <p class="text-lg bg-slate-800 p-4 rounded-lg border-l-4 border-red-500">N빵마스터는 이 복잡한 계산을 버튼 하나로 해결해줍니다. 최적의 분할 횟수와 금액을 찾아, 당신의 소중한 메소를 지켜드립니다.</p>
+                            </div>
+                            <div class="flex justify-center p-4 bg-slate-800/50 rounded-lg">
+                                <svg width="100%" height="100%" viewBox="0 0 500 300" class="max-w-full">
+                                    <defs>
+                                        <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#b91c1c;stop-opacity:1" />
+                                        </linearGradient>
+                                    </defs>
+                                    <line x1="50" y1="250" x2="450" y2="250" stroke="#475569" stroke-width="2"/>
+                                    <line x1="50" y1="50" x2="50" y2="250" stroke="#475569" stroke-width="2"/>
+                                    <text x="250" y="285" font-family="Noto Sans KR" font-size="14" fill="#9ca3af" text-anchor="middle">거래 금액</text>
+                                    <text x="15" y="150" font-family="Noto Sans KR" font-size="14" fill="#9ca3af" transform="rotate(-90 15,150)" text-anchor="middle">수수료율</text>
+                                    
+                                    <rect x="80" y="100" width="60" height="150" fill="url(#barGradient)"/>
+                                    <text x="110" y="90" font-family="Noto Sans KR" font-size="16" fill="#f87171" text-anchor="middle">6%</text>
+                                    <text x="110" y="265" font-family="Noto Sans KR" font-size="12" fill="#9ca3af" text-anchor="middle">~1억</text>
+
+                                    <rect x="180" y="125" width="60" height="125" fill="url(#barGradient)"/>
+                                    <text x="210" y="115" font-family="Noto Sans KR" font-size="16" fill="#f87171" text-anchor="middle">5%</text>
+                                    <text x="210" y="265" font-family="Noto Sans KR" font-size="12" fill="#9ca3af" text-anchor="middle">~2500만</text>
+
+                                    <rect x="280" y="150" width="60" height="100" fill="url(#barGradient)"/>
+                                    <text x="310" y="140" font-family="Noto Sans KR" font-size="16" fill="#f87171" text-anchor="middle">4%</text>
+                                    <text x="310" y="265" font-family="Noto Sans KR" font-size="12" fill="#9ca3af" text-anchor="middle">~1000만</text>
+                                    
+                                    <rect x="380" y="200" width="60" height="50" fill="url(#barGradient)"/>
+                                    <text x="410" y="190" font-family="Noto Sans KR" font-size="16" fill="#f87171" text-anchor="middle">1.8%</text>
+                                    <text x="410" y="265" font-family="Noto Sans KR" font-size="12" fill="#9ca3af" text-anchor="middle">~100만</text>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                            <div class="order-last lg:order-first flex justify-center p-4 bg-slate-800/50 rounded-lg">
+                               <svg width="100%" height="100%" viewBox="0 0 500 300" class="max-w-full">
+                                    <path d="M 100 150 A 100 100 0 1 1 400 150" stroke="#3b82f6" stroke-width="15" fill="none" stroke-dasharray="314" stroke-dashoffset="0"/>
+                                    <path d="M 100 150 A 100 100 0 1 1 400 150" stroke="#0ea5e9" stroke-width="15" fill="none" stroke-dasharray="314" stroke-dashoffset="157">
+                                        <animate attributeName="stroke-dashoffset" from="157" to="-157" dur="3s" repeatCount="indefinite" />
+                                    </path>
+                                    <text x="250" y="130" font-family="Noto Sans KR" font-size="24" fill="#e5e7eb" text-anchor="middle">리저렉션</text>
+                                    <text x="250" y="170" font-family="Noto Sans KR" font-size="20" fill="#e5e7eb" text-anchor="middle">15분 지속 / 30분 쿨타임</text>
+                                    <text x="250" y="250" font-family="Noto Sans KR" font-size="24" fill="#34d399" text-anchor="middle" font-weight="bold">안전 사이클: 14분</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-3xl font-bold text-white mb-4">14분의 마법, 리저 사이클</h3>
+                                <p class="mb-6 text-lg">리저렉션의 쿨타임은 30분, 버프 지속 시간은 15분입니다. 파티의 전멸을 막기 위해서는 15분 안에 다음 리저렉션을 받아야 합니다. 레이드 크로니클은 1분의 안전 마진을 두어 **14분 주기**로 리저렉션을 사용하도록 유도합니다.</p>
+                                <p class="text-lg bg-slate-800 p-4 rounded-lg border-l-4 border-blue-500">사망자 발생 시, 14분 뒤의 권장 시간과 그 이후의 예상 시간까지 자동으로 계산하고 음성으로 알려주어, 레이드 오더가 파티의 생존을 완벽하게 책임질 수 있도록 돕습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="zakum-guide" class="py-20">
+                <div class="container mx-auto px-4">
+                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">자쿰 원정대 준비하기</span></h2>
+                    <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover">
+                        <p class="text-center text-xl mb-8">자쿰 원정, 더 이상 두렵지 않습니다. 메피와 함께라면 철저한 준비가 가능합니다.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                            <div>
+                                <div class="bg-yellow-500 text-gray-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-3xl font-bold">1</div>
+                                <h4 class="text-xl font-bold text-white mb-2">파티 구성</h4>
+                                <p class="text-gray-400">안정적인 격파를 위해 격수, 비숍, 유틸 직업의 균형을 맞추는 것이 중요합니다.</p>
+                            </div>
+                            <div>
+                                <div class="bg-yellow-500 text-gray-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-3xl font-bold">2</div>
+                                <h4 class="text-xl font-bold text-white mb-2">필수 준비물</h4>
+                                <p class="text-gray-400">'불의 눈', 만병통치약, 각종 버프 물약을 넉넉히 챙겨 만일의 사태에 대비하세요.</p>
+                            </div>
+                            <div>
+                                <div class="bg-yellow-500 text-gray-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-3xl font-bold">3</div>
+                                <h4 class="text-xl font-bold text-white mb-2">타이머 세팅</h4>
+                                <p class="text-gray-400">레이드 시작 전, '레이드 크로니클'과 '메피 버피'를 세팅하여 완벽한 시간 관리를 준비하세요.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mepi Buffy Tool Section -->
+            <section id="buff-timer" class="py-20 text-gray-200">
+                <div class="container mx-auto px-4">
+                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">메피 버피 (실시간 버프 관리)</span></h2>
+                    <div class="flex justify-center">
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <!-- Main Buff Timer Panel -->
+                            <div class="app-container w-full max-w-sm rounded-2xl p-4 space-y-4">
+                                <header class="text-center">
+                                    <h1 class="text-2xl font-bold text-blue-400">메피 버피</h1>
+                                    <p id="realtime-clock" class="text-md text-gray-400 font-mono"></p>
+                                    <p id="session-end-time" class="text-sm text-cyan-300 font-semibold h-5"></p>
+                                </header>
+
+                                <div id="global-controls" class="grid grid-cols-2 gap-2">
+                                    <button id="global-start-btn" class="btn bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded-lg flex items-center justify-center space-x-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /></svg>
+                                        <span>버프 시작</span>
+                                    </button>
+                                    <button id="global-stop-btn" class="btn bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-lg flex items-center justify-center space-x-2">
+                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" /></svg>
+                                        <span>버프 정지</span>
+                                    </button>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <div id="active-timers-container" class="space-y-2">
+                                        <p id="no-timers-message" class="text-gray-500 text-center py-4">활성화된 타이머가 없습니다.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-4 pt-4 border-t border-gray-700/50">
+                                     <h2 class="section-title text-lg font-semibold text-center">스킬 추가하기</h2>
+                                    <button id="preset-holy-symbol" class="btn w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-2 px-4 rounded-lg flex items-center justify-center space-x-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L12 22M22 12L2 12"/></svg>
+                                        <span>홀리심볼</span>
+                                    </button>
+                                    <div class="bg-gray-800 p-3 rounded-lg space-y-3">
+                                        <h3 class="font-semibold text-white flex items-center space-x-2 justify-center text-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                            <span>샤프 아이즈</span>
+                                        </h3>
+                                        <div id="sharp-eyes-levels" class="grid grid-cols-3 gap-2">
+                                            <button data-level="10" data-duration="100" class="level-btn btn bg-gray-700 hover:bg-gray-600 py-1 text-sm rounded-md">Lv.10</button>
+                                            <button data-level="20" data-duration="200" class="level-btn btn bg-gray-700 hover:bg-gray-600 py-1 text-sm rounded-md">Lv.20</button>
+                                            <button data-level="30" data-duration="300" class="level-btn btn bg-gray-700 hover:bg-gray-600 py-1 text-sm rounded-md active">Lv.30</button>
+                                        </div>
+                                         <button id="add-sharp-eyes" class="btn w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded-md flex items-center justify-center space-x-2 text-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                                            <span>추가</span>
+                                        </button>
+                                    </div>
+                                    <form id="custom-timer-form" class="space-y-2">
+                                        <input type="text" id="custom-name" placeholder="자유 스킬 이름" required class="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                        <input type="number" id="custom-duration" placeholder="지속 시간 (초)" min="1" required class="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                        <button type="submit" class="btn w-full bg-teal-600 hover:bg-teal-500 font-bold py-2 rounded-md flex items-center justify-center space-x-2 text-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                                            <span>추가</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Buff Cast Stopwatch Panel -->
+                            <div class="stopwatch-panel w-full max-w-sm rounded-2xl p-4 flex flex-col justify-center items-center space-y-4">
+                                <h2 class="text-xl font-bold text-indigo-300 text-center">버프 시전 시간</h2>
+                                <p id="cast-time-display" class="font-mono text-5xl text-white">0.00<span class="text-3xl opacity-70">s</span></p>
+                                <div class="grid grid-cols-2 gap-2 w-full">
+                                    <button id="cast-time-toggle-btn" class="btn bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg flex items-center justify-center space-x-2">
+                                        <span id="cast-time-toggle-text">시작</span>
+                                    </button>
+                                    <button id="cast-time-reset-btn" class="btn bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 rounded-lg flex items-center justify-center space-x-2">
+                                        <span>초기화</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="container mx-auto px-4 my-12">
+                <div class="ad-container w-full min-h-[90px] bg-slate-900/50 rounded-lg flex justify-center items-center">
+                     <ins class="adsbygoogle"
+                          style="display:block; width:100%;"
+                          data-ad-client="ca-pub-8602495420447615"
+                          data-ad-slot="2345678901"
+                          data-ad-format="auto"
+                          data-full-width-responsive="true"></ins>
+                </div>
+            </div>
+
+            <section id="reviews" class="py-20 bg-gray-900/50">
+                <div class="container mx-auto px-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-center mb-12 gap-4">
+                        <h2 class="section-title text-4xl font-black text-center sm:text-left !mb-0 relative pb-4"><span class="shine-effect">생생한 사용자 후기</span></h2>
+                        <button id="writeReviewBtn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-lg transition-colors w-full sm:w-auto">후기 작성하기</button>
+                    </div>
+                    <div id="review-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Reviews will be injected here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center py-10 mt-10 border-t border-gray-800">
+            <div class="container mx-auto px-4 space-y-4">
+                 <div class="flex justify-center items-center space-x-4 text-gray-400 text-sm">
+                     <a href="/about.html" class="hover:text-sky-400 transition">사이트 소개</a>
+                     <span class="text-gray-600">|</span>
+                     <a href="/terms.html" class="hover:text-sky-400 transition">이용약관</a>
+                     <span class="text-gray-600">|</span>
+                     <a href="/privacy.html" class="hover:text-sky-400 transition">개인정보처리방침</a>
+                 </div>
+                 <p class="text-gray-500">소년아서 제작</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Modals -->
+    <div id="reviewModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
+        <form id="reviewForm" class="modal-content bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-lg text-left border border-slate-700">
+            <h3 class="text-2xl font-bold text-sky-400 mb-6 text-center">후기 작성</h3>
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="reviewerName" class="block text-sm font-medium text-gray-300 mb-1">닉네임</label>
+                        <input type="text" id="reviewerName" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
+                    </div>
+                    <div>
+                        <label for="reviewerInfo" class="block text-sm font-medium text-gray-300 mb-1">직업/레벨</label>
+                        <input type="text" id="reviewerInfo" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
+                    </div>
+                </div>
+                <div>
+                    <label for="reviewText" class="block text-sm font-medium text-gray-300 mb-1">후기 내용</label>
+                    <textarea id="reviewText" rows="4" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500"></textarea>
+                </div>
+            </div>
+            <div class="flex justify-end gap-4 mt-8">
+                <button type="button" class="modal-close-btn bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-lg transition-colors">취소</button>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">등록하기</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
+        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center border border-slate-700">
+            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
+            <h3 class="text-2xl font-bold text-yellow-400">문의하기</h3>
+            <div class="space-y-4 mt-6">
+                <a href="mailto:esgroup129@gmail.com" class="w-full flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition"><i class="fas fa-envelope h-5 w-5 mr-3"></i>이메일</a>
+                <a href="https://open.kakao.com/o/s4YH6WFh" target="_blank" class="w-full flex items-center justify-center bg-[#FEE500] hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-lg transition"><i class="fas fa-comment h-5 w-5 mr-2"></i>카카오톡 오픈채팅</a>
+                <a href="https://discord.com/users/930037107823636540" target="_blank" class="w-full flex items-center justify-center bg-[#5865F2] hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg transition"><i class="fab fa-discord h-5 w-5 mr-2"></i>디스코드</a>
             </div>
         </div>
     </div>
 
+    <div id="updatesModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
+        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-2xl text-left border border-slate-700">
+            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
+            <h3 class="text-3xl font-bold text-sky-400 mb-6 text-center">업데이트 내역</h3>
+            <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-4 text-slate-300">
+                <div class="p-4 bg-slate-700/50 rounded-lg">
+                    <p class="font-bold text-lg text-white">2024-07-20: '메피 버피' 신규 기능 추가!</p>
+                    <p class="mt-1">- 주요 스킬(홀리심볼, 샤프 아이즈 등)의 버프 지속시간을 관리하는 '메피 버피' 타이머를 추가했습니다.</p>
+                    <p class="mt-1">- 타이머 만료 시 음성 알림(TTS) 기능이 포함되어 있습니다.</p>
+                    <p class="mt-1">- 버프 시전 시간을 측정할 수 있는 스톱워치 기능도 함께 제공됩니다.</p>
+                </div>
+                 <div class="p-4 bg-slate-700/50 rounded-lg">
+                    <p class="font-bold text-lg text-white">2024-07-19: 후기 시스템 간소화</p>
+                    <p class="mt-1">- 후기 작성 시 '추천/비추천' 평가 기능을 제거하여 더 간단하게 후기를 남길 수 있도록 변경했습니다.</p>
+                </div>
+                 <div class="p-4 bg-slate-700/50 rounded-lg">
+                    <p class="font-bold text-lg text-white">2024-07-18: 공략 가이드 그래픽 복원</p>
+                    <p class="mt-1">- 깨진 이미지 링크를 제거하고, 원래의 SVG 그래픽으로 복원하여 안정성을 높였습니다.</p>
+                </div>
+                 <div class="p-4 bg-slate-700/50 rounded-lg">
+                    <p class="font-bold text-lg text-white">2024-07-17: UI/UX 개선</p>
+                    <p class="mt-1">- 모든 팝업창(모달)이 화면 중앙에 안정적으로 표시되도록 수정했습니다.</p>
+                    <p class="mt-1">- 후기 삭제 시 구식 알림창 대신 세련된 확인창이 나타나도록 개선했습니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1003] hidden">
+        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center border border-slate-700">
+            <h3 id="confirmTitle" class="text-xl font-bold text-white mb-4">확인</h3>
+            <p id="confirmMessage" class="text-gray-300 mb-6">이 작업을 수행하시겠습니까?</p>
+            <div id="confirmInputWrapper" class="hidden mb-4">
+                <input type="password" id="confirmInput" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500" placeholder="관리자 암호를 입력하세요">
+            </div>
+            <div class="flex justify-center gap-4">
+                <button id="confirmCancelBtn" class="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-lg transition-colors">취소</button>
+                <button id="confirmOkBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">확인</button>
+            </div>
+        </div>
+    </div>
+
+
     <script>
-        // DOM Elements
-        const clockDisplay = document.getElementById('realtime-clock');
-        const sessionEndTimeDisplay = document.getElementById('session-end-time');
-        const globalStartBtn = document.getElementById('global-start-btn');
-        const globalStopBtn = document.getElementById('global-stop-btn');
-        const activeTimersContainer = document.getElementById('active-timers-container');
-        const noTimersMessage = document.getElementById('no-timers-message');
-        const customTimerForm = document.getElementById('custom-timer-form');
-        const sharpEyesLevels = document.getElementById('sharp-eyes-levels');
-        const addSharpEyesBtn = document.getElementById('add-sharp-eyes');
-        const castTimeDisplay = document.getElementById('cast-time-display');
-        const castTimeToggleBtn = document.getElementById('cast-time-toggle-btn');
-        const castTimeResetBtn = document.getElementById('cast-time-reset-btn');
-        const castTimeToggleText = document.getElementById('cast-time-toggle-text');
-        
-        // State
-        let activeTimers = [];
-        let isGlobalTimerRunning = false;
-        let globalTimerInterval = null;
-        let clockInterval = null;
-        let castTimerInterval = null;
-        let castTimerStart = 0;
-        let isCastTimerRunning = false;
-        const synth = window.speechSynthesis;
-        let voices = [];
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- MLFEE Base Script ---
+            const reviewList = document.getElementById('review-list');
+            const writeReviewBtn = document.getElementById('writeReviewBtn');
+            
+            const modals = {
+                review: { el: document.getElementById('reviewModal'), form: document.getElementById('reviewForm') },
+                contact: { el: document.getElementById('contactModal') },
+                updates: { el: document.getElementById('updatesModal') },
+                confirm: { 
+                    el: document.getElementById('confirmModal'), 
+                    title: document.getElementById('confirmTitle'), 
+                    msg: document.getElementById('confirmMessage'),
+                    inputWrapper: document.getElementById('confirmInputWrapper'),
+                    input: document.getElementById('confirmInput'),
+                    okBtn: document.getElementById('confirmOkBtn'),
+                    cancelBtn: document.getElementById('confirmCancelBtn') 
+                }
+            };
 
-        // --- Initialization ---
-        function initialize() {
-            startClock();
-            updateGlobalButtonsState();
-            populateVoiceList();
-            if (speechSynthesis.onvoiceschanged !== undefined) {
-                speechSynthesis.onvoiceschanged = populateVoiceList;
+            function showModal(modal) {
+                if (!modal || !modal.el) return;
+                modal.el.classList.remove('hidden', 'modal-exiting');
+                modal.el.classList.add('modal-entering');
             }
-        }
 
-        function populateVoiceList() {
-            voices = synth.getVoices().filter(voice => voice.lang.startsWith('ko'));
-        }
+            function hideModal(modal) {
+                if (!modal || !modal.el) return;
+                modal.el.classList.remove('modal-entering');
+                modal.el.classList.add('modal-exiting');
+                setTimeout(() => modal.el.classList.add('hidden'), 300);
+            }
+            
+            function showConfirmation(title, message, options = {}) {
+                return new Promise((resolve) => {
+                    modals.confirm.title.textContent = title;
+                    modals.confirm.msg.textContent = message;
+                    modals.confirm.okBtn.textContent = options.okText || '확인';
+                    modals.confirm.okBtn.className = options.isDelete ? 'bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors' : 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors';
 
-        // --- Clock ---
-        function startClock() {
-            if (clockInterval) clearInterval(clockInterval);
-            clockInterval = setInterval(updateClock, 1000);
-            updateClock();
-        }
+                    if (options.prompt) {
+                        modals.confirm.inputWrapper.classList.remove('hidden');
+                        modals.confirm.input.value = '';
+                        modals.confirm.input.placeholder = options.placeholder || '';
+                    } else {
+                        modals.confirm.inputWrapper.classList.add('hidden');
+                    }
+                    
+                    showModal(modals.confirm);
 
-        function updateClock() {
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            clockDisplay.textContent = `${hours}:${minutes}:${seconds}`;
-        }
+                    const onOk = () => {
+                        cleanup();
+                        resolve(options.prompt ? modals.confirm.input.value : true);
+                    };
+                    const onCancel = () => {
+                        cleanup();
+                        resolve(options.prompt ? null : false);
+                    };
+                    
+                    const cleanup = () => {
+                        hideModal(modals.confirm);
+                        modals.confirm.okBtn.removeEventListener('click', onOk);
+                        modals.confirm.cancelBtn.removeEventListener('click', onCancel);
+                    };
 
-        // --- TTS ---
-        function speak(text) {
-            if (synth.speaking || !text) return;
-            const utterThis = new SpeechSynthesisUtterance(text);
-            const koreanVoice = voices.find(voice => voice.lang === 'ko-KR');
-            if (koreanVoice) utterThis.voice = koreanVoice;
-            synth.speak(utterThis);
-        }
+                    modals.confirm.okBtn.addEventListener('click', onOk);
+                    modals.confirm.cancelBtn.addEventListener('click', onCancel);
+                });
+            }
 
-        // --- Cast Time Stopwatch ---
-        function toggleCastTimer() {
-            isCastTimerRunning = !isCastTimerRunning;
-            if (isCastTimerRunning) {
-                castTimerStart = performance.now();
-                castTimerInterval = setInterval(() => {
+            const defaultReviews = [
+                { id: 'default1', name: 'AA 법사z', info: 'Lv. ?? 아크메이지', text: '레이드 크로니클 덕분에 자쿰 원정 처음으로 안 짤리고 깼어요. 오더가 정말 편해집니다. 강추!', avatar: 'https://placehold.co/40x40/3b82f6/ffffff?text=M' },
+                { id: 'default2', name: 'ㅁㅁ공대장', info: '자쿰 원정대', text: 'N빵마스터 없었을 땐 매번 계산기 두들기느라 힘들었는데, 이젠 클릭 한 번이면 끝이네요. 시간 엄청 아꼈어요.', avatar: 'https://placehold.co/40x40/ef4444/ffffff?text=L' },
+                { id: 'default3', name: 'DD 프리', info: 'Lv. ?? 비숍', text: '파티원들한테 리저 시간 브리핑해주기 너무 편해요. 시간 클릭하면 바로 복사되는 기능 만든 분은 천재이신 듯.', avatar: 'https://placehold.co/40x40/22c55e/ffffff?text=B' }
+            ];
+
+            function getReviews() {
+                const reviews = localStorage.getItem('userReviews');
+                return reviews ? JSON.parse(reviews) : [...defaultReviews];
+            }
+
+            function saveReviews(reviews) {
+                localStorage.setItem('userReviews', JSON.stringify(reviews));
+            }
+
+            function getAvatarChar(name) {
+                const firstChar = name.charAt(0);
+                if (/[a-zA-Z]/.test(firstChar)) return firstChar.toUpperCase();
+                const consonants = {'ㄱ':'G','ㄲ':'K','ㄴ':'N','ㄷ':'D','ㄸ':'D','ㄹ':'R','ㅁ':'M','ㅂ':'B','ㅃ':'B','ㅅ':'S','ㅆ':'S','ㅇ':'O','ㅈ':'J','ㅉ':'J','ㅊ':'C','ㅋ':'K','ㅌ':'T','ㅍ':'P','ㅎ':'H'};
+                return consonants[firstChar] || '?';
+            }
+
+            function renderReviews() {
+                if (!reviewList) return;
+                const reviews = getReviews();
+                reviewList.innerHTML = '';
+                if (reviews.length === 0) {
+                    reviewList.innerHTML = `<p class="text-center text-gray-400 col-span-full">아직 작성된 후기가 없습니다. 첫 후기를 남겨주세요!</p>`;
+                    return;
+                }
+
+                reviews.forEach(review => {
+                    const avatarChar = getAvatarChar(review.name);
+                    const avatarUrl = review.avatar || `https://placehold.co/40x40/6366f1/ffffff?text=${avatarChar}`;
+
+                    const reviewCard = document.createElement('div');
+                    reviewCard.className = 'bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col relative';
+                    reviewCard.innerHTML = `
+                        <button class="delete-review-btn absolute top-2 right-3 text-gray-500 hover:text-white text-2xl transition-colors" data-id="${review.id}">&times;</button>
+                        <div class="flex-grow">
+                            <p class="text-gray-300 mb-6 break-words">${review.text}</p>
+                        </div>
+                        <div class="flex items-center mt-auto">
+                            <img src="${avatarUrl}" alt="User Avatar" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-bold text-white">${review.name}</p>
+                                <p class="text-sm text-gray-500">${review.info}</p>
+                            </div>
+                        </div>
+                    `;
+                    reviewList.appendChild(reviewCard);
+                });
+            }
+
+            async function deleteReview(reviewId) {
+                const reviews = getReviews();
+                const reviewToDelete = reviews.find(r => r.id === reviewId);
+                if (!reviewToDelete) return;
+
+                let confirmed = false;
+                if (reviewToDelete.isUser) {
+                    confirmed = await showConfirmation('후기 삭제', '이 후기를 삭제하시겠습니까?', { isDelete: true, okText: '삭제' });
+                } else {
+                    const password = await showConfirmation('관리자 확인', '기본 후기는 관리자만 삭제할 수 있습니다.', { prompt: true, placeholder: '관리자 암호를 입력하세요', okText: '삭제' });
+                    if (password === "admin1234") {
+                        confirmed = true;
+                    } else if (password !== null) {
+                        await showConfirmation('오류', '암호가 틀렸습니다.', { okText: '닫기' });
+                    }
+                }
+
+                if (confirmed) {
+                    const newReviews = reviews.filter(review => review.id !== reviewId);
+                    saveReviews(newReviews);
+                    renderReviews();
+                }
+            }
+
+            if (reviewList) {
+                reviewList.addEventListener('click', (e) => {
+                    if (e.target.closest('.delete-review-btn')) {
+                        const reviewId = e.target.closest('.delete-review-btn').dataset.id;
+                        deleteReview(reviewId);
+                    }
+                });
+            }
+            
+            if (modals.review.form) {
+                modals.review.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('reviewerName').value;
+                    const info = document.getElementById('reviewerInfo').value;
+                    const text = document.getElementById('reviewText').value;
+                    
+                    const newReview = { 
+                        id: `user_${Date.now()}`,
+                        name, info, 
+                        text, 
+                        avatar: `https://placehold.co/40x40/6366f1/ffffff?text=${getAvatarChar(name)}`,
+                        isUser: true 
+                    };
+                    
+                    const reviews = getReviews();
+                    reviews.push(newReview);
+                    saveReviews(reviews);
+                    
+                    renderReviews();
+                    modals.review.form.reset();
+                    hideModal(modals.review);
+                });
+            }
+
+            renderReviews();
+
+            if (writeReviewBtn) writeReviewBtn.addEventListener('click', () => showModal(modals.review));
+            
+            document.querySelectorAll('.modal-close-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const modalEl = e.target.closest('.fixed.inset-0');
+                    if (modalEl) {
+                        const modalKey = Object.keys(modals).find(key => modals[key].el === modalEl);
+                        if(modalKey) hideModal(modals[modalKey]);
+                    }
+                });
+            });
+
+            Object.values(modals).forEach(modal => {
+                if (modal.el) {
+                    modal.el.addEventListener('click', (e) => {
+                        if (e.target === modal.el) hideModal(modal);
+                    });
+                }
+            });
+
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            
+            function closeSidebar() {
+                if (sidebar) sidebar.classList.add('translate-x-full');
+                if (sidebarToggle) sidebarToggle.classList.remove('active');
+                if (sidebarOverlay) sidebarOverlay.classList.add('hidden');
+            }
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('translate-x-full');
+                    sidebarToggle.classList.toggle('active');
+                    sidebarOverlay.classList.toggle('hidden');
+                });
+            }
+            if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+
+            document.getElementById('guideLink')?.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('guides')?.scrollIntoView({behavior: 'smooth'}); closeSidebar(); });
+            document.getElementById('updatesLink')?.addEventListener('click', (e) => { e.preventDefault(); closeSidebar(); setTimeout(() => showModal(modals.updates), 300); });
+            document.getElementById('contactLink')?.addEventListener('click', (e) => { e.preventDefault(); closeSidebar(); setTimeout(() => showModal(modals.contact), 300); });
+            
+            window.addEventListener('load', () => {
+                try {
+                    document.querySelectorAll('.adsbygoogle').forEach(ad => {
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    });
+                } catch (e) {
+                    console.error('AdSense push error:', e);
+                }
+            });
+
+            // --- Mepi Buffy Script ---
+            const clockDisplay = document.getElementById('realtime-clock');
+            const sessionEndTimeDisplay = document.getElementById('session-end-time');
+            const globalStartBtn = document.getElementById('global-start-btn');
+            const globalStopBtn = document.getElementById('global-stop-btn');
+            const activeTimersContainer = document.getElementById('active-timers-container');
+            const noTimersMessage = document.getElementById('no-timers-message');
+            const customTimerForm = document.getElementById('custom-timer-form');
+            const sharpEyesLevels = document.getElementById('sharp-eyes-levels');
+            const addSharpEyesBtn = document.getElementById('add-sharp-eyes');
+            const castTimeDisplay = document.getElementById('cast-time-display');
+            const castTimeToggleBtn = document.getElementById('cast-time-toggle-btn');
+            const castTimeResetBtn = document.getElementById('cast-time-reset-btn');
+            const castTimeToggleText = document.getElementById('cast-time-toggle-text');
+            
+            let activeTimers = [];
+            let isGlobalTimerRunning = false;
+            let globalTimerInterval = null;
+            let clockInterval = null;
+            let castTimerInterval = null;
+            let castTimerStart = 0;
+            let isCastTimerRunning = false;
+            const synth = window.speechSynthesis;
+            let voices = [];
+
+            function initializeBuffy() {
+                startClock();
+                updateGlobalButtonsState();
+                populateVoiceList();
+                if (speechSynthesis.onvoiceschanged !== undefined) {
+                    speechSynthesis.onvoiceschanged = populateVoiceList;
+                }
+            }
+
+            function populateVoiceList() {
+                voices = synth.getVoices().filter(voice => voice.lang.startsWith('ko'));
+            }
+
+            function startClock() {
+                if (clockInterval) clearInterval(clockInterval);
+                clockInterval = setInterval(updateClock, 1000);
+                updateClock();
+            }
+
+            function updateClock() {
+                if (!clockDisplay) return;
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const seconds = now.getSeconds().toString().padStart(2, '0');
+                clockDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+            }
+
+            function speak(text) {
+                if (synth.speaking || !text) return;
+                const utterThis = new SpeechSynthesisUtterance(text);
+                const koreanVoice = voices.find(voice => voice.lang === 'ko-KR');
+                if (koreanVoice) utterThis.voice = koreanVoice;
+                synth.speak(utterThis);
+            }
+
+            function toggleCastTimer() {
+                isCastTimerRunning = !isCastTimerRunning;
+                if (isCastTimerRunning) {
+                    castTimerStart = performance.now();
+                    castTimerInterval = setInterval(() => {
+                        const elapsed = (performance.now() - castTimerStart) / 1000;
+                        castTimeDisplay.innerHTML = `${elapsed.toFixed(2)}<span class="text-3xl opacity-70">s</span>`;
+                    }, 50);
+                    castTimeToggleText.textContent = '기록';
+                } else {
+                    clearInterval(castTimerInterval);
                     const elapsed = (performance.now() - castTimerStart) / 1000;
                     castTimeDisplay.innerHTML = `${elapsed.toFixed(2)}<span class="text-3xl opacity-70">s</span>`;
-                }, 50); // Update every 50ms for smooth display
-                castTimeToggleText.textContent = '기록';
-            } else {
+                    castTimeToggleText.textContent = '시작';
+                }
+            }
+
+            function resetCastTimer() {
+                if (isCastTimerRunning) {
+                    toggleCastTimer();
+                }
                 clearInterval(castTimerInterval);
-                const elapsed = (performance.now() - castTimerStart) / 1000;
-                castTimeDisplay.innerHTML = `${elapsed.toFixed(2)}<span class="text-3xl opacity-70">s</span>`;
+                castTimeDisplay.innerHTML = `0.00<span class="text-3xl opacity-70">s</span>`;
                 castTimeToggleText.textContent = '시작';
             }
-        }
 
-        function resetCastTimer() {
-            if (isCastTimerRunning) {
-                toggleCastTimer();
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+                const secs = (seconds % 60).toString().padStart(2, '0');
+                return `${mins}:${secs}`;
             }
-            clearInterval(castTimerInterval);
-            castTimeDisplay.innerHTML = `0.00<span class="text-3xl opacity-70">s</span>`;
-            castTimeToggleText.textContent = '시작';
-        }
-
-        // --- Buff Timer Logic ---
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-            const secs = (seconds % 60).toString().padStart(2, '0');
-            return `${mins}:${secs}`;
-        }
-        
-        function updateAllTimers() {
-            if (!isGlobalTimerRunning) return;
-            activeTimers.forEach(timer => {
-                if (timer.secondsLeft > 0) timer.secondsLeft--;
-                else {
-                    speak(timer.ttsMessage || `${timer.name} 스킬을 사용할 시간입니다.`);
-                    timer.secondsLeft = timer.totalSeconds;
+            
+            function updateAllTimers() {
+                if (!isGlobalTimerRunning) return;
+                activeTimers.forEach(timer => {
+                    if (timer.secondsLeft > 0) timer.secondsLeft--;
+                    else {
+                        speak(timer.ttsMessage || `${timer.name} 스킬을 사용할 시간입니다.`);
+                        timer.secondsLeft = timer.totalSeconds;
+                    }
+                    updateTimerDisplay(timer.id);
+                });
+            }
+            
+            function addTimer(name, duration, tts, color = '#4fd1c5') {
+                const existingTimer = activeTimers.find(t => t.name === name);
+                if (existingTimer) {
+                    existingTimer.secondsLeft = duration;
+                    existingTimer.totalSeconds = duration;
+                    updateTimerDisplay(existingTimer.id);
+                    speak(`${name} 타이머가 초기화되었습니다.`);
+                    return;
                 }
+                noTimersMessage.style.display = 'none';
+                const timer = { id: `timer-${Date.now()}`, name, totalSeconds: duration, secondsLeft: duration, ttsMessage: tts, color };
+                activeTimers.push(timer);
+                createTimerElement(timer);
+                updateGlobalButtonsState();
+            }
+
+            function removeTimer(timerId) {
+                activeTimers = activeTimers.filter(t => t.id !== timerId);
+                const timerElement = document.getElementById(timerId);
+                if (timerElement) {
+                    timerElement.style.opacity = 0;
+                    setTimeout(() => timerElement.remove(), 300);
+                }
+                if (activeTimers.length === 0) {
+                    if (isGlobalTimerRunning) isGlobalTimerRunning = false;
+                    noTimersMessage.style.display = 'block';
+                    sessionEndTimeDisplay.textContent = '';
+                }
+                updateGlobalButtonsState();
+            }
+            
+            function adjustTimer(timerId, amount) {
+                const timer = activeTimers.find(t => t.id === timerId);
+                if (!timer) return;
+                timer.secondsLeft += amount;
+                if (timer.secondsLeft < 0) timer.secondsLeft = 0;
                 updateTimerDisplay(timer.id);
+            }
+
+            function updateTimerDisplay(timerId) {
+                const timer = activeTimers.find(t => t.id === timerId);
+                const timerElement = document.getElementById(timerId);
+                if (timer && timerElement) {
+                    timerElement.querySelector('.time-left').textContent = formatTime(timer.secondsLeft);
+                    const progressPercentage = (timer.secondsLeft / timer.totalSeconds) * 100;
+                    timerElement.querySelector('.progress-bar-inner').style.width = `${progressPercentage}%`;
+                }
+            }
+
+            function updateGlobalButtonsState() {
+                const hasTimers = activeTimers.length > 0;
+                globalStartBtn.disabled = !hasTimers || isGlobalTimerRunning;
+                globalStopBtn.disabled = !hasTimers || !isGlobalTimerRunning;
+            }
+
+            function createTimerElement(timer) {
+                const card = document.createElement('div');
+                card.id = timer.id;
+                card.className = 'timer-card p-3 rounded-lg shadow-lg flex flex-col space-y-2';
+                const iconSVG = timer.name === '홀리심볼' 
+                    ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L12 22M22 12L2 12"/></svg>` 
+                    : timer.name.includes('샤프') 
+                        ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>` 
+                        : `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>`;
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-2">
+                            ${iconSVG}
+                            <span class="font-bold text-md text-white">${timer.name}</span>
+                        </div>
+                        <button data-timer-id="${timer.id}" class="remove-btn text-gray-500 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                        </button>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="time-left font-mono text-3xl font-bold text-white">${formatTime(timer.secondsLeft)}</span>
+                        <div class="flex items-center space-x-1">
+                            <button data-timer-id="${timer.id}" data-amount="-10" class="adjust-time-btn btn bg-red-700 hover:bg-red-600 text-white font-bold rounded-md w-12 h-7 flex items-center justify-center text-xs">-10s</button>
+                            <button data-timer-id="${timer.id}" data-amount="10" class="adjust-time-btn btn bg-green-700 hover:bg-green-600 text-white font-bold rounded-md w-12 h-7 flex items-center justify-center text-xs">+10s</button>
+                        </div>
+                    </div>
+                    <div class="w-full bg-black/30 rounded-full h-1.5 mt-1">
+                        <div class="progress-bar-inner h-1.5 rounded-full" style="width: 100%; --progress-color: ${timer.color}; background-color: ${timer.color};"></div>
+                    </div>
+                `;
+                activeTimersContainer.appendChild(card);
+            }
+
+            // Event Listeners for Buffy
+            if (castTimeToggleBtn) castTimeToggleBtn.addEventListener('click', toggleCastTimer);
+            if (castTimeResetBtn) castTimeResetBtn.addEventListener('click', resetCastTimer);
+
+            if (globalStartBtn) globalStartBtn.addEventListener('click', () => {
+                if (activeTimers.length > 0 && !isGlobalTimerRunning) {
+                    isGlobalTimerRunning = true;
+                    const now = new Date();
+                    now.setHours(now.getHours() + 1);
+                    const endHours = now.getHours().toString().padStart(2, '0');
+                    const endMinutes = now.getMinutes().toString().padStart(2, '0');
+                    sessionEndTimeDisplay.textContent = `종료 예정: ${endHours}:${endMinutes}`;
+                    if (!globalTimerInterval) globalTimerInterval = setInterval(updateAllTimers, 1000);
+                    updateGlobalButtonsState();
+                }
             });
-        }
-        
-        function addTimer(name, duration, tts, color = '#4fd1c5') {
-            const existingTimer = activeTimers.find(t => t.name === name);
-            if (existingTimer) {
-                existingTimer.secondsLeft = duration;
-                existingTimer.totalSeconds = duration;
-                updateTimerDisplay(existingTimer.id);
-                speak(`${name} 타이머가 초기화되었습니다.`);
-                return;
-            }
-            noTimersMessage.style.display = 'none';
-            const timer = { id: `timer-${Date.now()}`, name, totalSeconds: duration, secondsLeft: duration, ttsMessage: tts, color };
-            activeTimers.push(timer);
-            createTimerElement(timer);
-            updateGlobalButtonsState();
-        }
 
-        function removeTimer(timerId) {
-            activeTimers = activeTimers.filter(t => t.id !== timerId);
-            const timerElement = document.getElementById(timerId);
-            if (timerElement) {
-                timerElement.style.opacity = 0;
-                setTimeout(() => timerElement.remove(), 300);
-            }
-            if (activeTimers.length === 0) {
-                if (isGlobalTimerRunning) isGlobalTimerRunning = false;
-                noTimersMessage.style.display = 'block';
-                sessionEndTimeDisplay.textContent = '';
-            }
-            updateGlobalButtonsState();
-        }
-        
-        function adjustTimer(timerId, amount) {
-            const timer = activeTimers.find(t => t.id === timerId);
-            if (!timer) return;
-            timer.secondsLeft += amount;
-            if (timer.secondsLeft < 0) timer.secondsLeft = 0;
-            updateTimerDisplay(timer.id);
-        }
+            if (globalStopBtn) globalStopBtn.addEventListener('click', () => {
+                if (isGlobalTimerRunning) {
+                    isGlobalTimerRunning = false;
+                    sessionEndTimeDisplay.textContent = '';
+                    updateGlobalButtonsState();
+                }
+            });
 
-        function updateTimerDisplay(timerId) {
-            const timer = activeTimers.find(t => t.id === timerId);
-            const timerElement = document.getElementById(timerId);
-            if (timer && timerElement) {
-                timerElement.querySelector('.time-left').textContent = formatTime(timer.secondsLeft);
-                const progressPercentage = (timer.secondsLeft / timer.totalSeconds) * 100;
-                timerElement.querySelector('.progress-bar-inner').style.width = `${progressPercentage}%`;
-            }
-        }
+            document.getElementById('preset-holy-symbol')?.addEventListener('click', () => addTimer('홀리심볼', 120, '홀리심볼', '#f6e05e'));
+            
+            if (sharpEyesLevels) sharpEyesLevels.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    sharpEyesLevels.querySelector('.active').classList.remove('active');
+                    e.target.classList.add('active');
+                }
+            });
 
-        function updateGlobalButtonsState() {
-            const hasTimers = activeTimers.length > 0;
-            globalStartBtn.disabled = !hasTimers || isGlobalTimerRunning;
-            globalStopBtn.disabled = !hasTimers || !isGlobalTimerRunning;
-        }
+            if (addSharpEyesBtn) addSharpEyesBtn.addEventListener('click', () => {
+                const selectedLevel = sharpEyesLevels.querySelector('.active');
+                if (selectedLevel) {
+                    const duration = parseInt(selectedLevel.dataset.duration, 10);
+                    const level = selectedLevel.dataset.level;
+                    addTimer(`샤프 아이즈 Lv.${level}`, duration, '샤프 아이즈', '#68d391');
+                }
+            });
 
-        // --- DOM Creation ---
-        function createTimerElement(timer) {
-            const card = document.createElement('div');
-            card.id = timer.id;
-            card.className = 'timer-card p-3 rounded-lg shadow-lg flex flex-col space-y-2';
-            const iconSVG = timer.name === '홀리심볼' ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L12 22M22 12L2 12"/></svg>` : timer.name.includes('샤프') ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>`;
-            card.innerHTML = `
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center space-x-2">
-                        ${iconSVG}
-                        <span class="font-bold text-md text-white">${timer.name}</span>
-                    </div>
-                    <button data-timer-id="${timer.id}" class="remove-btn text-gray-500 hover:text-white transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
-                    </button>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="time-left font-mono text-3xl font-bold text-white">${formatTime(timer.secondsLeft)}</span>
-                    <div class="flex items-center space-x-1">
-                        <button data-timer-id="${timer.id}" data-amount="-10" class="adjust-time-btn btn bg-red-700 hover:bg-red-600 text-white font-bold rounded-md w-12 h-7 flex items-center justify-center text-xs">-10s</button>
-                        <button data-timer-id="${timer.id}" data-amount="10" class="adjust-time-btn btn bg-green-700 hover:bg-green-600 text-white font-bold rounded-md w-12 h-7 flex items-center justify-center text-xs">+10s</button>
-                    </div>
-                </div>
-                <div class="w-full bg-black/30 rounded-full h-1.5 mt-1">
-                    <div class="progress-bar-inner h-1.5 rounded-full" style="width: 100%; --progress-color: ${timer.color}; background-color: ${timer.color};"></div>
-                </div>
-            `;
-            activeTimersContainer.appendChild(card);
-        }
+            if (customTimerForm) customTimerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('custom-name').value;
+                const duration = parseInt(document.getElementById('custom-duration').value, 10);
+                if (name && duration > 0) {
+                    addTimer(name, duration, `${name} 스킬 시간입니다.`);
+                    customTimerForm.reset();
+                }
+            });
+            
+            if (activeTimersContainer) activeTimersContainer.addEventListener('click', (e) => {
+                const removeButton = e.target.closest('.remove-btn');
+                if (removeButton) {
+                    removeTimer(removeButton.dataset.timerId);
+                    return;
+                }
+                const adjustButton = e.target.closest('.adjust-time-btn');
+                if (adjustButton) {
+                    const timerId = adjustButton.dataset.timerId;
+                    const amount = parseInt(adjustButton.dataset.amount, 10);
+                    adjustTimer(timerId, amount);
+                }
+            });
 
-        // --- Event Listeners ---
-        castTimeToggleBtn.addEventListener('click', toggleCastTimer);
-        castTimeResetBtn.addEventListener('click', resetCastTimer);
-
-        globalStartBtn.addEventListener('click', () => {
-            if (activeTimers.length > 0 && !isGlobalTimerRunning) {
-                isGlobalTimerRunning = true;
-                const now = new Date();
-                now.setHours(now.getHours() + 1);
-                const endHours = now.getHours().toString().padStart(2, '0');
-                const endMinutes = now.getMinutes().toString().padStart(2, '0');
-                sessionEndTimeDisplay.textContent = `종료 예정: ${endHours}:${endMinutes}`;
-                if (!globalTimerInterval) globalTimerInterval = setInterval(updateAllTimers, 1000);
-                updateGlobalButtonsState();
-            }
+            // Initialize the Buffy script
+            initializeBuffy();
         });
-
-        globalStopBtn.addEventListener('click', () => {
-            if (isGlobalTimerRunning) {
-                isGlobalTimerRunning = false;
-                sessionEndTimeDisplay.textContent = '';
-                updateGlobalButtonsState();
-            }
-        });
-
-        document.getElementById('preset-holy-symbol').addEventListener('click', () => addTimer('홀리심볼', 120, '홀리심볼', '#f6e05e'));
-        sharpEyesLevels.addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON') {
-                sharpEyesLevels.querySelector('.active').classList.remove('active');
-                e.target.classList.add('active');
-            }
-        });
-        addSharpEyesBtn.addEventListener('click', () => {
-            const selectedLevel = sharpEyesLevels.querySelector('.active');
-            if (selectedLevel) {
-                const duration = parseInt(selectedLevel.dataset.duration, 10);
-                const level = selectedLevel.dataset.level;
-                addTimer(`샤프 아이즈 Lv.${level}`, duration, '샤프 아이즈', '#68d391');
-            }
-        });
-        customTimerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('custom-name').value;
-            const duration = parseInt(document.getElementById('custom-duration').value, 10);
-            if (name && duration > 0) {
-                addTimer(name, duration, `${name} 스킬 시간입니다.`);
-                customTimerForm.reset();
-            }
-        });
-        activeTimersContainer.addEventListener('click', (e) => {
-            const removeButton = e.target.closest('.remove-btn');
-            if (removeButton) {
-                removeTimer(removeButton.dataset.timerId);
-                return;
-            }
-            const adjustButton = e.target.closest('.adjust-time-btn');
-            if (adjustButton) {
-                const timerId = adjustButton.dataset.timerId;
-                const amount = parseInt(adjustButton.dataset.amount, 10);
-                adjustTimer(timerId, amount);
-            }
-        });
-
-        // --- Run ---
-        window.onload = initialize;
     </script>
 </body>
 </html>
-
