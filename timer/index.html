@@ -220,6 +220,18 @@
         </div>
     </div>
 
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal-backdrop items-center justify-center hidden">
+        <div class="modal-content max-w-sm">
+            <h3 id="confirmModalTitle" class="text-2xl font-bold text-yellow-400">확인</h3>
+            <p id="confirmModalMessage" class="mt-4 text-lg text-slate-300"></p>
+            <div class="mt-6 flex justify-end gap-4">
+                <button id="confirmCancelBtn" class="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-lg transition">취소</button>
+                <button id="confirmOkBtn" class="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-6 rounded-lg transition">확인</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const RES_DURATION = 15 * 60;
@@ -253,10 +265,17 @@
                 contactLink: document.getElementById('contactLink'),
                 contactModal: document.getElementById('contactModal'),
                 closeContactModalBtn: document.getElementById('closeContactModalBtn'),
+                // Confirmation Modal elements
+                confirmModal: document.getElementById('confirmModal'),
+                confirmModalTitle: document.getElementById('confirmModalTitle'),
+                confirmModalMessage: document.getElementById('confirmModalMessage'),
+                confirmOkBtn: document.getElementById('confirmOkBtn'),
+                confirmCancelBtn: document.getElementById('confirmCancelBtn'),
             };
 
             let timerInterval = null, isMuted = false, autoDeathTimeoutId = null;
             let raidState = {};
+            let confirmCallback = null;
 
             function getInitialState() {
                 return {
@@ -311,8 +330,7 @@
                 if (data.state === 'initial' || data.state === 'ended') {
                     dom.totalTime.textContent = formatTime(data.totalSeconds, false);
                     dom.resTimesDisplay.classList.add('hidden');
-                    // When not running, still need to render the list for name editing etc.
-                    renderBishopList(data.bishops, data.currentBishopIndex, data.state);
+                    updateBishopCooldowns(data.bishops, data.currentBishopIndex, data.state);
                     return;
                 }
 
@@ -348,8 +366,8 @@
                     dom.resTimesDisplay.classList.add('hidden');
                 }
 
-                // [FIX] Re-render components that show cooldowns every second.
-                renderBishopList(data.bishops, data.currentBishopIndex, data.state);
+                // [FIX] Call functions that update high-frequency data
+                updateBishopCooldowns(data.bishops, data.currentBishopIndex, data.state);
                 renderControlPanel(data);
             }
 
@@ -382,29 +400,58 @@
                 dom.controlPanel.innerHTML = buttonHTML;
                 dom.briefing.textContent = briefingText;
             }
-
+            
+            // This function builds the list structure. Called on major state changes.
             function renderBishopList(bishops, currentIndex, state) {
                 dom.bishopList.innerHTML = '';
                 if (!bishops) return;
                 bishops.forEach((b, i) => {
+                    const row = document.createElement('tr');
+                    row.className = `border-b border-slate-700/50`;
+                    row.innerHTML = `
+                        <td class="p-3">${i + 1}</td>
+                        <td class="p-3 bishop-name cursor-pointer hover:bg-slate-700 rounded-md" contenteditable="${state === 'initial'}" data-index="${i}">${b.name}</td>
+                        <td class="p-3 font-bold"></td>
+                        <td class="p-3 font-mono"></td>
+                        <td class="p-3 font-mono">${b.usedAt ? formatClockTime(new Date(b.usedAt)) : '--:--:--'}</td>
+                        <td class="p-3 text-center"><button class="remove-bishop-btn text-red-500 hover:text-red-400 font-bold text-2xl ${state !== 'initial' ? 'hidden' : ''}" data-index="${i}">&times;</button></td>
+                    `;
+                    dom.bishopList.appendChild(row);
+                });
+                // After building, do an initial update of cooldowns and statuses
+                updateBishopCooldowns(bishops, currentIndex, state);
+            }
+
+            // [NEW] This function only updates text content, preserving the DOM structure.
+            // This prevents the contenteditable field from being reset.
+            function updateBishopCooldowns(bishops, currentIndex, state) {
+                if (!bishops) return;
+                const rows = dom.bishopList.querySelectorAll('tr');
+                if (rows.length !== bishops.length) return; // Exit if list is out of sync
+
+                bishops.forEach((b, i) => {
+                    const row = rows[i];
+                    if (!row) return;
+
                     const now = Date.now();
                     const onCooldown = b.cooldownEndsAt && b.cooldownEndsAt > now;
                     const cooldownSeconds = onCooldown ? Math.floor((b.cooldownEndsAt - now) / 1000) : 0;
                     const statusText = onCooldown ? '쿨타임' : '대기';
                     const statusClass = onCooldown ? 'status-cooldown' : 'text-green-400';
                     const isCurrent = i === currentIndex && (state === 'running' || state === 'res-active');
+
+                    const statusCell = row.cells[2];
+                    const cooldownCell = row.cells[3];
+
+                    if (statusCell) {
+                        statusCell.textContent = statusText;
+                        statusCell.className = `p-3 font-bold ${statusClass}`;
+                    }
+                    if (cooldownCell) {
+                        cooldownCell.textContent = onCooldown ? formatTime(cooldownSeconds, false) : '사용 가능';
+                    }
                     
-                    const row = document.createElement('tr');
-                    row.className = `border-b border-slate-700/50 ${isCurrent ? 'bg-sky-900/50' : ''}`;
-                    row.innerHTML = `
-                        <td class="p-3">${i + 1}</td>
-                        <td class="p-3 bishop-name cursor-pointer hover:bg-slate-700 rounded-md" contenteditable="${state === 'initial'}" data-index="${i}">${b.name}</td>
-                        <td class="p-3 font-bold ${statusClass}">${statusText}</td>
-                        <td class="p-3 font-mono">${onCooldown ? formatTime(cooldownSeconds, false) : '사용 가능'}</td>
-                        <td class="p-3 font-mono">${b.usedAt ? formatClockTime(new Date(b.usedAt)) : '--:--:--'}</td>
-                        <td class="p-3 text-center"><button class="remove-bishop-btn text-red-500 hover:text-red-400 font-bold text-2xl ${state !== 'initial' ? 'hidden' : ''}" data-index="${i}">&times;</button></td>
-                    `;
-                    dom.bishopList.appendChild(row);
+                    row.classList.toggle('bg-sky-900/50', isCurrent);
                 });
             }
             
@@ -481,12 +528,13 @@
             }
             
             function handleReset() {
-                if (!confirm("정말로 모든 진행 상황을 초기화하시겠습니까?")) return;
-                if (autoDeathTimeoutId) clearTimeout(autoDeathTimeoutId);
-                if (timerInterval) clearInterval(timerInterval);
-                raidState = getInitialState();
-                addLog('레이드가 초기화되었습니다.', 'system');
-                render(raidState);
+                showConfirmation("정말로 모든 진행 상황을 초기화하시겠습니까?", () => {
+                    if (autoDeathTimeoutId) clearTimeout(autoDeathTimeoutId);
+                    if (timerInterval) clearInterval(timerInterval);
+                    raidState = getInitialState();
+                    addLog('레이드가 초기화되었습니다.', 'system');
+                    render(raidState);
+                });
             }
 
             function handleEndRaid() {
@@ -544,11 +592,17 @@
             }
             
             function updateBishopName(index, newName) {
-                if (!newName || !raidState.bishops[index]) return;
+                if (!newName || !raidState.bishops[index]) {
+                    // If name is empty, revert to the old name
+                    render(raidState);
+                    return;
+                };
                 const oldName = raidState.bishops[index].name;
                 raidState.bishops[index].name = newName;
                 addLog(`비숍 '${oldName}'의 이름이 '${newName}'(으)로 변경되었습니다.`, 'info');
-                render(raidState);
+                // No need to call render here as the blur event handles it.
+                // Just update the state. The control panel might need an update though.
+                renderControlPanel(raidState);
             }
             
             function addBishop() {
@@ -588,7 +642,7 @@
             
             function showNotification(message) {
                 const notification = document.createElement('div');
-                notification.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 bg-sky-500 text-white py-2 px-4 rounded-lg shadow-lg transition-opacity duration-300 z-50';
+                notification.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 bg-sky-500 text-white py-2 px-4 rounded-lg shadow-lg transition-opacity duration-300 z-[1003]';
                 notification.textContent = message;
                 document.body.appendChild(notification);
                 setTimeout(() => {
@@ -604,6 +658,12 @@
                     console.error('Clipboard copy failed:', err);
                     showNotification('복사 실패!');
                 });
+            }
+
+            function showConfirmation(message, onConfirm) {
+                dom.confirmModalMessage.textContent = message;
+                confirmCallback = onConfirm;
+                dom.confirmModal.classList.remove('hidden');
             }
 
             function attachEventListeners() {
@@ -676,6 +736,19 @@
                  }
                  if(dom.closeContactModalBtn) dom.closeContactModalBtn.addEventListener('click', () => dom.contactModal.classList.add('hidden'));
                  if(dom.contactModal) dom.contactModal.addEventListener('click', (e) => { if(e.target === dom.contactModal) dom.contactModal.classList.add('hidden'); });
+
+                 // Confirmation Modal Listeners
+                 if(dom.confirmCancelBtn) dom.confirmCancelBtn.addEventListener('click', () => {
+                    dom.confirmModal.classList.add('hidden');
+                    confirmCallback = null;
+                 });
+                 if(dom.confirmOkBtn) dom.confirmOkBtn.addEventListener('click', () => {
+                    if (typeof confirmCallback === 'function') {
+                        confirmCallback();
+                    }
+                    dom.confirmModal.classList.add('hidden');
+                    confirmCallback = null;
+                 });
             }
             
             function closeSidebar() {
