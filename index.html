@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MLFEE(메피) 허브 | 메이플랜드 필수 도구</title>
-    <meta name="description" content="원정, 더 이상 어렵지 않아요! MLFEE(메피)에서 수수료 계산기와 리저렉션 타이머 등 다양한 편의 도구를 만나보세요.">
-    <meta name="keywords" content="메이플랜드, 메랜 수수료 계산기, 리저렉션 타이머, 원정대, 메피, MLFEE, 자쿰, 혼테일, 공략">
+    <meta name="description" content="원정, 더 이상 어렵지 않아요! MLFEE(메피)에서 수수료 계산기, 리저렉션 타이머, 버프 타이머 등 다양한 편의 도구를 만나보세요.">
+    <meta name="keywords" content="메이플랜드, 메랜 수수료 계산기, 리저렉션 타이머, 버프 타이머, 메피, MLFEE, 자쿰, 혼테일, 공략">
     <meta property="og:title" content="MLFEE(메피) 메이플랜드 필수 도구">
-    <meta property="og:description" content="자쿰, 혼테일 원정을 위한 필수 도구! 수수료 계산과 리저 타이머, 이제 더 쉬워집니다.">
+    <meta property="og:description" content="자쿰, 혼테일 원정을 위한 필수 도구! 수수료 계산, 리저 타이머, 버프 관리까지 더 쉬워집니다.">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615"
@@ -88,7 +88,7 @@
         .nav-toggle.active .hamburger-icon span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
     </style>
 </head>
-<body class="bg-gray-900 text-white antialiased">
+<body class="antialiased">
     
     <!-- Sidebar Navigation -->
     <div id="sidebar-toggle" class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
@@ -100,10 +100,11 @@
     </div>
     <nav id="sidebar" class="fixed right-0 top-0 w-72 h-full bg-gray-800/90 backdrop-blur-lg border-l-2 border-gray-700 z-[1000] shadow-2xl transition-transform duration-300 ease-in-out translate-x-full">
         <h3 class="text-center text-2xl font-bold text-blue-400 mt-16 mb-8">메뉴</h3>
-        <a href="https://mlfee.com" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">홈</a>
+        <a href="/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">홈</a>
         <a href="#" id="updatesLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">업데이트</a>
-        <a href="https://www.mlfee.com/calc/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
-        <a href="https://www.mlfee.com/timer/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
+        <a href="/calc" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
+        <a href="/timer" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
+        <a href="/buff" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
         <a href="#guides" id="guideLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
         <a href="#" id="contactLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의</a>
     </nav>
@@ -125,7 +126,7 @@
                         원정, 더 이상 어렵지 않아요!
                     </h1>
                     <p class="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto my-10">
-                        복잡한 수수료 계산, 아슬아슬한 리저렉션 관리...<br>
+                        복잡한 수수료 계산, 아슬아슬한 리저렉션 관리, 정신없는 버프 리필까지...<br>
                         메피의 스마트한 도구들과 함께라면, 당신도 최고의 원정대원이 될 수 있습니다.
                     </p>
                     <div>
@@ -150,8 +151,8 @@
             <section id="tools" class="py-20">
                 <div class="container mx-auto px-4">
                     <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">MLFEE 핵심 도구</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <a href="/calc/" class="tool-link block">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <a href="/calc" class="tool-link block">
                             <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
                                 <div class="text-red-500 mb-6">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h3m-3-7h3m-6.128 9.872A3 3 0 006.872 21h10.256a3 3 0 002.872-3.128V7.128A3 3 0 0017.128 4H6.872a3 3 0 00-2.872 3.128v10.744z" /></svg>
@@ -160,13 +161,24 @@
                                 <p class="text-gray-400">메소 수수료 '수작'부터 N인 파티 분배, 택배 정산, 목표 금액 역산까지 원클릭으로 해결하세요.</p>
                             </div>
                         </a>
-                        <a href="/timer/" class="tool-link block">
+                        <a href="/timer" class="tool-link block">
                             <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
                                 <div class="text-blue-500 mb-6">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </div>
                                 <h3 class="text-2xl font-bold mb-4 text-blue-400 text-center">레이드 크로니클 (리저 타이머)</h3>
                                 <p class="text-gray-400">비숍의 리저렉션 쿨타임을 정확히 체크하고, 다음 예상 시간을 공유하여 안정적인 레이드를 운영하세요.</p>
+                            </div>
+                        </a>
+                        <a href="/buff" class="tool-link block">
+                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
+                                <div class="text-green-500 mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-4 text-green-400 text-center">메피 버피 (실시간 버프 관리)</h3>
+                                <p class="text-gray-400">홀리심볼, 샤프 아이즈 등 주요 버프 스킬의 주기를 관리하고, 음성으로 리필 타이밍을 알려드립니다.</p>
                             </div>
                         </a>
                     </div>
@@ -236,17 +248,6 @@
                 </div>
             </section>
             
-            <div class="container mx-auto px-4 my-12">
-                <div class="ad-container w-full min-h-[90px] bg-slate-900/50 rounded-lg flex justify-center items-center">
-                     <ins class="adsbygoogle"
-                          style="display:block; width:100%;"
-                          data-ad-client="ca-pub-8602495420447615"
-                          data-ad-slot="2345678901"
-                          data-ad-format="auto"
-                          data-full-width-responsive="true"></ins>
-                </div>
-            </div>
-
             <section id="zakum-guide" class="py-20">
                 <div class="container mx-auto px-4">
                     <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">자쿰 원정대 준비하기</span></h2>
@@ -266,13 +267,24 @@
                             <div>
                                 <div class="bg-yellow-500 text-gray-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-3xl font-bold">3</div>
                                 <h4 class="text-xl font-bold text-white mb-2">타이머 세팅</h4>
-                                <p class="text-gray-400">레이드 시작 전, '레이드 크로니클'에 파티의 비숍들을 모두 등록하고 역할을 분담하여 완벽한 리저 사이클을 준비하세요.</p>
+                                <p class="text-gray-400">레이드 시작 전, '레이드 크로니클'과 '메피 버피'를 세팅하여 완벽한 시간 관리를 준비하세요.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
             
+            <div class="container mx-auto px-4 my-12">
+                <div class="ad-container w-full min-h-[90px] bg-slate-900/50 rounded-lg flex justify-center items-center">
+                     <ins class="adsbygoogle"
+                          style="display:block; width:100%;"
+                          data-ad-client="ca-pub-8602495420447615"
+                          data-ad-slot="2345678901"
+                          data-ad-format="auto"
+                          data-full-width-responsive="true"></ins>
+                </div>
+            </div>
+
             <section id="reviews" class="py-20 bg-gray-900/50">
                 <div class="container mx-auto px-4">
                     <div class="flex flex-col sm:flex-row justify-between items-center mb-12 gap-4">
@@ -344,19 +356,25 @@
             <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
             <h3 class="text-3xl font-bold text-sky-400 mb-6 text-center">업데이트 내역</h3>
             <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-4 text-slate-300">
+                <div class="p-4 bg-slate-700/50 rounded-lg">
+                    <p class="font-bold text-lg text-white">2024-07-20: '메피 버피' 신규 기능 추가!</p>
+                    <p class="mt-1">- 주요 스킬(홀리심볼, 샤프 아이즈 등)의 버프 지속시간을 관리하는 '메피 버피' 타이머를 추가했습니다.</p>
+                    <p class="mt-1">- 타이머 만료 시 음성 알림(TTS) 기능이 포함되어 있습니다.</p>
+                    <p class="mt-1">- 버프 시전 시간을 측정할 수 있는 스톱워치 기능도 함께 제공됩니다.</p>
+                </div>
                  <div class="p-4 bg-slate-700/50 rounded-lg">
-                     <p class="font-bold text-lg text-white">2024-07-19: 후기 시스템 간소화</p>
-                     <p class="mt-1">- 후기 작성 시 '추천/비추천' 평가 기능을 제거하여 더 간단하게 후기를 남길 수 있도록 변경했습니다.</p>
-                 </div>
+                    <p class="font-bold text-lg text-white">2024-07-19: 후기 시스템 간소화</p>
+                    <p class="mt-1">- 후기 작성 시 '추천/비추천' 평가 기능을 제거하여 더 간단하게 후기를 남길 수 있도록 변경했습니다.</p>
+                </div>
                  <div class="p-4 bg-slate-700/50 rounded-lg">
-                     <p class="font-bold text-lg text-white">2024-07-18: 공략 가이드 그래픽 복원</p>
-                     <p class="mt-1">- 깨진 이미지 링크를 제거하고, 원래의 SVG 그래픽으로 복원하여 안정성을 높였습니다.</p>
-                 </div>
+                    <p class="font-bold text-lg text-white">2024-07-18: 공략 가이드 그래픽 복원</p>
+                    <p class="mt-1">- 깨진 이미지 링크를 제거하고, 원래의 SVG 그래픽으로 복원하여 안정성을 높였습니다.</p>
+                </div>
                  <div class="p-4 bg-slate-700/50 rounded-lg">
-                     <p class="font-bold text-lg text-white">2024-07-17: UI/UX 개선</p>
-                     <p class="mt-1">- 모든 팝업창(모달)이 화면 중앙에 안정적으로 표시되도록 수정했습니다.</p>
-                     <p class="mt-1">- 후기 삭제 시 구식 알림창 대신 세련된 확인창이 나타나도록 개선했습니다.</p>
-                 </div>
+                    <p class="font-bold text-lg text-white">2024-07-17: UI/UX 개선</p>
+                    <p class="mt-1">- 모든 팝업창(모달)이 화면 중앙에 안정적으로 표시되도록 수정했습니다.</p>
+                    <p class="mt-1">- 후기 삭제 시 구식 알림창 대신 세련된 확인창이 나타나도록 개선했습니다.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -378,11 +396,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- UI Elements ---
+            // --- MLFEE Base Script ---
             const reviewList = document.getElementById('review-list');
             const writeReviewBtn = document.getElementById('writeReviewBtn');
             
-            // --- Modal Helper ---
             const modals = {
                 review: { el: document.getElementById('reviewModal'), form: document.getElementById('reviewForm') },
                 contact: { el: document.getElementById('contactModal') },
@@ -448,7 +465,6 @@
                 });
             }
 
-            // --- Review System (localStorage) ---
             const defaultReviews = [
                 { id: 'default1', name: 'AA 법사z', info: 'Lv. ?? 아크메이지', text: '레이드 크로니클 덕분에 자쿰 원정 처음으로 안 짤리고 깼어요. 오더가 정말 편해집니다. 강추!', avatar: 'https://placehold.co/40x40/3b82f6/ffffff?text=M' },
                 { id: 'default2', name: 'ㅁㅁ공대장', info: '자쿰 원정대', text: 'N빵마스터 없었을 땐 매번 계산기 두들기느라 힘들었는데, 이젠 클릭 한 번이면 끝이네요. 시간 엄청 아꼈어요.', avatar: 'https://placehold.co/40x40/ef4444/ffffff?text=L' },
@@ -529,8 +545,8 @@
 
             if (reviewList) {
                 reviewList.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('delete-review-btn')) {
-                        const reviewId = e.target.dataset.id;
+                    if (e.target.closest('.delete-review-btn')) {
+                        const reviewId = e.target.closest('.delete-review-btn').dataset.id;
                         deleteReview(reviewId);
                     }
                 });
@@ -563,15 +579,14 @@
 
             renderReviews();
 
-            // --- General UI & Modal Event Listeners ---
             if (writeReviewBtn) writeReviewBtn.addEventListener('click', () => showModal(modals.review));
             
             document.querySelectorAll('.modal-close-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const modalEl = e.target.closest('.fixed.inset-0');
                     if (modalEl) {
-                         const modalKey = Object.keys(modals).find(key => modals[key].el === modalEl);
-                         if(modalKey) hideModal(modals[modalKey]);
+                        const modalKey = Object.keys(modals).find(key => modals[key].el === modalEl);
+                        if(modalKey) hideModal(modals[modalKey]);
                     }
                 });
             });
@@ -619,4 +634,4 @@
         });
     </script>
 </body>
-</ht
+</html>
