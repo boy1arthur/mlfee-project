@@ -147,12 +147,12 @@
 
                 <div id="bishopSection" class="mt-8">
                      <div class="flex justify-between items-center mb-2 px-2">
-                        <h2 class="text-xl font-bold text-slate-300">파티원 관리</h2>
-                        <button id="addBishopBtn" class="bg-teal-600 hover:bg-teal-500 text-white font-bold py-1 px-4 rounded-full transition-colors text-lg">+</button>
-                    </div>
-                    <div class="overflow-x-auto bg-slate-900/70 rounded-lg p-2">
-                        <table class="w-full text-left text-xl"><thead class="border-b border-slate-700"><tr class="text-base text-slate-400"><th class="p-3">순번</th><th class="p-3">비숍</th><th class="p-3">상태</th><th class="p-3">쿨타임</th><th class="p-3">사용 시각</th><th class="p-3"></th></tr></thead><tbody id="bishop-list"></tbody></table>
-                    </div>
+                         <h2 class="text-xl font-bold text-slate-300">파티원 관리</h2>
+                         <button id="addBishopBtn" class="bg-teal-600 hover:bg-teal-500 text-white font-bold py-1 px-4 rounded-full transition-colors text-lg">+</button>
+                     </div>
+                     <div class="overflow-x-auto bg-slate-900/70 rounded-lg p-2">
+                         <table class="w-full text-left text-xl"><thead class="border-b border-slate-700"><tr class="text-base text-slate-400"><th class="p-3">순번</th><th class="p-3">비숍</th><th class="p-3">상태</th><th class="p-3">쿨타임</th><th class="p-3">사용 시각</th><th class="p-3"></th></tr></thead><tbody id="bishop-list"></tbody></table>
+                     </div>
                 </div>
                 
                 <div id="log-section" class="mt-8 bg-slate-900/70 rounded-lg">
@@ -311,6 +311,8 @@
                 if (data.state === 'initial' || data.state === 'ended') {
                     dom.totalTime.textContent = formatTime(data.totalSeconds, false);
                     dom.resTimesDisplay.classList.add('hidden');
+                    // When not running, still need to render the list for name editing etc.
+                    renderBishopList(data.bishops, data.currentBishopIndex, data.state);
                     return;
                 }
 
@@ -345,6 +347,10 @@
                     dom.resGaugeContainer.classList.add('hidden');
                     dom.resTimesDisplay.classList.add('hidden');
                 }
+
+                // [FIX] Re-render components that show cooldowns every second.
+                renderBishopList(data.bishops, data.currentBishopIndex, data.state);
+                renderControlPanel(data);
             }
 
             function renderControlPanel(data) {
@@ -386,14 +392,14 @@
                     const cooldownSeconds = onCooldown ? Math.floor((b.cooldownEndsAt - now) / 1000) : 0;
                     const statusText = onCooldown ? '쿨타임' : '대기';
                     const statusClass = onCooldown ? 'status-cooldown' : 'text-green-400';
-                    const isCurrent = i === currentIndex && state === 'running';
+                    const isCurrent = i === currentIndex && (state === 'running' || state === 'res-active');
                     
                     const row = document.createElement('tr');
                     row.className = `border-b border-slate-700/50 ${isCurrent ? 'bg-sky-900/50' : ''}`;
                     row.innerHTML = `
                         <td class="p-3">${i + 1}</td>
                         <td class="p-3 bishop-name cursor-pointer hover:bg-slate-700 rounded-md" contenteditable="${state === 'initial'}" data-index="${i}">${b.name}</td>
-                        <td class="p-3 ${statusClass}">${statusText}</td>
+                        <td class="p-3 font-bold ${statusClass}">${statusText}</td>
                         <td class="p-3 font-mono">${onCooldown ? formatTime(cooldownSeconds, false) : '사용 가능'}</td>
                         <td class="p-3 font-mono">${b.usedAt ? formatClockTime(new Date(b.usedAt)) : '--:--:--'}</td>
                         <td class="p-3 text-center"><button class="remove-bishop-btn text-red-500 hover:text-red-400 font-bold text-2xl ${state !== 'initial' ? 'hidden' : ''}" data-index="${i}">&times;</button></td>
@@ -438,7 +444,7 @@
                 const now = Date.now();
                 raidState.resurrectionActiveUntil = now + RES_DURATION * 1000;
                 
-                const recommendedTime = new Date(raidState.resurrectionActiveUntil - 60 * 1000);
+                const recommendedTime = new Date(now + IDEAL_CYCLE_TIME * 1000);
                 raidState.resScheduleTimes = [
                     recommendedTime.getTime(),
                     recommendedTime.getTime() + IDEAL_CYCLE_TIME * 1000,
@@ -477,6 +483,7 @@
             function handleReset() {
                 if (!confirm("정말로 모든 진행 상황을 초기화하시겠습니까?")) return;
                 if (autoDeathTimeoutId) clearTimeout(autoDeathTimeoutId);
+                if (timerInterval) clearInterval(timerInterval);
                 raidState = getInitialState();
                 addLog('레이드가 초기화되었습니다.', 'system');
                 render(raidState);
@@ -603,74 +610,72 @@
                  if (dom.resetBtn) dom.resetBtn.addEventListener('click', handleReset);
                  if (dom.endRaidBtn) dom.endRaidBtn.addEventListener('click', handleEndRaid);
                  if (dom.muteBtn) dom.muteBtn.addEventListener('click', () => {
-                    isMuted = !isMuted;
-                    dom.muteBtn.textContent = isMuted ? '소리 켜기' : '소리 끄기';
-                    speak(`음성 안내 ${isMuted ? '끄기' : '켜기'}`);
-                });
+                     isMuted = !isMuted;
+                     dom.muteBtn.textContent = isMuted ? '소리 켜기' : '소리 끄기';
+                     speak(`음성 안내 ${isMuted ? '끄기' : '켜기'}`);
+                 });
                 
-                if (dom.resTimesDisplay) dom.resTimesDisplay.addEventListener('click', () => {
-                    if (raidState.resScheduleTimes && raidState.resScheduleTimes.length > 0) {
-                        const minutes = raidState.resScheduleTimes.map(ts => new Date(ts).getMinutes());
-                        const textToCopy = `${minutes.join(', ')} 리저`;
-                        copyToClipboard(textToCopy, `'${textToCopy}'가 복사되었습니다.`);
-                    }
-                });
+                 if (dom.resTimesDisplay) dom.resTimesDisplay.addEventListener('click', () => {
+                     if (raidState.resScheduleTimes && raidState.resScheduleTimes.length > 0) {
+                         const minutes = raidState.resScheduleTimes.map(ts => new Date(ts).getMinutes());
+                         const textToCopy = `${minutes.join(', ')} 리저`;
+                         copyToClipboard(textToCopy, `'${textToCopy}'가 복사되었습니다.`);
+                     }
+                 });
                 
-                if (dom.controlPanel) dom.controlPanel.addEventListener('click', (e) => {
-                    const targetId = e.target.id || e.target.closest('button')?.id;
-                    if (targetId === 'startRaidBtn') handleStartRaid();
-                    if (targetId === 'deathBtn') handleDeath();
-                    if (targetId === 'useResBtn') handleUseResurrection();
-                });
+                 if (dom.controlPanel) dom.controlPanel.addEventListener('click', (e) => {
+                     const targetId = e.target.id || e.target.closest('button')?.id;
+                     if (targetId === 'startRaidBtn') handleStartRaid();
+                     if (targetId === 'deathBtn') handleDeath();
+                     if (targetId === 'useResBtn') handleUseResurrection();
+                 });
 
-                if (dom.addBishopBtn) dom.addBishopBtn.addEventListener('click', addBishop);
+                 if (dom.addBishopBtn) dom.addBishopBtn.addEventListener('click', addBishop);
 
-                if (dom.bishopList) {
-                    dom.bishopList.addEventListener('click', e => {
-                        if (e.target.classList.contains('remove-bishop-btn')) {
-                            const index = parseInt(e.target.dataset.index);
-                            removeBishop(index);
-                        }
-                    });
-                    dom.bishopList.addEventListener('blur', e => {
-                        if (e.target.classList.contains('bishop-name')) {
-                            const index = parseInt(e.target.dataset.index);
-                            const newName = e.target.textContent.trim();
-                            updateBishopName(index, newName);
-                        }
-                    }, true);
-                    dom.bishopList.addEventListener('keydown', e => {
-                        if (e.target.classList.contains('bishop-name') && e.key === 'Enter') {
-                            e.preventDefault(); e.target.blur();
-                        }
-                    });
-                }
+                 if (dom.bishopList) {
+                     dom.bishopList.addEventListener('click', e => {
+                         if (e.target.classList.contains('remove-bishop-btn')) {
+                             const index = parseInt(e.target.dataset.index);
+                             removeBishop(index);
+                         }
+                     });
+                     dom.bishopList.addEventListener('blur', e => {
+                         if (e.target.classList.contains('bishop-name')) {
+                             const index = parseInt(e.target.dataset.index);
+                             const newName = e.target.textContent.trim();
+                             updateBishopName(index, newName);
+                         }
+                     }, true);
+                     dom.bishopList.addEventListener('keydown', e => {
+                         if (e.target.classList.contains('bishop-name') && e.key === 'Enter') {
+                             e.preventDefault(); e.target.blur();
+                         }
+                     });
+                 }
                 
-                // Sidebar and Modal Listeners
-                if (dom.sidebarToggle) {
-                    dom.sidebarToggle.addEventListener('click', () => {
-                        dom.sidebar.classList.toggle('translate-x-full');
-                        dom.sidebarToggle.classList.toggle('active');
-                        dom.sidebarOverlay.classList.toggle('hidden');
-                    });
-                }
-                if (dom.sidebarOverlay) {
-                    dom.sidebarOverlay.addEventListener('click', closeSidebar);
-                }
-                if(dom.guideLink) dom.guideLink.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('how-to-guide').scrollIntoView({ behavior: 'smooth' }); closeSidebar(); });
-                if(dom.contactLink) {
-                    dom.contactLink.addEventListener('click', (e) => { 
-                        e.preventDefault(); 
-                        closeSidebar();
-                        setTimeout(() => {
-                            dom.contactModal.classList.remove('hidden');
-                        }, 300);
-                    });
-                }
-                if(dom.closeContactModalBtn) dom.closeContactModalBtn.addEventListener('click', () => dom.contactModal.classList.add('hidden'));
-                if(dom.contactModal) dom.contactModal.addEventListener('click', (e) => { if(e.target === dom.contactModal) dom.contactModal.classList.add('hidden'); });
-                if(dom.summaryModal) dom.closeSummaryBtn.addEventListener('click', () => dom.summaryModal.classList.add('hidden'));
-
+                 // Sidebar and Modal Listeners
+                 if (dom.sidebarToggle) {
+                     dom.sidebarToggle.addEventListener('click', () => {
+                         dom.sidebar.classList.toggle('translate-x-full');
+                         dom.sidebarToggle.classList.toggle('active');
+                         dom.sidebarOverlay.classList.toggle('hidden');
+                     });
+                 }
+                 if (dom.sidebarOverlay) {
+                     dom.sidebarOverlay.addEventListener('click', closeSidebar);
+                 }
+                 if(dom.guideLink) dom.guideLink.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('how-to-guide').scrollIntoView({ behavior: 'smooth' }); closeSidebar(); });
+                 if(dom.contactLink) {
+                     dom.contactLink.addEventListener('click', (e) => { 
+                         e.preventDefault(); 
+                         closeSidebar();
+                         setTimeout(() => {
+                             dom.contactModal.classList.remove('hidden');
+                         }, 300);
+                     });
+                 }
+                 if(dom.closeContactModalBtn) dom.closeContactModalBtn.addEventListener('click', () => dom.contactModal.classList.add('hidden'));
+                 if(dom.contactModal) dom.contactModal.addEventListener('click', (e) => { if(e.target === dom.contactModal) dom.contactModal.classList.add('hidden'); });
             }
             
             function closeSidebar() {
