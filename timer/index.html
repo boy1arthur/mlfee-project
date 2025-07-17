@@ -17,27 +17,115 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     
     <style>
+        /* 기본 스타일 및 CSS 변수 정의 */
+        :root, .theme-default {
+            --bg-main: #0a0e1a;
+            --bg-primary: #1e293b;
+            --bg-secondary: #2d3748;
+            --bg-tertiary: #475569;
+            --bg-interactive: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-accent: #22D3EE;
+            --border-color: #334155;
+            --accent-color-1: #2DD4BF;
+            --accent-color-2: #3B82F6;
+            --btn-start-from: #38bdf8;
+            --btn-start-to: #0d9488;
+            --btn-death-from: #ef4444;
+            --btn-death-to: #b91c1c;
+            --btn-res-from: #2dd4bf;
+            --btn-res-to: #06b6d4;
+        }
+
+        .theme-forest {
+            --bg-main: #1a2a27;
+            --bg-primary: #2f4842;
+            --bg-secondary: #3e5e56;
+            --bg-tertiary: #50746c;
+            --bg-interactive: #43a047;
+            --text-primary: #e8f5e9;
+            --text-secondary: #a5d6a7;
+            --text-accent: #a7ffeb;
+            --border-color: #43a047;
+            --accent-color-1: #66bb6a;
+            --accent-color-2: #81c784;
+            --btn-start-from: #4caf50;
+            --btn-start-to: #2e7d32;
+            --btn-death-from: #e57373;
+            --btn-death-to: #c62828;
+            --btn-res-from: #4db6ac;
+            --btn-res-to: #00897b;
+        }
+
+        .theme-ocean {
+            --bg-main: #0c1e3e;
+            --bg-primary: #1a3a6e;
+            --bg-secondary: #2a5298;
+            --bg-tertiary: #3b74db;
+            --bg-interactive: #1e40af;
+            --text-primary: #e3f2fd;
+            --text-secondary: #90caf9;
+            --text-accent: #82b1ff;
+            --border-color: #42a5f5;
+            --accent-color-1: #64b5f6;
+            --accent-color-2: #9be7ff;
+            --btn-start-from: #2196f3;
+            --btn-start-to: #0d47a1;
+            --btn-death-from: #ff7043;
+            --btn-death-to: #d84315;
+            --btn-res-from: #4dd0e1;
+            --btn-res-to: #0097a7;
+        }
+
+        .theme-blackgold {
+            --bg-main: #121212;
+            --bg-primary: #1E1E1E;
+            --bg-secondary: #282828;
+            --bg-tertiary: #403d39;
+            --bg-interactive: #c69f2e;
+            --text-primary: #f5f5f5;
+            --text-secondary: #ccc5b9;
+            --text-accent: #ffd700;
+            --border-color: #DAA520;
+            --accent-color-1: #FFD700;
+            --accent-color-2: #F0E68C;
+            --btn-start-from: #DAA520;
+            --btn-start-to: #B8860B;
+            --btn-death-from: #ef4444;
+            --btn-death-to: #b91c1c;
+            --btn-res-from: #F0E68C;
+            --btn-res-to: #DAA520;
+        }
+
         html { scroll-behavior: smooth; }
         body { 
             font-family: 'Noto Sans KR', sans-serif; 
             -webkit-tap-highlight-color: transparent;
-            background-color: #0a0e1a;
+            background-color: var(--bg-main);
             background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
             background-size: 40px 40px;
+            color: var(--text-primary);
         }
         
         .main-control-btn {
             @apply w-full max-w-lg text-6xl sm:text-8xl font-black py-10 sm:py-12 px-6 rounded-full shadow-lg border-4 transition-all duration-200 relative overflow-hidden;
         }
         .main-control-btn:not(:disabled):active { @apply transform scale-95 shadow-inner; }
-        .main-control-btn:disabled { @apply bg-slate-700 border-slate-600 text-slate-500 cursor-not-allowed opacity-70; }
+        .main-control-btn:disabled { 
+            background-color: var(--bg-tertiary);
+            border-color: var(--bg-interactive);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
 
-        .btn-start { @apply bg-gradient-to-br from-cyan-500 to-teal-600 border-cyan-400/50 text-white; }
-        .btn-death { @apply bg-gradient-to-br from-red-500 to-red-700 border-red-400/50 text-white; }
-        .btn-res { @apply bg-gradient-to-br from-teal-400 to-cyan-500 border-teal-300/50 text-white; }
+        .btn-start { background-image: linear-gradient(to bottom right, var(--btn-start-from), var(--btn-start-to)); border-color: var(--btn-start-from); color: white; }
+        .btn-death { background-image: linear-gradient(to bottom right, var(--btn-death-from), var(--btn-death-to)); border-color: var(--btn-death-from); color: white; }
+        .btn-res { background-image: linear-gradient(to bottom right, var(--btn-res-from), var(--btn-res-to)); border-color: var(--btn-res-from); color: black; }
         
         .gradient-text {
-            background: linear-gradient(to right, #2DD4BF, #22D3EE);
+            background: linear-gradient(to right, var(--accent-color-1), var(--accent-color-2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -46,7 +134,12 @@
         .status-cooldown { color: #f97316; }
 
         .modal-backdrop { @apply fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002]; animation: fadeIn 0.3s ease-out; }
-        .modal-content { @apply bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full text-center border border-slate-700; animation: slideIn 0.3s ease-out; }
+        .modal-content { 
+            background-color: var(--bg-primary);
+            @apply backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full text-center border; 
+            animation: slideIn 0.3s ease-out;
+            border-color: var(--border-color);
+        }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -54,28 +147,22 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out, margin 0.5s ease-in-out;
-            padding-top: 0;
-            padding-bottom: 0;
-            margin-bottom: 0;
+            padding-top: 0; padding-bottom: 0; margin-bottom: 0;
         }
         .summary-container.expanded {
             max-height: 1000px;
-            padding-top: 1.5rem;
-            padding-bottom: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-top: 2px solid #334155;
-            border-bottom: 2px solid #334155;
+            padding-top: 1.5rem; padding-bottom: 1.5rem; margin-bottom: 1.5rem;
+            border-top: 2px solid var(--border-color);
+            border-bottom: 2px solid var(--border-color);
         }
         
-        .hamburger-icon span {
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-        }
+        .hamburger-icon span { transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; }
         .nav-toggle.active .hamburger-icon span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
         .nav-toggle.active .hamburger-icon span:nth-child(2) { opacity: 0; }
         .nav-toggle.active .hamburger-icon span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-200 flex items-center justify-center min-h-screen p-4">
+<body class="theme-default">
 
     <!-- Sidebar Navigation -->
     <div id="sidebar-toggle" class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
@@ -99,32 +186,57 @@
     <!-- App Container -->
     <div id="app" class="w-full max-w-4xl mx-auto">
         <div id="raid-view">
-            <div class="bg-gray-800/50 rounded-2xl shadow-2xl p-6 relative backdrop-blur-sm border border-slate-700">
-                <div class="absolute top-4 right-16 flex gap-2">
-                    <button id="muteBtn" class="bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm font-bold py-1.5 px-4 rounded-full transition-colors">소리 끄기</button>
+            <div class="bg-primary rounded-2xl shadow-2xl p-6 relative backdrop-blur-sm border border-slate-700">
+                <!-- 왼쪽 상단 제어: 자동/수동 모드, 테마 변경 -->
+                <div class="absolute top-4 left-6 flex items-center gap-4">
+                    <div class="flex items-center space-x-3 bg-secondary/50 p-2 rounded-full">
+                        <span id="manualModeLabel" class="text-sm font-bold px-2 transition-colors">수동</span>
+                        <label for="autoDeathToggle" class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="autoDeathToggle" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-tertiary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent-color-1"></div>
+                        </label>
+                        <span id="autoModeLabel" class="text-sm font-bold px-2 transition-colors">자동</span>
+                    </div>
+                     <!-- 테마 선택기 -->
+                    <div id="theme-selector" class="relative">
+                        <button id="theme-btn" class="bg-secondary hover:bg-tertiary text-secondary text-sm font-bold py-1.5 px-4 rounded-full transition-colors flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.121-3.536a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1z" /></svg>
+                            <span>테마</span>
+                        </button>
+                        <div id="theme-dropdown" class="absolute left-0 mt-2 w-48 bg-primary border border-tertiary rounded-lg shadow-lg hidden z-10">
+                            <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="default">기본 (어둠)</a>
+                            <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="forest">숲속의 아침</a>
+                            <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="ocean">심해 탐험</a>
+                            <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="blackgold">블랙 & 골드</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 오른쪽 상단 제어: 소리, 종료, 초기화 -->
+                <div class="absolute top-4 right-6 flex items-center gap-2">
+                    <button id="muteBtn" class="bg-secondary hover:bg-tertiary text-secondary text-sm font-bold py-1.5 px-4 rounded-full transition-colors">소리 끄기</button>
                     <button id="endRaidBtn" class="bg-red-600 hover:bg-red-500 text-white text-sm font-bold py-1.5 px-4 rounded-full transition-colors hidden">레이드 종료</button>
                     <button id="resetBtn" class="bg-red-800 hover:bg-red-700 text-white text-sm font-bold py-1.5 px-4 rounded-full transition-colors">초기화</button>
                 </div>
                 
-                <div class="text-center mb-6">
+                <div class="text-center mb-6 pt-16">
                     <h1 class="text-5xl font-black gradient-text tracking-wider">레이드 크로니클</h1>
                     <div id="totalTime" class="mt-2">
-                        <span class="text-lg font-semibold text-slate-400">레이드 경과</span>
-                        <p class="text-4xl font-bold tracking-wider font-mono text-slate-200">00:00</p>
+                        <span class="text-lg font-semibold text-secondary">레이드 경과</span>
+                        <p class="text-4xl font-bold tracking-wider font-mono text-primary">00:00</p>
                     </div>
                 </div>
                 
                 <div id="summaryContainer" class="summary-container">
-                    <div id="summaryContent" class="text-left space-y-4 text-slate-300 text-lg"></div>
+                    <div id="summaryContent" class="text-left space-y-4 text-secondary text-lg"></div>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-t border-b border-slate-700 py-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-t border-b border-border-color py-6">
                     <div class="text-center">
-                        <p class="text-base text-slate-400 mb-1">현재 시각 (KST)</p>
-                        <p id="kstTime" class="text-5xl font-bold tracking-wider font-mono text-teal-300">00:00:00</p>
+                        <p class="text-base text-secondary mb-1">현재 시각 (KST)</p>
+                        <p id="kstTime" class="text-5xl font-bold tracking-wider font-mono text-accent">00:00:00</p>
                     </div>
                     <div class="space-y-4">
-                        <div id="resTimesDisplay" class="text-center cursor-pointer hidden p-2 rounded-lg hover:bg-slate-700/50 transition-colors" title="클릭하여 분 단위 시간 복사">
+                        <div id="resTimesDisplay" class="text-center cursor-pointer hidden p-2 rounded-lg hover:bg-secondary/50 transition-colors" title="클릭하여 분 단위 시간 복사">
                             <p class="text-base text-yellow-400 mb-1">리저 권장 및 예상 시각</p>
                             <p id="resTimesList" class="text-3xl md:text-4xl font-bold tracking-wider font-mono text-yellow-300">-</p>
                         </div>
@@ -138,43 +250,53 @@
                         <span class="text-lg text-emerald-400 font-bold">리저렉션 유효 시간</span>
                         <span id="resurrectionTime" class="text-2xl font-bold tracking-wider text-emerald-400 font-mono">--:--</span>
                     </div>
-                    <div class="w-full bg-slate-700 rounded-full h-4 overflow-hidden">
+                    <div class="w-full bg-tertiary rounded-full h-4 overflow-hidden">
                         <div id="resGaugeBar" class="h-4 rounded-full transition-all duration-500 bg-gradient-to-r from-emerald-500 to-teal-600"></div>
                     </div>
                 </div>
                 
-                <div id="briefing" class="mt-6 text-center text-slate-300 font-semibold h-6 text-lg"></div>
+                <div id="briefing" class="mt-6 text-center text-secondary font-semibold h-6 text-lg"></div>
 
                 <div id="bishopSection" class="mt-8">
                      <div class="flex justify-between items-center mb-2 px-2">
-                         <h2 class="text-xl font-bold text-slate-300">파티원 관리</h2>
+                         <h2 class="text-xl font-bold text-primary">파티원 관리</h2>
                          <button id="addBishopBtn" class="bg-teal-600 hover:bg-teal-500 text-white font-bold py-1 px-4 rounded-full transition-colors text-lg">+</button>
                      </div>
-                     <div class="overflow-x-auto bg-slate-900/70 rounded-lg p-2">
-                         <table class="w-full text-left text-xl"><thead class="border-b border-slate-700"><tr class="text-base text-slate-400"><th class="p-3">순번</th><th class="p-3">비숍</th><th class="p-3">상태</th><th class="p-3">쿨타임</th><th class="p-3">사용 시각</th><th class="p-3"></th></tr></thead><tbody id="bishop-list"></tbody></table>
+                     <div class="overflow-x-auto bg-secondary/70 rounded-lg p-2">
+                         <table class="w-full text-left text-xl"><thead class="border-b border-border-color"><tr class="text-base text-secondary"><th class="p-3">순번</th><th class="p-3">비숍</th><th class="p-3">상태</th><th class="p-3">쿨타임</th><th class="p-3">사용 시각</th><th class="p-3"></th></tr></thead><tbody id="bishop-list"></tbody></table>
                      </div>
                 </div>
                 
-                <div id="log-section" class="mt-8 bg-slate-900/70 rounded-lg">
-                    <h2 class="p-4 font-bold text-lg text-slate-300 text-center border-b border-slate-700">이벤트 로그</h2>
-                    <div id="eventLog" class="p-3 space-y-2 overflow-y-auto h-48 text-base"></div>
+                <!-- 로그 및 메모장 섹션 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div id="log-section" class="bg-secondary/70 rounded-lg flex flex-col">
+                        <h2 class="p-4 font-bold text-lg text-primary text-center border-b border-border-color flex-shrink-0">이벤트 로그</h2>
+                        <div id="eventLog" class="p-3 space-y-2 overflow-y-auto h-48 text-base flex-grow"></div>
+                    </div>
+                    <div id="notepad-section" class="bg-secondary/70 rounded-lg flex flex-col">
+                        <h2 class="p-4 font-bold text-lg text-primary text-center border-b border-border-color flex-shrink-0">레이드 메모장</h2>
+                        <textarea id="raidNotepad" class="w-full h-48 bg-transparent p-3 text-secondary focus:outline-none resize-none flex-grow" placeholder="자쿰 입장 시간, 물약 사용 개수, 특이사항 등을 메모하세요..."></textarea>
+                    </div>
                 </div>
                 
                 <div id="how-to-guide" class="mt-12">
-                    <div class="border-t-2 border-slate-700 pt-8">
+                    <div class="border-t-2 border-border-color pt-8">
                         <h2 class="text-4xl font-black text-center gradient-text mb-8">레이드 크로니클 활용 가이드</h2>
-                        <div class="space-y-12 text-slate-300 leading-relaxed text-lg bg-slate-900/50 p-8 rounded-xl">
+                        <div class="space-y-12 text-secondary leading-relaxed text-lg bg-primary/50 p-8 rounded-xl">
                             <section>
-                                <h3 class="text-2xl font-bold text-white mb-4 border-l-4 border-teal-400 pl-4">1. 레이드 크로니클이란?</h3>
+                                <h3 class="text-2xl font-bold text-primary mb-4 border-l-4 border-accent-color-1 pl-4">1. 레이드 크로니클이란?</h3>
                                 <p>레이드 크로니클은 메이플랜드의 자쿰, 혼테일과 같은 보스 원정에서 가장 중요한 요소 중 하나인 '리저렉션'의 복잡한 쿨타임을 관리해주는 스마트 타이머입니다. 파티의 전멸을 막고 안정적인 클리어를 돕기 위해 설계되었습니다. 더 이상 수동으로 시간을 계산하거나 기억할 필요 없이, 이 도구가 모든 것을 자동으로 처리하고 음성으로 알려줍니다.</p>
                             </section>
                             <section>
-                                <h3 class="text-2xl font-bold text-white mb-4 border-l-4 border-teal-400 pl-4">2. 핵심 원리: 14분의 마법</h3>
+                                <h3 class="text-2xl font-bold text-primary mb-4 border-l-4 border-accent-color-1 pl-4">2. 핵심 원리: 14분의 마법</h3>
                                 <p>리저렉션의 쿨타임은 30분이지만, 버프 지속시간은 15분입니다. 안정적인 레이드를 위해서는 15분 안에 다음 리저렉션을 사용하는 것이 이상적입니다. 레이드 크로니클은 1분의 여유 시간을 두어, **14분 주기**로 리저렉션을 사용하는 것을 권장하며 모든 시간을 자동으로 계산합니다. 이 '14분의 마법'만 기억하면 당신도 최고의 오더가 될 수 있습니다.</p>
                             </section>
                             <section>
-                                <h3 class="text-2xl font-bold text-white mb-4 border-l-4 border-teal-400 pl-4">3. 상세 기능 알아보기</h3>
+                                <h3 class="text-2xl font-bold text-primary mb-4 border-l-4 border-accent-color-1 pl-4">3. 상세 기능 알아보기</h3>
                                 <ul class="space-y-6 list-disc list-inside">
+                                    <li><strong class="text-sky-400 text-xl block mb-2">자동/수동 모드 전환</strong>
+                                        <p>레이드 상황에 맞춰 '자동 사망' 모드를 켜거나 끌 수 있습니다. 스위치가 켜져 있으면 리저렉션 사용 후 자동으로 다음 사망 타이머가 시작됩니다. 스위치를 끄면, '사망자 발생' 버튼을 직접 눌러 원하는 타이밍에 타이머를 시작할 수 있어 더욱 정밀한 제어가 가능합니다.</p>
+                                    </li>
                                     <li><strong class="text-sky-400 text-xl block mb-2">지능형 시간 안내 & 원클릭 복사</strong>
                                         <p>사망자 발생 시, 14분 뒤의 권장 시간과 그로부터 +14분, +28분 뒤의 예상 시간을 함께 보여줍니다. 이 시간 영역을 클릭하면 **"21, 35, 49 리저"** 와 같이 파티 채팅에 바로 공유할 수 있는 텍스트가 복사되어 신속한 오더가 가능합니다.</p>
                                     </li>
@@ -202,7 +324,7 @@
             <button id="closeContactModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
             <h3 class="text-2xl font-bold text-yellow-400">문의하기</h3>
             <div class="space-y-4 mt-6">
-                <a href="mailto:esgroup129@gmail.com" class="w-full flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition">
+                <a href="mailto:esgroup129@gmail.com" class="w-full flex items-center justify-center bg-tertiary hover:bg-interactive text-primary font-bold py-3 px-4 rounded-lg transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
                     이메일
                 </a>
@@ -224,9 +346,9 @@
     <div id="confirmModal" class="modal-backdrop items-center justify-center hidden">
         <div class="modal-content max-w-sm">
             <h3 id="confirmModalTitle" class="text-2xl font-bold text-yellow-400">확인</h3>
-            <p id="confirmModalMessage" class="mt-4 text-lg text-slate-300"></p>
+            <p id="confirmModalMessage" class="mt-4 text-lg text-secondary"></p>
             <div class="mt-6 flex justify-end gap-4">
-                <button id="confirmCancelBtn" class="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-lg transition">취소</button>
+                <button id="confirmCancelBtn" class="bg-tertiary hover:bg-interactive text-primary font-bold py-2 px-6 rounded-lg transition">취소</button>
                 <button id="confirmOkBtn" class="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-6 rounded-lg transition">확인</button>
             </div>
         </div>
@@ -265,17 +387,86 @@
                 contactLink: document.getElementById('contactLink'),
                 contactModal: document.getElementById('contactModal'),
                 closeContactModalBtn: document.getElementById('closeContactModalBtn'),
-                // Confirmation Modal elements
                 confirmModal: document.getElementById('confirmModal'),
                 confirmModalTitle: document.getElementById('confirmModalTitle'),
                 confirmModalMessage: document.getElementById('confirmModalMessage'),
                 confirmOkBtn: document.getElementById('confirmOkBtn'),
                 confirmCancelBtn: document.getElementById('confirmCancelBtn'),
+                autoDeathToggle: document.getElementById('autoDeathToggle'),
+                autoModeLabel: document.getElementById('autoModeLabel'),
+                manualModeLabel: document.getElementById('manualModeLabel'),
+                raidNotepad: document.getElementById('raidNotepad'),
+                themeBtn: document.getElementById('theme-btn'),
+                themeDropdown: document.getElementById('theme-dropdown'),
+                themeOptions: document.querySelectorAll('.theme-option'),
             };
 
             let timerInterval = null, isMuted = false, autoDeathTimeoutId = null;
             let raidState = {};
             let confirmCallback = null;
+
+            // --- Notepad Module ---
+            class Notepad {
+                constructor(textareaElement) {
+                    this.textarea = textareaElement;
+                    this.storageKey = 'raidChronicleNotepad';
+                    this._init();
+                }
+
+                _init() {
+                    if (!this.textarea) return;
+                    this._load();
+                    this.textarea.addEventListener('input', () => this._save());
+                }
+
+                _load() {
+                    const savedContent = localStorage.getItem(this.storageKey);
+                    if (savedContent) {
+                        this.textarea.value = savedContent;
+                    }
+                }
+
+                _save() {
+                    localStorage.setItem(this.storageKey, this.textarea.value);
+                }
+            }
+            
+            // --- Theme Manager ---
+            class ThemeManager {
+                constructor() {
+                    this.currentTheme = localStorage.getItem('raidChronicleTheme') || 'default';
+                    this._init();
+                }
+
+                _init() {
+                    this.applyTheme(this.currentTheme);
+                    dom.themeBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        dom.themeDropdown.classList.toggle('hidden');
+                    });
+
+                    dom.themeOptions.forEach(option => {
+                        option.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const newTheme = e.target.dataset.theme;
+                            this.applyTheme(newTheme);
+                            dom.themeDropdown.classList.add('hidden');
+                        });
+                    });
+
+                    document.addEventListener('click', (e) => {
+                        if (!dom.themeBtn.contains(e.target) && !dom.themeDropdown.contains(e.target)) {
+                            dom.themeDropdown.classList.add('hidden');
+                        }
+                    });
+                }
+
+                applyTheme(themeName) {
+                    document.body.className = `antialiased theme-${themeName}`;
+                    localStorage.setItem('raidChronicleTheme', themeName);
+                    this.currentTheme = themeName;
+                }
+            }
 
             function getInitialState() {
                 return {
@@ -286,19 +477,28 @@
                     resScheduleTimes: [],
                     currentBishopIndex: 0,
                     bishops: [
-                        { name: '비숍A', cooldownEndsAt: null, usedAt: null, resCount: 0 },
-                        { name: '비숍B', cooldownEndsAt: null, usedAt: null, resCount: 0 },
-                        { name: '비숍C', cooldownEndsAt: null, usedAt: null, resCount: 0 },
+                        { name: '비숍1', cooldownEndsAt: null, usedAt: null, resCount: 0 },
+                        { name: '비숍2', cooldownEndsAt: null, usedAt: null, resCount: 0 },
+                        { name: '비숍3', cooldownEndsAt: null, usedAt: null, resCount: 0 },
                     ],
-                    logs: [{ timestamp: new Date().toISOString(), message: '레이드 크로니클이 준비되었습니다.', type: 'system' }]
+                    logs: [{ timestamp: new Date().toISOString(), message: '레이드 크로니클이 준비되었습니다.', type: 'system' }],
+                    isAutoDeathMode: true,
                 };
             }
 
             function init() {
                 raidState = getInitialState();
+                const savedMode = localStorage.getItem('raidChronicle_autoDeathMode');
+                if (savedMode !== null) {
+                    raidState.isAutoDeathMode = JSON.parse(savedMode);
+                }
+                dom.autoDeathToggle.checked = raidState.isAutoDeathMode;
+                updateAutoDeathModeUI(raidState.isAutoDeathMode);
                 render(raidState);
                 setInterval(updateKstClock, 1000);
                 attachEventListeners();
+                new Notepad(dom.raidNotepad);
+                new ThemeManager();
             }
             
             function render(data) {
@@ -313,7 +513,7 @@
                 dom.endRaidBtn.classList.toggle('hidden', data.state === 'initial' || data.state === 'ended');
                 dom.resGaugeContainer.classList.toggle('hidden', data.state !== 'res-active');
                 dom.addBishopBtn.disabled = data.state !== 'initial';
-                dom.logSection.classList.toggle('hidden', data.state === 'ended');
+                dom.logSection.parentElement.classList.toggle('hidden', data.state === 'ended');
                 dom.bishopSection.classList.toggle('hidden', data.state === 'ended');
                 
                 if (data.state !== 'ended') {
@@ -366,7 +566,6 @@
                     dom.resTimesDisplay.classList.add('hidden');
                 }
 
-                // [FIX] Call functions that update high-frequency data
                 updateBishopCooldowns(data.bishops, data.currentBishopIndex, data.state);
                 renderControlPanel(data);
             }
@@ -401,16 +600,15 @@
                 dom.briefing.textContent = briefingText;
             }
             
-            // This function builds the list structure. Called on major state changes.
             function renderBishopList(bishops, currentIndex, state) {
                 dom.bishopList.innerHTML = '';
                 if (!bishops) return;
                 bishops.forEach((b, i) => {
                     const row = document.createElement('tr');
-                    row.className = `border-b border-slate-700/50`;
+                    row.className = `border-b border-border-color/50`;
                     row.innerHTML = `
                         <td class="p-3">${i + 1}</td>
-                        <td class="p-3 bishop-name cursor-pointer hover:bg-slate-700 rounded-md" contenteditable="${state === 'initial'}" data-index="${i}">${b.name}</td>
+                        <td class="p-3 bishop-name cursor-pointer hover:bg-secondary rounded-md" contenteditable="${state === 'initial'}" data-index="${i}">${b.name}</td>
                         <td class="p-3 font-bold"></td>
                         <td class="p-3 font-mono"></td>
                         <td class="p-3 font-mono">${b.usedAt ? formatClockTime(new Date(b.usedAt)) : '--:--:--'}</td>
@@ -418,16 +616,13 @@
                     `;
                     dom.bishopList.appendChild(row);
                 });
-                // After building, do an initial update of cooldowns and statuses
                 updateBishopCooldowns(bishops, currentIndex, state);
             }
 
-            // [NEW] This function only updates text content, preserving the DOM structure.
-            // This prevents the contenteditable field from being reset.
             function updateBishopCooldowns(bishops, currentIndex, state) {
                 if (!bishops) return;
                 const rows = dom.bishopList.querySelectorAll('tr');
-                if (rows.length !== bishops.length) return; // Exit if list is out of sync
+                if (rows.length !== bishops.length) return;
 
                 bishops.forEach((b, i) => {
                     const row = rows[i];
@@ -460,10 +655,10 @@
                 if (!logs || logs.length === 0) return;
                 
                 logs.slice(-20).forEach(log => {
-                     const colors = { info: 'text-slate-400', success: 'text-cyan-400', warning: 'text-orange-400', system: 'text-amber-400' };
+                     const colors = { info: 'text-secondary', success: 'text-accent', warning: 'text-orange-400', system: 'text-amber-400' };
                      const logEntry = document.createElement('div');
                      const timestamp = new Date(log.timestamp).toLocaleTimeString('ko-KR', { hour12: false });
-                     logEntry.innerHTML = `<span class="font-mono text-slate-500">[${timestamp}]</span> <span class="${colors[log.type] || 'text-slate-400'}">${log.message}</span>`;
+                     logEntry.innerHTML = `<span class="font-mono text-tertiary">[${timestamp}]</span> <span class="${colors[log.type] || 'text-secondary'}">${log.message}</span>`;
                      dom.eventLog.appendChild(logEntry);
                 });
                  dom.eventLog.scrollTop = dom.eventLog.scrollHeight;
@@ -479,9 +674,15 @@
                 raidState.raidStartedAt = Date.now();
                 addLog('레이드가 시작되었습니다.', 'system');
                 speak('레이드 시작');
-                addLog('5초 후, 사망자 타이머가 자동으로 시작됩니다.', 'info');
-                speak('5초 후, 자동 시작');
-                autoDeathTimeoutId = setTimeout(handleDeath, 5000);
+
+                if (raidState.isAutoDeathMode) {
+                    addLog('5초 후, 사망자 타이머가 자동으로 시작됩니다.', 'info');
+                    speak('5초 후, 자동 시작');
+                    autoDeathTimeoutId = setTimeout(handleDeath, 5000);
+                } else {
+                    addLog('수동 모드입니다. 사망자 발생 시 버튼을 눌러주세요.', 'info');
+                    speak('수동 모드');
+                }
                 render(raidState);
             }
 
@@ -521,9 +722,14 @@
                 bishop.usedAt = now;
                 raidState.currentBishopIndex = (raidState.currentBishopIndex + 1) % raidState.bishops.length;
                 
-                addLog('3초 후, 다음 사망자 타이머가 자동으로 시작됩니다.', 'info');
-                speak('3초 후, 자동 시작');
-                autoDeathTimeoutId = setTimeout(handleDeath, 3000);
+                if (raidState.isAutoDeathMode) {
+                    addLog('3초 후, 다음 사망자 타이머가 자동으로 시작됩니다.', 'info');
+                    speak('3초 후, 자동 시작');
+                    autoDeathTimeoutId = setTimeout(handleDeath, 3000);
+                } else {
+                    addLog('수동 모드입니다. 사망자 발생 시 버튼을 눌러주세요.', 'info');
+                    speak('수동 모드');
+                }
                 render(raidState);
             }
             
@@ -562,15 +768,15 @@
                         <button id="copySummaryBtn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded-full transition-colors">간편 요약 복사</button>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-slate-900/50 p-4 rounded-lg">
-                            <h5 class="text-xl font-bold text-teal-300 mb-2">종합 정보</h5>
+                        <div class="bg-secondary/50 p-4 rounded-lg">
+                            <h5 class="text-xl font-bold text-accent mb-2">종합 정보</h5>
                             <p><strong>총 레이드 시간:</strong> ${totalDuration}</p>
                             <p><strong>시작 시각:</strong> ${startTime}</p>
                             <p><strong>종료 시각:</strong> ${endTime}</p>
                             <p><strong>총 사망 횟수:</strong> ${totalDeaths}회</p>
                         </div>
-                        <div class="bg-slate-900/50 p-4 rounded-lg">
-                            <h5 class="text-xl font-bold text-teal-300 mb-2">파티원별 리저렉션 사용 횟수</h5>
+                        <div class="bg-secondary/50 p-4 rounded-lg">
+                            <h5 class="text-xl font-bold text-accent mb-2">파티원별 리저렉션 사용 횟수</h5>
                             ${bishopSummaryHtml || '<p>리저렉션 사용 기록이 없습니다.</p>'}
                         </div>
                     </div>
@@ -593,15 +799,12 @@
             
             function updateBishopName(index, newName) {
                 if (!newName || !raidState.bishops[index]) {
-                    // If name is empty, revert to the old name
                     render(raidState);
                     return;
                 };
                 const oldName = raidState.bishops[index].name;
                 raidState.bishops[index].name = newName;
                 addLog(`비숍 '${oldName}'의 이름이 '${newName}'(으)로 변경되었습니다.`, 'info');
-                // No need to call render here as the blur event handles it.
-                // Just update the state. The control panel might need an update though.
                 renderControlPanel(raidState);
             }
             
@@ -664,6 +867,20 @@
                 dom.confirmModalMessage.textContent = message;
                 confirmCallback = onConfirm;
                 dom.confirmModal.classList.remove('hidden');
+            }
+
+            function updateAutoDeathModeUI(isAuto) {
+                if (isAuto) {
+                    dom.autoModeLabel.classList.add('text-teal-300');
+                    dom.autoModeLabel.classList.remove('text-slate-500');
+                    dom.manualModeLabel.classList.add('text-slate-500');
+                    dom.manualModeLabel.classList.remove('text-teal-300');
+                } else {
+                    dom.autoModeLabel.classList.remove('text-teal-300');
+                    dom.autoModeLabel.classList.add('text-slate-500');
+                    dom.manualModeLabel.classList.remove('text-slate-500');
+                    dom.manualModeLabel.classList.add('text-teal-300');
+                }
             }
 
             function attachEventListeners() {
@@ -743,12 +960,24 @@
                     confirmCallback = null;
                  });
                  if(dom.confirmOkBtn) dom.confirmOkBtn.addEventListener('click', () => {
-                    if (typeof confirmCallback === 'function') {
-                        confirmCallback();
-                    }
-                    dom.confirmModal.classList.add('hidden');
-                    confirmCallback = null;
+                     if (typeof confirmCallback === 'function') {
+                         confirmCallback();
+                     }
+                     dom.confirmModal.classList.add('hidden');
+                     confirmCallback = null;
                  });
+
+                 if (dom.autoDeathToggle) {
+                    dom.autoDeathToggle.addEventListener('change', (e) => {
+                        raidState.isAutoDeathMode = e.target.checked;
+                        updateAutoDeathModeUI(raidState.isAutoDeathMode);
+                        const mode = raidState.isAutoDeathMode ? '자동' : '수동';
+                        const message = `: ${mode} 모드`;
+                        addLog(message, 'system');
+                        speak(message);
+                        localStorage.setItem('raidChronicle_autoDeathMode', raidState.isAutoDeathMode);
+                    });
+                }
             }
             
             function closeSidebar() {
