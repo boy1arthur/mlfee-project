@@ -32,7 +32,7 @@
             transform: translateY(-8px); 
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 0 15px rgba(59, 130, 246, 0.2);
         }
-        .tool-card:hover {
+        .tool-card:hover, .supporter-card:hover {
             border-color: rgba(59, 130, 246, 0.5);
         }
         
@@ -102,11 +102,11 @@
         <h3 class="text-center text-2xl font-bold text-blue-400 mt-16 mb-8">메뉴</h3>
         <a href="/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">홈</a>
         <a href="#" id="updatesLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">업데이트</a>
-        <a href="/calc" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
-        <a href="/timer" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
-        <a href="/buff" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
+        <a href="calc.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
+        <a href="timer.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
+        <a href="buff.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
         <a href="#guides" id="guideLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
-        <a href="#" id="contactLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의</a>
+        <a href="#" id="contactLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의하기</a>
     </nav>
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[999] hidden"></div>
     
@@ -152,7 +152,7 @@
                 <div class="container mx-auto px-4">
                     <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">MLFEE 핵심 도구</span></h2>
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <a href="/calc" class="tool-link block">
+                        <a href="calc.html" class="tool-link block">
                             <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
                                 <div class="text-red-500 mb-6">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h3m-3-7h3m-6.128 9.872A3 3 0 006.872 21h10.256a3 3 0 002.872-3.128V7.128A3 3 0 0017.128 4H6.872a3 3 0 00-2.872 3.128v10.744z" /></svg>
@@ -161,7 +161,7 @@
                                 <p class="text-gray-400">메소 수수료 '수작'부터 N인 파티 분배, 택배 정산, 목표 금액 역산까지 원클릭으로 해결하세요.</p>
                             </div>
                         </a>
-                        <a href="/timer" class="tool-link block">
+                        <a href="timer.html" class="tool-link block">
                             <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
                                 <div class="text-blue-500 mb-6">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -170,7 +170,7 @@
                                 <p class="text-gray-400">비숍의 리저렉션 쿨타임을 정확히 체크하고, 다음 예상 시간을 공유하여 안정적인 레이드를 운영하세요.</p>
                             </div>
                         </a>
-                        <a href="/buff" class="tool-link block">
+                        <a href="buff.html" class="tool-link block">
                             <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
                                 <div class="text-green-500 mb-6">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -277,25 +277,65 @@
             <div class="container mx-auto px-4 my-12">
                 <div class="ad-container w-full min-h-[90px] bg-slate-900/50 rounded-lg flex justify-center items-center">
                      <ins class="adsbygoogle"
-                          style="display:block; width:100%;"
-                          data-ad-client="ca-pub-8602495420447615"
-                          data-ad-slot="2345678901"
-                          data-ad-format="auto"
-                          data-full-width-responsive="true"></ins>
+                         style="display:block; width:100%;"
+                         data-ad-client="ca-pub-8602495420447615"
+                         data-ad-slot="2345678901"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
                 </div>
             </div>
 
-            <section id="reviews" class="py-20 bg-gray-900/50">
+            <section id="cheer-comments" class="py-20 bg-gray-900/50">
                 <div class="container mx-auto px-4">
                     <div class="flex flex-col sm:flex-row justify-between items-center mb-12 gap-4">
-                        <h2 class="section-title text-4xl font-black text-center sm:text-left !mb-0 relative pb-4"><span class="shine-effect">생생한 사용자 후기</span></h2>
-                        <button id="writeReviewBtn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-lg transition-colors w-full sm:w-auto">후기 작성하기</button>
+                        <h2 class="section-title text-4xl font-black text-center sm:text-left !mb-0 relative pb-4"><span class="shine-effect">응원과 격려의 한마디</span></h2>
+                        <button id="writeCommentBtn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-lg transition-colors w-full sm:w-auto">응원 댓글 남기기</button>
                     </div>
-                    <div id="review-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Reviews will be injected here -->
+                    <div id="comment-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Comments will be injected here -->
                     </div>
                 </div>
             </section>
+
+            <!-- 후원자 명예의 전당 -->
+            <section id="hall-of-fame" class="py-20">
+                <div class="container mx-auto px-4">
+                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">명예의 전당</span></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- 가상 후원자 카드 -->
+                        <div class="supporter-card bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col">
+                            <div class="flex items-center mb-4">
+                                <i class="fas fa-scroll text-yellow-400 text-2xl mr-4"></i>
+                                <h4 class="font-bold text-lg text-white">[협찬] 장로 스탄</h4>
+                            </div>
+                            <p class="text-slate-300 italic">"리스항구의 발전을 위해 MLFEE를 공식 후원하네. 유저들이여, 이곳에서 정보를 얻고 메이플 월드를 탐험하게나."</p>
+                        </div>
+                        <div class="supporter-card bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col">
+                            <div class="flex items-center mb-4">
+                                <i class="fas fa-gem text-amber-500 text-2xl mr-4"></i>
+                                <h4 class="font-bold text-lg text-white">[후원] 밍밍부인</h4>
+                            </div>
+                            <p class="text-amber-400 italic">"남편 냄비뚜껑 퀘스트 깰 때 이 사이트가 큰 도움이 됐어요. 고마워서 제 비상금으로 후원합니다."</p>
+                        </div>
+                        <div class="supporter-card bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col">
+                            <div class="flex items-center mb-4">
+                                <i class="fas fa-leaf text-green-500 text-2xl mr-4"></i>
+                                <h4 class="font-bold text-lg text-white">[지원] 주황버섯</h4>
+                            </div>
+                            <p class="text-green-400 italic">"메소가 부족해서... 대신 저를 잡으면 나오는 '주황버섯의 갓' 100개로 후원합니다."</p>
+                        </div>
+                         <!-- 후원 유도 카드 -->
+                        <div class="md:col-span-2 lg:col-span-3 bg-gradient-to-r from-blue-600 to-sky-500 p-8 rounded-2xl text-center flex flex-col sm:flex-row items-center justify-center gap-8 card-hover">
+                           <div class="flex-grow">
+                               <h3 class="text-3xl font-black text-white">이 도구가 도움이 되셨다면,</h3>
+                               <p class="text-blue-200 mt-2 text-xl">다음 아이디어를 위한 ☕ 따뜻한 응원 한 잔, 어떠세요?</p>
+                           </div>
+                           <button id="donateBtn" class="bg-white text-blue-600 font-bold py-3 px-8 rounded-lg text-lg transition-transform hover:scale-105 flex-shrink-0">커피 한 잔 선물하기</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </main>
 
         <footer class="text-center py-10 mt-10 border-t border-gray-800">
@@ -313,23 +353,23 @@
     </div>
     
     <!-- Modals -->
-    <div id="reviewModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <form id="reviewForm" class="modal-content bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-lg text-left border border-slate-700">
-            <h3 class="text-2xl font-bold text-sky-400 mb-6 text-center">후기 작성</h3>
+    <div id="commentModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
+        <form id="commentForm" class="modal-content bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-lg text-left border border-slate-700">
+            <h3 class="text-2xl font-bold text-sky-400 mb-6 text-center">응원 댓글 작성</h3>
             <div class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label for="reviewerName" class="block text-sm font-medium text-gray-300 mb-1">닉네임</label>
-                        <input type="text" id="reviewerName" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
+                        <label for="commenterName" class="block text-sm font-medium text-gray-300 mb-1">닉네임</label>
+                        <input type="text" id="commenterName" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
                     </div>
                     <div>
-                        <label for="reviewerInfo" class="block text-sm font-medium text-gray-300 mb-1">직업/레벨</label>
-                        <input type="text" id="reviewerInfo" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
+                        <label for="commenterInfo" class="block text-sm font-medium text-gray-300 mb-1">직업/레벨</label>
+                        <input type="text" id="commenterInfo" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
                     </div>
                 </div>
                 <div>
-                    <label for="reviewText" class="block text-sm font-medium text-gray-300 mb-1">후기 내용</label>
-                    <textarea id="reviewText" rows="4" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500"></textarea>
+                    <label for="commentText" class="block text-sm font-medium text-gray-300 mb-1">응원 메시지</label>
+                    <textarea id="commentText" rows="4" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500"></textarea>
                 </div>
             </div>
             <div class="flex justify-end gap-4 mt-8">
@@ -343,10 +383,23 @@
         <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center border border-slate-700">
             <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
             <h3 class="text-2xl font-bold text-yellow-400">문의하기</h3>
+            <p class="text-gray-400 mt-2 mb-6">사이트 개선 제안이나 버그 제보는 언제나 환영입니다.</p>
             <div class="space-y-4 mt-6">
                 <a href="mailto:esgroup129@gmail.com" class="w-full flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition"><i class="fas fa-envelope h-5 w-5 mr-3"></i>이메일</a>
                 <a href="https://open.kakao.com/o/s4YH6WFh" target="_blank" class="w-full flex items-center justify-center bg-[#FEE500] hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-lg transition"><i class="fas fa-comment h-5 w-5 mr-2"></i>카카오톡 오픈채팅</a>
                 <a href="https://discord.com/users/930037107823636540" target="_blank" class="w-full flex items-center justify-center bg-[#5865F2] hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg transition"><i class="fab fa-discord h-5 w-5 mr-2"></i>디스코드</a>
+            </div>
+        </div>
+    </div>
+    
+    <div id="donationModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
+        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center border border-slate-700">
+            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
+            <h3 class="text-2xl font-bold text-yellow-400">후원 안내</h3>
+            <p class="text-gray-400 mt-2 mb-6">여러분의 따뜻한 응원 한 잔이 제겐 큰 힘이됩니다.</p>
+            <div class="my-6">
+                <img src="images/kakaoqr.png"> alt="카카오페이 후원 QR코드" class="w-48 h-48 mx-auto rounded-lg border-4 border-yellow-400 p-1 bg-white">
+                <p class="mt-4 font-semibold text-white">카카오페이로 간편하게!</p>
             </div>
         </div>
     </div>
@@ -356,24 +409,17 @@
             <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
             <h3 class="text-3xl font-bold text-sky-400 mb-6 text-center">업데이트 내역</h3>
             <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-4 text-slate-300">
+                 <div class="p-4 bg-slate-700/50 rounded-lg">
+                    <p class="font-bold text-lg text-white">2024-07-19: 레이드 크로니클 <자동,수동 모드 스위치> 업데이트!</p>
+                    <p class="mt-1">- '자동','수동'으로 레이드 현장 상황에 맞게 대응할수있도록 추가했습니다.</p>
+                </div>
                 <div class="p-4 bg-slate-700/50 rounded-lg">
-                    <p class="font-bold text-lg text-white">2024-07-20: '메피 버피' 신규 기능 추가!</p>
+                    <p class="font-bold text-lg text-white">2024-07-18: '메피 버피' 신규 기능 추가!</p>
                     <p class="mt-1">- 주요 스킬(홀리심볼, 샤프 아이즈 등)의 버프 지속시간을 관리하는 '메피 버피' 타이머를 추가했습니다.</p>
-                    <p class="mt-1">- 타이머 만료 시 음성 알림(TTS) 기능이 포함되어 있습니다.</p>
-                    <p class="mt-1">- 버프 시전 시간을 측정할 수 있는 스톱워치 기능도 함께 제공됩니다.</p>
-                </div>
-                 <div class="p-4 bg-slate-700/50 rounded-lg">
-                    <p class="font-bold text-lg text-white">2024-07-19: 후기 시스템 간소화</p>
-                    <p class="mt-1">- 후기 작성 시 '추천/비추천' 평가 기능을 제거하여 더 간단하게 후기를 남길 수 있도록 변경했습니다.</p>
-                </div>
-                 <div class="p-4 bg-slate-700/50 rounded-lg">
-                    <p class="font-bold text-lg text-white">2024-07-18: 공략 가이드 그래픽 복원</p>
-                    <p class="mt-1">- 깨진 이미지 링크를 제거하고, 원래의 SVG 그래픽으로 복원하여 안정성을 높였습니다.</p>
                 </div>
                  <div class="p-4 bg-slate-700/50 rounded-lg">
                     <p class="font-bold text-lg text-white">2024-07-17: UI/UX 개선</p>
                     <p class="mt-1">- 모든 팝업창(모달)이 화면 중앙에 안정적으로 표시되도록 수정했습니다.</p>
-                    <p class="mt-1">- 후기 삭제 시 구식 알림창 대신 세련된 확인창이 나타나도록 개선했습니다.</p>
                 </div>
             </div>
         </div>
@@ -394,16 +440,265 @@
     </div>
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- MLFEE Base Script ---
-            const reviewList = document.getElementById('review-list');
-            const writeReviewBtn = document.getElementById('writeReviewBtn');
+    <script type="module">
+        /**
+         * MLFEE 메인 애플리케이션 모듈
+         * 각 기능(모달, 댓글, 사이드바 등)을 별도의 클래스로 분리하여 관리합니다.
+         * 이를 통해 코드의 가독성과 유지보수성을 높입니다.
+         */
+
+        // ---------------------------------
+        // 모달(팝업창) 관리 모듈
+        // ---------------------------------
+        class ModalManager {
+            /**
+             * 애플리케이션의 모든 모달을 제어합니다.
+             * @param {object} modalElements - 각 모달의 DOM 요소를 담은 객체
+             */
+            constructor(modalElements) {
+                this.modals = modalElements;
+                this._init();
+            }
+
+            _init() {
+                for (const key in this.modals) {
+                    const modal = this.modals[key];
+                    if (!modal.el) continue;
+                    modal.el.addEventListener('click', (e) => {
+                        if (e.target === modal.el) this.hide(key);
+                    });
+                    modal.el.querySelectorAll('.modal-close-btn').forEach(btn => {
+                        btn.addEventListener('click', () => this.hide(key));
+                    });
+                }
+            }
+
+            show(key) {
+                const modal = this.modals[key];
+                if (!modal || !modal.el) return;
+                modal.el.classList.remove('hidden', 'modal-exiting');
+                modal.el.classList.add('modal-entering');
+            }
+
+            hide(key) {
+                const modal = this.modals[key];
+                if (!modal || !modal.el) return;
+                modal.el.classList.remove('modal-entering');
+                modal.el.classList.add('modal-exiting');
+                setTimeout(() => modal.el.classList.add('hidden'), 300);
+            }
+
+            showConfirmation(title, message, options = {}) {
+                return new Promise((resolve) => {
+                    const confirmModal = this.modals.confirm;
+                    confirmModal.title.textContent = title;
+                    confirmModal.msg.textContent = message;
+                    confirmModal.okBtn.textContent = options.okText || '확인';
+                    confirmModal.okBtn.className = options.isDelete 
+                        ? 'bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors' 
+                        : 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors';
+
+                    if (options.prompt) {
+                        confirmModal.inputWrapper.classList.remove('hidden');
+                        confirmModal.input.value = '';
+                        confirmModal.input.type = options.inputType || 'password';
+                        confirmModal.input.placeholder = options.placeholder || '';
+                    } else {
+                        confirmModal.inputWrapper.classList.add('hidden');
+                    }
+                    
+                    this.show('confirm');
+
+                    const onOk = () => {
+                        cleanup();
+                        resolve(options.prompt ? confirmModal.input.value : true);
+                    };
+                    const onCancel = () => {
+                        cleanup();
+                        resolve(options.prompt ? null : false);
+                    };
+                    
+                    const cleanup = () => {
+                        this.hide('confirm');
+                        confirmModal.okBtn.removeEventListener('click', onOk);
+                        confirmModal.cancelBtn.removeEventListener('click', onCancel);
+                    };
+
+                    confirmModal.okBtn.addEventListener('click', onOk, { once: true });
+                    confirmModal.cancelBtn.addEventListener('click', onCancel, { once: true });
+                });
+            }
+        }
+
+        // ---------------------------------
+        // 응원 댓글 시스템 관리 모듈
+        // ---------------------------------
+        class CommentSystem {
+            constructor(listElement, modalManager) {
+                this.commentList = listElement;
+                this.modalManager = modalManager;
+                this.defaultComments = [
+                    { id: 'default1', name: 'AA 법사z', info: 'Lv. ?? 아크메이지', text: '레이드 크로니클 덕분에 자쿰 원정 처음으로 안 짤리고 깼어요. 오더가 정말 편해집니다. 강추!', avatar: 'https://placehold.co/40x40/3b82f6/ffffff?text=M' },
+                    { id: 'default2', name: 'ㅁㅁ공대장', info: '자쿰 원정대', text: 'N빵마스터 없었을 땐 매번 계산기 두들기느라 힘들었는데, 이젠 클릭 한 번이면 끝이네요. 시간 엄청 아꼈어요.', avatar: 'https://placehold.co/40x40/ef4444/ffffff?text=L' },
+                    { id: 'default3', name: 'DD 프리', info: 'Lv. ?? 비숍', text: '파티원들한테 리저 시간 브리핑해주기 너무 편해요. 시간 클릭하면 바로 복사되는 기능 만든 분은 천재이신 듯.', avatar: 'https://placehold.co/40x40/22c55e/ffffff?text=B' }
+                ];
+                this._init();
+            }
+
+            _init() {
+                if (!this.commentList) return;
+                this.render();
+                this.commentList.addEventListener('click', (e) => {
+                    if (e.target.closest('.delete-comment-btn')) {
+                        const commentId = e.target.closest('.delete-comment-btn').dataset.id;
+                        this._handleDelete(commentId);
+                    }
+                });
+            }
+
+            _getComments() {
+                const comments = localStorage.getItem('userComments');
+                return comments ? JSON.parse(comments) : [...this.defaultComments];
+            }
+
+            _saveComments(comments) {
+                localStorage.setItem('userComments', JSON.stringify(comments));
+            }
             
-            const modals = {
-                review: { el: document.getElementById('reviewModal'), form: document.getElementById('reviewForm') },
+            _getAvatarChar(name) {
+                const firstChar = name.charAt(0);
+                if (/[a-zA-Z]/.test(firstChar)) return firstChar.toUpperCase();
+                const consonants = {'ㄱ':'G','ㄲ':'K','ㄴ':'N','ㄷ':'D','ㄸ':'D','ㄹ':'R','ㅁ':'M','ㅂ':'B','ㅃ':'B','ㅅ':'S','ㅆ':'S','ㅇ':'O','ㅈ':'J','ㅉ':'J','ㅊ':'C','ㅋ':'K','ㅌ':'T','ㅍ':'P','ㅎ':'H'};
+                return consonants[firstChar] || '?';
+            }
+
+            render() {
+                if (!this.commentList) return;
+                const comments = this._getComments();
+                this.commentList.innerHTML = '';
+                if (comments.length === 0) {
+                    this.commentList.innerHTML = `<p class="text-center text-gray-400 col-span-full">아직 작성된 응원이 없습니다. 첫 응원을 남겨주세요!</p>`;
+                    return;
+                }
+
+                comments.forEach(comment => {
+                    const avatarChar = this._getAvatarChar(comment.name);
+                    const avatarUrl = comment.avatar || `https://placehold.co/40x40/6366f1/ffffff?text=${avatarChar}`;
+                    const commentCard = document.createElement('div');
+                    commentCard.className = 'bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col relative';
+                    commentCard.innerHTML = `
+                        <button class="delete-comment-btn absolute top-2 right-3 text-gray-500 hover:text-white text-2xl transition-colors" data-id="${comment.id}">&times;</button>
+                        <div class="flex-grow">
+                            <p class="text-gray-300 mb-6 break-words">${comment.text}</p>
+                        </div>
+                        <div class="flex items-center mt-auto">
+                            <img src="${avatarUrl}" alt="User Avatar" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-bold text-white">${comment.name}</p>
+                                <p class="text-sm text-gray-500">${comment.info}</p>
+                            </div>
+                        </div>
+                    `;
+                    this.commentList.appendChild(commentCard);
+                });
+            }
+
+            add(commentData) {
+                const newComment = { 
+                    id: `user_${Date.now()}`,
+                    ...commentData,
+                    avatar: `https://placehold.co/40x40/6366f1/ffffff?text=${this._getAvatarChar(commentData.name)}`,
+                    isUser: true 
+                };
+                const comments = this._getComments();
+                comments.push(newComment);
+                this._saveComments(comments);
+                this.render();
+            }
+
+            async _handleDelete(commentId) {
+                const comments = this._getComments();
+                const commentToDelete = comments.find(c => c.id === commentId);
+                if (!commentToDelete) return;
+
+                let confirmed = false;
+                if (commentToDelete.isUser) {
+                    confirmed = await this.modalManager.showConfirmation('댓글 삭제', '이 응원 댓글을 삭제하시겠습니까?', { isDelete: true, okText: '삭제' });
+                } else {
+                    const password = await this.modalManager.showConfirmation('관리자 확인', '기본 댓글은 관리자만 삭제할 수 있습니다.', { prompt: true, placeholder: '관리자 암호를 입력하세요', okText: '삭제' });
+                    if (password === "admin1234") {
+                        confirmed = true;
+                    } else if (password !== null) {
+                        await this.modalManager.showConfirmation('오류', '암호가 틀렸습니다.', { okText: '닫기' });
+                    }
+                }
+
+                if (confirmed) {
+                    const newComments = comments.filter(comment => comment.id !== commentId);
+                    this._saveComments(newComments);
+                    this.render();
+                }
+            }
+        }
+
+        // ---------------------------------
+        // 사이드바 관리 모듈
+        // ---------------------------------
+        class Sidebar {
+            constructor() {
+                this.toggleBtn = document.getElementById('sidebar-toggle');
+                this.sidebarEl = document.getElementById('sidebar');
+                this.overlayEl = document.getElementById('sidebar-overlay');
+                this._init();
+            }
+
+            _init() {
+                if (!this.toggleBtn || !this.sidebarEl || !this.overlayEl) return;
+                this.toggleBtn.addEventListener('click', () => this.toggle());
+                this.overlayEl.addEventListener('click', () => this.close());
+                this.sidebarEl.addEventListener('click', (e) => {
+                    if(e.target.tagName === 'A') this.close();
+                });
+            }
+
+            toggle() {
+                this.sidebarEl.classList.toggle('translate-x-full');
+                this.toggleBtn.classList.toggle('active');
+                this.overlayEl.classList.toggle('hidden');
+            }
+
+            close() {
+                this.sidebarEl.classList.add('translate-x-full');
+                this.toggleBtn.classList.remove('active');
+                this.overlayEl.classList.add('hidden');
+            }
+        }
+
+        // ---------------------------------
+        // 광고 관리 모듈
+        // ---------------------------------
+        class AdManager {
+            static loadAds() {
+                try {
+                    document.querySelectorAll('.adsbygoogle').forEach(() => {
+                        (window.adsbygoogle = window.adsbygoogle || []).push({});
+                    });
+                } catch (e) {
+                    console.error('AdSense push error:', e);
+                }
+            }
+        }
+
+        // =================================
+        // 메인 애플리케이션 초기화
+        // =================================
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const modalElements = {
+                comment: { el: document.getElementById('commentModal'), form: document.getElementById('commentForm') },
                 contact: { el: document.getElementById('contactModal') },
                 updates: { el: document.getElementById('updatesModal') },
+                donation: { el: document.getElementById('donationModal') },
                 confirm: { 
                     el: document.getElementById('confirmModal'), 
                     title: document.getElementById('confirmTitle'), 
@@ -414,223 +709,43 @@
                     cancelBtn: document.getElementById('confirmCancelBtn') 
                 }
             };
-
-            function showModal(modal) {
-                if (!modal || !modal.el) return;
-                modal.el.classList.remove('hidden', 'modal-exiting');
-                modal.el.classList.add('modal-entering');
-            }
-
-            function hideModal(modal) {
-                if (!modal || !modal.el) return;
-                modal.el.classList.remove('modal-entering');
-                modal.el.classList.add('modal-exiting');
-                setTimeout(() => modal.el.classList.add('hidden'), 300);
-            }
+            const commentListEl = document.getElementById('comment-list');
+            const writeCommentBtn = document.getElementById('writeCommentBtn');
+            const donateBtn = document.getElementById('donateBtn');
             
-            function showConfirmation(title, message, options = {}) {
-                return new Promise((resolve) => {
-                    modals.confirm.title.textContent = title;
-                    modals.confirm.msg.textContent = message;
-                    modals.confirm.okBtn.textContent = options.okText || '확인';
-                    modals.confirm.okBtn.className = options.isDelete ? 'bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors' : 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors';
+            const modalManager = new ModalManager(modalElements);
+            const commentSystem = new CommentSystem(commentListEl, modalManager);
+            const sidebar = new Sidebar();
 
-                    if (options.prompt) {
-                        modals.confirm.inputWrapper.classList.remove('hidden');
-                        modals.confirm.input.value = '';
-                        modals.confirm.input.placeholder = options.placeholder || '';
-                    } else {
-                        modals.confirm.inputWrapper.classList.add('hidden');
-                    }
-                    
-                    showModal(modals.confirm);
+            writeCommentBtn?.addEventListener('click', () => modalManager.show('comment'));
+            donateBtn?.addEventListener('click', () => modalManager.show('donation'));
 
-                    const onOk = () => {
-                        cleanup();
-                        resolve(options.prompt ? modals.confirm.input.value : true);
-                    };
-                    const onCancel = () => {
-                        cleanup();
-                        resolve(options.prompt ? null : false);
-                    };
-                    
-                    const cleanup = () => {
-                        hideModal(modals.confirm);
-                        modals.confirm.okBtn.removeEventListener('click', onOk);
-                        modals.confirm.cancelBtn.removeEventListener('click', onCancel);
-                    };
-
-                    modals.confirm.okBtn.addEventListener('click', onOk);
-                    modals.confirm.cancelBtn.addEventListener('click', onCancel);
-                });
-            }
-
-            const defaultReviews = [
-                { id: 'default1', name: 'AA 법사z', info: 'Lv. ?? 아크메이지', text: '레이드 크로니클 덕분에 자쿰 원정 처음으로 안 짤리고 깼어요. 오더가 정말 편해집니다. 강추!', avatar: 'https://placehold.co/40x40/3b82f6/ffffff?text=M' },
-                { id: 'default2', name: 'ㅁㅁ공대장', info: '자쿰 원정대', text: 'N빵마스터 없었을 땐 매번 계산기 두들기느라 힘들었는데, 이젠 클릭 한 번이면 끝이네요. 시간 엄청 아꼈어요.', avatar: 'https://placehold.co/40x40/ef4444/ffffff?text=L' },
-                { id: 'default3', name: 'DD 프리', info: 'Lv. ?? 비숍', text: '파티원들한테 리저 시간 브리핑해주기 너무 편해요. 시간 클릭하면 바로 복사되는 기능 만든 분은 천재이신 듯.', avatar: 'https://placehold.co/40x40/22c55e/ffffff?text=B' }
-            ];
-
-            function getReviews() {
-                const reviews = localStorage.getItem('userReviews');
-                return reviews ? JSON.parse(reviews) : [...defaultReviews];
-            }
-
-            function saveReviews(reviews) {
-                localStorage.setItem('userReviews', JSON.stringify(reviews));
-            }
-
-            function getAvatarChar(name) {
-                const firstChar = name.charAt(0);
-                if (/[a-zA-Z]/.test(firstChar)) return firstChar.toUpperCase();
-                const consonants = {'ㄱ':'G','ㄲ':'K','ㄴ':'N','ㄷ':'D','ㄸ':'D','ㄹ':'R','ㅁ':'M','ㅂ':'B','ㅃ':'B','ㅅ':'S','ㅆ':'S','ㅇ':'O','ㅈ':'J','ㅉ':'J','ㅊ':'C','ㅋ':'K','ㅌ':'T','ㅍ':'P','ㅎ':'H'};
-                return consonants[firstChar] || '?';
-            }
-
-            function renderReviews() {
-                if (!reviewList) return;
-                const reviews = getReviews();
-                reviewList.innerHTML = '';
-                if (reviews.length === 0) {
-                    reviewList.innerHTML = `<p class="text-center text-gray-400 col-span-full">아직 작성된 후기가 없습니다. 첫 후기를 남겨주세요!</p>`;
-                    return;
-                }
-
-                reviews.forEach(review => {
-                    const avatarChar = getAvatarChar(review.name);
-                    const avatarUrl = review.avatar || `https://placehold.co/40x40/6366f1/ffffff?text=${avatarChar}`;
-
-                    const reviewCard = document.createElement('div');
-                    reviewCard.className = 'bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col relative';
-                    reviewCard.innerHTML = `
-                        <button class="delete-review-btn absolute top-2 right-3 text-gray-500 hover:text-white text-2xl transition-colors" data-id="${review.id}">&times;</button>
-                        <div class="flex-grow">
-                            <p class="text-gray-300 mb-6 break-words">${review.text}</p>
-                        </div>
-                        <div class="flex items-center mt-auto">
-                            <img src="${avatarUrl}" alt="User Avatar" class="w-10 h-10 rounded-full mr-4">
-                            <div>
-                                <p class="font-bold text-white">${review.name}</p>
-                                <p class="text-sm text-gray-500">${review.info}</p>
-                            </div>
-                        </div>
-                    `;
-                    reviewList.appendChild(reviewCard);
-                });
-            }
-
-            async function deleteReview(reviewId) {
-                const reviews = getReviews();
-                const reviewToDelete = reviews.find(r => r.id === reviewId);
-                if (!reviewToDelete) return;
-
-                let confirmed = false;
-                if (reviewToDelete.isUser) {
-                    confirmed = await showConfirmation('후기 삭제', '이 후기를 삭제하시겠습니까?', { isDelete: true, okText: '삭제' });
-                } else {
-                    const password = await showConfirmation('관리자 확인', '기본 후기는 관리자만 삭제할 수 있습니다.', { prompt: true, placeholder: '관리자 암호를 입력하세요', okText: '삭제' });
-                    if (password === "admin1234") {
-                        confirmed = true;
-                    } else if (password !== null) {
-                        await showConfirmation('오류', '암호가 틀렸습니다.', { okText: '닫기' });
-                    }
-                }
-
-                if (confirmed) {
-                    const newReviews = reviews.filter(review => review.id !== reviewId);
-                    saveReviews(newReviews);
-                    renderReviews();
-                }
-            }
-
-            if (reviewList) {
-                reviewList.addEventListener('click', (e) => {
-                    if (e.target.closest('.delete-review-btn')) {
-                        const reviewId = e.target.closest('.delete-review-btn').dataset.id;
-                        deleteReview(reviewId);
-                    }
-                });
-            }
-            
-            if (modals.review.form) {
-                modals.review.form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const name = document.getElementById('reviewerName').value;
-                    const info = document.getElementById('reviewerInfo').value;
-                    const text = document.getElementById('reviewText').value;
-                    
-                    const newReview = { 
-                        id: `user_${Date.now()}`,
-                        name, info, 
-                        text, 
-                        avatar: `https://placehold.co/40x40/6366f1/ffffff?text=${getAvatarChar(name)}`,
-                        isUser: true 
-                    };
-                    
-                    const reviews = getReviews();
-                    reviews.push(newReview);
-                    saveReviews(reviews);
-                    
-                    renderReviews();
-                    modals.review.form.reset();
-                    hideModal(modals.review);
-                });
-            }
-
-            renderReviews();
-
-            if (writeReviewBtn) writeReviewBtn.addEventListener('click', () => showModal(modals.review));
-            
-            document.querySelectorAll('.modal-close-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const modalEl = e.target.closest('.fixed.inset-0');
-                    if (modalEl) {
-                        const modalKey = Object.keys(modals).find(key => modals[key].el === modalEl);
-                        if(modalKey) hideModal(modals[modalKey]);
-                    }
-                });
-            });
-
-            Object.values(modals).forEach(modal => {
-                if (modal.el) {
-                    modal.el.addEventListener('click', (e) => {
-                        if (e.target === modal.el) hideModal(modal);
-                    });
+            modalElements.comment.form?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('commenterName').value;
+                const info = document.getElementById('commenterInfo').value;
+                const text = document.getElementById('commentText').value;
+                if (name && info && text) {
+                    commentSystem.add({ name, info, text });
+                    modalElements.comment.form.reset();
+                    modalManager.hide('comment');
                 }
             });
 
-            const sidebarToggle = document.getElementById('sidebar-toggle');
-            const sidebar = document.getElementById('sidebar');
-            const sidebarOverlay = document.getElementById('sidebar-overlay');
-            
-            function closeSidebar() {
-                if (sidebar) sidebar.classList.add('translate-x-full');
-                if (sidebarToggle) sidebarToggle.classList.remove('active');
-                if (sidebarOverlay) sidebarOverlay.classList.add('hidden');
-            }
-
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', () => {
-                    sidebar.classList.toggle('translate-x-full');
-                    sidebarToggle.classList.toggle('active');
-                    sidebarOverlay.classList.toggle('hidden');
-                });
-            }
-            if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
-
-            document.getElementById('guideLink')?.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('guides')?.scrollIntoView({behavior: 'smooth'}); closeSidebar(); });
-            document.getElementById('updatesLink')?.addEventListener('click', (e) => { e.preventDefault(); closeSidebar(); setTimeout(() => showModal(modals.updates), 300); });
-            document.getElementById('contactLink')?.addEventListener('click', (e) => { e.preventDefault(); closeSidebar(); setTimeout(() => showModal(modals.contact), 300); });
-            
-            window.addEventListener('load', () => {
-                try {
-                    document.querySelectorAll('.adsbygoogle').forEach(ad => {
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-                    });
-                } catch (e) {
-                    console.error('AdSense push error:', e);
-                }
+            document.getElementById('guideLink')?.addEventListener('click', (e) => { 
+                e.preventDefault(); 
+                document.getElementById('guides')?.scrollIntoView({ behavior: 'smooth' }); 
             });
+            document.getElementById('updatesLink')?.addEventListener('click', (e) => { 
+                e.preventDefault(); 
+                setTimeout(() => modalManager.show('updates'), 300);
+            });
+            document.getElementById('contactLink')?.addEventListener('click', (e) => { 
+                e.preventDefault(); 
+                setTimeout(() => modalManager.show('contact'), 300);
+            });
+            
+            window.addEventListener('load', AdManager.loadAds);
         });
     </script>
 </body>
