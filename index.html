@@ -77,8 +77,10 @@
         .nav-toggle.active .hamburger-icon span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
         .nav-toggle.active .hamburger-icon span:nth-child(2) { opacity: 0; }
         .nav-toggle.active .hamburger-icon span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        
+        /* [수정] hover 방식 대신 JS로 제어하기 위한 CSS 변경 */
         .profile-dropdown { display: none; }
-        .profile-container:hover .profile-dropdown { display: block; }
+        .profile-dropdown.show { display: block; }
     </style>
 </head>
 <body class="antialiased">
@@ -101,7 +103,7 @@
                         <img id="user-avatar" src="https://placehold.co/32x32/374151/d1d5db?text=M" class="w-8 h-8 rounded-full border-2 border-slate-500">
                         <span id="user-nickname" class="font-semibold text-white">닉네임</span>
                     </div>
-                    <div class="profile-dropdown absolute right-0 mt-2 w-48 bg-slate-800 rounded-lg shadow-lg py-1 border border-slate-700">
+                    <div class="profile-dropdown absolute right-0 mt-2 w-48 bg-slate-800 rounded-lg shadow-lg py-1 border border-slate-700 z-10">
                         <a href="#" id="profile-settings-link" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700">프로필 설정</a>
                         <a href="/community/index.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700">커뮤니티</a>
                         <button id="logout-btn" class="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-slate-700">로그아웃</button>
@@ -517,13 +519,11 @@
         // ---------------------------------
         // Firebase Configuration
         // ---------------------------------
-        // 🔥 중요: 이 부분은 Firebase 콘솔에서 복사한 설정 코드를 그대로 붙여넣는 곳입니다.
-        // 기존 코드에서는 이 객체 안에 <script> 태그가 포함되어 있어 오류가 발생했습니다.
         const firebaseConfig = {
             apiKey: "AIzaSyASDsgKULCrP_3I3jz5irdzfbO9TzSwBZ8",
             authDomain: "mlfee-hub.firebaseapp.com",
             projectId: "mlfee-hub",
-            storageBucket: "mlfee-hub.appspot.com", // .firebasestorage.app 에서 .appspot.com 으로 변경될 수 있습니다. 콘솔 값을 확인하세요.
+            storageBucket: "mlfee-hub.appspot.com",
             messagingSenderId: "330580584999",
             appId: "1:330580584999:web:66410250d754fa68a2fc02",
             measurementId: "G-VLQR1NXFFM"
@@ -572,7 +572,7 @@
             toggleMode() {
                 this.isLoginMode = !this.isLoginMode;
                 this.elements.authError.textContent = '';
-                this.elements.authForm.reset(); // 모드 변경 시 입력 필드 초기화
+                this.elements.authForm.reset(); 
                 if (this.isLoginMode) {
                     this.elements.authTitle.textContent = '로그인';
                     this.elements.nicknameField.classList.add('hidden');
@@ -604,7 +604,6 @@
                             return;
                         }
                         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                        // Firestore에 사용자 프로필 정보 저장
                         await setDoc(doc(db, "users", userCredential.user.uid), {
                             nickname: nickname,
                             email: email,
@@ -658,7 +657,7 @@
                 switch (code) {
                     case 'auth/invalid-email': return '유효하지 않은 이메일 형식입니다.';
                     case 'auth/user-not-found':
-                    case 'auth/invalid-credential': // 최신 SDK에서는 user-not-found, wrong-password 대신 invalid-credential 사용
+                    case 'auth/invalid-credential':
                          return '이메일 또는 비밀번호가 일치하지 않습니다.';
                     case 'auth/wrong-password': return '비밀번호가 일치하지 않습니다.';
                     case 'auth/email-already-in-use': return '이미 사용 중인 이메일입니다.';
@@ -686,7 +685,6 @@
 
             _init() {
                 this.elements.profileForm.addEventListener('submit', (e) => this.handleSave(e));
-                // 프로필 모달이 열릴 때 데이터를 로드하도록 변경
                 document.getElementById('profile-settings-link').addEventListener('click', (e) => {
                     e.preventDefault();
                     const user = auth.currentUser;
@@ -733,12 +731,11 @@
 
                 } catch (error) {
                     console.error("Error updating profile: ", error);
-                    // 사용자에게 오류 메시지를 보여줄 수 있습니다.
                 }
             }
         }
 
-        // Other classes (ModalManager, CommentSystem, Sidebar) remain the same...
+        // Other classes (ModalManager, CommentSystem, Sidebar)
         class ModalManager {
             constructor(modals) {
                 this.modals = modals;
@@ -782,7 +779,6 @@
                 this.render();
             }
             render() {
-                // Simplified render logic for brevity
                 if (!this.commentList) return;
                 this.commentList.innerHTML = '';
                 this.defaultComments.forEach(comment => {
@@ -848,10 +844,12 @@
                         sidebarEl: document.getElementById('sidebar'),
                         overlayEl: document.getElementById('sidebar-overlay')
                     },
+                    // [추가] 프로필 드롭다운 메뉴 관련 요소
+                    profileContainer: document.getElementById('logged-in-view'),
+                    profileDropdown: document.querySelector('.profile-dropdown'),
                     commentList: document.getElementById('comment-list'),
                     loginBtn: document.getElementById('login-btn'),
                     signupBtn: document.getElementById('signup-btn'),
-                    // profileSettingsLink는 ProfileManager에서 직접 처리하도록 변경
                     donateBtn: document.getElementById('donateBtn'),
                     qrContainer: document.getElementById('qrcode-container'),
                     navLinks: {
@@ -879,7 +877,13 @@
                     if (this.authManager.isLoginMode) this.authManager.toggleMode();
                     this.modalManager.show('auth');
                 });
-                // '프로필 설정' 링크는 ProfileManager에서 자체적으로 이벤트를 처리합니다.
+                
+                // [추가] 프로필 메뉴 클릭 이벤트
+                this.elements.profileContainer?.querySelector('.cursor-pointer')?.addEventListener('click', (e) => {
+                    e.stopPropagation(); // 이벤트 버블링 방지
+                    this.elements.profileDropdown.classList.toggle('show');
+                });
+
                 this.elements.donateBtn?.addEventListener('click', () => {
                     this.modalManager.show('donation');
                     this._generateQRCode();
@@ -889,6 +893,13 @@
                 this.elements.navLinks.guideLink?.addEventListener('click', (e) => {
                     e.preventDefault();
                     document.getElementById('guides')?.scrollIntoView({ behavior: 'smooth' });
+                });
+
+                // [추가] 프로필 메뉴 바깥 영역 클릭 시 메뉴 닫기
+                window.addEventListener('click', (e) => {
+                    if (this.elements.profileContainer && !this.elements.profileContainer.contains(e.target)) {
+                        this.elements.profileDropdown?.classList.remove('show');
+                    }
                 });
             }
 
