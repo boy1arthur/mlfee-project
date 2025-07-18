@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>MLFEE 커뮤니티</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+  <!-- Firebase SDKs -->
+  <script src="[https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script](https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script)>
+  <script src="[https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script](https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script)>
+</head>
+<body class="bg-gray-900 text-gray-100">
+  <header class="py-6 text-center bg-gray-800">
+    <h1 class="text-3xl font-bold text-blue-400">MLFEE 커뮤니티</h1>
+  </header>
+  <main class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">게시글 목록</h2>
+      <button id="writeBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg">글쓰기</button>
+    </div>
+    <div id="postList" class="space-y-4"></div>
+  </main>
+  <!-- 글쓰기 모달 -->
+  <div id="writeModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden">
+    <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md">
+      <h3 class="text-xl font-bold mb-4">새 글 작성</h3>
+      <input id="postTitle" type="text" placeholder="제목" class="w-full mb-3 p-2 rounded bg-gray-700 text-white" />
+      <textarea id="postContent" rows="5" placeholder="내용" class="w-full mb-3 p-2 rounded bg-gray-700 text-white"></textarea>
+      <div class="flex justify-end gap-2">
+        <button id="cancelWrite" class="bg-gray-600 px-4 py-2 rounded text-white">취소</button>
+        <button id="submitWrite" class="bg-blue-600 px-4 py-2 rounded text-white">등록</button>
+      </div>
+    </div>
+  </div>
+  <!-- 수정 모달 -->
+  <div id="editModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden">
+    <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md">
+      <h3 class="text-xl font-bold mb-4">글 수정</h3>
+      <input id="editTitle" type="text" placeholder="제목" class="w-full mb-3 p-2 rounded bg-gray-700 text-white" />
+      <textarea id="editContent" rows="5" placeholder="내용" class="w-full mb-3 p-2 rounded bg-gray-700 text-white"></textarea>
+      <div class="flex justify-end gap-2">
+        <button id="cancelEdit" class="bg-gray-600 px-4 py-2 rounded text-white">취소</button>
+        <button id="submitEdit" class="bg-blue-600 px-4 py
