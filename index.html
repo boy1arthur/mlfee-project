@@ -13,9 +13,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- QR Code 생성 라이브러리 추가 -->
+    <!-- QR Code generation library -->
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
+    <!-- Google Ads -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615"
      crossorigin="anonymous"></script>
      
@@ -105,9 +106,9 @@
         <h3 class="text-center text-2xl font-bold text-blue-400 mt-16 mb-8">메뉴</h3>
         <a href="/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">홈</a>
         <a href="#" id="updatesLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">업데이트</a>
-        <a href="calc" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
-        <a href="timer" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
-        <a href="buff" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
+        <a href="calc/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
+        <a href="timer/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
+        <a href="buff/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
         <a href="#guides" id="guideLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
         <a href="#" id="contactLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의하기</a>
     </nav>
@@ -155,7 +156,7 @@
                 <div class="container mx-auto px-4">
                     <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">MLFEE 핵심 도구</span></h2>
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <a href="calc" class="tool-link block">
+                        <a href="calc/index.html" class="tool-link block">
                             <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
                                 <div class="text-red-500 mb-6">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h3m-3-7h3m-6.128 9.872A3 3 0 006.872 21h10.256a3 3 0 002.872-3.128V7.128A3 3 0 0017.128 4H6.872a3 3 0 00-2.872 3.128v10.744z" /></svg>
@@ -164,7 +165,7 @@
                                 <p class="text-gray-400">메소 수수료 '수작'부터 N인 파티 분배, 택배 정산, 목표 금액 역산까지 원클릭으로 해결하세요.</p>
                             </div>
                         </a>
-                        <a href="timer" class="tool-link block">
+                        <a href="timer/index.html" class="tool-link block">
                             <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
                                 <div class="text-blue-500 mb-6">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -173,7 +174,7 @@
                                 <p class="text-gray-400">비숍의 리저렉션 쿨타임을 정확히 체크하고, 다음 예상 시간을 공유하여 안정적인 레이드를 운영하세요.</p>
                             </div>
                         </a>
-                        <a href="buff" class="tool-link block">
+                        <a href="buff/index.html" class="tool-link block">
                             <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
                                 <div class="text-green-500 mb-6">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -295,17 +296,17 @@
                         <button id="writeCommentBtn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-lg transition-colors w-full sm:w-auto">응원 댓글 남기기</button>
                     </div>
                     <div id="comment-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Comments will be injected here -->
+                        <!-- Comments will be injected here by JavaScript -->
                     </div>
                 </div>
             </section>
 
-            <!-- 후원자 명예의 전당 -->
+            <!-- Hall of Fame -->
             <section id="hall-of-fame" class="py-20">
                 <div class="container mx-auto px-4">
                     <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">명예의 전당</span></h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- 가상 후원자 카드 -->
+                        <!-- Supporter Cards -->
                         <div class="supporter-card bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col">
                             <div class="flex items-center mb-4">
                                 <i class="fas fa-scroll text-yellow-400 text-2xl mr-4"></i>
@@ -327,7 +328,7 @@
                             </div>
                             <p class="text-green-400 italic">"메소가 부족해서... 대신 저를 잡으면 나오는 '주황버섯의 갓' 100개로 후원합니다."</p>
                         </div>
-                         <!-- 후원 유도 카드 -->
+                        <!-- Donation CTA Card -->
                         <div class="md:col-span-2 lg:col-span-3 bg-gradient-to-r from-blue-600 to-sky-500 p-8 rounded-2xl text-center flex flex-col sm:flex-row items-center justify-center gap-8 card-hover">
                            <div class="flex-grow">
                                <h3 class="text-3xl font-black text-white">이 도구가 도움이 되셨다면,</h3>
@@ -401,7 +402,7 @@
             <h3 class="text-2xl font-bold text-yellow-400">후원 안내</h3>
             <p class="text-gray-400 mt-2 mb-6">여러분의 따뜻한 응원 한 잔이 제겐 큰 힘이됩니다.</p>
             <div class="my-6">
-                <div id="qrcode-container" class="w-48 h-48 mx-auto"></div>
+                <div id="qrcode-container" class="w-48 h-48 mx-auto bg-white p-2 rounded-lg"></div>
                 <p class="mt-4 font-semibold text-white">카카오페이로 간편하게!</p>
             </div>
         </div>
@@ -412,7 +413,7 @@
             <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
             <h3 class="text-3xl font-bold text-sky-400 mb-6 text-center">업데이트 내역</h3>
             <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-4 text-slate-300">
-                 <div class="p-4 bg-slate-700/50 rounded-lg">
+                <div class="p-4 bg-slate-700/50 rounded-lg">
                     <p class="font-bold text-lg text-white">2024-07-19: 후원 시스템 개선</p>
                     <p class="mt-1">- '후기'를 '응원 댓글'로 변경하여 참여 장벽을 낮추고, '명예의 전당'과 자연스럽게 연결했습니다.</p>
                 </div>
@@ -445,21 +446,38 @@
 
     <script type="module">
         /**
-         * MLFEE 메인 애플리케이션 모듈
-         * 각 기능(모달, 댓글, 사이드바 등)을 별도의 클래스로 분리하여 관리합니다.
-         * 이를 통해 코드의 가독성과 유지보수성을 높입니다.
+         * =================================================================
+         * MLFEE Main Application Module (Refactored)
+         * -----------------------------------------------------------------
+         * This script organizes all website functionalities into distinct
+         * classes, managed by a central `App` class. This approach,
+         * known as object-oriented programming, significantly improves
+         * code readability, maintainability, and reduces errors when
+         * making changes.
+         *
+         * Key Improvements:
+         * 1. Centralized App Controller: The `App` class initializes and
+         * coordinates all other modules.
+         * 2. Decoupling: Classes are no longer tightly bound to specific
+         * HTML IDs. They receive necessary elements during initialization,
+         * making the code more flexible.
+         * 3. Clear Responsibilities: Each class has a single, well-defined
+         * purpose (e.g., `ModalManager` only handles modals).
+         * 4. Robust Initialization: The script waits for the DOM to be
+         * fully loaded before executing, preventing common errors.
+         * =================================================================
          */
 
         // ---------------------------------
-        // 모달(팝업창) 관리 모듈
+        // Modal (Popup) Management Module
         // ---------------------------------
         class ModalManager {
             /**
-             * 애플리케이션의 모든 모달을 제어합니다.
-             * @param {object} modalElements - 각 모달의 DOM 요소를 담은 객체
+             * Controls all modals in the application.
+             * @param {object} modals - An object containing modal elements.
              */
-            constructor(modalElements) {
-                this.modals = modalElements;
+            constructor(modals) {
+                this.modals = modals;
                 this._init();
             }
 
@@ -467,33 +485,59 @@
                 for (const key in this.modals) {
                     const modal = this.modals[key];
                     if (!modal.el) continue;
+
+                    // Close modal if background is clicked
                     modal.el.addEventListener('click', (e) => {
                         if (e.target === modal.el) this.hide(key);
                     });
+
+                    // Attach event listeners to all close buttons within the modal
                     modal.el.querySelectorAll('.modal-close-btn').forEach(btn => {
                         btn.addEventListener('click', () => this.hide(key));
                     });
                 }
             }
 
+            /**
+             * Shows a modal with an animation.
+             * @param {string} key - The key of the modal to show.
+             */
             show(key) {
                 const modal = this.modals[key];
-                if (!modal || !modal.el) return;
+                if (!modal?.el) return;
                 modal.el.classList.remove('hidden', 'modal-exiting');
                 modal.el.classList.add('modal-entering');
             }
 
+            /**
+             * Hides a modal with an animation.
+             * @param {string} key - The key of the modal to hide.
+             */
             hide(key) {
                 const modal = this.modals[key];
-                if (!modal || !modal.el) return;
+                if (!modal?.el) return;
                 modal.el.classList.remove('modal-entering');
                 modal.el.classList.add('modal-exiting');
                 setTimeout(() => modal.el.classList.add('hidden'), 300);
             }
 
+            /**
+             * Shows a confirmation dialog and returns a Promise that resolves with the user's choice.
+             * @param {string} title - The title of the confirmation.
+             * @param {string} message - The message to display.
+             * @param {object} [options={}] - Configuration options.
+             * @param {boolean} [options.isDelete=false] - If true, styles the OK button for a delete action.
+             * @param {string} [options.okText='확인'] - Text for the OK button.
+             * @param {boolean} [options.prompt=false] - If true, shows an input field.
+             * @param {string} [options.inputType='password'] - Type for the input field.
+             * @param {string} [options.placeholder=''] - Placeholder for the input field.
+             * @returns {Promise<boolean|string|null>}
+             */
             showConfirmation(title, message, options = {}) {
                 return new Promise((resolve) => {
                     const confirmModal = this.modals.confirm;
+                    if (!confirmModal?.el) return resolve(false);
+
                     confirmModal.title.textContent = title;
                     confirmModal.msg.textContent = message;
                     confirmModal.okBtn.textContent = options.okText || '확인';
@@ -534,38 +578,53 @@
         }
 
         // ---------------------------------
-        // 응원 댓글 시스템 관리 모듈
+        // Cheer Comment System Module
         // ---------------------------------
         class CommentSystem {
+            /**
+             * Manages the cheer comment section.
+             * @param {HTMLElement} listElement - The element to display the comments in.
+             * @param {ModalManager} modalManager - The application's modal manager.
+             */
             constructor(listElement, modalManager) {
                 this.commentList = listElement;
                 this.modalManager = modalManager;
+                this.storageKey = 'userComments_mlfee';
                 this.defaultComments = [
                     { id: 'default1', name: 'AA 법사z', info: 'Lv. ?? 아크메이지', text: '레이드 크로니클 덕분에 자쿰 원정 처음으로 안 짤리고 깼어요. 오더가 정말 편해집니다. 강추!', avatar: 'https://placehold.co/40x40/3b82f6/ffffff?text=M' },
                     { id: 'default2', name: 'ㅁㅁ공대장', info: '자쿰 원정대', text: 'N빵마스터 없었을 땐 매번 계산기 두들기느라 힘들었는데, 이젠 클릭 한 번이면 끝이네요. 시간 엄청 아꼈어요.', avatar: 'https://placehold.co/40x40/ef4444/ffffff?text=L' },
                     { id: 'default3', name: 'DD 프리', info: 'Lv. ?? 비숍', text: '파티원들한테 리저 시간 브리핑해주기 너무 편해요. 시간 클릭하면 바로 복사되는 기능 만든 분은 천재이신 듯.', avatar: 'https://placehold.co/40x40/22c55e/ffffff?text=B' }
                 ];
-                this._init();
             }
 
-            _init() {
+            init() {
                 if (!this.commentList) return;
                 this.render();
                 this.commentList.addEventListener('click', (e) => {
-                    if (e.target.closest('.delete-comment-btn')) {
-                        const commentId = e.target.closest('.delete-comment-btn').dataset.id;
+                    const deleteBtn = e.target.closest('.delete-comment-btn');
+                    if (deleteBtn) {
+                        const commentId = deleteBtn.dataset.id;
                         this._handleDelete(commentId);
                     }
                 });
             }
 
             _getComments() {
-                const comments = localStorage.getItem('userComments');
-                return comments ? JSON.parse(comments) : [...this.defaultComments];
+                try {
+                    const comments = localStorage.getItem(this.storageKey);
+                    return comments ? JSON.parse(comments) : [...this.defaultComments];
+                } catch (e) {
+                    console.error("Could not access localStorage. Using default comments.", e);
+                    return [...this.defaultComments];
+                }
             }
 
             _saveComments(comments) {
-                localStorage.setItem('userComments', JSON.stringify(comments));
+                try {
+                    localStorage.setItem(this.storageKey, JSON.stringify(comments));
+                } catch (e) {
+                    console.error("Could not save to localStorage.", e);
+                }
             }
             
             _getAvatarChar(name) {
@@ -631,7 +690,7 @@
                     const password = await this.modalManager.showConfirmation('관리자 확인', '기본 댓글은 관리자만 삭제할 수 있습니다.', { prompt: true, placeholder: '관리자 암호를 입력하세요', okText: '삭제' });
                     if (password === "admin1234") {
                         confirmed = true;
-                    } else if (password !== null) {
+                    } else if (password !== null) { // User entered wrong password, didn't just cancel
                         await this.modalManager.showConfirmation('오류', '암호가 틀렸습니다.', { okText: '닫기' });
                     }
                 }
@@ -645,126 +704,156 @@
         }
 
         // ---------------------------------
-        // 사이드바 관리 모듈
+        // Sidebar Management Module
         // ---------------------------------
         class Sidebar {
-            constructor() {
-                this.toggleBtn = document.getElementById('sidebar-toggle');
-                this.sidebarEl = document.getElementById('sidebar');
-                this.overlayEl = document.getElementById('sidebar-overlay');
-                this._init();
+            constructor(elements) {
+                this.elements = elements;
             }
-
-            _init() {
-                if (!this.toggleBtn || !this.sidebarEl || !this.overlayEl) return;
-                this.toggleBtn.addEventListener('click', () => this.toggle());
-                this.overlayEl.addEventListener('click', () => this.close());
-                this.sidebarEl.addEventListener('click', (e) => {
+            
+            init() {
+                if (!this.elements.toggleBtn || !this.elements.sidebarEl || !this.elements.overlayEl) return;
+                this.elements.toggleBtn.addEventListener('click', () => this.toggle());
+                this.elements.overlayEl.addEventListener('click', () => this.close());
+                this.elements.sidebarEl.addEventListener('click', (e) => {
                     if(e.target.tagName === 'A') this.close();
                 });
             }
 
             toggle() {
-                this.sidebarEl.classList.toggle('translate-x-full');
-                this.toggleBtn.classList.toggle('active');
-                this.overlayEl.classList.toggle('hidden');
+                this.elements.sidebarEl.classList.toggle('translate-x-full');
+                this.elements.toggleBtn.classList.toggle('active');
+                this.elements.overlayEl.classList.toggle('hidden');
             }
 
             close() {
-                this.sidebarEl.classList.add('translate-x-full');
-                this.toggleBtn.classList.remove('active');
-                this.overlayEl.classList.add('hidden');
+                this.elements.sidebarEl.classList.add('translate-x-full');
+                this.elements.toggleBtn.classList.remove('active');
+                this.elements.overlayEl.classList.add('hidden');
             }
         }
 
         // ---------------------------------
-        // 광고 관리 모듈
+        // Main Application Controller
         // ---------------------------------
-        class AdManager {
-            static loadAds() {
-                try {
-                    document.querySelectorAll('.adsbygoogle').forEach(() => {
-                        (window.adsbygoogle = window.adsbygoogle || []).push({});
-                    });
-                } catch (e) {
-                    console.error('AdSense push error:', e);
-                }
+        class App {
+            constructor() {
+                this.elements = this._queryElements();
+                this.modalManager = new ModalManager(this.elements.modals);
+                this.commentSystem = new CommentSystem(this.elements.commentList, this.modalManager);
+                this.sidebar = new Sidebar(this.elements.sidebar);
+                this.qrCodeGenerated = false;
+            }
+
+            /**
+             * Centralized place to query all DOM elements.
+             * This makes it easy to update selectors if the HTML changes.
+             */
+            _queryElements() {
+                return {
+                    modals: {
+                        comment: { el: document.getElementById('commentModal'), form: document.getElementById('commentForm') },
+                        contact: { el: document.getElementById('contactModal') },
+                        updates: { el: document.getElementById('updatesModal') },
+                        donation: { el: document.getElementById('donationModal') },
+                        confirm: { 
+                            el: document.getElementById('confirmModal'), 
+                            title: document.getElementById('confirmTitle'), 
+                            msg: document.getElementById('confirmMessage'),
+                            inputWrapper: document.getElementById('confirmInputWrapper'),
+                            input: document.getElementById('confirmInput'),
+                            okBtn: document.getElementById('confirmOkBtn'),
+                            cancelBtn: document.getElementById('confirmCancelBtn') 
+                        }
+                    },
+                    sidebar: {
+                        toggleBtn: document.getElementById('sidebar-toggle'),
+                        sidebarEl: document.getElementById('sidebar'),
+                        overlayEl: document.getElementById('sidebar-overlay')
+                    },
+                    commentList: document.getElementById('comment-list'),
+                    writeCommentBtn: document.getElementById('writeCommentBtn'),
+                    donateBtn: document.getElementById('donateBtn'),
+                    qrContainer: document.getElementById('qrcode-container'),
+                    navLinks: {
+                        guideLink: document.getElementById('guideLink'),
+                        updatesLink: document.getElementById('updatesLink'),
+                        contactLink: document.getElementById('contactLink')
+                    }
+                };
+            }
+
+            /**
+             * Initializes all modules and sets up event listeners.
+             */
+            init() {
+                this.sidebar.init();
+                this.commentSystem.init();
+                this._initEventListeners();
+                // Removed the manual ad initialization call to prevent errors.
+                // The async script tag for AdSense handles loading automatically.
+            }
+
+            /**
+             * Centralized event listener setup.
+             */
+            _initEventListeners() {
+                this.elements.writeCommentBtn?.addEventListener('click', () => this.modalManager.show('comment'));
+                
+                this.elements.donateBtn?.addEventListener('click', () => {
+                    this.modalManager.show('donation');
+                    this._generateQRCode();
+                });
+
+                this.elements.modals.comment.form?.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('commenterName').value.trim();
+                    const info = document.getElementById('commenterInfo').value.trim();
+                    const text = document.getElementById('commentText').value.trim();
+                    if (name && info && text) {
+                        this.commentSystem.add({ name, info, text });
+                        this.elements.modals.comment.form.reset();
+                        this.modalManager.hide('comment');
+                    }
+                });
+
+                // Sidebar navigation links that open modals
+                this.elements.navLinks.updatesLink?.addEventListener('click', (e) => { e.preventDefault(); this.modalManager.show('updates'); });
+                this.elements.navLinks.contactLink?.addEventListener('click', (e) => { e.preventDefault(); this.modalManager.show('contact'); });
+                
+                // Smooth scroll for anchor links
+                this.elements.navLinks.guideLink?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById('guides')?.scrollIntoView({ behavior: 'smooth' });
+                });
+            }
+
+            /**
+             * Generates the donation QR code if it hasn't been already.
+             */
+            _generateQRCode() {
+                if (this.qrCodeGenerated || !this.elements.qrContainer) return;
+                
+                new QRCode(this.elements.qrContainer, {
+                    text: "https://qr.kakaopay.com/Fb3Rszvbr", // KakaoPay QR link
+                    width: 176,
+                    height: 176,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+                this.qrCodeGenerated = true;
             }
         }
 
         // =================================
-        // 메인 애플리케이션 초기화
+        // Application Entry Point
         // =================================
         document.addEventListener('DOMContentLoaded', () => {
-            
-            const modalElements = {
-                comment: { el: document.getElementById('commentModal'), form: document.getElementById('commentForm') },
-                contact: { el: document.getElementById('contactModal') },
-                updates: { el: document.getElementById('updatesModal') },
-                donation: { el: document.getElementById('donationModal') },
-                confirm: { 
-                    el: document.getElementById('confirmModal'), 
-                    title: document.getElementById('confirmTitle'), 
-                    msg: document.getElementById('confirmMessage'),
-                    inputWrapper: document.getElementById('confirmInputWrapper'),
-                    input: document.getElementById('confirmInput'),
-                    okBtn: document.getElementById('confirmOkBtn'),
-                    cancelBtn: document.getElementById('confirmCancelBtn') 
-                }
-            };
-            const commentListEl = document.getElementById('comment-list');
-            const writeCommentBtn = document.getElementById('writeCommentBtn');
-            const donateBtn = document.getElementById('donateBtn');
-            
-            const modalManager = new ModalManager(modalElements);
-            const commentSystem = new CommentSystem(commentListEl, modalManager);
-            const sidebar = new Sidebar();
-
-            writeCommentBtn?.addEventListener('click', () => modalManager.show('comment'));
-            
-            donateBtn?.addEventListener('click', () => {
-                modalManager.show('donation');
-                // QR 코드는 모달이 열릴 때 생성하여 항상 최상의 품질을 유지합니다.
-                const qrContainer = document.getElementById('qrcode-container');
-                if (qrContainer && !qrContainer.querySelector('canvas')) { // 이미 생성되었는지 확인
-                    new QRCode(qrContainer, {
-                        text: "https://qr.kakaopay.com/Fb3Rszvbr", // 여기에 실제 카카오페이 QR 링크를 넣으세요.
-                        width: 176,
-                        height: 176,
-                        colorDark : "#000000",
-                        colorLight : "#ffffff",
-                        correctLevel : QRCode.CorrectLevel.H
-                    });
-                }
-            });
-
-            modalElements.comment.form?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const name = document.getElementById('commenterName').value;
-                const info = document.getElementById('commenterInfo').value;
-                const text = document.getElementById('commentText').value;
-                if (name && info && text) {
-                    commentSystem.add({ name, info, text });
-                    modalElements.comment.form.reset();
-                    modalManager.hide('comment');
-                }
-            });
-
-            document.getElementById('guideLink')?.addEventListener('click', (e) => { 
-                e.preventDefault(); 
-                document.getElementById('guides')?.scrollIntoView({ behavior: 'smooth' }); 
-            });
-            document.getElementById('updatesLink')?.addEventListener('click', (e) => { 
-                e.preventDefault(); 
-                setTimeout(() => modalManager.show('updates'), 300);
-            });
-            document.getElementById('contactLink')?.addEventListener('click', (e) => { 
-                e.preventDefault(); 
-                setTimeout(() => modalManager.show('contact'), 300);
-            });
-            
-            window.addEventListener('load', AdManager.loadAds);
+            const app = new App();
+            app.init();
         });
+
     </script>
 </body>
 </html>
