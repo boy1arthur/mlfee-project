@@ -493,6 +493,11 @@
                     if (expectedEndTimeDisplay) {
                         expectedEndTimeDisplay.textContent = `예상 종료 시각: ${getOneHourLaterString()}`;
                     }
+            function closeSidebar() {
+                sidebar.classList.add('translate-x-full');
+                sidebarToggle.classList.remove('active');
+                sidebarOverlay.classList.add('hidden');
+            }
                 }
             });
 
