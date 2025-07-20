@@ -25,52 +25,78 @@
         // Firebase 설정 및 초기화
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
         if (Object.keys(firebaseConfig).length > 0) {
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // 인증 상태 변경 리스너는 auth가 성공적으로 초기화된 후에만 설정
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                    } else {
+                        // __initial_auth_token이 없으면 익명 로그인 시도
+                        if (typeof __initial_auth_token !== 'undefined') {
+                            try {
+                                await signInWithCustomToken(auth, __initial_auth_token);
+                                userId = auth.currentUser.uid;
+                            } catch (error) {
+                                console.error("Custom token 로그인 실패:", error);
+                                try {
+                                    await signInAnonymously(auth);
+                                    userId = auth.currentUser.uid;
+                                } catch (anonError) {
+                                    console.error("익명 로그인 실패:", anonError);
+                                    userId = crypto.randomUUID(); // 로그인 실패 시 임시 ID 할당
+                                }
+                            }
+                        } else {
+                            try {
+                                await signInAnonymously(auth);
+                                userId = auth.currentUser.uid;
+                            } catch (anonError) {
+                                console.error("익명 로그인 실패:", anonError);
+                                userId = crypto.randomUUID(); // 로그인 실패 시 임시 ID 할당
+                            }
+                        }
+                    }
+                    isAuthReady = true; // 인증 준비 완료
+                    console.log("Firebase 인증 준비 완료. User ID:", userId);
+                    // 인증 완료 후 게시글 로드 시작
+                    if (db) {
+                        loadPosts();
+                    }
+                });
+
+            } catch (firebaseInitError) {
+                console.error("Firebase 초기화 중 오류 발생:", firebaseInitError);
+                // Firebase 초기화 실패 시, isAuthReady를 false로 유지하고 userId를 임시로 설정
+                userId = crypto.randomUUID();
+                isAuthReady = true; // 인증은 안되었지만 앱은 동작하도록 isAuthReady를 true로 설정
+                // 게시글 로드는 Firebase가 없으므로 호출하지 않음
+            }
         } else {
-            console.error("Firebase 설정이 제공되지 않았습니다.");
+            console.error("Firebase 설정이 제공되지 않았습니다. 게시판 기능이 제한됩니다.");
+            // Firebase 설정이 없는 경우, 임시 userId 할당 및 isAuthReady를 true로 설정하여 앱이 동작하도록 함
+            userId = crypto.randomUUID();
+            isAuthReady = true;
+            // Firebase가 없으므로 게시글 로드 시도하지 않음. 대신 사용자에게 메시지 표시.
+            document.addEventListener('DOMContentLoaded', () => {
+                const postList = document.getElementById('postList');
+                if (postList) {
+                    postList.innerHTML = '<p class="text-center text-red-400">Firebase 설정이 없어 게시판 기능을 사용할 수 없습니다.</p>';
+                }
+                const writeBtn = document.getElementById('writeBtn');
+                if (writeBtn) {
+                    writeBtn.disabled = true;
+                    writeBtn.textContent = '글쓰기 (비활성화)';
+                    writeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    writeBtn.classList.remove('hover:bg-blue-700');
+                }
+            });
         }
 
         appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-        // 인증 상태 변경 리스너
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                userId = user.uid;
-            } else {
-                // __initial_auth_token이 없으면 익명 로그인 시도
-                if (typeof __initial_auth_token !== 'undefined') {
-                    try {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                        userId = auth.currentUser.uid;
-                    } catch (error) {
-                        console.error("Custom token 로그인 실패:", error);
-                        try {
-                            await signInAnonymously(auth);
-                            userId = auth.currentUser.uid;
-                        } catch (anonError) {
-                            console.error("익명 로그인 실패:", anonError);
-                            userId = crypto.randomUUID(); // 로그인 실패 시 임시 ID 할당
-                        }
-                    }
-                } else {
-                    try {
-                        await signInAnonymously(auth);
-                        userId = auth.currentUser.uid;
-                    } catch (anonError) {
-                        console.error("익명 로그인 실패:", anonError);
-                        userId = crypto.randomUUID(); // 로그인 실패 시 임시 ID 할당
-                    }
-                }
-            }
-            isAuthReady = true; // 인증 준비 완료
-            console.log("Firebase 인증 준비 완료. User ID:", userId);
-            // 인증 완료 후 게시글 로드 시작
-            if (db) {
-                loadPosts();
-            }
-        });
 
         // DOM Elements
         const sidebarToggle = document.getElementById('sidebar-toggle');
