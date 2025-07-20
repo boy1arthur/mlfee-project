@@ -94,23 +94,30 @@
 
         // --- Sidebar Functions ---
         function toggleSidebar() {
+            console.log("toggleSidebar called. Current sidebar classes:", sidebar.classList);
             // 사이드바가 현재 숨겨져 있으면 (translate-x-full), 보이게 함 (translate-x-0)
             if (sidebar.classList.contains('translate-x-full')) {
                 sidebar.classList.remove('translate-x-full');
                 sidebar.classList.add('translate-x-0');
+                console.log("Sidebar opened. New classes:", sidebar.classList);
             } else { // 사이드바가 현재 보이면 (translate-x-0), 숨김 (translate-x-full)
                 sidebar.classList.remove('translate-x-0');
                 sidebar.classList.add('translate-x-full');
+                console.log("Sidebar closed. New classes:", sidebar.classList);
             }
             sidebarToggle.classList.toggle('active');
             sidebarOverlay.classList.toggle('hidden');
+            console.log("Overlay hidden state:", sidebarOverlay.classList.contains('hidden'));
         }
 
         function closeSidebar() {
+            console.log("closeSidebar called. Current sidebar classes:", sidebar.classList);
             sidebar.classList.remove('translate-x-0');
             sidebar.classList.add('translate-x-full');
             sidebarToggle.classList.remove('active');
             sidebarOverlay.classList.add('hidden');
+            console.log("Sidebar forced closed. New classes:", sidebar.classList);
+            console.log("Overlay hidden state:", sidebarOverlay.classList.contains('hidden'));
         }
 
         // --- Post Management Functions ---
@@ -425,6 +432,7 @@
         <h3 class="text-center text-2xl font-bold gradient-text mt-16 mb-8">메뉴</h3>
         <a href="/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">홈</a>
         <a href="/community/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">커뮤니티</a>
+        <a href="#" id="updatesLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">업데이트</a>
         <a href="calc/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
         <a href="timer/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
         <a href="buff/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
