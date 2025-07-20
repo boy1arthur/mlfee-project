@@ -211,6 +211,33 @@
             const castTimeToggleText = document.getElementById('cast-time-toggle-text');
             const presetHolySymbolBtn = document.getElementById('preset-holy-symbol');
             const notepad = document.getElementById('notepad');
+            // --- Sidebar Toggle ---
+const sidebarToggle = document.getElementById('sidebar-toggle');
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+const navLinks = document.querySelectorAll('#sidebar a');
+
+function toggleSidebar() {
+    sidebar.classList.toggle('translate-x-full');
+    sidebarToggle.classList.toggle('active');
+    sidebarOverlay.classList.toggle('hidden');
+}
+
+function closeSidebar() {
+    sidebar.classList.add('translate-x-full');
+    sidebarToggle.classList.remove('active');
+    sidebarOverlay.classList.add('hidden');
+}
+
+if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', toggleSidebar);
+}
+if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', closeSidebar);
+}
+navLinks.forEach(link => {
+    link.addEventListener('click', closeSidebar);
+});
 
             // State
             let activeTimers = [];
