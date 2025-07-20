@@ -1,16 +1,419 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>MLFEE 커뮤니티</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <meta charset="UTF-8">
+    <title>MLFEE 커뮤니티</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // 전역 변수 선언 (Firebase 인스턴스 및 사용자 정보)
+        let app;
+        let db;
+        let auth;
+        let userId;
+        let appId;
+        let isAuthReady = false; // 인증 준비 상태를 추적하는 플래그
+
+        // Firebase 설정 및 초기화
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        if (Object.keys(firebaseConfig).length > 0) {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+        } else {
+            console.error("Firebase 설정이 제공되지 않았습니다.");
+        }
+
+        appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        // 인증 상태 변경 리스너
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                userId = user.uid;
+            } else {
+                // __initial_auth_token이 없으면 익명 로그인 시도
+                if (typeof __initial_auth_token !== 'undefined') {
+                    try {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                        userId = auth.currentUser.uid;
+                    } catch (error) {
+                        console.error("Custom token 로그인 실패:", error);
+                        try {
+                            await signInAnonymously(auth);
+                            userId = auth.currentUser.uid;
+                        } catch (anonError) {
+                            console.error("익명 로그인 실패:", anonError);
+                            userId = crypto.randomUUID(); // 로그인 실패 시 임시 ID 할당
+                        }
+                    }
+                } else {
+                    try {
+                        await signInAnonymously(auth);
+                        userId = auth.currentUser.uid;
+                    } catch (anonError) {
+                        console.error("익명 로그인 실패:", anonError);
+                        userId = crypto.randomUUID(); // 로그인 실패 시 임시 ID 할당
+                    }
+                }
+            }
+            isAuthReady = true; // 인증 준비 완료
+            console.log("Firebase 인증 준비 완료. User ID:", userId);
+            // 인증 완료 후 게시글 로드 시작
+            if (db) {
+                loadPosts();
+            }
+        });
+
+        // DOM Elements
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const navLinks = document.querySelectorAll('#sidebar a');
+        const writeBtn = document.getElementById('writeBtn');
+        const writeModal = document.getElementById('writeModal');
+        const cancelWriteBtn = document.getElementById('cancelWrite');
+        const submitWriteBtn = document.getElementById('submitWrite');
+        const postTitleInput = document.getElementById('postTitle');
+        const postContentInput = document.getElementById('postContent');
+        const postList = document.getElementById('postList');
+        const editModal = document.getElementById('editModal');
+        const cancelEditBtn = document.getElementById('cancelEdit');
+        const submitEditBtn = document.getElementById('submitEdit');
+        const editTitleInput = document.getElementById('editTitle');
+        const editContentInput = document.getElementById('editContent');
+
+        let currentEditingPostId = null; // 수정 중인 게시글 ID
+
+        // --- Sidebar Functions ---
+        function toggleSidebar() {
+            // 사이드바가 현재 숨겨져 있으면 (translate-x-full), 보이게 함 (translate-x-0)
+            if (sidebar.classList.contains('translate-x-full')) {
+                sidebar.classList.remove('translate-x-full');
+                sidebar.classList.add('translate-x-0');
+            } else { // 사이드바가 현재 보이면 (translate-x-0), 숨김 (translate-x-full)
+                sidebar.classList.remove('translate-x-0');
+                sidebar.classList.add('translate-x-full');
+            }
+            sidebarToggle.classList.toggle('active');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('translate-x-0');
+            sidebar.classList.add('translate-x-full');
+            sidebarToggle.classList.remove('active');
+            sidebarOverlay.classList.add('hidden');
+        }
+
+        // --- Post Management Functions ---
+        async function loadPosts() {
+            if (!db || !isAuthReady) {
+                console.log("Firestore 또는 인증이 준비되지 않아 게시글을 로드할 수 없습니다.");
+                return;
+            }
+
+            const postsCollectionRef = collection(db, `artifacts/${appId}/public/data/posts`);
+            const q = query(postsCollectionRef); // orderBy는 성능 문제로 제외
+
+            onSnapshot(q, (snapshot) => {
+                postList.innerHTML = ''; // 기존 목록 초기화
+                const posts = [];
+                snapshot.forEach(doc => {
+                    posts.push({ id: doc.id, ...doc.data() });
+                });
+
+                // 클라이언트 측에서 시간 역순으로 정렬
+                posts.sort((a, b) => {
+                    if (a.timestamp && b.timestamp) {
+                        return b.timestamp.toDate() - a.timestamp.toDate();
+                    }
+                    return 0; // timestamp가 없는 경우 정렬하지 않음
+                });
+
+                if (posts.length === 0) {
+                    postList.innerHTML = '<p class="text-center text-gray-500">아직 게시글이 없습니다. 첫 게시글을 작성해보세요!</p>';
+                } else {
+                    posts.forEach(post => {
+                        const postElement = document.createElement('div');
+                        postElement.className = 'bg-gray-800 p-4 rounded-lg shadow-md';
+                        const postDate = post.timestamp ? new Date(post.timestamp.toDate()).toLocaleString() : '날짜 없음';
+
+                        postElement.innerHTML = `
+                            <h3 class="text-xl font-semibold text-blue-300 mb-2">${escapeHTML(post.title)}</h3>
+                            <p class="text-gray-300 mb-3 whitespace-pre-wrap">${escapeHTML(post.content)}</p>
+                            <div class="flex justify-between items-center text-sm text-gray-400">
+                                <span>작성자: ${escapeHTML(post.authorId || '익명')}</span>
+                                <span>${postDate}</span>
+                            </div>
+                            ${userId && post.authorId === userId ? `
+                                <div class="mt-4 flex justify-end space-x-2">
+                                    <button data-id="${post.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded-md text-sm">수정</button>
+                                    <button data-id="${post.id}" class="delete-btn bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm">삭제</button>
+                                </div>
+                            ` : ''}
+                        `;
+                        postList.appendChild(postElement);
+                    });
+                }
+            }, (error) => {
+                console.error("게시글 로드 중 오류 발생:", error);
+                postList.innerHTML = '<p class="text-center text-red-400">게시글을 불러오는 데 실패했습니다. 다시 시도해주세요.</p>';
+            });
+        }
+
+        async function addPost() {
+            if (!db || !userId) {
+                console.error("Firestore 또는 사용자 ID가 준비되지 않았습니다.");
+                return;
+            }
+            const title = postTitleInput.value.trim();
+            const content = postContentInput.value.trim();
+
+            if (!title || !content) {
+                showCustomAlert('제목과 내용을 모두 입력해주세요.');
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/public/data/posts`), {
+                    title: title,
+                    content: content,
+                    authorId: userId,
+                    timestamp: serverTimestamp()
+                });
+                postTitleInput.value = '';
+                postContentInput.value = '';
+                writeModal.classList.add('hidden');
+                showCustomAlert('게시글이 성공적으로 등록되었습니다!');
+            } catch (e) {
+                console.error("게시글 추가 중 오류 발생: ", e);
+                showCustomAlert('게시글 등록에 실패했습니다.');
+            }
+        }
+
+        async function updatePost() {
+            if (!db || !userId || !currentEditingPostId) {
+                console.error("Firestore, 사용자 ID 또는 게시글 ID가 준비되지 않았습니다.");
+                return;
+            }
+            const title = editTitleInput.value.trim();
+            const content = editContentInput.value.trim();
+
+            if (!title || !content) {
+                showCustomAlert('제목과 내용을 모두 입력해주세요.');
+                return;
+            }
+
+            try {
+                const postRef = doc(db, `artifacts/${appId}/public/data/posts`, currentEditingPostId);
+                const postDoc = await getDoc(postRef);
+
+                if (postDoc.exists() && postDoc.data().authorId === userId) {
+                    await updateDoc(postRef, {
+                        title: title,
+                        content: content,
+                        // timestamp는 변경하지 않음
+                    });
+                    editModal.classList.add('hidden');
+                    showCustomAlert('게시글이 성공적으로 수정되었습니다!');
+                } else {
+                    showCustomAlert('게시글을 수정할 권한이 없습니다.');
+                }
+            } catch (e) {
+                console.error("게시글 수정 중 오류 발생: ", e);
+                showCustomAlert('게시글 수정에 실패했습니다.');
+            }
+        }
+
+        async function deletePost(postId) {
+            if (!db || !userId) {
+                console.error("Firestore 또는 사용자 ID가 준비되지 않았습니다.");
+                return;
+            }
+            // 사용자 정의 확인 모달을 사용
+            showCustomConfirm('정말로 이 게시글을 삭제하시겠습니까?', async () => {
+                try {
+                    const postRef = doc(db, `artifacts/${appId}/public/data/posts`, postId);
+                    const postDoc = await getDoc(postRef);
+
+                    if (postDoc.exists() && postDoc.data().authorId === userId) {
+                        await deleteDoc(postRef);
+                        showCustomAlert('게시글이 성공적으로 삭제되었습니다!');
+                    } else {
+                        showCustomAlert('게시글을 삭제할 권한이 없습니다.');
+                    }
+                } catch (e) {
+                    console.error("게시글 삭제 중 오류 발생: ", e);
+                    showCustomAlert('게시글 삭제에 실패했습니다.');
+                }
+            });
+        }
+
+        // HTML 이스케이프 함수
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        // --- Custom Alert/Confirm Modals (Replace alert/confirm) ---
+        function showCustomAlert(message) {
+            const alertModal = document.createElement('div');
+            alertModal.className = 'fixed inset-0 bg-black/70 flex items-center justify-center z-[2000]';
+            alertModal.innerHTML = `
+                <div class="bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-xs text-center">
+                    <p class="text-white text-lg mb-4">${message}</p>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md" onclick="this.closest('.fixed').remove()">확인</button>
+                </div>
+            `;
+            document.body.appendChild(alertModal);
+        }
+
+        function showCustomConfirm(message, onConfirm) {
+            const confirmModal = document.createElement('div');
+            confirmModal.className = 'fixed inset-0 bg-black/70 flex items-center justify-center z-[2000]';
+            confirmModal.innerHTML = `
+                <div class="bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-xs text-center">
+                    <p class="text-white text-lg mb-4">${message}</p>
+                    <div class="flex justify-center space-x-4">
+                        <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md" id="confirmYes">예</button>
+                        <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-md" id="confirmNo">아니오</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(confirmModal);
+
+            document.getElementById('confirmYes').onclick = () => {
+                onConfirm();
+                confirmModal.remove();
+            };
+            document.getElementById('confirmNo').onclick = () => {
+                confirmModal.remove();
+            };
+        }
+
+        // --- Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Sidebar Event Listeners
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', toggleSidebar);
+            }
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+            navLinks.forEach(link => {
+                link.addEventListener('click', closeSidebar);
+            });
+
+            // Community Board Event Listeners
+            if (writeBtn) {
+                writeBtn.addEventListener('click', () => {
+                    if (!userId) {
+                        showCustomAlert('게시글을 작성하려면 로그인이 필요합니다.'); // Firebase 인증이 완료되지 않은 경우
+                        return;
+                    }
+                    postTitleInput.value = '';
+                    postContentInput.value = '';
+                    writeModal.classList.remove('hidden');
+                });
+            }
+
+            if (cancelWriteBtn) {
+                cancelWriteBtn.addEventListener('click', () => {
+                    writeModal.classList.add('hidden');
+                });
+            }
+
+            if (submitWriteBtn) {
+                submitWriteBtn.addEventListener('click', addPost);
+            }
+
+            if (cancelEditBtn) {
+                cancelEditBtn.addEventListener('click', () => {
+                    editModal.classList.add('hidden');
+                    currentEditingPostId = null;
+                });
+            }
+
+            if (submitEditBtn) {
+                submitEditBtn.addEventListener('click', updatePost);
+            }
+
+            if (postList) {
+                postList.addEventListener('click', async (e) => {
+                    const editButton = e.target.closest('.edit-btn');
+                    const deleteButton = e.target.closest('.delete-btn');
+
+                    if (editButton) {
+                        currentEditingPostId = editButton.dataset.id;
+                        try {
+                            const postRef = doc(db, `artifacts/${appId}/public/data/posts`, currentEditingPostId);
+                            const postDoc = await getDoc(postRef);
+                            if (postDoc.exists()) {
+                                const data = postDoc.data();
+                                editTitleInput.value = data.title;
+                                editContentInput.value = data.content;
+                                editModal.classList.remove('hidden');
+                            } else {
+                                showCustomAlert('게시글을 찾을 수 없습니다.');
+                            }
+                        } catch (error) {
+                            console.error("게시글 불러오기 오류:", error);
+                            showCustomAlert('게시글을 불러오는 데 실패했습니다.');
+                        }
+                    } else if (deleteButton) {
+                        deletePost(deleteButton.dataset.id);
+                    }
+                });
+            }
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #0a0e1a;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Sidebar specific styles */
+        .side-nav {
+            transform: translateX(100%); /* Hidden by default */
+            /* transition 속성은 HTML 요소에 이미 정의되어 있습니다. */
+        }
+        .side-nav.translate-x-0 {
+            transform: translateX(0); /* Shown when active */
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(2) {
+            opacity: 0;
+        }
+        .nav-toggle.active .hamburger-icon span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+        .nav-toggle .hamburger-icon span {
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
 </head>
 <body class="bg-gray-900 text-gray-100">
-  <!-- Sidebar Navigation -->
+    <!-- Sidebar Navigation -->
     <div id="sidebar-toggle" class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
         <div class="hamburger-icon space-y-1.5">
             <span class="block w-6 h-0.5 bg-white"></span>
@@ -20,52 +423,57 @@
     </div>
     <nav id="sidebar" class="side-nav fixed right-0 top-0 w-72 h-full bg-gray-800/90 backdrop-blur-lg border-l-2 border-gray-700 z-[1000] shadow-2xl transition-transform duration-300 ease-in-out translate-x-full">
         <h3 class="text-center text-2xl font-bold gradient-text mt-16 mb-8">메뉴</h3>
-        <a href="https://mlfee.com" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">홈</a>
-        <a href="https://mlfee.com/community/" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700">커뮤니티</a>
-        <a href="https://www.mlfee.com/calc/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
-        <a href="https://www.mlfee.com/timer/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
-        <a href="https://www.mlfee.com/buff/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
-        <a href="#how-to-guide" id="guideLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
-        <a href="#" id="contactLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의</a>
+        <a href="/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">홈</a>
+        <a href="/community/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">커뮤니티</a>
+        <a href="calc/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
+        <a href="timer/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
+        <a href="buff/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
+        <a href="#guides" id="guideLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
+        <a href="#" id="contactLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의하기</a>
     </nav>
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[999] hidden"></div>
-  <header class="py-6 text-center bg-gray-800">
-    <h1 class="text-3xl font-bold text-blue-400">MLFEE 커뮤니티</h1>
-  </header>
-  <main class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-bold">게시글 목록</h2>
-      <button id="writeBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg">글쓰기</button>
+
+    <header class="py-6 text-center bg-gray-800">
+        <h1 class="text-3xl font-bold text-blue-400">MLFEE 커뮤니티</h1>
+    </header>
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">게시글 목록</h2>
+            <button id="writeBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg">글쓰기</button>
+        </div>
+        <div id="postList" class="space-y-4">
+            <!-- 게시글이 여기에 로드됩니다 -->
+        </div>
+    </main>
+
+    <!-- 글쓰기 모달 -->
+    <div id="writeModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden z-[1002]">
+        <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md shadow-xl">
+            <h3 class="text-xl font-bold mb-4 text-white">새 글 작성</h3>
+            <input id="postTitle" type="text" placeholder="제목" class="w-full mb-3 p-3 rounded bg-gray-700 text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500" />
+            <textarea id="postContent" rows="8" placeholder="내용" class="w-full mb-3 p-3 rounded bg-gray-700 text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500 resize-y"></textarea>
+            <div class="flex justify-end gap-2">
+                <button id="cancelWrite" class="bg-gray-600 hover:bg-gray-700 px-5 py-2 rounded-md text-white font-semibold">취소</button>
+                <button id="submitWrite" class="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-md text-white font-semibold">등록</button>
+            </div>
+        </div>
     </div>
-    <div id="postList" class="space-y-4"></div>
-  </main>
-  <!-- 글쓰기 모달 -->
-  <div id="writeModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden">
-    <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md">
-      <h3 class="text-xl font-bold mb-4">새 글 작성</h3>
-      <input id="postTitle" type="text" placeholder="제목" class="w-full mb-3 p-2 rounded bg-gray-700 text-white" />
-      <textarea id="postContent" rows="5" placeholder="내용" class="w-full mb-3 p-2 rounded bg-gray-700 text-white"></textarea>
-      <div class="flex justify-end gap-2">
-        <button id="cancelWrite" class="bg-gray-600 px-4 py-2 rounded text-white">취소</button>
-        <button id="submitWrite" class="bg-blue-600 px-4 py-2 rounded text-white">등록</button>
-      </div>
+
+    <!-- 수정 모달 -->
+    <div id="editModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden z-[1002]">
+        <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md shadow-xl">
+            <h3 class="text-xl font-bold mb-4 text-white">글 수정</h3>
+            <input id="editTitle" type="text" placeholder="제목" class="w-full mb-3 p-3 rounded bg-gray-700 text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500" />
+            <textarea id="editContent" rows="8" placeholder="내용" class="w-full mb-3 p-3 rounded bg-gray-700 text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500 resize-y"></textarea>
+            <div class="flex justify-end gap-2">
+                <button id="cancelEdit" class="bg-gray-600 hover:bg-gray-700 px-5 py-2 rounded-md text-white font-semibold">취소</button>
+                <button id="submitEdit" class="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-md text-white font-semibold">수정</button>
+            </div>
+        </div>
     </div>
-  </div>
-  <!-- 수정 모달 -->
-  <div id="editModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden">
-    <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md">
-      <h3 class="text-xl font-bold mb-4">글 수정</h3>
-      <input id="editTitle" type="text" placeholder="제목" class="w-full mb-3 p-2 rounded bg-gray-700 text-white" />
-      <textarea id="editContent" rows="5" placeholder="내용" class="w-full mb-3 p-2 rounded bg-gray-700 text-white"></textarea>
-      <div class="flex justify-end gap-2">
-        <button id="cancelEdit" class="bg-gray-600 px-4 py-2 rounded text-white">취소</button>
-        <button id="submitEdit" class="bg-blue-600 px-4 py-2 rounded text-white">수정</button>
-      </div>
-    </div>
-  </div>
-  <footer class="py-6 text-center bg-gray-800 mt-10">
-    <p class="text-gray-400">소년아서 제작</p>
-  </footer>
-  <script src="community.js" type="module"></script>
+
+    <footer class="py-6 text-center bg-gray-800 mt-10">
+        <p class="text-gray-400">소년아서 제작</p>
+    </footer>
 </body>
 </html>
