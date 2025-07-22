@@ -8,6 +8,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- 파비콘 (Favicon) 추가 -->
+    <link rel="icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
+    
+    <!-- Open Graph 이미지 추가 (소셜 미디어 공유 시 미리보기 이미지) -->
+    <meta property="og:image" content="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png">
+    <meta property="og:image:width" content="1200"> 
+    <meta property="og:image:height" content="630"> 
+
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -78,7 +88,11 @@
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[999] hidden"></div>
 
     <header class="py-6 text-center bg-gray-800">
-        <h1 class="text-3xl font-bold text-blue-400">MLFEE 커뮤니티</h1>
+        <!-- 기존 텍스트 로고를 이미지 로고로 변경 -->
+        <a href="/" class="inline-block">
+            <img src="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" alt="MLFEE 로고" class="h-10 mx-auto">
+        </a>
+        <h1 class="text-3xl font-bold text-blue-400 mt-2">MLFEE 커뮤니티</h1>
     </header>
     <main class="container mx-auto px-4 py-8">
         <div class="flex justify-between items-center mb-6">
@@ -171,11 +185,21 @@
         let appId;
         let isAuthReady = false; // Flag to track authentication readiness
 
-        // Firebase configuration and initialization
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        // Firebase configuration (직접 여기에 Firebase 프로젝트 설정을 붙여넣으세요)
+        const firebaseConfig = {
+            apiKey: "AIzaSyASDsgKULCrP_3I3jz5irdzfbO9TzSwBZ8",
+            authDomain: "mlfee-hub.firebaseapp.com",
+            projectId: "mlfee-hub",
+            storageBucket: "mlfee-hub.firebasestorage.app",
+            messagingSenderId: "330580584999",
+            appId: "1:330580584999:web:66410250d754fa68a2fc02",
+            measurementId: "G-VLQR1NXFFM"
+        };
+        // Canvas 환경에서 제공하는 __app_id가 있다면 사용하고, 없다면 firebaseConfig.projectId를 사용합니다.
+        appId = typeof __app_id !== 'undefined' ? __app_id : firebaseConfig.projectId; 
 
-        if (Object.keys(firebaseConfig).length > 0) {
+        // Firebase 설정이 유효한지 확인 (apiKey가 기본값 "YOUR_API_KEY"가 아닌지 확인)
+        if (Object.keys(firebaseConfig).length > 0 && firebaseConfig.apiKey !== "YOUR_API_KEY") { 
             try {
                 app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
@@ -186,47 +210,48 @@
                     if (user) {
                         userId = user.uid;
                     } else {
+                        // Canvas 환경에서 제공하는 토큰이 있다면 사용
                         if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                             try {
                                 await signInWithCustomToken(auth, __initial_auth_token);
                                 userId = auth.currentUser.uid;
                             } catch (error) {
-                                console.error("Custom token login failed:", error);
+                                console.error("Custom token 로그인 실패:", error);
                                 try {
-                                    await signInAnonymously(auth);
+                                    await signInAnonymously(auth); // 익명 로그인 시도
                                     userId = auth.currentUser.uid;
                                 } catch (anonError) {
-                                    console.error("Anonymous login failed:", anonError);
-                                    userId = crypto.randomUUID(); // Assign temporary ID if all logins fail
+                                    console.error("익명 로그인 실패:", anonError);
+                                    userId = crypto.randomUUID(); // 로그인 실패 시 임시 ID 할당
                                 }
                             }
                         } else {
                             try {
-                                await signInAnonymously(auth);
+                                await signInAnonymously(auth); // 익명 로그인 시도
                                 userId = auth.currentUser.uid;
                             } catch (anonError) {
-                                console.error("Anonymous login failed:", anonError);
-                                userId = crypto.randomUUID(); // Assign temporary ID if anonymous login fails
+                                console.error("익명 로그인 실패:", anonError);
+                                userId = crypto.randomUUID(); // 로그인 실패 시 임시 ID 할당
                             }
                         }
                     }
-                    isAuthReady = true; // Auth is ready (either logged in or anonymous/temp ID assigned)
-                    console.log("Firebase authentication ready. User ID:", userId);
+                    isAuthReady = true; // 인증 준비 완료
+                    console.log("Firebase 인증 준비 완료. User ID:", userId);
                     
-                    // Load posts only after auth is ready
+                    // 인증 완료 후 게시글 로드 시작
                     if (db) {
                         communityApp.loadPosts(); 
                     }
                 });
 
             } catch (firebaseInitError) {
-                console.error("Error initializing Firebase:", firebaseInitError);
-                userId = crypto.randomUUID(); // Assign temporary ID if Firebase init fails
-                isAuthReady = true; // Mark as ready to allow other app parts to function
+                console.error("Firebase 초기화 중 오류 발생:", firebaseInitError);
+                userId = crypto.randomUUID(); // Firebase 초기화 실패 시 임시 ID 할당
+                isAuthReady = true; // 앱이 동작하도록 isAuthReady를 true로 설정
                 document.addEventListener('DOMContentLoaded', () => {
                     const postList = document.getElementById('postList');
                     if (postList) {
-                        postList.innerHTML = '<p class="text-center text-red-400">Firebase 설정 오류로 게시판 기능을 사용할 수 없습니다.</p>';
+                        postList.innerHTML = '<p class="text-center text-red-400">Firebase 초기화 오류로 게시판 기능을 사용할 수 없습니다.</p>';
                     }
                     const writeBtn = document.getElementById('writeBtn');
                     if (writeBtn) {
@@ -238,9 +263,9 @@
                 });
             }
         } else {
-            console.error("Firebase configuration not provided. Community board functionality will be limited.");
-            userId = crypto.randomUUID(); // Assign temporary ID if no config
-            isAuthReady = true;
+            console.error("Firebase 설정이 제공되지 않았거나 유효하지 않습니다. 게시판 기능이 제한됩니다.");
+            userId = crypto.randomUUID(); // Firebase 설정이 없는 경우 임시 userId 할당
+            isAuthReady = true; // 앱이 동작하도록 isAuthReady를 true로 설정
             document.addEventListener('DOMContentLoaded', () => {
                 const postList = document.getElementById('postList');
                 if (postList) {
@@ -544,7 +569,7 @@
                         this.hideModal(this.elements.editModal);
                         this.showCustomAlert('게시글이 성공적으로 수정되었습니다!');
                     } else {
-                        this.showCustomAlert('게시글을 수정할 권한이 없거나 게시글을 찾을 수 없습니다.');
+                        this.showCustomAlert('게시글을 수정할 권한이 없습니다.');
                     }
                 } catch (e) {
                     console.error("Error updating post: ", e);
@@ -568,7 +593,7 @@
                             await deleteDoc(postRef);
                             this.showCustomAlert('게시글이 성공적으로 삭제되었습니다!');
                         } else {
-                            this.showCustomAlert('게시글을 삭제할 권한이 없거나 게시글을 찾을 수 없습니다.');
+                            this.showCustomAlert('게시글을 삭제할 권한이 없습니다.');
                         }
                     } catch (e) {
                         console.error("Error deleting post: ", e);
