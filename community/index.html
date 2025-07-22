@@ -8,413 +8,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // 전역 변수 선언 (Firebase 인스턴스 및 사용자 정보)
-        let app;
-        let db;
-        let auth;
-        let userId;
-        let appId;
-        let isAuthReady = false; // 인증 준비 상태를 추적하는 플래그
-
-        // Firebase 설정 및 초기화
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        if (Object.keys(firebaseConfig).length > 0) {
-            try {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                // 인증 상태 변경 리스너는 auth가 성공적으로 초기화된 후에만 설정
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        userId = user.uid;
-                    } else {
-                        // __initial_auth_token이 없으면 익명 로그인 시도
-                        if (typeof __initial_auth_token !== 'undefined') {
-                            try {
-                                await signInWithCustomToken(auth, __initial_auth_token);
-                                userId = auth.currentUser.uid;
-                            } catch (error) {
-                                console.error("Custom token 로그인 실패:", error);
-                                try {
-                                    await signInAnonymously(auth);
-                                    userId = auth.currentUser.uid;
-                                } catch (anonError) {
-                                    console.error("익명 로그인 실패:", anonError);
-                                    userId = crypto.randomUUID(); // 로그인 실패 시 임시 ID 할당
-                                }
-                            }
-                        } else {
-                            try {
-                                await signInAnonymously(auth);
-                                userId = auth.currentUser.uid;
-                            } catch (anonError) {
-                                console.error("익명 로그인 실패:", anonError);
-                                userId = crypto.randomUUID(); // 로그인 실패 시 임시 ID 할당
-                            }
-                        }
-                    }
-                    isAuthReady = true; // 인증 준비 완료
-                    console.log("Firebase 인증 준비 완료. User ID:", userId);
-                    // 인증 완료 후 게시글 로드 시작
-                    if (db) {
-                        loadPosts();
-                    }
-                });
-
-            } catch (firebaseInitError) {
-                console.error("Firebase 초기화 중 오류 발생:", firebaseInitError);
-                // Firebase 초기화 실패 시, isAuthReady를 false로 유지하고 userId를 임시로 설정
-                userId = crypto.randomUUID();
-                isAuthReady = true; // 인증은 안되었지만 앱은 동작하도록 isAuthReady를 true로 설정
-                // 게시글 로드는 Firebase가 없으므로 호출하지 않음
-            }
-        } else {
-            console.error("Firebase 설정이 제공되지 않았습니다. 게시판 기능이 제한됩니다.");
-            // Firebase 설정이 없는 경우, 임시 userId 할당 및 isAuthReady를 true로 설정하여 앱이 동작하도록 함
-            userId = crypto.randomUUID();
-            isAuthReady = true;
-            // Firebase가 없으므로 게시글 로드 시도하지 않음. 대신 사용자에게 메시지 표시.
-            document.addEventListener('DOMContentLoaded', () => {
-                const postList = document.getElementById('postList');
-                if (postList) {
-                    postList.innerHTML = '<p class="text-center text-red-400">Firebase 설정이 없어 게시판 기능을 사용할 수 없습니다.</p>';
-                }
-                const writeBtn = document.getElementById('writeBtn');
-                if (writeBtn) {
-                    writeBtn.disabled = true;
-                    writeBtn.textContent = '글쓰기 (비활성화)';
-                    writeBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                    writeBtn.classList.remove('hover:bg-blue-700');
-                }
-            });
-        }
-
-        appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-        // DOM Elements
-        const sidebarToggle = document.getElementById('sidebar-toggle');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebar-overlay');
-        const navLinks = document.querySelectorAll('#sidebar a');
-        const writeBtn = document.getElementById('writeBtn');
-        const writeModal = document.getElementById('writeModal');
-        const cancelWriteBtn = document.getElementById('cancelWrite');
-        const submitWriteBtn = document.getElementById('submitWrite');
-        const postTitleInput = document.getElementById('postTitle');
-        const postContentInput = document.getElementById('postContent');
-        const postList = document.getElementById('postList');
-        const editModal = document.getElementById('editModal');
-        const cancelEditBtn = document.getElementById('cancelEdit');
-        const submitEditBtn = document.getElementById('submitEdit');
-        const editTitleInput = document.getElementById('editTitle');
-        const editContentInput = document.getElementById('editContent');
-
-        let currentEditingPostId = null; // 수정 중인 게시글 ID
-
-        // --- Sidebar Functions ---
-        function toggleSidebar() {
-            console.log("toggleSidebar called. Current sidebar classes:", sidebar.classList);
-            // 사이드바가 현재 숨겨져 있으면 (translate-x-full), 보이게 함 (translate-x-0)
-            if (sidebar.classList.contains('translate-x-full')) {
-                sidebar.classList.remove('translate-x-full');
-                sidebar.classList.add('translate-x-0');
-                console.log("Sidebar opened. New classes:", sidebar.classList);
-            } else { // 사이드바가 현재 보이면 (translate-x-0), 숨김 (translate-x-full)
-                sidebar.classList.remove('translate-x-0');
-                sidebar.classList.add('translate-x-full');
-                console.log("Sidebar closed. New classes:", sidebar.classList);
-            }
-            sidebarToggle.classList.toggle('active');
-            sidebarOverlay.classList.toggle('hidden');
-            console.log("Overlay hidden state:", sidebarOverlay.classList.contains('hidden'));
-        }
-
-        function closeSidebar() {
-            console.log("closeSidebar called. Current sidebar classes:", sidebar.classList);
-            sidebar.classList.remove('translate-x-0');
-            sidebar.classList.add('translate-x-full');
-            sidebarToggle.classList.remove('active');
-            sidebarOverlay.classList.add('hidden');
-            console.log("Sidebar forced closed. New classes:", sidebar.classList);
-            console.log("Overlay hidden state:", sidebarOverlay.classList.contains('hidden'));
-        }
-
-        // --- Post Management Functions ---
-        async function loadPosts() {
-            if (!db || !isAuthReady) {
-                console.log("Firestore 또는 인증이 준비되지 않아 게시글을 로드할 수 없습니다.");
-                return;
-            }
-
-            const postsCollectionRef = collection(db, `artifacts/${appId}/public/data/posts`);
-            const q = query(postsCollectionRef); // orderBy는 성능 문제로 제외
-
-            onSnapshot(q, (snapshot) => {
-                postList.innerHTML = ''; // 기존 목록 초기화
-                const posts = [];
-                snapshot.forEach(doc => {
-                    posts.push({ id: doc.id, ...doc.data() });
-                });
-
-                // 클라이언트 측에서 시간 역순으로 정렬
-                posts.sort((a, b) => {
-                    if (a.timestamp && b.timestamp) {
-                        return b.timestamp.toDate() - a.timestamp.toDate();
-                    }
-                    return 0; // timestamp가 없는 경우 정렬하지 않음
-                });
-
-                if (posts.length === 0) {
-                    postList.innerHTML = '<p class="text-center text-gray-500">아직 게시글이 없습니다. 첫 게시글을 작성해보세요!</p>';
-                } else {
-                    posts.forEach(post => {
-                        const postElement = document.createElement('div');
-                        postElement.className = 'bg-gray-800 p-4 rounded-lg shadow-md';
-                        const postDate = post.timestamp ? new Date(post.timestamp.toDate()).toLocaleString() : '날짜 없음';
-
-                        postElement.innerHTML = `
-                            <h3 class="text-xl font-semibold text-blue-300 mb-2">${escapeHTML(post.title)}</h3>
-                            <p class="text-gray-300 mb-3 whitespace-pre-wrap">${escapeHTML(post.content)}</p>
-                            <div class="flex justify-between items-center text-sm text-gray-400">
-                                <span>작성자: ${escapeHTML(post.authorId || '익명')}</span>
-                                <span>${postDate}</span>
-                            </div>
-                            ${userId && post.authorId === userId ? `
-                                <div class="mt-4 flex justify-end space-x-2">
-                                    <button data-id="${post.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded-md text-sm">수정</button>
-                                    <button data-id="${post.id}" class="delete-btn bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm">삭제</button>
-                                </div>
-                            ` : ''}
-                        `;
-                        postList.appendChild(postElement);
-                    });
-                }
-            }, (error) => {
-                console.error("게시글 로드 중 오류 발생:", error);
-                postList.innerHTML = '<p class="text-center text-red-400">게시글을 불러오는 데 실패했습니다. 다시 시도해주세요.</p>';
-            });
-        }
-
-        async function addPost() {
-            if (!db || !userId) {
-                console.error("Firestore 또는 사용자 ID가 준비되지 않았습니다.");
-                return;
-            }
-            const title = postTitleInput.value.trim();
-            const content = postContentInput.value.trim();
-
-            if (!title || !content) {
-                showCustomAlert('제목과 내용을 모두 입력해주세요.');
-                return;
-            }
-
-            try {
-                await addDoc(collection(db, `artifacts/${appId}/public/data/posts`), {
-                    title: title,
-                    content: content,
-                    authorId: userId,
-                    timestamp: serverTimestamp()
-                });
-                postTitleInput.value = '';
-                postContentInput.value = '';
-                writeModal.classList.add('hidden');
-                showCustomAlert('게시글이 성공적으로 등록되었습니다!');
-            } catch (e) {
-                console.error("게시글 추가 중 오류 발생: ", e);
-                showCustomAlert('게시글 등록에 실패했습니다.');
-            }
-        }
-
-        async function updatePost() {
-            if (!db || !userId || !currentEditingPostId) {
-                console.error("Firestore, 사용자 ID 또는 게시글 ID가 준비되지 않았습니다.");
-                return;
-            }
-            const title = editTitleInput.value.trim();
-            const content = editContentInput.value.trim();
-
-            if (!title || !content) {
-                showCustomAlert('제목과 내용을 모두 입력해주세요.');
-                return;
-            }
-
-            try {
-                const postRef = doc(db, `artifacts/${appId}/public/data/posts`, currentEditingPostId);
-                const postDoc = await getDoc(postRef);
-
-                if (postDoc.exists() && postDoc.data().authorId === userId) {
-                    await updateDoc(postRef, {
-                        title: title,
-                        content: content,
-                        // timestamp는 변경하지 않음
-                    });
-                    editModal.classList.add('hidden');
-                    showCustomAlert('게시글이 성공적으로 수정되었습니다!');
-                } else {
-                    showCustomAlert('게시글을 수정할 권한이 없습니다.');
-                }
-            } catch (e) {
-                console.error("게시글 수정 중 오류 발생: ", e);
-                showCustomAlert('게시글 수정에 실패했습니다.');
-            }
-        }
-
-        async function deletePost(postId) {
-            if (!db || !userId) {
-                console.error("Firestore 또는 사용자 ID가 준비되지 않았습니다.");
-                return;
-            }
-            // 사용자 정의 확인 모달을 사용
-            showCustomConfirm('정말로 이 게시글을 삭제하시겠습니까?', async () => {
-                try {
-                    const postRef = doc(db, `artifacts/${appId}/public/data/posts`, postId);
-                    const postDoc = await getDoc(postRef);
-
-                    if (postDoc.exists() && postDoc.data().authorId === userId) {
-                        await deleteDoc(postRef);
-                        showCustomAlert('게시글이 성공적으로 삭제되었습니다!');
-                    } else {
-                        showCustomAlert('게시글을 삭제할 권한이 없습니다.');
-                    }
-                } catch (e) {
-                    console.error("게시글 삭제 중 오류 발생: ", e);
-                    showCustomAlert('게시글 삭제에 실패했습니다.');
-                }
-            });
-        }
-
-        // HTML 이스케이프 함수
-        function escapeHTML(str) {
-            const div = document.createElement('div');
-            div.appendChild(document.createTextNode(str));
-            return div.innerHTML;
-        }
-
-        // --- Custom Alert/Confirm Modals (Replace alert/confirm) ---
-        function showCustomAlert(message) {
-            const alertModal = document.createElement('div');
-            alertModal.className = 'fixed inset-0 bg-black/70 flex items-center justify-center z-[2000]';
-            alertModal.innerHTML = `
-                <div class="bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-xs text-center">
-                    <p class="text-white text-lg mb-4">${message}</p>
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md" onclick="this.closest('.fixed').remove()">확인</button>
-                </div>
-            `;
-            document.body.appendChild(alertModal);
-        }
-
-        function showCustomConfirm(message, onConfirm) {
-            const confirmModal = document.createElement('div');
-            confirmModal.className = 'fixed inset-0 bg-black/70 flex items-center justify-center z-[2000]';
-            confirmModal.innerHTML = `
-                <div class="bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-xs text-center">
-                    <p class="text-white text-lg mb-4">${message}</p>
-                    <div class="flex justify-center space-x-4">
-                        <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md" id="confirmYes">예</button>
-                        <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-md" id="confirmNo">아니오</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(confirmModal);
-
-            document.getElementById('confirmYes').onclick = () => {
-                onConfirm();
-                confirmModal.remove();
-            };
-            document.getElementById('confirmNo').onclick = () => {
-                confirmModal.remove();
-            };
-        }
-
-        // --- Event Listeners ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Sidebar Event Listeners
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', toggleSidebar);
-            }
-            if (sidebarOverlay) {
-                sidebarOverlay.addEventListener('click', closeSidebar);
-            }
-            navLinks.forEach(link => {
-                link.addEventListener('click', closeSidebar);
-            });
-
-            // Community Board Event Listeners
-            if (writeBtn) {
-                writeBtn.addEventListener('click', () => {
-                    if (!userId) {
-                        showCustomAlert('게시글을 작성하려면 로그인이 필요합니다.'); // Firebase 인증이 완료되지 않은 경우
-                        return;
-                    }
-                    postTitleInput.value = '';
-                    postContentInput.value = '';
-                    writeModal.classList.remove('hidden');
-                });
-            }
-
-            if (cancelWriteBtn) {
-                cancelWriteBtn.addEventListener('click', () => {
-                    writeModal.classList.add('hidden');
-                });
-            }
-
-            if (submitWriteBtn) {
-                submitWriteBtn.addEventListener('click', addPost);
-            }
-
-            if (cancelEditBtn) {
-                cancelEditBtn.addEventListener('click', () => {
-                    editModal.classList.add('hidden');
-                    currentEditingPostId = null;
-                });
-            }
-
-            if (submitEditBtn) {
-                submitEditBtn.addEventListener('click', updatePost);
-            }
-
-            if (postList) {
-                postList.addEventListener('click', async (e) => {
-                    const editButton = e.target.closest('.edit-btn');
-                    const deleteButton = e.target.closest('.delete-btn');
-
-                    if (editButton) {
-                        currentEditingPostId = editButton.dataset.id;
-                        try {
-                            const postRef = doc(db, `artifacts/${appId}/public/data/posts`, currentEditingPostId);
-                            const postDoc = await getDoc(postRef);
-                            if (postDoc.exists()) {
-                                const data = postDoc.data();
-                                editTitleInput.value = data.title;
-                                editContentInput.value = data.content;
-                                editModal.classList.remove('hidden');
-                            } else {
-                                showCustomAlert('게시글을 찾을 수 없습니다.');
-                            }
-                        } catch (error) {
-                            console.error("게시글 불러오기 오류:", error);
-                            showCustomAlert('게시글을 불러오는 데 실패했습니다.');
-                        }
-                    } else if (deleteButton) {
-                        deletePost(deleteButton.dataset.id);
-                    }
-                });
-            }
-        });
-    </script>
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
             background-color: #0a0e1a;
             background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
             background-size: 40px 40px;
+            color: #f3f4f6; /* Tailwind gray-100 */
         }
 
         .gradient-text {
@@ -426,7 +26,6 @@
         /* Sidebar specific styles */
         .side-nav {
             transform: translateX(100%); /* Hidden by default */
-            /* transition 속성은 HTML 요소에 이미 정의되어 있습니다. */
         }
         .side-nav.translate-x-0 {
             transform: translateX(0); /* Shown when active */
@@ -443,6 +42,17 @@
         .nav-toggle .hamburger-icon span {
             transition: all 0.3s ease-in-out;
         }
+
+        /* Modal animations */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+        
+        .modal-entering { animation: fadeIn 0.3s ease-out forwards; }
+        .modal-entering .modal-content { animation: slideIn 0.3s ease-out forwards; }
+        .modal-exiting { animation: fadeOut 0.3s ease-in forwards; }
+        .modal-exiting .modal-content { animation: slideOut 0.3s ease-in forwards; }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100">
@@ -477,12 +87,13 @@
         </div>
         <div id="postList" class="space-y-4">
             <!-- 게시글이 여기에 로드됩니다 -->
+            <p class="text-center text-gray-500">게시글을 불러오는 중입니다...</p>
         </div>
     </main>
 
     <!-- 글쓰기 모달 -->
     <div id="writeModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden z-[1002]">
-        <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md shadow-xl">
+        <div class="modal-content bg-gray-800 p-8 rounded-lg w-full max-w-md shadow-xl">
             <h3 class="text-xl font-bold mb-4 text-white">새 글 작성</h3>
             <input id="postTitle" type="text" placeholder="제목" class="w-full mb-3 p-3 rounded bg-gray-700 text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500" />
             <textarea id="postContent" rows="8" placeholder="내용" class="w-full mb-3 p-3 rounded bg-gray-700 text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500 resize-y"></textarea>
@@ -495,7 +106,7 @@
 
     <!-- 수정 모달 -->
     <div id="editModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden z-[1002]">
-        <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md shadow-xl">
+        <div class="modal-content bg-gray-800 p-8 rounded-lg w-full max-w-md shadow-xl">
             <h3 class="text-xl font-bold mb-4 text-white">글 수정</h3>
             <input id="editTitle" type="text" placeholder="제목" class="w-full mb-3 p-3 rounded bg-gray-700 text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500" />
             <textarea id="editContent" rows="8" placeholder="내용" class="w-full mb-3 p-3 rounded bg-gray-700 text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500 resize-y"></textarea>
@@ -506,8 +117,473 @@
         </div>
     </div>
 
+    <!-- Custom Alert Modal -->
+    <div id="customAlertModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden z-[2000]">
+        <div class="modal-content bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-xs text-center">
+            <p id="customAlertMessage" class="text-white text-lg mb-4"></p>
+            <button id="customAlertOkBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">확인</button>
+        </div>
+    </div>
+
+    <!-- Custom Confirm Modal -->
+    <div id="customConfirmModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden z-[2000]">
+        <div class="modal-content bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-xs text-center">
+            <p id="customConfirmMessage" class="text-white text-lg mb-4"></p>
+            <div class="flex justify-center space-x-4">
+                <button id="customConfirmYesBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md">예</button>
+                <button id="customConfirmNoBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-md">아니오</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="py-6 text-center bg-gray-800 mt-10">
         <p class="text-gray-400">소년아서 제작</p>
     </footer>
+
+    <script type="module">
+        // Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, 
+            signInAnonymously, 
+            signInWithCustomToken, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            getDocs, 
+            doc, 
+            updateDoc, 
+            deleteDoc, 
+            onSnapshot, 
+            query, 
+            orderBy, 
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase instances and user info
+        let app;
+        let db;
+        let auth;
+        let userId = null;
+        let appId;
+        let isAuthReady = false; // Flag to track authentication readiness
+
+        // Firebase configuration and initialization
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        if (Object.keys(firebaseConfig).length > 0) {
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Authentication state change listener
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                    } else {
+                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            try {
+                                await signInWithCustomToken(auth, __initial_auth_token);
+                                userId = auth.currentUser.uid;
+                            } catch (error) {
+                                console.error("Custom token login failed:", error);
+                                try {
+                                    await signInAnonymously(auth);
+                                    userId = auth.currentUser.uid;
+                                } catch (anonError) {
+                                    console.error("Anonymous login failed:", anonError);
+                                    userId = crypto.randomUUID(); // Assign temporary ID if all logins fail
+                                }
+                            }
+                        } else {
+                            try {
+                                await signInAnonymously(auth);
+                                userId = auth.currentUser.uid;
+                            } catch (anonError) {
+                                console.error("Anonymous login failed:", anonError);
+                                userId = crypto.randomUUID(); // Assign temporary ID if anonymous login fails
+                            }
+                        }
+                    }
+                    isAuthReady = true; // Auth is ready (either logged in or anonymous/temp ID assigned)
+                    console.log("Firebase authentication ready. User ID:", userId);
+                    
+                    // Load posts only after auth is ready
+                    if (db) {
+                        communityApp.loadPosts(); 
+                    }
+                });
+
+            } catch (firebaseInitError) {
+                console.error("Error initializing Firebase:", firebaseInitError);
+                userId = crypto.randomUUID(); // Assign temporary ID if Firebase init fails
+                isAuthReady = true; // Mark as ready to allow other app parts to function
+                document.addEventListener('DOMContentLoaded', () => {
+                    const postList = document.getElementById('postList');
+                    if (postList) {
+                        postList.innerHTML = '<p class="text-center text-red-400">Firebase 설정 오류로 게시판 기능을 사용할 수 없습니다.</p>';
+                    }
+                    const writeBtn = document.getElementById('writeBtn');
+                    if (writeBtn) {
+                        writeBtn.disabled = true;
+                        writeBtn.textContent = '글쓰기 (비활성화)';
+                        writeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                        writeBtn.classList.remove('hover:bg-blue-700');
+                    }
+                });
+            }
+        } else {
+            console.error("Firebase configuration not provided. Community board functionality will be limited.");
+            userId = crypto.randomUUID(); // Assign temporary ID if no config
+            isAuthReady = true;
+            document.addEventListener('DOMContentLoaded', () => {
+                const postList = document.getElementById('postList');
+                if (postList) {
+                    postList.innerHTML = '<p class="text-center text-red-400">Firebase 설정이 없어 게시판 기능을 사용할 수 없습니다.</p>';
+                }
+                const writeBtn = document.getElementById('writeBtn');
+                if (writeBtn) {
+                    writeBtn.disabled = true;
+                    writeBtn.textContent = '글쓰기 (비활성화)';
+                    writeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    writeBtn.classList.remove('hover:bg-blue-700');
+                }
+            });
+        }
+
+        // --- Utility Functions ---
+        // HTML escape function to prevent XSS
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        // --- Community App Class ---
+        class CommunityApp {
+            constructor() {
+                this.elements = this._queryElements();
+                this.currentEditingPostId = null; // ID of the post being edited
+                this._initEventListeners();
+            }
+
+            _queryElements() {
+                return {
+                    // Sidebar elements
+                    sidebarToggle: document.getElementById('sidebar-toggle'),
+                    sidebar: document.getElementById('sidebar'),
+                    sidebarOverlay: document.getElementById('sidebar-overlay'),
+                    navLinks: document.querySelectorAll('#sidebar a'),
+
+                    // Community board elements
+                    writeBtn: document.getElementById('writeBtn'),
+                    writeModal: document.getElementById('writeModal'),
+                    cancelWriteBtn: document.getElementById('cancelWrite'),
+                    submitWriteBtn: document.getElementById('submitWrite'),
+                    postTitleInput: document.getElementById('postTitle'),
+                    postContentInput: document.getElementById('postContent'),
+                    postList: document.getElementById('postList'),
+                    editModal: document.getElementById('editModal'),
+                    cancelEditBtn: document.getElementById('cancelEdit'),
+                    submitEditBtn: document.getElementById('submitEdit'),
+                    editTitleInput: document.getElementById('editTitle'),
+                    editContentInput: document.getElementById('editContent'),
+
+                    // Custom Alert/Confirm Modals
+                    customAlertModal: document.getElementById('customAlertModal'),
+                    customAlertMessage: document.getElementById('customAlertMessage'),
+                    customAlertOkBtn: document.getElementById('customAlertOkBtn'),
+                    customConfirmModal: document.getElementById('customConfirmModal'),
+                    customConfirmMessage: document.getElementById('customConfirmMessage'),
+                    customConfirmYesBtn: document.getElementById('customConfirmYesBtn'),
+                    customConfirmNoBtn: document.getElementById('customConfirmNoBtn'),
+                };
+            }
+
+            _initEventListeners() {
+                // Sidebar Event Listeners
+                if (this.elements.sidebarToggle) {
+                    this.elements.sidebarToggle.addEventListener('click', () => this.toggleSidebar());
+                }
+                if (this.elements.sidebarOverlay) {
+                    this.elements.sidebarOverlay.addEventListener('click', () => this.closeSidebar());
+                }
+                this.elements.navLinks.forEach(link => {
+                    link.addEventListener('click', () => this.closeSidebar());
+                });
+
+                // Community Board Event Listeners
+                if (this.elements.writeBtn) {
+                    this.elements.writeBtn.addEventListener('click', () => {
+                        // Check if user is logged in and not anonymous
+                        if (!userId || !auth.currentUser || auth.currentUser.isAnonymous) {
+                            this.showCustomAlert('게시글을 작성하려면 로그인이 필요합니다.');
+                            return;
+                        }
+                        this.elements.postTitleInput.value = '';
+                        this.elements.postContentInput.value = '';
+                        this.showModal(this.elements.writeModal);
+                    });
+                }
+
+                if (this.elements.cancelWriteBtn) {
+                    this.elements.cancelWriteBtn.addEventListener('click', () => {
+                        this.hideModal(this.elements.writeModal);
+                    });
+                }
+
+                if (this.elements.submitWriteBtn) {
+                    this.elements.submitWriteBtn.addEventListener('click', () => this.addPost());
+                }
+
+                if (this.elements.cancelEditBtn) {
+                    this.elements.cancelEditBtn.addEventListener('click', () => {
+                        this.hideModal(this.elements.editModal);
+                        this.currentEditingPostId = null;
+                    });
+                }
+
+                if (this.elements.submitEditBtn) {
+                    this.elements.submitEditBtn.addEventListener('click', () => this.updatePost());
+                }
+
+                if (this.elements.postList) {
+                    this.elements.postList.addEventListener('click', async (e) => {
+                        const editButton = e.target.closest('.edit-btn');
+                        const deleteButton = e.target.closest('.delete-btn');
+
+                        if (editButton) {
+                            this.currentEditingPostId = editButton.dataset.id;
+                            try {
+                                const postRef = doc(db, `artifacts/${appId}/public/data/posts`, this.currentEditingPostId);
+                                const postDoc = await getDoc(postRef);
+                                if (postDoc.exists()) {
+                                    const data = postDoc.data();
+                                    // Ensure only the author can edit
+                                    if (data.authorId === userId) { 
+                                        this.elements.editTitleInput.value = data.title;
+                                        this.elements.editContentInput.value = data.content;
+                                        this.showModal(this.elements.editModal);
+                                    } else {
+                                        this.showCustomAlert('게시글을 수정할 권한이 없습니다.');
+                                    }
+                                } else {
+                                    this.showCustomAlert('게시글을 찾을 수 없습니다.');
+                                }
+                            } catch (error) {
+                                console.error("Error loading post for edit:", error);
+                                this.showCustomAlert('게시글을 불러오는 데 실패했습니다.');
+                            }
+                        } else if (deleteButton) {
+                            this.deletePost(deleteButton.dataset.id);
+                        }
+                    });
+                }
+
+                // Custom Alert/Confirm button event listeners
+                this.elements.customAlertOkBtn.addEventListener('click', () => this.hideModal(this.elements.customAlertModal));
+                // Confirm buttons will have their click handlers set dynamically in showCustomConfirm
+            }
+
+            // --- Sidebar Functions ---
+            toggleSidebar() {
+                this.elements.sidebar.classList.toggle('translate-x-full');
+                this.elements.sidebarToggle.classList.toggle('active');
+                this.elements.sidebarOverlay.classList.toggle('hidden');
+            }
+
+            closeSidebar() {
+                this.elements.sidebar.classList.add('translate-x-full');
+                this.elements.sidebarToggle.classList.remove('active');
+                this.elements.sidebarOverlay.classList.add('hidden');
+            }
+
+            // --- Modal Functions (for write/edit modals) ---
+            showModal(modalElement) {
+                modalElement.classList.remove('hidden', 'modal-exiting');
+                modalElement.classList.add('modal-entering');
+            }
+
+            hideModal(modalElement) {
+                modalElement.classList.remove('modal-entering');
+                modalElement.classList.add('modal-exiting');
+                setTimeout(() => modalElement.classList.add('hidden'), 300);
+            }
+
+            // --- Custom Alert/Confirm Modals (Replacement for native alert/confirm) ---
+            showCustomAlert(message) {
+                this.elements.customAlertMessage.textContent = message;
+                this.showModal(this.elements.customAlertModal);
+            }
+
+            showCustomConfirm(message, onConfirmCallback) {
+                this.elements.customConfirmMessage.textContent = message;
+                this.showModal(this.elements.customConfirmModal);
+                this.elements.customConfirmYesBtn.onclick = () => {
+                    onConfirmCallback();
+                    this.hideModal(this.elements.customConfirmModal);
+                };
+                this.elements.customConfirmNoBtn.onclick = () => {
+                    this.hideModal(this.elements.customConfirmModal);
+                };
+            }
+
+            // --- Post Management Functions ---
+            async loadPosts() {
+                // Ensure Firebase is initialized and auth state is determined
+                if (!db || !isAuthReady) {
+                    console.log("Firestore or authentication not ready. Cannot load posts.");
+                    this.elements.postList.innerHTML = '<p class="text-center text-gray-500">게시글을 불러올 수 없습니다. 잠시 후 다시 시도해주세요.</p>';
+                    return;
+                }
+
+                const postsCollectionRef = collection(db, `artifacts/${appId}/public/data/posts`);
+                // Query posts, ordering by timestamp in descending order (newest first)
+                const q = query(postsCollectionRef, orderBy("timestamp", "desc")); 
+
+                // Listen for real-time updates
+                onSnapshot(q, (snapshot) => {
+                    this.elements.postList.innerHTML = ''; // Clear existing posts
+                    if (snapshot.empty) {
+                        this.elements.postList.innerHTML = '<p class="text-center text-gray-500">아직 게시글이 없습니다. 첫 게시글을 작성해보세요!</p>';
+                        return;
+                    }
+
+                    snapshot.forEach(doc => {
+                        const post = doc.data();
+                        const postId = doc.id;
+                        const postElement = document.createElement('div');
+                        postElement.className = 'bg-gray-800 p-4 rounded-lg shadow-md';
+                        const postDate = post.timestamp ? new Date(post.timestamp.toDate()).toLocaleString('ko-KR') : '날짜 없음';
+
+                        // Check if the current user is the author to show edit/delete buttons
+                        const isAuthor = userId && post.authorId === userId;
+
+                        postElement.innerHTML = `
+                            <h3 class="text-xl font-semibold text-blue-300 mb-2">${escapeHTML(post.title)}</h3>
+                            <p class="text-gray-300 mb-3 whitespace-pre-wrap">${escapeHTML(post.content)}</p>
+                            <div class="flex justify-between items-center text-sm text-gray-400">
+                                <span>작성자: ${escapeHTML(post.authorId || '익명')}</span>
+                                <span>${postDate}</span>
+                            </div>
+                            ${isAuthor ? `
+                                <div class="mt-4 flex justify-end space-x-2">
+                                    <button data-id="${postId}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded-md text-sm">수정</button>
+                                    <button data-id="${postId}" class="delete-btn bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm">삭제</button>
+                                </div>
+                            ` : ''}
+                        `;
+                        this.elements.postList.appendChild(postElement);
+                    });
+                }, (error) => {
+                    console.error("Error loading posts:", error);
+                    this.elements.postList.innerHTML = '<p class="text-center text-red-400">게시글을 불러오는 데 실패했습니다. 다시 시도해주세요.</p>';
+                });
+            }
+
+            async addPost() {
+                if (!db || !userId || !auth.currentUser || auth.currentUser.isAnonymous) {
+                    console.error("Firestore or user not properly authenticated.");
+                    this.showCustomAlert('게시글을 작성하려면 로그인이 필요합니다.');
+                    return;
+                }
+                const title = this.elements.postTitleInput.value.trim();
+                const content = this.elements.postContentInput.value.trim();
+
+                if (!title || !content) {
+                    this.showCustomAlert('제목과 내용을 모두 입력해주세요.');
+                    return;
+                }
+
+                try {
+                    await addDoc(collection(db, `artifacts/${appId}/public/data/posts`), {
+                        title: title,
+                        content: content,
+                        authorId: userId,
+                        timestamp: serverTimestamp() // Use server timestamp for consistency
+                    });
+                    this.elements.postTitleInput.value = '';
+                    this.elements.postContentInput.value = '';
+                    this.hideModal(this.elements.writeModal);
+                    this.showCustomAlert('게시글이 성공적으로 등록되었습니다!');
+                } catch (e) {
+                    console.error("Error adding post: ", e);
+                    this.showCustomAlert('게시글 등록에 실패했습니다.');
+                }
+            }
+
+            async updatePost() {
+                if (!db || !userId || !this.currentEditingPostId) {
+                    console.error("Firestore, user ID, or post ID not ready for update.");
+                    this.showCustomAlert('게시글을 수정할 수 없습니다. 다시 시도해주세요.');
+                    return;
+                }
+                const title = this.elements.editTitleInput.value.trim();
+                const content = this.elements.editContentInput.value.trim();
+
+                if (!title || !content) {
+                    this.showCustomAlert('제목과 내용을 모두 입력해주세요.');
+                    return;
+                }
+
+                try {
+                    const postRef = doc(db, `artifacts/${appId}/public/data/posts`, this.currentEditingPostId);
+                    const postDoc = await getDoc(postRef);
+
+                    if (postDoc.exists() && postDoc.data().authorId === userId) {
+                        await updateDoc(postRef, {
+                            title: title,
+                            content: content,
+                            // timestamp is not updated on edit
+                        });
+                        this.hideModal(this.elements.editModal);
+                        this.showCustomAlert('게시글이 성공적으로 수정되었습니다!');
+                    } else {
+                        this.showCustomAlert('게시글을 수정할 권한이 없거나 게시글을 찾을 수 없습니다.');
+                    }
+                } catch (e) {
+                    console.error("Error updating post: ", e);
+                    this.showCustomAlert('게시글 수정에 실패했습니다.');
+                }
+            }
+
+            async deletePost(postId) {
+                if (!db || !userId) {
+                    console.error("Firestore or user ID not ready for delete.");
+                    this.showCustomAlert('게시글을 삭제할 수 없습니다. 다시 시도해주세요.');
+                    return;
+                }
+                
+                this.showCustomConfirm('정말로 이 게시글을 삭제하시겠습니까?', async () => {
+                    try {
+                        const postRef = doc(db, `artifacts/${appId}/public/data/posts`, postId);
+                        const postDoc = await getDoc(postRef);
+
+                        if (postDoc.exists() && postDoc.data().authorId === userId) {
+                            await deleteDoc(postRef);
+                            this.showCustomAlert('게시글이 성공적으로 삭제되었습니다!');
+                        } else {
+                            this.showCustomAlert('게시글을 삭제할 권한이 없거나 게시글을 찾을 수 없습니다.');
+                        }
+                    } catch (e) {
+                        console.error("Error deleting post: ", e);
+                        this.showCustomAlert('게시글 삭제에 실패했습니다.');
+                    }
+                });
+            }
+        }
+
+        // Initialize the CommunityApp when the DOM is fully loaded
+        let communityApp;
+        document.addEventListener('DOMContentLoaded', () => {
+            communityApp = new CommunityApp();
+            // loadPosts is now called within onAuthStateChanged to ensure Firebase is ready
+        });
+    </script>
 </body>
 </html>
