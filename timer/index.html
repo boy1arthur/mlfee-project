@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>레이드 크로니클 - 메이플랜드 리저렉션 타이머</title>
-    
+    <title>레이드 크로니클 - 메이플랜드 리저렉션 타이머</title>    
     <!-- SEO Meta Tags -->
     <meta name="description" content="자쿰, 혼테일 원정 필수 도구! 레이드 크로니클로 비숍의 리저렉션 쿨타임을 완벽하게 관리하고, 파티원들과 실시간으로 상황을 공유하세요.">
     <meta name="keywords" content="메이플랜드, 메랜, 리저렉션, 타이머, 리저, 자쿰, 혼테일, 원정대, 레이드, 비숍, MLFEE, 메피">
@@ -12,26 +11,16 @@
     <meta property="og:description" content="실시간 동기화와 지능형 시간 안내로 레이드의 안정성을 높여보세요.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.mlfee.com/timer/">
-    <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLFEE(메피) 허브 | 메이플랜드 필수 도구</title>
-    <meta name="description" content="원정, 더 이상 어렵지 않아요! MLFEE(메피)에서 수수료 계산기, 리저렉션 타이머, 버프 타이머 등 다양한 편의 도구를 만나보세요.">
-    <meta name="keywords" content="메이플랜드, 메랜 수수료 계산기, 리저렉션 타이머, 버프 타이머, 메피, MLFEE, 자쿰, 혼테일, 공략">
-    <meta property="og:title" content="MLFEE(메피) 메이플랜드 필수 도구">
-    <meta property="og:description" content="자쿰, 혼테일 원정을 위한 필수 도구! 수수료 계산, 리저 타이머, 버프 관리까지 더 쉬워집니다.">
-    <!-- 파비콘 (Favicon) 추가: 브라우저 탭에 표시될 아이콘입니다. -->
-    <!-- 이 'href' 속성에 로고 이미지 URL을 넣어주세요. -->
+    
+    <!-- 파비콘 (Favicon) 추가 -->
     <link rel="icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
     
-    <!-- Open Graph 이미지 추가: 소셜 미디어(카카오톡, 페이스북 등) 공유 시 미리보기 이미지입니다. -->
-    <!-- 이 'content' 속성에 로고 이미지 URL을 넣어주세요. -->
+    <!-- Open Graph 이미지 추가 (소셜 미디어 공유 시 미리보기 이미지) -->
     <meta property="og:image" content="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png">
     <meta property="og:image:width" content="1200"> 
-    <meta property="og:image:height" content="630">     
+    <meta property="og:image:height" content="630"> 
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -41,912 +30,6 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615"
      crossorigin="anonymous"></script>
      
-    <style>
-        html { scroll-behavior: smooth; }
-        body { 
-            font-family: 'Noto Sans KR', sans-serif; 
-            background-color: #0a0e1a;
-            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
-            background-size: 40px 40px;
-            color: #d1d5db;
-        }
-        .card-hover { transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out; }
-        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 0 15px rgba(59, 130, 246, 0.2); }
-        .tool-card:hover, .supporter-card:hover { border-color: rgba(59, 130, 246, 0.5); }
-        
-        .shine-effect {
-            position: relative;
-            background: linear-gradient(to right, #38BDF8, #3B82F6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .shine-effect::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            background-size: 200% 100%;
-            animation: shine 5s linear infinite;
-        }
-        @keyframes shine {
-            0% { background-position: 200% center; }
-            100% { background-position: -200% center; }
-        }
-
-        .section-title.text-4xl::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6rem;
-            height: 0.25rem;
-            background-color: #3b82f6;
-            border-radius: 9999px;
-        }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
-        
-        .modal-entering { animation: fadeIn 0.3s ease-out forwards; }
-        .modal-entering .modal-content { animation: slideIn 0.3s ease-out forwards; }
-        .modal-exiting { animation: fadeOut 0.3s ease-in forwards; }
-        .modal-exiting .modal-content { animation: slideOut 0.3s ease-in forwards; }
-
-        .hamburger-icon span { transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; }
-        .nav-toggle.active .hamburger-icon span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-        .nav-toggle.active .hamburger-icon span:nth-child(2) { opacity: 0; }
-        .nav-toggle.active .hamburger-icon span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-        
-        /* [수정] hover 방식 대신 JS로 제어하기 위한 CSS 변경 */
-        .profile-dropdown { display: none; }
-        .profile-dropdown.show { display: block; }
-    </style>
-</head>
-<body class="antialiased">
-    
-    <!-- Header with Auth buttons -->
-    <header class="py-4">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <a href="/" class="inline-block text-2xl sm:text-3xl font-bold text-blue-400">
-                <span class="text-white">MLFEE</span>(메피)
-            </a>
-            <div id="auth-container" class="flex items-center gap-4">
-                <!-- Logged out state -->
-                <div id="logged-out-view">
-                    <button id="login-btn" class="text-gray-300 hover:text-sky-400 transition">로그인</button>
-                    <button id="signup-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">회원가입</button>
-                </div>
-                <!-- Logged in state -->
-                <div id="logged-in-view" class="hidden relative profile-container">
-                    <div class="flex items-center gap-2 cursor-pointer">
-                        <img id="user-avatar" src="https://placehold.co/32x32/374151/d1d5db?text=M" class="w-8 h-8 rounded-full border-2 border-slate-500">
-                        <span id="user-nickname" class="font-semibold text-white">닉네임</span>
-                    </div>
-                    <div class="profile-dropdown absolute right-0 mt-2 w-48 bg-slate-800 rounded-lg shadow-lg py-1 border border-slate-700 z-10">
-                        <a href="#" id="profile-settings-link" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700">프로필 설정</a>
-                        <a href="/community/index.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700">커뮤니티</a>
-                        <button id="logout-btn" class="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-slate-700">로그아웃</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-    
-    <!-- Sidebar Navigation -->
-    <div id="sidebar-toggle" class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
-        <div class="hamburger-icon space-y-1.5">
-            <span class="block w-6 h-0.5 bg-white"></span>
-            <span class="block w-6 h-0.5 bg-white"></span>
-            <span class="block w-6 h-0.5 bg-white"></span>
-        </div>
-    </div>
-    <nav id="sidebar" class="fixed right-0 top-0 w-72 h-full bg-gray-800/90 backdrop-blur-lg border-l-2 border-gray-700 z-[1000] shadow-2xl transition-transform duration-300 ease-in-out translate-x-full">
-        <h3 class="text-center text-2xl font-bold text-blue-400 mt-16 mb-8">메뉴</h3>
-        <a href="/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">홈</a>
-        <a href="/community/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">커뮤니티</a>
-        <a href="#" id="updatesLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">업데이트</a>
-        <a href="calc/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
-        <a href="timer/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
-        <a href="buff/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
-        <a href="#guides" id="guideLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
-        <a href="#" id="contactLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의하기</a>
-    </nav>
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[999] hidden"></div>
-    
-    <div class="main-content transition-all duration-300 ease-in-out">
-        <main>
-            <section class="hero text-center pt-12 pb-16 sm:pt-16 sm:pb-24">
-                <div class="container mx-auto px-4">
-                    <h1 class="text-4xl sm:text-6xl font-black leading-tight shine-effect">
-                        원정, 더 이상 어렵지 않아요!
-                    </h1>
-                    <p class="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto my-10">
-                        복잡한 수수료 계산, 아슬아슬한 리저렉션 관리, 정신없는 버프 리필까지...<br>
-                        메피의 스마트한 도구들과 함께라면, 당신도 최고의 원정대원이 될 수 있습니다.
-                    </p>
-                    <div>
-                        <a href="#tools" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition duration-300 inline-block shadow-lg hover:shadow-blue-500/50">
-                            핵심 도구 바로가기
-                        </a>
-                    </div>
-                </div>
-            </section>
-            
-            <div class="container mx-auto px-4 my-12">
-                <div class="ad-container w-full min-h-[90px] bg-slate-900/50 rounded-lg flex justify-center items-center">
-                    <ins class="adsbygoogle"
-                         style="display:block; width:100%; text-align:center;"
-                         data-ad-client="ca-pub-8602495420447615"
-                         data-ad-slot="1234567890"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                </div>
-            </div>
-
-            <!-- Rest of the main content sections (tools, guides, etc.) remain the same -->
-            <section id="tools" class="py-20">
-                <div class="container mx-auto px-4">
-                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">MLFEE 핵심 도구</span></h2>
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <a href="calc/index.html" class="tool-link block">
-                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
-                                <div class="text-red-500 mb-6">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h3m-3-7h3m-6.128 9.872A3 3 0 006.872 21h10.256a3 3 0 002.872-3.128V7.128A3 3 0 0017.128 4H6.872a3 3 0 00-2.872 3.128v10.744z" /></svg>
-                                </div>
-                                <h3 class="text-2xl font-bold mb-4 text-red-400 text-center">N빵마스터 (수수료 계산기)</h3>
-                                <p class="text-gray-400">메소 수수료 '수작'부터 N인 파티 분배, 택배 정산, 목표 금액 역산까지 원클릭으로 해결하세요.</p>
-                            </div>
-                        </a>
-                        <a href="timer/index.html" class="tool-link block">
-                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
-                                <div class="text-blue-500 mb-6">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                </div>
-                                <h3 class="text-2xl font-bold mb-4 text-blue-400 text-center">레이드 크로니클 (리저 타이머)</h3>
-                                <p class="text-gray-400">비숍의 리저렉션 쿨타임을 정확히 체크하고, 다음 예상 시간을 공유하여 안정적인 레이드를 운영하세요.</p>
-                            </div>
-                        </a>
-                        <a href="buff/index.html" class="tool-link block">
-                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
-                                <div class="text-green-500 mb-6">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <h3 class="text-2xl font-bold mb-4 text-green-400 text-center">메피 버피 (실시간 버프 관리)</h3>
-                                <p class="text-gray-400">홀리심볼, 샤프 아이즈 등 주요 버프 스킬의 주기를 관리하고, 음성으로 리필 타이밍을 알려드립니다.</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </section>
-            <section id="guides" class="py-20 bg-gray-900/50">
-                <div class="container mx-auto px-4">
-                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">원정대 필승 공략집</span></h2>
-                    <div class="space-y-16">
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                            <div>
-                                <h3 class="text-3xl font-bold text-white mb-4">수수료, 아는 만큼 아낀다!</h3>
-                                <p class="mb-6 text-lg">고가의 아이템을 거래할 때, 6%에 달하는 수수료는 큰 부담입니다. 하지만 메이플랜드의 수수료 시스템은 금액 구간별로 세율이 다르다는 점을 이용하면, 거래를 여러 번에 나누어 총 수수료를 획기적으로 줄일 수 있습니다. 이것이 바로 '수작'의 핵심 원리입니다.</p>
-                                <p class="text-lg bg-slate-800 p-4 rounded-lg border-l-4 border-red-500">N빵마스터는 이 복잡한 계산을 버튼 하나로 해결해줍니다. 최적의 분할 횟수와 금액을 찾아, 당신의 소중한 메소를 지켜드립니다.</p>
-                            </div>
-                            <div class="flex justify-center p-4 bg-slate-800/50 rounded-lg">
-                                <svg width="100%" height="100%" viewBox="0 0 500 300" class="max-w-full">
-                                    <defs>
-                                        <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
-                                            <stop offset="100%" style="stop-color:#b91c1c;stop-opacity:1" />
-                                        </linearGradient>
-                                    </defs>
-                                    <line x1="50" y1="250" x2="450" y2="250" stroke="#475569" stroke-width="2"/>
-                                    <line x1="50" y1="50" x2="50" y2="250" stroke="#475569" stroke-width="2"/>
-                                    <text x="250" y="285" font-family="Noto Sans KR" font-size="14" fill="#9ca3af" text-anchor="middle">거래 금액</text>
-                                    <text x="15" y="150" font-family="Noto Sans KR" font-size="14" fill="#9ca3af" transform="rotate(-90 15,150)" text-anchor="middle">수수료율</text>
-                                    
-                                    <rect x="80" y="100" width="60" height="150" fill="url(#barGradient)"/>
-                                    <text x="110" y="90" font-family="Noto Sans KR" font-size="16" fill="#f87171" text-anchor="middle">6%</text>
-                                    <text x="110" y="265" font-family="Noto Sans KR" font-size="12" fill="#9ca3af" text-anchor="middle">~1억</text>
-
-                                    <rect x="180" y="125" width="60" height="125" fill="url(#barGradient)"/>
-                                    <text x="210" y="115" font-family="Noto Sans KR" font-size="16" fill="#f87171" text-anchor="middle">5%</text>
-                                    <text x="210" y="265" font-family="Noto Sans KR" font-size="12" fill="#9ca3af" text-anchor="middle">~2500만</text>
-
-                                    <rect x="280" y="150" width="60" height="100" fill="url(#barGradient)"/>
-                                    <text x="310" y="140" font-family="Noto Sans KR" font-size="16" fill="#f87171" text-anchor="middle">4%</text>
-                                    <text x="310" y="265" font-family="Noto Sans KR" font-size="12" fill="#9ca3af" text-anchor="middle">~1000만</text>
-                                    
-                                    <rect x="380" y="200" width="60" height="50" fill="url(#barGradient)"/>
-                                    <text x="410" y="190" font-family="Noto Sans KR" font-size="16" fill="#f87171" text-anchor="middle">1.8%</text>
-                                    <text x="410" y="265" font-family="Noto Sans KR" font-size="12" fill="#9ca3af" text-anchor="middle">~100만</text>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                            <div class="order-last lg:order-first flex justify-center p-4 bg-slate-800/50 rounded-lg">
-                               <svg width="100%" height="100%" viewBox="0 0 500 300" class="max-w-full">
-                                    <path d="M 100 150 A 100 100 0 1 1 400 150" stroke="#3b82f6" stroke-width="15" fill="none" stroke-dasharray="314" stroke-dashoffset="0"/>
-                                    <path d="M 100 150 A 100 100 0 1 1 400 150" stroke="#0ea5e9" stroke-width="15" fill="none" stroke-dasharray="314" stroke-dashoffset="157">
-                                        <animate attributeName="stroke-dashoffset" from="157" to="-157" dur="3s" repeatCount="indefinite" />
-                                    </path>
-                                    <text x="250" y="130" font-family="Noto Sans KR" font-size="24" fill="#e5e7eb" text-anchor="middle">리저렉션</text>
-                                    <text x="250" y="170" font-family="Noto Sans KR" font-size="20" fill="#e5e7eb" text-anchor="middle">15분 지속 / 30분 쿨타임</text>
-                                    <text x="250" y="250" font-family="Noto Sans KR" font-size="24" fill="#34d399" text-anchor="middle" font-weight="bold">안전 사이클: 14분</text>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-3xl font-bold text-white mb-4">14분의 마법, 리저 사이클</h3>
-                                <p class="mb-6 text-lg">리저렉션의 쿨타임은 30분, 버프 지속 시간은 15분입니다. 파티의 전멸을 막기 위해서는 15분 안에 다음 리저렉션을 받아야 합니다. 레이드 크로니클은 1분의 안전 마진을 두어 **14분 주기**로 리저렉션을 사용하도록 유도합니다.</p>
-                                <p class="text-lg bg-slate-800 p-4 rounded-lg border-l-4 border-blue-500">사망자 발생 시, 14분 뒤의 권장 시간과 그 이후의 예상 시간까지 자동으로 계산하고 음성으로 알려주어, 레이드 오더가 파티의 생존을 완벽하게 책임질 수 있도록 돕습니다.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section id="zakum-guide" class="py-20">
-                <div class="container mx-auto px-4">
-                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">자쿰 원정대 준비하기</span></h2>
-                    <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover">
-                        <p class="text-center text-xl mb-8">자쿰 원정, 더 이상 두렵지 않습니다. 메피와 함께라면 철저한 준비가 가능합니다.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                            <div>
-                                <div class="bg-yellow-500 text-gray-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-3xl font-bold">1</div>
-                                <h4 class="text-xl font-bold text-white mb-2">파티 구성</h4>
-                                <p class="text-gray-400">안정적인 격파를 위해 격수, 비숍, 유틸 직업의 균형을 맞추는 것이 중요합니다.</p>
-                            </div>
-                            <div>
-                                <div class="bg-yellow-500 text-gray-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-3xl font-bold">2</div>
-                                <h4 class="text-xl font-bold text-white mb-2">필수 준비물</h4>
-                                <p class="text-gray-400">'불의 눈', 만병통치약, 각종 버프 물약을 넉넉히 챙겨 만일의 사태에 대비하세요.</p>
-                            </div>
-                            <div>
-                                <div class="bg-yellow-500 text-gray-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-3xl font-bold">3</div>
-                                <h4 class="text-xl font-bold text-white mb-2">타이머 세팅</h4>
-                                <p class="text-gray-400">레이드 시작 전, '레이드 크로니클'과 '메피 버피'를 세팅하여 완벽한 시간 관리를 준비하세요.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <div class="container mx-auto px-4 my-12">
-                <div class="ad-container w-full min-h-[90px] bg-slate-900/50 rounded-lg flex justify-center items-center">
-                       <ins class="adsbygoogle"
-                            style="display:block; width:100%;"
-                            data-ad-client="ca-pub-8602495420447615"
-                            data-ad-slot="2345678901"
-                            data-ad-format="auto"
-                            data-full-width-responsive="true"></ins>
-                </div>
-            </div>
-            <section id="cheer-comments" class="py-20 bg-gray-900/50">
-                <div class="container mx-auto px-4">
-                    <div class="flex flex-col sm:flex-row justify-between items-center mb-12 gap-4">
-                        <h2 class="section-title text-4xl font-black text-center sm:text-left !mb-0 relative pb-4"><span class="shine-effect">응원과 격려의 한마디</span></h2>
-                        <button id="writeCommentBtn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-lg transition-colors w-full sm:w-auto">응원 댓글 남기기</button>
-                    </div>
-                    <div id="comment-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Comments will be injected here by JavaScript -->
-                    </div>
-                </div>
-            </section>
-            <section id="hall-of-fame" class="py-20">
-                <div class="container mx-auto px-4">
-                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">명예의 전당</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="supporter-card bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col">
-                            <div class="flex items-center mb-4">
-                                <i class="fas fa-scroll text-yellow-400 text-2xl mr-4"></i>
-                                <h4 class="font-bold text-lg text-white">[협찬] 장로 스탄</h4>
-                            </div>
-                            <p class="text-slate-300 italic">"리스항구의 발전을 위해 MLFEE를 공식 후원하네. 유저들이여, 이곳에서 정보를 얻고 메이플 월드를 탐험하게나."</p>
-                        </div>
-                        <div class="supporter-card bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col">
-                            <div class="flex items-center mb-4">
-                                <i class="fas fa-gem text-amber-500 text-2xl mr-4"></i>
-                                <h4 class="font-bold text-lg text-white">[후원] 밍밍부인</h4>
-                            </div>
-                            <p class="text-amber-400 italic">"남편 냄비뚜껑 퀘스트 깰 때 이 사이트가 큰 도움이 됐어요. 고마워서 제 비상금으로 후원합니다."</p>
-                        </div>
-                        <div class="supporter-card bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col">
-                            <div class="flex items-center mb-4">
-                                <i class="fas fa-leaf text-green-500 text-2xl mr-4"></i>
-                                <h4 class="font-bold text-lg text-white">[지원] 주황버섯</h4>
-                            </div>
-                            <p class="text-green-400 italic">"메소가 부족해서... 대신 저를 잡으면 나오는 '주황버섯의 갓' 100개로 후원합니다."</p>
-                        </div>
-                        <div class="md:col-span-2 lg:col-span-3 bg-gradient-to-r from-blue-600 to-sky-500 p-8 rounded-2xl text-center flex flex-col sm:flex-row items-center justify-center gap-8 card-hover">
-                           <div class="flex-grow">
-                               <h3 class="text-3xl font-black text-white">이 도구가 도움이 되셨다면,</h3>
-                               <p class="text-blue-200 mt-2 text-xl">다음 아이디어를 위한 ☕ 따뜻한 응원 한 잔, 어떠세요?</p>
-                           </div>
-                           <button id="donateBtn" class="bg-white text-blue-600 font-bold py-3 px-8 rounded-lg text-lg transition-transform hover:scale-105 flex-shrink-0">커피 한 잔 선물하기</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer class="text-center py-10 mt-10 border-t border-gray-800">
-            <div class="container mx-auto px-4 space-y-4">
-                <div class="flex justify-center items-center space-x-4 text-gray-400 text-sm">
-                    <a href="/about.html" class="hover:text-sky-400 transition">사이트 소개</a>
-                    <span class="text-gray-600">|</span>
-                    <a href="/terms.html" class="hover:text-sky-400 transition">이용약관</a>
-                    <span class="text-gray-600">|</span>
-                    <a href="/privacy.html" class="hover:text-sky-400 transition">개인정보처리방침</a>
-                </div>
-                <p class="text-gray-500">소년아서 제작</p>
-            </div>
-        </footer>
-    </div>
-    
-    <!-- Modals -->
-    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-left border border-slate-700">
-            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
-            <h3 id="auth-title" class="text-2xl font-bold text-sky-400 mb-6 text-center">로그인</h3>
-            <form id="auth-form">
-                <div class="space-y-4">
-                    <div id="nickname-field" class="hidden">
-                        <label for="nickname" class="block text-sm font-medium text-gray-300 mb-1">닉네임</label>
-                        <input type="text" id="nickname" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500" placeholder="게임 닉네임을 입력하세요">
-                    </div>
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-300 mb-1">이메일</label>
-                        <input type="email" id="email" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
-                    </div>
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-300 mb-1">비밀번호</label>
-                        <input type="password" id="password" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
-                    </div>
-                </div>
-                <p id="auth-error" class="text-red-400 text-sm mt-4 h-5"></p>
-                <div class="mt-6">
-                    <button type="submit" id="auth-submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">로그인</button>
-                </div>
-            </form>
-            <p class="text-center text-sm text-gray-400 mt-6">
-                <span id="auth-switch-text">계정이 없으신가요?</span>
-                <button id="auth-switch-btn" class="font-semibold text-sky-400 hover:underline">회원가입</button>
-            </p>
-        </div>
-    </div>
-    
-    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-left border border-slate-700">
-            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
-            <h3 class="text-2xl font-bold text-sky-400 mb-6 text-center">프로필 설정</h3>
-            <form id="profile-form">
-                <div class="space-y-4">
-                    <div>
-                        <label for="profile-nickname" class="block text-sm font-medium text-gray-300 mb-1">닉네임</label>
-                        <input type="text" id="profile-nickname" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
-                    </div>
-                    <div>
-                        <label for="profile-job" class="block text-sm font-medium text-gray-300 mb-1">직업</label>
-                        <input type="text" id="profile-job" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
-                    </div>
-                </div>
-                <p id="profile-success" class="text-green-400 text-sm mt-4 h-5"></p>
-                <div class="flex justify-end gap-4 mt-8">
-                    <button type="button" class="modal-close-btn bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-lg transition-colors">취소</button>
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">저장하기</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Other modals (comment, contact, donation, etc.) -->
-    <div id="commentModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <form id="commentForm" class="modal-content bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-lg text-left border border-slate-700">
-            <h3 class="text-2xl font-bold text-sky-400 mb-6 text-center">응원 댓글 작성</h3>
-            <div class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label for="commenterName" class="block text-sm font-medium text-gray-300 mb-1">닉네임</label>
-                        <input type="text" id="commenterName" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
-                    </div>
-                    <div>
-                        <label for="commenterInfo" class="block text-sm font-medium text-gray-300 mb-1">직업/레벨</label>
-                        <input type="text" id="commenterInfo" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
-                    </div>
-                </div>
-                <div>
-                    <label for="commentText" class="block text-sm font-medium text-gray-300 mb-1">응원 메시지</label>
-                    <textarea id="commentText" rows="4" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500"></textarea>
-                </div>
-            </div>
-            <div class="flex justify-end gap-4 mt-8">
-                <button type="button" class="modal-close-btn bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-lg transition-colors">취소</button>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">등록하기</button>
-            </div>
-        </form>
-    </div>
-    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center border border-slate-700">
-            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
-            <h3 class="text-2xl font-bold text-yellow-400">문의하기</h3>
-            <p class="text-gray-400 mt-2 mb-6">사이트 개선 제안이나 버그 제보는 언제나 환영입니다.</p>
-            <div class="space-y-4 mt-6">
-                <a href="mailto:esgroup129@gmail.com" class="w-full flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition"><i class="fas fa-envelope h-5 w-5 mr-3"></i>이메일</a>
-                <a href="https://open.kakao.com/o/s4YH6WFh" target="_blank" class="w-full flex items-center justify-center bg-[#FEE500] hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-lg transition"><i class="fas fa-comment h-5 w-5 mr-2"></i>카카오톡 오픈채팅</a>
-                <a href="https://discord.com/users/930037107823636540" target="_blank" class="w-full flex items-center justify-center bg-[#5865F2] hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg transition"><i class="fab fa-discord h-5 w-5 mr-2"></i>디스코드</a>
-            </div>
-        </div>
-    </div>
-    <div id="donationModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center border border-slate-700">
-            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
-            <h3 class="text-2xl font-bold text-yellow-400">후원 안내</h3>
-            <p class="text-gray-400 mt-2 mb-6">여러분의 따뜻한 응원 한 잔이 제겐 큰 힘이됩니다.</p>
-            <div class="my-6">
-                <div id="qrcode-container" class="w-48 h-48 mx-auto bg-white p-2 rounded-lg"></div>
-                <p class="mt-4 font-semibold text-white">카카오페이로 간편하게!</p>
-            </div>
-        </div>
-    </div>
-    <div id="updatesModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-2xl text-left border border-slate-700">
-            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
-            <h3 class="text-3xl font-bold text-sky-400 mb-6 text-center">업데이트 내역</h3>
-            <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-4 text-slate-300">
-                <div class="p-4 bg-slate-700/50 rounded-lg">
-                    <p class="font-bold text-lg text-white">2024-07-19: 후원 시스템 개선</p>
-                    <p class="mt-1">- '후기'를 '응원 댓글'로 변경하여 참여 장벽을 낮추고, '명예의 전당'과 자연스럽게 연결했습니다.</p>
-                </div>
-                <div class="p-4 bg-slate-700/50 rounded-lg">
-                    <p class="font-bold text-lg text-white">2024-07-18: '메피 버피' 신규 기능 추가!</p>
-                    <p class="mt-1">- 주요 스킬(홀리심볼, 샤프 아이즈 등)의 버프 지속시간을 관리하는 '메피 버피' 타이머를 추가했습니다.</p>
-                </div>
-                 <div class="p-4 bg-slate-700/50 rounded-lg">
-                    <p class="font-bold text-lg text-white">2024-07-17: UI/UX 개선</p>
-                    <p class="mt-1">- 모든 팝업창(모달)이 화면 중앙에 안정적으로 표시되도록 수정했습니다.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1003] hidden">
-        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center border border-slate-700">
-            <h3 id="confirmTitle" class="text-xl font-bold text-white mb-4">확인</h3>
-            <p id="confirmMessage" class="text-gray-300 mb-6">이 작업을 수행하시겠습니까?</p>
-            <div id="confirmInputWrapper" class="hidden mb-4">
-                <input type="password" id="confirmInput" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500" placeholder="관리자 암호를 입력하세요">
-            </div>
-            <div class="flex justify-center gap-4">
-                <button id="confirmCancelBtn" class="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-lg transition-colors">취소</button>
-                <button id="confirmOkBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">확인</button>
-            </div>
-        </div>
-    </div>
-
-    <script type="module">
-        // Firebase SDKs
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { 
-            getAuth, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword, 
-            signOut, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            getDoc 
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        // ---------------------------------
-        // Firebase Configuration
-        // ---------------------------------
-        const firebaseConfig = {
-            apiKey: "AIzaSyASDsgKULCrP_3I3jz5irdzfbO9TzSwBZ8",
-            authDomain: "mlfee-hub.firebaseapp.com",
-            projectId: "mlfee-hub",
-            storageBucket: "mlfee-hub.appspot.com",
-            messagingSenderId: "330580584999",
-            appId: "1:330580584999:web:66410250d754fa68a2fc02",
-            measurementId: "G-VLQR1NXFFM"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // ---------------------------------
-        // Auth Management Module
-        // ---------------------------------
-        class AuthManager {
-            constructor(modalManager) {
-                this.modalManager = modalManager;
-                this.isLoginMode = true;
-                this.elements = {
-                    authModal: document.getElementById('authModal'),
-                    authForm: document.getElementById('auth-form'),
-                    authTitle: document.getElementById('auth-title'),
-                    nicknameField: document.getElementById('nickname-field'),
-                    emailInput: document.getElementById('email'),
-                    passwordInput: document.getElementById('password'),
-                    nicknameInput: document.getElementById('nickname'),
-                    authError: document.getElementById('auth-error'),
-                    authSubmitBtn: document.getElementById('auth-submit-btn'),
-                    authSwitchBtn: document.getElementById('auth-switch-btn'),
-                    authSwitchText: document.getElementById('auth-switch-text'),
-                    loggedOutView: document.getElementById('logged-out-view'),
-                    loggedInView: document.getElementById('logged-in-view'),
-                    userNickname: document.getElementById('user-nickname'),
-                    userAvatar: document.getElementById('user-avatar'),
-                    logoutBtn: document.getElementById('logout-btn'),
-                };
-                this._init();
-            }
-
-            _init() {
-                this.elements.authSwitchBtn.addEventListener('click', () => this.toggleMode());
-                this.elements.authForm.addEventListener('submit', (e) => this.handleSubmit(e));
-                this.elements.logoutBtn.addEventListener('click', () => this.logout());
-                this.listenAuthState();
-            }
-
-            toggleMode() {
-                this.isLoginMode = !this.isLoginMode;
-                this.elements.authError.textContent = '';
-                this.elements.authForm.reset(); 
-                if (this.isLoginMode) {
-                    this.elements.authTitle.textContent = '로그인';
-                    this.elements.nicknameField.classList.add('hidden');
-                    this.elements.authSubmitBtn.textContent = '로그인';
-                    this.elements.authSwitchText.textContent = '계정이 없으신가요?';
-                    this.elements.authSwitchBtn.textContent = '회원가입';
-                } else {
-                    this.elements.authTitle.textContent = '회원가입';
-                    this.elements.nicknameField.classList.remove('hidden');
-                    this.elements.authSubmitBtn.textContent = '회원가입';
-                    this.elements.authSwitchText.textContent = '이미 계정이 있으신가요?';
-                    this.elements.authSwitchBtn.textContent = '로그인';
-                }
-            }
-
-            async handleSubmit(e) {
-                e.preventDefault();
-                const email = this.elements.emailInput.value;
-                const password = this.elements.passwordInput.value;
-                const nickname = this.elements.nicknameInput.value;
-                this.elements.authError.textContent = '';
-
-                try {
-                    if (this.isLoginMode) {
-                        await signInWithEmailAndPassword(auth, email, password);
-                    } else {
-                        if (!nickname.trim()) {
-                            this.elements.authError.textContent = '닉네임을 입력해주세요.';
-                            return;
-                        }
-                        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                        await setDoc(doc(db, "users", userCredential.user.uid), {
-                            nickname: nickname,
-                            email: email,
-                            job: '',
-                            createdAt: new Date()
-                        });
-                    }
-                    this.modalManager.hide('auth');
-                    this.elements.authForm.reset();
-                } catch (error) {
-                    this.elements.authError.textContent = this.getErrorMessage(error.code);
-                }
-            }
-
-            async logout() {
-                await signOut(auth);
-            }
-
-            listenAuthState() {
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        const userProfile = await this.getUserProfile(user.uid);
-                        this.updateUIForLoggedInUser(userProfile);
-                    } else {
-                        this.updateUIForLoggedOutUser();
-                    }
-                });
-            }
-
-            async getUserProfile(uid) {
-                const docRef = doc(db, "users", uid);
-                const docSnap = await getDoc(docRef);
-                return docSnap.exists() ? docSnap.data() : null;
-            }
-
-            updateUIForLoggedInUser(profile) {
-                if (!profile) return;
-                this.elements.loggedOutView.classList.add('hidden');
-                this.elements.loggedInView.classList.remove('hidden');
-                this.elements.userNickname.textContent = profile.nickname;
-                const firstChar = profile.nickname.charAt(0).toUpperCase();
-                this.elements.userAvatar.src = `https://placehold.co/32x32/3b82f6/ffffff?text=${firstChar}`;
-            }
-
-            updateUIForLoggedOutUser() {
-                this.elements.loggedOutView.classList.remove('hidden');
-                this.elements.loggedInView.classList.add('hidden');
-            }
-
-            getErrorMessage(code) {
-                switch (code) {
-                    case 'auth/invalid-email': return '유효하지 않은 이메일 형식입니다.';
-                    case 'auth/user-not-found':
-                    case 'auth/invalid-credential':
-                         return '이메일 또는 비밀번호가 일치하지 않습니다.';
-                    case 'auth/wrong-password': return '비밀번호가 일치하지 않습니다.';
-                    case 'auth/email-already-in-use': return '이미 사용 중인 이메일입니다.';
-                    case 'auth/weak-password': return '비밀번호는 6자리 이상이어야 합니다.';
-                    default: return '오류가 발생했습니다. 다시 시도해주세요.';
-                }
-            }
-        }
-        
-        // ---------------------------------
-        // Profile Management Module
-        // ---------------------------------
-        class ProfileManager {
-            constructor(modalManager) {
-                this.modalManager = modalManager;
-                this.elements = {
-                    profileModal: document.getElementById('profileModal'),
-                    profileForm: document.getElementById('profile-form'),
-                    nicknameInput: document.getElementById('profile-nickname'),
-                    jobInput: document.getElementById('profile-job'),
-                    successMessage: document.getElementById('profile-success'),
-                };
-                this._init();
-            }
-
-            _init() {
-                this.elements.profileForm.addEventListener('submit', (e) => this.handleSave(e));
-                document.getElementById('profile-settings-link').addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const user = auth.currentUser;
-                    if (user) {
-                        this.loadProfileData(user.uid);
-                        this.modalManager.show('profile');
-                    }
-                });
-            }
-
-            async loadProfileData(uid) {
-                const docRef = doc(db, "users", uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    this.elements.nicknameInput.value = data.nickname || '';
-                    this.elements.jobInput.value = data.job || '';
-                }
-            }
-
-            async handleSave(e) {
-                e.preventDefault();
-                const user = auth.currentUser;
-                if (!user) return;
-
-                const newNickname = this.elements.nicknameInput.value;
-                const newJob = this.elements.jobInput.value;
-
-                try {
-                    await setDoc(doc(db, "users", user.uid), {
-                        nickname: newNickname,
-                        job: newJob
-                    }, { merge: true });
-                    
-                    document.getElementById('user-nickname').textContent = newNickname;
-                    const firstChar = newNickname.charAt(0).toUpperCase();
-                    document.getElementById('user-avatar').src = `https://placehold.co/32x32/3b82f6/ffffff?text=${firstChar}`;
-
-                    this.elements.successMessage.textContent = '프로필이 저장되었습니다.';
-                    setTimeout(() => {
-                        this.elements.successMessage.textContent = '';
-                        this.modalManager.hide('profile');
-                    }, 1500);
-
-                } catch (error) {
-                    console.error("Error updating profile: ", error);
-                }
-            }
-        }
-
-        // Other classes (ModalManager, CommentSystem, Sidebar)
-        class ModalManager {
-            constructor(modals) {
-                this.modals = modals;
-                this._init();
-            }
-            _init() {
-                for (const key in this.modals) {
-                    const modal = this.modals[key];
-                    if (!modal.el) continue;
-                    modal.el.addEventListener('click', (e) => { if (e.target === modal.el) this.hide(key); });
-                    modal.el.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', () => this.hide(key)));
-                }
-            }
-            show(key) {
-                const modal = this.modals[key];
-                if (!modal?.el) return;
-                modal.el.classList.remove('hidden', 'modal-exiting');
-                modal.el.classList.add('modal-entering');
-            }
-            hide(key) {
-                const modal = this.modals[key];
-                if (!modal?.el) return;
-                modal.el.classList.remove('modal-entering');
-                modal.el.classList.add('modal-exiting');
-                setTimeout(() => modal.el.classList.add('hidden'), 300);
-            }
-        }
-        class CommentSystem {
-             constructor(listElement, modalManager) {
-                this.commentList = listElement;
-                this.modalManager = modalManager;
-                this.storageKey = 'userComments_mlfee';
-                this.defaultComments = [
-                    { id: 'default1', name: 'AA 법사z', info: 'Lv. ?? 아크메이지', text: '레이드 크로니클 덕분에 자쿰 원정 처음으로 안 짤리고 깼어요. 오더가 정말 편해집니다. 강추!', avatar: 'https://placehold.co/40x40/3b82f6/ffffff?text=M' },
-                    { id: 'default2', name: 'ㅁㅁ공대장', info: '자쿰 원정대', text: 'N빵마스터 없었을 땐 매번 계산기 두들기느라 힘들었는데, 이젠 클릭 한 번이면 끝이네요. 시간 엄청 아꼈어요.', avatar: 'https://placehold.co/40x40/ef4444/ffffff?text=L' },
-                    { id: 'default3', name: 'DD 프리', info: 'Lv. ?? 비숍', text: '파티원들한테 리저 시간 브리핑해주기 너무 편해요. 시간 클릭하면 바로 복사되는 기능 만든 분은 천재이신 듯.', avatar: 'https://placehold.co/40x40/22c55e/ffffff?text=B' }
-                ];
-            }
-            init() {
-                if (!this.commentList) return;
-                this.render();
-            }
-            render() {
-                if (!this.commentList) return;
-                this.commentList.innerHTML = '';
-                this.defaultComments.forEach(comment => {
-                    const commentCard = document.createElement('div');
-                    commentCard.className = 'bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col relative';
-                    commentCard.innerHTML = `
-                        <div class="flex-grow"><p class="text-gray-300 mb-6 break-words">${comment.text}</p></div>
-                        <div class="flex items-center mt-auto">
-                            <img src="${comment.avatar}" alt="User Avatar" class="w-10 h-10 rounded-full mr-4">
-                            <div><p class="font-bold text-white">${comment.name}</p><p class="text-sm text-gray-500">${comment.info}</p></div>
-                        </div>`;
-                    this.commentList.appendChild(commentCard);
-                });
-            }
-        }
-        class Sidebar {
-            constructor(elements) { this.elements = elements; }
-            init() {
-                if (!this.elements.toggleBtn || !this.elements.sidebarEl || !this.elements.overlayEl) return;
-                this.elements.toggleBtn.addEventListener('click', () => this.toggle());
-                this.elements.overlayEl.addEventListener('click', () => this.close());
-                this.elements.sidebarEl.addEventListener('click', (e) => { if(e.target.tagName === 'A') this.close(); });
-            }
-            toggle() {
-                this.elements.sidebarEl.classList.toggle('translate-x-full');
-                this.elements.toggleBtn.classList.toggle('active');
-                this.elements.overlayEl.classList.toggle('hidden');
-            }
-            close() {
-                this.elements.sidebarEl.classList.add('translate-x-full');
-                this.elements.toggleBtn.classList.remove('active');
-                this.elements.overlayEl.classList.add('hidden');
-            }
-        }
-
-        // ---------------------------------
-        // Main Application Controller
-        // ---------------------------------
-        class App {
-            constructor() {
-                this.elements = this._queryElements();
-                this.modalManager = new ModalManager(this.elements.modals);
-                this.authManager = new AuthManager(this.modalManager);
-                this.profileManager = new ProfileManager(this.modalManager);
-                this.commentSystem = new CommentSystem(this.elements.commentList, this.modalManager);
-                this.sidebar = new Sidebar(this.elements.sidebar);
-                this.qrCodeGenerated = false;
-            }
-
-            _queryElements() {
-                return {
-                    modals: {
-                        auth: { el: document.getElementById('authModal') },
-                        profile: { el: document.getElementById('profileModal') },
-                        comment: { el: document.getElementById('commentModal'), form: document.getElementById('commentForm') },
-                        contact: { el: document.getElementById('contactModal') },
-                        updates: { el: document.getElementById('updatesModal') },
-                        donation: { el: document.getElementById('donationModal') },
-                        confirm: { el: document.getElementById('confirmModal') }
-                    },
-                    sidebar: {
-                        toggleBtn: document.getElementById('sidebar-toggle'),
-                        sidebarEl: document.getElementById('sidebar'),
-                        overlayEl: document.getElementById('sidebar-overlay')
-                    },
-                    // [추가] 프로필 드롭다운 메뉴 관련 요소
-                    profileContainer: document.getElementById('logged-in-view'),
-                    profileDropdown: document.querySelector('.profile-dropdown'),
-                    commentList: document.getElementById('comment-list'),
-                    loginBtn: document.getElementById('login-btn'),
-                    signupBtn: document.getElementById('signup-btn'),
-                    donateBtn: document.getElementById('donateBtn'),
-                    qrContainer: document.getElementById('qrcode-container'),
-                    navLinks: {
-                        guideLink: document.getElementById('guideLink'),
-                        updatesLink: document.getElementById('updatesLink'),
-                        contactLink: document.getElementById('contactLink')
-                    }
-                };
-            }
-
-            init() {
-                this.sidebar.init();
-                this.commentSystem.init();
-                this._initEventListeners();
-                (adsbygoogle = window.adsbygoogle || []).push({});
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-
-            _initEventListeners() {
-                this.elements.loginBtn?.addEventListener('click', () => {
-                    if (!this.authManager.isLoginMode) this.authManager.toggleMode();
-                    this.modalManager.show('auth');
-                });
-                this.elements.signupBtn?.addEventListener('click', () => {
-                    if (this.authManager.isLoginMode) this.authManager.toggleMode();
-                    this.modalManager.show('auth');
-                });
-                
-                // [추가] 프로필 메뉴 클릭 이벤트
-                this.elements.profileContainer?.querySelector('.cursor-pointer')?.addEventListener('click', (e) => {
-                    e.stopPropagation(); // 이벤트 버블링 방지
-                    this.elements.profileDropdown.classList.toggle('show');
-                });
-
-                this.elements.donateBtn?.addEventListener('click', () => {
-                    this.modalManager.show('donation');
-                    this._generateQRCode();
-                });
-                this.elements.navLinks.updatesLink?.addEventListener('click', (e) => { e.preventDefault(); this.modalManager.show('updates'); });
-                this.elements.navLinks.contactLink?.addEventListener('click', (e) => { e.preventDefault(); this.modalManager.show('contact'); });
-                this.elements.navLinks.guideLink?.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    document.getElementById('guides')?.scrollIntoView({ behavior: 'smooth' });
-                });
-
-                // [추가] 프로필 메뉴 바깥 영역 클릭 시 메뉴 닫기
-                window.addEventListener('click', (e) => {
-                    if (this.elements.profileContainer && !this.elements.profileContainer.contains(e.target)) {
-                        this.elements.profileDropdown?.classList.remove('show');
-                    }
-                });
-            }
-
-            _generateQRCode() {
-                if (this.qrCodeGenerated || !this.elements.qrContainer) return;
-                new QRCode(this.elements.qrContainer, {
-                    text: "https://qr.kakaopay.com/Fb3Rszvbr",
-                    width: 176, height: 176, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H
-                });
-                this.qrCodeGenerated = true;
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const app = new App();
-            app.init();
-        });
-    </script>
-</body>
-</html>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
-    
     <style>
         /* 기본 스타일 및 CSS 변수 정의 */
         :root, .theme-default {
@@ -1119,38 +202,50 @@
     <div id="app" class="w-full max-w-4xl mx-auto">
         <div id="raid-view">
             <div class="bg-primary rounded-2xl shadow-2xl p-6 relative backdrop-blur-sm border border-slate-700">
-                <!-- 왼쪽 상단 제어: 자동/수동 모드, 테마 변경 -->
-                <div class="absolute top-4 left-6 flex items-center gap-4">
-                    <div class="flex items-center space-x-3 bg-secondary/50 p-2 rounded-full">
-                        <span id="manualModeLabel" class="text-sm font-bold px-2 transition-colors">수동</span>
-                        <label for="autoDeathToggle" class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="autoDeathToggle" class="sr-only peer" checked>
-                            <div class="w-11 h-6 bg-tertiary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent-color-1"></div>
-                        </label>
-                        <span id="autoModeLabel" class="text-sm font-bold px-2 transition-colors">자동</span>
-                    </div>
-                     <!-- 테마 선택기 -->
-                    <div id="theme-selector" class="relative">
-                        <button id="theme-btn" class="bg-secondary hover:bg-tertiary text-secondary text-sm font-bold py-1.5 px-4 rounded-full transition-colors flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.121-3.536a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1z" /></svg>
-                            <span>테마</span>
-                        </button>
-                        <div id="theme-dropdown" class="absolute left-0 mt-2 w-48 bg-primary border border-tertiary rounded-lg shadow-lg hidden z-10">
-                            <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="default">기본 (어둠)</a>
-                            <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="forest">숲속의 아침</a>
-                            <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="ocean">심해 탐험</a>
-                            <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="blackgold">블랙 & 골드</a>
+                <!-- 상단 헤더 영역: 로고 및 모든 제어 버튼들을 포함합니다. -->
+                <header class="flex flex-wrap justify-between items-center mb-6 pt-4 px-2">
+                    <!-- 로고 -->
+                    <a href="https://mlfee.com" class="inline-block flex-shrink-0">
+                        <img src="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" alt="MLFEE 로고" class="h-8 sm:h-10">
+                    </a>
+
+                    <!-- 모든 제어 요소 그룹 (자동/수동 스위치, 테마 선택기, 소리/종료/초기화 버튼) -->
+                    <div class="flex flex-wrap items-center gap-4 mt-2 sm:mt-0 ml-auto"> <!-- ml-auto로 오른쪽 정렬 -->
+                        <!-- 자동/수동 스위치 -->
+                        <div class="flex items-center space-x-3 bg-secondary/50 p-2 rounded-full">
+                            <span id="manualModeLabel" class="text-sm font-bold px-2 transition-colors">수동</span>
+                            <label for="autoDeathToggle" class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="autoDeathToggle" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-tertiary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent-color-1"></div>
+                            </label>
+                            <span id="autoModeLabel" class="text-sm font-bold px-2 transition-colors">자동</span>
+                        </div>
+                        
+                        <!-- 테마 선택기 -->
+                        <div id="theme-selector" class="relative">
+                            <button id="theme-btn" class="bg-secondary hover:bg-tertiary text-secondary text-sm font-bold py-1.5 px-4 rounded-full transition-colors flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.121-3.536a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1z" /></svg>
+                                <span>테마</span>
+                            </button>
+                            <div id="theme-dropdown" class="absolute left-0 mt-2 w-48 bg-primary border border-tertiary rounded-lg shadow-lg hidden z-10">
+                                <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="default">기본 (어둠)</a>
+                                <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="forest">숲속의 아침</a>
+                                <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="ocean">심해 탐험</a>
+                                <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="blackgold">블랙 & 골드</a>
+                            </div>
+                        </div>
+
+                        <!-- 소리, 종료, 초기화 버튼 -->
+                        <div class="flex items-center gap-2">
+                            <button id="muteBtn" class="bg-secondary hover:bg-tertiary text-secondary text-sm font-bold py-1.5 px-4 rounded-full transition-colors">소리 끄기</button>
+                            <button id="endRaidBtn" class="bg-red-600 hover:bg-red-500 text-white text-sm font-bold py-1.5 px-4 rounded-full transition-colors hidden">레이드 종료</button>
+                            <button id="resetBtn" class="bg-red-800 hover:bg-red-700 text-white text-sm font-bold py-1.5 px-4 rounded-full transition-colors">초기화</button>
                         </div>
                     </div>
-                </div>
-                <!-- 오른쪽 상단 제어: 소리, 종료, 초기화 -->
-                <div class="absolute top-4 right-6 flex items-center gap-2">
-                    <button id="muteBtn" class="bg-secondary hover:bg-tertiary text-secondary text-sm font-bold py-1.5 px-4 rounded-full transition-colors">소리 끄기</button>
-                    <button id="endRaidBtn" class="bg-red-600 hover:bg-red-500 text-white text-sm font-bold py-1.5 px-4 rounded-full transition-colors hidden">레이드 종료</button>
-                    <button id="resetBtn" class="bg-red-800 hover:bg-red-700 text-white text-sm font-bold py-1.5 px-4 rounded-full transition-colors">초기화</button>
-                </div>
+                </header>
                 
-                <div class="text-center mb-6 pt-16">
+                <!-- 레이드 크로니클의 메인 제목 및 시간 표시 (pt-16 제거) -->
+                <div class="text-center mb-6">
                     <h1 class="text-5xl font-black gradient-text tracking-wider">레이드 크로니클</h1>
                     <div id="totalTime" class="mt-2">
                         <span class="text-lg font-semibold text-secondary">레이드 경과</span>
@@ -1190,13 +285,13 @@
                 <div id="briefing" class="mt-6 text-center text-secondary font-semibold h-6 text-lg"></div>
 
                 <div id="bishopSection" class="mt-8">
-                     <div class="flex justify-between items-center mb-2 px-2">
-                         <h2 class="text-xl font-bold text-primary">파티원 관리</h2>
-                         <button id="addBishopBtn" class="bg-teal-600 hover:bg-teal-500 text-white font-bold py-1 px-4 rounded-full transition-colors text-lg">+</button>
-                     </div>
-                     <div class="overflow-x-auto bg-secondary/70 rounded-lg p-2">
-                         <table class="w-full text-left text-xl"><thead class="border-b border-border-color"><tr class="text-base text-secondary"><th class="p-3">순번</th><th class="p-3">비숍</th><th class="p-3">상태</th><th class="p-3">쿨타임</th><th class="p-3">사용 시각</th><th class="p-3"></th></tr></thead><tbody id="bishop-list"></tbody></table>
-                     </div>
+                    <div class="flex justify-between items-center mb-2 px-2">
+                        <h2 class="text-xl font-bold text-primary">파티원 관리</h2>
+                        <button id="addBishopBtn" class="bg-teal-600 hover:bg-teal-500 text-white font-bold py-1 px-4 rounded-full transition-colors text-lg">+</button>
+                    </div>
+                    <div class="overflow-x-auto bg-secondary/70 rounded-lg p-2">
+                        <table class="w-full text-left text-xl"><thead class="border-b border-border-color"><tr class="text-base text-secondary"><th class="p-3">순번</th><th class="p-3">비숍</th><th class="p-3">상태</th><th class="p-3">쿨타임</th><th class="p-3">사용 시각</th><th class="p-3"></th></tr></thead><tbody id="bishop-list"></tbody></table>
+                    </div>
                 </div>
                 
                 <!-- 로그 및 메모장 섹션 -->
@@ -1221,7 +316,7 @@
                             </section>
                             <section>
                                 <h3 class="text-2xl font-bold text-primary mb-4 border-l-4 border-accent-color-1 pl-4">2. 핵심 원리: 14분의 마법</h3>
-                                <p>리저렉션의 쿨타임은 30분이지만, 버프 지속시간은 15분입니다. 안정적인 레이드를 위해서는 15분 안에 다음 리저렉션을 사용하는 것이 이상적입니다. 레이드 크로니클은 1분의 여유 시간을 두어, **14분 주기**로 리저렉션을 사용하는 것을 권장하며 모든 시간을 자동으로 계산합니다. 이 '14분의 마법'만 기억하면 당신도 최고의 오더가 될 수 있습니다.</p>
+                                <p>리저렉션의 쿨타임은 30분이지만, 버프 지속시간은 15분입니다. 안정적인 레이드를 위해서는 15분 안에 다음 리저렉션을 사용하는 것이 이상적입니다. 레이드 크로니클은 1분의 여유 시간을 두어, <b>14분 주기</b>로 리저렉션을 사용하는 것을 권장하며 모든 시간을 자동으로 계산합니다. 이 '14분의 마법'만 기억하면 당신도 최고의 오더가 될 수 있습니다.</p>
                             </section>
                             <section>
                                 <h3 class="text-2xl font-bold text-primary mb-4 border-l-4 border-accent-color-1 pl-4">3. 상세 기능 알아보기</h3>
@@ -1230,7 +325,7 @@
                                         <p>레이드 상황에 맞춰 '자동 사망' 모드를 켜거나 끌 수 있습니다. 스위치가 켜져 있으면 리저렉션 사용 후 자동으로 다음 사망 타이머가 시작됩니다. 스위치를 끄면, '사망자 발생' 버튼을 직접 눌러 원하는 타이밍에 타이머를 시작할 수 있어 더욱 정밀한 제어가 가능합니다.</p>
                                     </li>
                                     <li><strong class="text-sky-400 text-xl block mb-2">지능형 시간 안내 & 원클릭 복사</strong>
-                                        <p>사망자 발생 시, 14분 뒤의 권장 시간과 그로부터 +14분, +28분 뒤의 예상 시간을 함께 보여줍니다. 이 시간 영역을 클릭하면 **"21, 35, 49 리저"** 와 같이 파티 채팅에 바로 공유할 수 있는 텍스트가 복사되어 신속한 오더가 가능합니다.</p>
+                                        <p>사망자 발생 시, 14분 뒤의 권장 시간과 그로부터 +14분, +28분 뒤의 예상 시간을 함께 보여줍니다. 이 시간 영역을 클릭하면 <b>"21, 35, 49 리저"</b> 와 같이 파티 채팅에 바로 공유할 수 있는 텍스트가 복사되어 신속한 오더가 가능합니다.</p>
                                     </li>
                                     <li><strong class="text-sky-400 text-xl block mb-2">완전 자동화된 흐름 & 음성 안내</strong>
                                         <p>'레이드 시작' 후 5초, '리저렉션 사용' 후 3초 뒤에 다음 타이머가 자동으로 시작됩니다. "5초 후 자동 시작", "사망, 리저 타이머 시작" 등 중요한 순간을 음성으로 안내하여 레이드에 더욱 집중할 수 있습니다.</p>
@@ -1587,13 +682,13 @@
                 if (!logs || logs.length === 0) return;
                 
                 logs.slice(-20).forEach(log => {
-                     const colors = { info: 'text-secondary', success: 'text-accent', warning: 'text-orange-400', system: 'text-amber-400' };
-                     const logEntry = document.createElement('div');
-                     const timestamp = new Date(log.timestamp).toLocaleTimeString('ko-KR', { hour12: false });
-                     logEntry.innerHTML = `<span class="font-mono text-tertiary">[${timestamp}]</span> <span class="${colors[log.type] || 'text-secondary'}">${log.message}</span>`;
-                     dom.eventLog.appendChild(logEntry);
+                    const colors = { info: 'text-secondary', success: 'text-accent', warning: 'text-orange-400', system: 'text-amber-400' };
+                    const logEntry = document.createElement('div');
+                    const timestamp = new Date(log.timestamp).toLocaleTimeString('ko-KR', { hour12: false });
+                    logEntry.innerHTML = `<span class="font-mono text-tertiary">[${timestamp}]</span> <span class="${colors[log.type] || 'text-secondary'}">${log.message}</span>`;
+                    dom.eventLog.appendChild(logEntry);
                 });
-                 dom.eventLog.scrollTop = dom.eventLog.scrollHeight;
+                dom.eventLog.scrollTop = dom.eventLog.scrollHeight;
             }
 
             function addLog(message, type = 'info') {
@@ -1816,90 +911,90 @@
             }
 
             function attachEventListeners() {
-                 if (dom.resetBtn) dom.resetBtn.addEventListener('click', handleReset);
-                 if (dom.endRaidBtn) dom.endRaidBtn.addEventListener('click', handleEndRaid);
-                 if (dom.muteBtn) dom.muteBtn.addEventListener('click', () => {
-                     isMuted = !isMuted;
-                     dom.muteBtn.textContent = isMuted ? '소리 켜기' : '소리 끄기';
-                     speak(`음성 안내 ${isMuted ? '끄기' : '켜기'}`);
-                 });
+                if (dom.resetBtn) dom.resetBtn.addEventListener('click', handleReset);
+                if (dom.endRaidBtn) dom.endRaidBtn.addEventListener('click', handleEndRaid);
+                if (dom.muteBtn) dom.muteBtn.addEventListener('click', () => {
+                    isMuted = !isMuted;
+                    dom.muteBtn.textContent = isMuted ? '소리 켜기' : '소리 끄기';
+                    speak(`음성 안내 ${isMuted ? '끄기' : '켜기'}`);
+                });
                 
-                 if (dom.resTimesDisplay) dom.resTimesDisplay.addEventListener('click', () => {
-                     if (raidState.resScheduleTimes && raidState.resScheduleTimes.length > 0) {
-                         const minutes = raidState.resScheduleTimes.map(ts => new Date(ts).getMinutes());
-                         const textToCopy = `${minutes.join(', ')} 리저`;
-                         copyToClipboard(textToCopy, `'${textToCopy}'가 복사되었습니다.`);
-                     }
-                 });
+                if (dom.resTimesDisplay) dom.resTimesDisplay.addEventListener('click', () => {
+                    if (raidState.resScheduleTimes && raidState.resScheduleTimes.length > 0) {
+                        const minutes = raidState.resScheduleTimes.map(ts => new Date(ts).getMinutes());
+                        const textToCopy = `${minutes.join(', ')} 리저`;
+                        copyToClipboard(textToCopy, `'${textToCopy}'가 복사되었습니다.`);
+                    }
+                });
                 
-                 if (dom.controlPanel) dom.controlPanel.addEventListener('click', (e) => {
-                     const targetId = e.target.id || e.target.closest('button')?.id;
-                     if (targetId === 'startRaidBtn') handleStartRaid();
-                     if (targetId === 'deathBtn') handleDeath();
-                     if (targetId === 'useResBtn') handleUseResurrection();
-                 });
+                if (dom.controlPanel) dom.controlPanel.addEventListener('click', (e) => {
+                    const targetId = e.target.id || e.target.closest('button')?.id;
+                    if (targetId === 'startRaidBtn') handleStartRaid();
+                    if (targetId === 'deathBtn') handleDeath();
+                    if (targetId === 'useResBtn') handleUseResurrection();
+                });
 
-                 if (dom.addBishopBtn) dom.addBishopBtn.addEventListener('click', addBishop);
+                if (dom.addBishopBtn) dom.addBishopBtn.addEventListener('click', addBishop);
 
-                 if (dom.bishopList) {
-                     dom.bishopList.addEventListener('click', e => {
-                         if (e.target.classList.contains('remove-bishop-btn')) {
-                             const index = parseInt(e.target.dataset.index);
-                             removeBishop(index);
-                         }
-                     });
-                     dom.bishopList.addEventListener('blur', e => {
-                         if (e.target.classList.contains('bishop-name')) {
-                             const index = parseInt(e.target.dataset.index);
-                             const newName = e.target.textContent.trim();
-                             updateBishopName(index, newName);
-                         }
-                     }, true);
-                     dom.bishopList.addEventListener('keydown', e => {
-                         if (e.target.classList.contains('bishop-name') && e.key === 'Enter') {
-                             e.preventDefault(); e.target.blur();
-                         }
-                     });
-                 }
+                if (dom.bishopList) {
+                    dom.bishopList.addEventListener('click', e => {
+                        if (e.target.classList.contains('remove-bishop-btn')) {
+                            const index = parseInt(e.target.dataset.index);
+                            removeBishop(index);
+                        }
+                    });
+                    dom.bishopList.addEventListener('blur', e => {
+                        if (e.target.classList.contains('bishop-name')) {
+                            const index = parseInt(e.target.dataset.index);
+                            const newName = e.target.textContent.trim();
+                            updateBishopName(index, newName);
+                        }
+                    }, true);
+                    dom.bishopList.addEventListener('keydown', e => {
+                        if (e.target.classList.contains('bishop-name') && e.key === 'Enter') {
+                            e.preventDefault(); e.target.blur();
+                        }
+                    });
+                }
                 
-                 // Sidebar and Modal Listeners
-                 if (dom.sidebarToggle) {
-                     dom.sidebarToggle.addEventListener('click', () => {
-                         dom.sidebar.classList.toggle('translate-x-full');
-                         dom.sidebarToggle.classList.toggle('active');
-                         dom.sidebarOverlay.classList.toggle('hidden');
-                     });
-                 }
-                 if (dom.sidebarOverlay) {
-                     dom.sidebarOverlay.addEventListener('click', closeSidebar);
-                 }
-                 if(dom.guideLink) dom.guideLink.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('how-to-guide').scrollIntoView({ behavior: 'smooth' }); closeSidebar(); });
-                 if(dom.contactLink) {
-                     dom.contactLink.addEventListener('click', (e) => { 
-                         e.preventDefault(); 
-                         closeSidebar();
-                         setTimeout(() => {
-                             dom.contactModal.classList.remove('hidden');
-                         }, 300);
-                     });
-                 }
-                 if(dom.closeContactModalBtn) dom.closeContactModalBtn.addEventListener('click', () => dom.contactModal.classList.add('hidden'));
-                 if(dom.contactModal) dom.contactModal.addEventListener('click', (e) => { if(e.target === dom.contactModal) dom.contactModal.classList.add('hidden'); });
+                // Sidebar and Modal Listeners
+                if (dom.sidebarToggle) {
+                    dom.sidebarToggle.addEventListener('click', () => {
+                        dom.sidebar.classList.toggle('translate-x-full');
+                        dom.sidebarToggle.classList.toggle('active');
+                        dom.sidebarOverlay.classList.toggle('hidden');
+                    });
+                }
+                if (dom.sidebarOverlay) {
+                    dom.sidebarOverlay.addEventListener('click', closeSidebar);
+                }
+                if(dom.guideLink) dom.guideLink.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('how-to-guide').scrollIntoView({ behavior: 'smooth' }); closeSidebar(); });
+                if(dom.contactLink) {
+                    dom.contactLink.addEventListener('click', (e) => { 
+                        e.preventDefault(); 
+                        closeSidebar();
+                        setTimeout(() => {
+                            dom.contactModal.classList.remove('hidden');
+                        }, 300);
+                    });
+                }
+                if(dom.closeContactModalBtn) dom.closeContactModalBtn.addEventListener('click', () => dom.contactModal.classList.add('hidden'));
+                if(dom.contactModal) dom.contactModal.addEventListener('click', (e) => { if(e.target === dom.contactModal) dom.contactModal.classList.add('hidden'); });
 
-                 // Confirmation Modal Listeners
-                 if(dom.confirmCancelBtn) dom.confirmCancelBtn.addEventListener('click', () => {
+                // Confirmation Modal Listeners
+                if(dom.confirmCancelBtn) dom.confirmCancelBtn.addEventListener('click', () => {
                     dom.confirmModal.classList.add('hidden');
                     confirmCallback = null;
-                 });
-                 if(dom.confirmOkBtn) dom.confirmOkBtn.addEventListener('click', () => {
-                     if (typeof confirmCallback === 'function') {
-                         confirmCallback();
-                     }
-                     dom.confirmModal.classList.add('hidden');
-                     confirmCallback = null;
-                 });
+                });
+                if(dom.confirmOkBtn) dom.confirmOkBtn.addEventListener('click', () => {
+                    if (typeof confirmCallback === 'function') {
+                        confirmCallback();
+                    }
+                    dom.confirmModal.classList.add('hidden');
+                    confirmCallback = null;
+                });
 
-                 if (dom.autoDeathToggle) {
+                if (dom.autoDeathToggle) {
                     dom.autoDeathToggle.addEventListener('change', (e) => {
                         raidState.isAutoDeathMode = e.target.checked;
                         updateAutoDeathModeUI(raidState.isAutoDeathMode);
