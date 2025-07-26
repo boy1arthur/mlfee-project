@@ -3,555 +3,521 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLFEE(메피) 허브 | 메이플랜드 필수 도구</title>
-    <meta name="description" content="원정, 더 이상 어렵지 않아요! MLFEE(메피)에서 수수료 계산기, 리저렉션 타이머, 버프 타이머 등 다양한 편의 도구를 만나보세요.">
-    <meta name="keywords" content="메이플랜드, 메랜 수수료 계산기, 리저렉션 타이머, 버프 타이머, 메피, MLFEE, 자쿰, 혼테일, 공략">
-    <meta property="og:title" content="MLFEE(메피) 메이플랜드 필수 도구">
-    <meta property="og:description" content="자쿰, 혼테일 원정을 위한 필수 도구! 수수료 계산, 리저 타이머, 버프 관리까지 더 쉬워집니다.">
-    <!-- 파비콘 (Favicon) 추가: 브라우저 탭에 표시될 아이콘입니다. -->
-    <!-- 이 'href' 속성에 로고 이미지 URL을 넣어주세요. -->
+    <title>MLFEE TIMES | AI로 일상과 게임의 생산성을 바꾸다</title>
+    <meta name="description" content="비개발자가 AI를 활용해 메이플랜드 필수 유틸리티를 개발하고, 그 여정을 공유합니다. 당신의 생산성을 높여줄 AI 꿀팁과 개발 실록을 만나보세요.">
+    <meta name="keywords" content="AI, 비개발자, 개발 실록, 생산성, 메이플랜드, 유틸리티, 수수료 계산기, 리저렉션 타이머, MLFEE, Gemini, ChatGPT">
+    
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <meta property="og:title" content="MLFEE TIMES | AI로 당신의 문제를 해결합니다">
+    <meta property="og:description" content="코딩을 몰라도 괜찮아요. 비개발자가 AI로 메이플랜드 필수 도구를 만들고, 그 모든 과정을 공유합니다. 당신의 생산성을 높여줄 영감을 얻어가세요.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png">
+    <meta property="og:image:width" content="1200"> 
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://mlfee.com">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
     <link rel="icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
     
-    <!-- Open Graph 이미지 추가: 소셜 미디어(카카오톡, 페이스북 등) 공유 시 미리보기 이미지입니다. -->
-    <!-- 이 'content' 속성에 로고 이미지 URL을 넣어주세요. -->
-    <meta property="og:image" content="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png">
-    <meta property="og:image:width" content="1200"> 
-    <meta property="og:image:height" content="630">     
+    <!-- External Libraries: TailwindCSS, Fonts, Font Awesome -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615"
-     crossorigin="anonymous"></script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615" crossorigin="anonymous"></script>
      
     <style>
         html { scroll-behavior: smooth; }
         body { 
-            font-family: 'Noto Sans KR', sans-serif; 
-            background-color: #0a0e1a;
-            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
-            background-size: 40px 40px;
-            color: #d1d5db;
+            font-family: 'Inter', 'Noto Sans KR', sans-serif; 
+            background-color: #ffffff;
+            color: #111111;
         }
-        .card-hover { transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out; }
-        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 0 15px rgba(59, 130, 246, 0.2); }
-        .tool-card:hover, .supporter-card:hover { border-color: rgba(59, 130, 246, 0.5); }
+        .font-serif { font-family: 'Playfair Display', serif; }
         
-        .shine-effect {
-            position: relative;
-            background: linear-gradient(to right, #38BDF8, #3B82F6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .shine-effect::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            background-size: 200% 100%;
-            animation: shine 5s linear infinite;
-        }
-        @keyframes shine {
-            0% { background-position: 200% center; }
-            100% { background-position: -200% center; }
+        .header-shadow {
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #e5e7eb;
         }
 
-        .section-title.text-4xl::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6rem;
-            height: 0.25rem;
-            background-color: #3b82f6;
-            border-radius: 9999px;
+        .profile-dropdown {
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .profile-dropdown.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
         
+        .sidebar-sticky {
+            position: sticky;
+            top: 145px;
+        }
+        
+        .ad-slot {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f4f6;
+            border: 1px dashed #d1d5db;
+            color: #9ca3af;
+            font-size: 0.875rem;
+            min-height: 90px;
+        }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
-        
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .modal-entering { animation: fadeIn 0.3s ease-out forwards; }
-        .modal-entering .modal-content { animation: slideIn 0.3s ease-out forwards; }
-        .modal-exiting { animation: fadeOut 0.3s ease-in forwards; }
-        .modal-exiting .modal-content { animation: slideOut 0.3s ease-in forwards; }
-
-        .hamburger-icon span { transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; }
-        .nav-toggle.active .hamburger-icon span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-        .nav-toggle.active .hamburger-icon span:nth-child(2) { opacity: 0; }
-        .nav-toggle.active .hamburger-icon span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        .modal-entering .modal-content { animation: slideInUp 0.3s ease-out forwards; }
         
-        /* [수정] hover 방식 대신 JS로 제어하기 위한 CSS 변경 */
-        .profile-dropdown { display: none; }
-        .profile-dropdown.show { display: block; }
+        /* 게시물 상세 페이지 스타일 */
+        .prose { color: #374151; }
+        .prose h1, .prose h2, .prose h3 { color: #111827; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+        .prose a { color: #2563eb; text-decoration: underline; }
+        .prose blockquote { border-left-color: #3b82f6; color: #4b5563; }
+        .prose code { color: #be123c; background-color: #fef2f2; padding: 2px 5px; border-radius: 4px; font-weight: 600; }
+        .prose pre { background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; color: #d1d5db; }
+        .prose pre code { color: inherit; background-color: transparent; padding: 0; }
     </style>
 </head>
 <body class="antialiased">
     
-    <!-- Header with Auth buttons -->
-    <header class="py-4">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <a href="/" class="inline-block text-2xl sm:text-3xl font-bold text-blue-400">
-                <span class="text-white">MLFEE</span>(메피)
-            </a>
-            <div id="auth-container" class="flex items-center gap-4">
-                <!-- Logged out state -->
-                <div id="logged-out-view">
-                    <button id="login-btn" class="text-gray-300 hover:text-sky-400 transition">로그인</button>
-                    <button id="signup-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">회원가입</button>
+    <!-- Header -->
+    <header class="bg-white/95 backdrop-blur-sm sticky top-0 z-50 header-shadow">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center gap-4">
+                    <button id="mobile-menu-btn" class="lg:hidden text-xl"><i class="fas fa-bars"></i></button>
                 </div>
-                <!-- Logged in state -->
-                <div id="logged-in-view" class="hidden relative profile-container">
-                    <div class="flex items-center gap-2 cursor-pointer">
-                        <img id="user-avatar" src="https://placehold.co/32x32/374151/d1d5db?text=M" class="w-8 h-8 rounded-full border-2 border-slate-500">
-                        <span id="user-nickname" class="font-semibold text-white">닉네임</span>
+                <a href="/" class="text-3xl md:text-4xl font-serif font-bold text-black absolute left-1/2 -translate-x-1/2">MLFEE TIMES</a>
+                <div id="auth-container">
+                    <!-- Logged Out/In Views -->
+                    <div id="logged-out-view">
+                        <button id="login-btn" class="bg-black text-white font-bold py-2 px-5 rounded-md text-sm hover:bg-gray-800 transition-colors">로그인</button>
                     </div>
-                    <div class="profile-dropdown absolute right-0 mt-2 w-48 bg-slate-800 rounded-lg shadow-lg py-1 border border-slate-700 z-10">
-                        <a href="#" id="profile-settings-link" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700">프로필 설정</a>
-                        <a href="/community/index.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700">커뮤니티</a>
-                        <button id="logout-btn" class="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-slate-700">로그아웃</button>
+                    <div id="logged-in-view" class="hidden relative">
+                        <div class="flex items-center gap-2 cursor-pointer profile-avatar-btn">
+                            <img id="user-avatar" src="https://placehold.co/32x32/e9ecef/495057?text=M" alt="User Avatar" class="w-8 h-8 rounded-full border-2 border-gray-300">
+                        </div>
+                        <div class="profile-dropdown absolute right-0 mt-3 w-48 bg-white rounded-lg shadow-xl py-1 border border-gray-200 z-10">
+                            <div class="px-4 py-2 border-b border-gray-200">
+                                <p class="font-semibold text-sm text-gray-800 truncate" id="user-nickname">닉네임</p>
+                            </div>
+                            <a href="#" id="profile-settings-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">프로필 설정</a>
+                            <button id="logout-btn" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">로그아웃</button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <nav id="main-nav" class="hidden lg:flex justify-center items-center gap-8 py-3 border-t border-gray-200">
+                <!-- Navigation links will be dynamically inserted here -->
+            </nav>
+        </div>
+        <div id="mobile-nav-container" class="hidden lg:hidden bg-white border-t border-gray-200">
+             <!-- Mobile navigation links will be dynamically inserted here -->
         </div>
     </header>
     
-    <!-- Sidebar Navigation -->
-    <div id="sidebar-toggle" class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
-        <div class="hamburger-icon space-y-1.5">
-            <span class="block w-6 h-0.5 bg-white"></span>
-            <span class="block w-6 h-0.5 bg-white"></span>
-            <span class="block w-6 h-0.5 bg-white"></span>
+    <!-- Main Content Area -->
+    <div id="page-content">
+        <!-- This area will be dynamically filled by the router -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-10 mt-10 border-t border-gray-200 bg-white">
+        <div class="container mx-auto px-4 text-center space-y-4">
+            <a href="/" class="text-3xl font-serif font-bold text-black">MLFEE TIMES</a>
+            <div class="flex justify-center items-center space-x-4 text-gray-500 text-sm">
+                <a href="#" class="hover:underline">사이트 소개</a>
+                <a href="#" class="hover:underline">이용약관</a>
+                <a href="#" class="hover:underline">개인정보처리방침</a>
+            </div>
+            <p class="text-gray-400 text-xs">&copy; 2025 MLFEE TIMES. All rights reserved. (소년아서 제작)</p>
         </div>
-    </div>
-    <nav id="sidebar" class="fixed right-0 top-0 w-72 h-full bg-gray-800/90 backdrop-blur-lg border-l-2 border-gray-700 z-[1000] shadow-2xl transition-transform duration-300 ease-in-out translate-x-full">
-        <h3 class="text-center text-2xl font-bold text-blue-400 mt-16 mb-8">메뉴</h3>
-        <a href="/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">홈</a>
-        <a href="/community/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">커뮤니티</a>
-        <a href="#" id="updatesLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">업데이트</a>
-        <a href="calc/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
-        <a href="timer/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
-        <a href="buff/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
-        <a href="#guides" id="guideLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
-        <a href="#" id="contactLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의하기</a>
-    </nav>
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[999] hidden"></div>
+    </footer>
     
-    <div class="main-content transition-all duration-300 ease-in-out">
-        <main>
-            <section class="hero text-center pt-12 pb-16 sm:pt-16 sm:pb-24">
-                <div class="container mx-auto px-4">
-                    <h1 class="text-4xl sm:text-6xl font-black leading-tight shine-effect">
-                        원정, 더 이상 어렵지 않아요!
-                    </h1>
-                    <p class="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto my-10">
-                        복잡한 수수료 계산, 아슬아슬한 리저렉션 관리, 정신없는 버프 리필까지...<br>
-                        메피의 스마트한 도구들과 함께라면, 당신도 최고의 원정대원이 될 수 있습니다.
-                    </p>
-                    <div>
-                        <a href="#tools" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition duration-300 inline-block shadow-lg hover:shadow-blue-500/50">
-                            핵심 도구 바로가기
-                        </a>
-                    </div>
-                </div>
-            </section>
-            
-            <div class="container mx-auto px-4 my-12">
-                <div class="ad-container w-full min-h-[90px] bg-slate-900/50 rounded-lg flex justify-center items-center">
-                    <ins class="adsbygoogle"
-                         style="display:block; width:100%; text-align:center;"
-                         data-ad-client="ca-pub-8602495420447615"
-                         data-ad-slot="1234567890"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                </div>
-            </div>
-
-            <!-- Rest of the main content sections (tools, guides, etc.) remain the same -->
-            <section id="tools" class="py-20">
-                <div class="container mx-auto px-4">
-                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">MLFEE 핵심 도구</span></h2>
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <a href="calc/index.html" class="tool-link block">
-                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
-                                <div class="text-red-500 mb-6">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h3m-3-7h3m-6.128 9.872A3 3 0 006.872 21h10.256a3 3 0 002.872-3.128V7.128A3 3 0 0017.128 4H6.872a3 3 0 00-2.872 3.128v10.744z" /></svg>
-                                </div>
-                                <h3 class="text-2xl font-bold mb-4 text-red-400 text-center">N빵마스터 (수수료 계산기)</h3>
-                                <p class="text-gray-400">메소 수수료 '수작'부터 N인 파티 분배, 택배 정산, 목표 금액 역산까지 원클릭으로 해결하세요.</p>
-                            </div>
-                        </a>
-                        <a href="timer/index.html" class="tool-link block">
-                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
-                                <div class="text-blue-500 mb-6">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                </div>
-                                <h3 class="text-2xl font-bold mb-4 text-blue-400 text-center">레이드 크로니클 (리저 타이머)</h3>
-                                <p class="text-gray-400">비숍의 리저렉션 쿨타임을 정확히 체크하고, 다음 예상 시간을 공유하여 안정적인 레이드를 운영하세요.</p>
-                            </div>
-                        </a>
-                        <a href="buff/index.html" class="tool-link block">
-                            <div class="tool-card bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover h-full">
-                                <div class="text-green-500 mb-6">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <h3 class="text-2xl font-bold mb-4 text-green-400 text-center">메피 버피 (실시간 버프 관리)</h3>
-                                <p class="text-gray-400">홀리심볼, 샤프 아이즈 등 주요 버프 스킬의 주기를 관리하고, 음성으로 리필 타이밍을 알려드립니다.</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </section>
-            <section id="guides" class="py-20 bg-gray-900/50">
-                <div class="container mx-auto px-4">
-                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">원정대 필승 공략집</span></h2>
-                    <div class="space-y-16">
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                            <div>
-                                <h3 class="text-3xl font-bold text-white mb-4">수수료, 아는 만큼 아낀다!</h3>
-                                <p class="mb-6 text-lg">고가의 아이템을 거래할 때, 6%에 달하는 수수료는 큰 부담입니다. 하지만 메이플랜드의 수수료 시스템은 금액 구간별로 세율이 다르다는 점을 이용하면, 거래를 여러 번에 나누어 총 수수료를 획기적으로 줄일 수 있습니다. 이것이 바로 '수작'의 핵심 원리입니다.</p>
-                                <p class="text-lg bg-slate-800 p-4 rounded-lg border-l-4 border-red-500">N빵마스터는 이 복잡한 계산을 버튼 하나로 해결해줍니다. 최적의 분할 횟수와 금액을 찾아, 당신의 소중한 메소를 지켜드립니다.</p>
-                            </div>
-                            <div class="flex justify-center p-4 bg-slate-800/50 rounded-lg">
-                                <svg width="100%" height="100%" viewBox="0 0 500 300" class="max-w-full">
-                                    <defs>
-                                        <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
-                                            <stop offset="100%" style="stop-color:#b91c1c;stop-opacity:1" />
-                                        </linearGradient>
-                                    </defs>
-                                    <line x1="50" y1="250" x2="450" y2="250" stroke="#475569" stroke-width="2"/>
-                                    <line x1="50" y1="50" x2="50" y2="250" stroke="#475569" stroke-width="2"/>
-                                    <text x="250" y="285" font-family="Noto Sans KR" font-size="14" fill="#9ca3af" text-anchor="middle">거래 금액</text>
-                                    <text x="15" y="150" font-family="Noto Sans KR" font-size="14" fill="#9ca3af" transform="rotate(-90 15,150)" text-anchor="middle">수수료율</text>
-                                    
-                                    <rect x="80" y="100" width="60" height="150" fill="url(#barGradient)"/>
-                                    <text x="110" y="90" font-family="Noto Sans KR" font-size="16" fill="#f87171" text-anchor="middle">6%</text>
-                                    <text x="110" y="265" font-family="Noto Sans KR" font-size="12" fill="#9ca3af" text-anchor="middle">~1억</text>
-
-                                    <rect x="180" y="125" width="60" height="125" fill="url(#barGradient)"/>
-                                    <text x="210" y="115" font-family="Noto Sans KR" font-size="16" fill="#f87171" text-anchor="middle">5%</text>
-                                    <text x="210" y="265" font-family="Noto Sans KR" font-size="12" fill="#9ca3af" text-anchor="middle">~2500만</text>
-
-                                    <rect x="280" y="150" width="60" height="100" fill="url(#barGradient)"/>
-                                    <text x="310" y="140" font-family="Noto Sans KR" font-size="16" fill="#f87171" text-anchor="middle">4%</text>
-                                    <text x="310" y="265" font-family="Noto Sans KR" font-size="12" fill="#9ca3af" text-anchor="middle">~1000만</text>
-                                    
-                                    <rect x="380" y="200" width="60" height="50" fill="url(#barGradient)"/>
-                                    <text x="410" y="190" font-family="Noto Sans KR" font-size="16" fill="#f87171" text-anchor="middle">1.8%</text>
-                                    <text x="410" y="265" font-family="Noto Sans KR" font-size="12" fill="#9ca3af" text-anchor="middle">~100만</text>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                            <div class="order-last lg:order-first flex justify-center p-4 bg-slate-800/50 rounded-lg">
-                               <svg width="100%" height="100%" viewBox="0 0 500 300" class="max-w-full">
-                                    <path d="M 100 150 A 100 100 0 1 1 400 150" stroke="#3b82f6" stroke-width="15" fill="none" stroke-dasharray="314" stroke-dashoffset="0"/>
-                                    <path d="M 100 150 A 100 100 0 1 1 400 150" stroke="#0ea5e9" stroke-width="15" fill="none" stroke-dasharray="314" stroke-dashoffset="157">
-                                        <animate attributeName="stroke-dashoffset" from="157" to="-157" dur="3s" repeatCount="indefinite" />
-                                    </path>
-                                    <text x="250" y="130" font-family="Noto Sans KR" font-size="24" fill="#e5e7eb" text-anchor="middle">리저렉션</text>
-                                    <text x="250" y="170" font-family="Noto Sans KR" font-size="20" fill="#e5e7eb" text-anchor="middle">15분 지속 / 30분 쿨타임</text>
-                                    <text x="250" y="250" font-family="Noto Sans KR" font-size="24" fill="#34d399" text-anchor="middle" font-weight="bold">안전 사이클: 14분</text>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-3xl font-bold text-white mb-4">14분의 마법, 리저 사이클</h3>
-                                <p class="mb-6 text-lg">리저렉션의 쿨타임은 30분, 버프 지속 시간은 15분입니다. 파티의 전멸을 막기 위해서는 15분 안에 다음 리저렉션을 받아야 합니다. 레이드 크로니클은 1분의 안전 마진을 두어 **14분 주기**로 리저렉션을 사용하도록 유도합니다.</p>
-                                <p class="text-lg bg-slate-800 p-4 rounded-lg border-l-4 border-blue-500">사망자 발생 시, 14분 뒤의 권장 시간과 그 이후의 예상 시간까지 자동으로 계산하고 음성으로 알려주어, 레이드 오더가 파티의 생존을 완벽하게 책임질 수 있도록 돕습니다.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section id="zakum-guide" class="py-20">
-                <div class="container mx-auto px-4">
-                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">자쿰 원정대 준비하기</span></h2>
-                    <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700 card-hover">
-                        <p class="text-center text-xl mb-8">자쿰 원정, 더 이상 두렵지 않습니다. 메피와 함께라면 철저한 준비가 가능합니다.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                            <div>
-                                <div class="bg-yellow-500 text-gray-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-3xl font-bold">1</div>
-                                <h4 class="text-xl font-bold text-white mb-2">파티 구성</h4>
-                                <p class="text-gray-400">안정적인 격파를 위해 격수, 비숍, 유틸 직업의 균형을 맞추는 것이 중요합니다.</p>
-                            </div>
-                            <div>
-                                <div class="bg-yellow-500 text-gray-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-3xl font-bold">2</div>
-                                <h4 class="text-xl font-bold text-white mb-2">필수 준비물</h4>
-                                <p class="text-gray-400">'불의 눈', 만병통치약, 각종 버프 물약을 넉넉히 챙겨 만일의 사태에 대비하세요.</p>
-                            </div>
-                            <div>
-                                <div class="bg-yellow-500 text-gray-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-3xl font-bold">3</div>
-                                <h4 class="text-xl font-bold text-white mb-2">타이머 세팅</h4>
-                                <p class="text-gray-400">레이드 시작 전, '레이드 크로니클'과 '메피 버피'를 세팅하여 완벽한 시간 관리를 준비하세요.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <div class="container mx-auto px-4 my-12">
-                <div class="ad-container w-full min-h-[90px] bg-slate-900/50 rounded-lg flex justify-center items-center">
-                       <ins class="adsbygoogle"
-                            style="display:block; width:100%;"
-                            data-ad-client="ca-pub-8602495420447615"
-                            data-ad-slot="2345678901"
-                            data-ad-format="auto"
-                            data-full-width-responsive="true"></ins>
-                </div>
-            </div>
-            <section id="cheer-comments" class="py-20 bg-gray-900/50">
-                <div class="container mx-auto px-4">
-                    <div class="flex flex-col sm:flex-row justify-between items-center mb-12 gap-4">
-                        <h2 class="section-title text-4xl font-black text-center sm:text-left !mb-0 relative pb-4"><span class="shine-effect">응원과 격려의 한마디</span></h2>
-                        <button id="writeCommentBtn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-lg transition-colors w-full sm:w-auto">응원 댓글 남기기</button>
-                    </div>
-                    <div id="comment-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Comments will be injected here by JavaScript -->
-                    </div>
-                </div>
-            </section>
-            <section id="hall-of-fame" class="py-20">
-                <div class="container mx-auto px-4">
-                    <h2 class="section-title text-4xl font-black text-center mb-12 relative pb-4"><span class="shine-effect">명예의 전당</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="supporter-card bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col">
-                            <div class="flex items-center mb-4">
-                                <i class="fas fa-scroll text-yellow-400 text-2xl mr-4"></i>
-                                <h4 class="font-bold text-lg text-white">[협찬] 장로 스탄</h4>
-                            </div>
-                            <p class="text-slate-300 italic">"리스항구의 발전을 위해 MLFEE를 공식 후원하네. 유저들이여, 이곳에서 정보를 얻고 메이플 월드를 탐험하게나."</p>
-                        </div>
-                        <div class="supporter-card bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col">
-                            <div class="flex items-center mb-4">
-                                <i class="fas fa-gem text-amber-500 text-2xl mr-4"></i>
-                                <h4 class="font-bold text-lg text-white">[후원] 밍밍부인</h4>
-                            </div>
-                            <p class="text-amber-400 italic">"남편 냄비뚜껑 퀘스트 깰 때 이 사이트가 큰 도움이 됐어요. 고마워서 제 비상금으로 후원합니다."</p>
-                        </div>
-                        <div class="supporter-card bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col">
-                            <div class="flex items-center mb-4">
-                                <i class="fas fa-leaf text-green-500 text-2xl mr-4"></i>
-                                <h4 class="font-bold text-lg text-white">[지원] 주황버섯</h4>
-                            </div>
-                            <p class="text-green-400 italic">"메소가 부족해서... 대신 저를 잡으면 나오는 '주황버섯의 갓' 100개로 후원합니다."</p>
-                        </div>
-                        <div class="md:col-span-2 lg:col-span-3 bg-gradient-to-r from-blue-600 to-sky-500 p-8 rounded-2xl text-center flex flex-col sm:flex-row items-center justify-center gap-8 card-hover">
-                           <div class="flex-grow">
-                               <h3 class="text-3xl font-black text-white">이 도구가 도움이 되셨다면,</h3>
-                               <p class="text-blue-200 mt-2 text-xl">다음 아이디어를 위한 ☕ 따뜻한 응원 한 잔, 어떠세요?</p>
-                           </div>
-                           <button id="donateBtn" class="bg-white text-blue-600 font-bold py-3 px-8 rounded-lg text-lg transition-transform hover:scale-105 flex-shrink-0">커피 한 잔 선물하기</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer class="text-center py-10 mt-10 border-t border-gray-800">
-            <div class="container mx-auto px-4 space-y-4">
-                <div class="flex justify-center items-center space-x-4 text-gray-400 text-sm">
-                    <a href="/about.html" class="hover:text-sky-400 transition">사이트 소개</a>
-                    <span class="text-gray-600">|</span>
-                    <a href="/terms.html" class="hover:text-sky-400 transition">이용약관</a>
-                    <span class="text-gray-600">|</span>
-                    <a href="/privacy.html" class="hover:text-sky-400 transition">개인정보처리방침</a>
-                </div>
-                <p class="text-gray-500">소년아서 제작</p>
-            </div>
-        </footer>
-    </div>
-    
-    <!-- Modals -->
-    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-left border border-slate-700">
-            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
-            <h3 id="auth-title" class="text-2xl font-bold text-sky-400 mb-6 text-center">로그인</h3>
+    <!-- Modals (Auth, Profile etc.) -->
+    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-[1002] hidden">
+        <div class="modal-content relative bg-white rounded-lg shadow-2xl p-8 w-full max-w-sm text-left border">
+            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition text-2xl" aria-label="Close">&times;</button>
+            <h3 id="auth-title" class="font-serif text-2xl font-bold text-black mb-6 text-center">로그인</h3>
             <form id="auth-form">
                 <div class="space-y-4">
                     <div id="nickname-field" class="hidden">
-                        <label for="nickname" class="block text-sm font-medium text-gray-300 mb-1">닉네임</label>
-                        <input type="text" id="nickname" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500" placeholder="게임 닉네임을 입력하세요">
+                        <label for="nickname" class="block text-sm font-medium text-gray-700 mb-1">닉네임</label>
+                        <input type="text" id="nickname" class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition" placeholder="사용하실 닉네임을 입력하세요">
                     </div>
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-300 mb-1">이메일</label>
-                        <input type="email" id="email" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">이메일</label>
+                        <input type="email" id="email" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition">
                     </div>
                     <div>
-                        <label for="password" class="block text-sm font-medium text-gray-300 mb-1">비밀번호</label>
-                        <input type="password" id="password" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">비밀번호</label>
+                        <input type="password" id="password" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition">
                     </div>
                 </div>
-                <p id="auth-error" class="text-red-400 text-sm mt-4 h-5"></p>
+                <p id="auth-error" class="text-red-600 text-sm mt-4 h-5"></p>
                 <div class="mt-6">
-                    <button type="submit" id="auth-submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">로그인</button>
+                    <button type="submit" id="auth-submit-btn" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-md transition-colors">로그인</button>
                 </div>
             </form>
-            <p class="text-center text-sm text-gray-400 mt-6">
+            <p class="text-center text-sm text-gray-500 mt-6">
                 <span id="auth-switch-text">계정이 없으신가요?</span>
-                <button id="auth-switch-btn" class="font-semibold text-sky-400 hover:underline">회원가입</button>
+                <button id="auth-switch-btn" class="font-semibold text-black hover:underline">회원가입</button>
             </p>
         </div>
     </div>
     
-    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-left border border-slate-700">
-            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
-            <h3 class="text-2xl font-bold text-sky-400 mb-6 text-center">프로필 설정</h3>
+    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-[1002] hidden">
+        <div class="modal-content relative bg-white rounded-lg shadow-2xl p-8 w-full max-w-sm text-left border">
+            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition text-2xl" aria-label="Close">&times;</button>
+            <h3 class="font-serif text-2xl font-bold text-black mb-6 text-center">프로필 설정</h3>
             <form id="profile-form">
                 <div class="space-y-4">
                     <div>
-                        <label for="profile-nickname" class="block text-sm font-medium text-gray-300 mb-1">닉네임</label>
-                        <input type="text" id="profile-nickname" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
+                        <label for="profile-nickname" class="block text-sm font-medium text-gray-700 mb-1">닉네임</label>
+                        <input type="text" id="profile-nickname" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition">
                     </div>
                     <div>
-                        <label for="profile-job" class="block text-sm font-medium text-gray-300 mb-1">직업</label>
-                        <input type="text" id="profile-job" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
+                        <label for="profile-job" class="block text-sm font-medium text-gray-700 mb-1">한 줄 소개</label>
+                        <input type="text" id="profile-job" class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition" placeholder="예: AI로 문제를 해결하는 비개발자">
                     </div>
                 </div>
-                <p id="profile-success" class="text-green-400 text-sm mt-4 h-5"></p>
+                <p id="profile-success" class="text-green-600 text-sm mt-4 h-5"></p>
                 <div class="flex justify-end gap-4 mt-8">
-                    <button type="button" class="modal-close-btn bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-lg transition-colors">취소</button>
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">저장하기</button>
+                    <button type="button" class="modal-close-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-md transition-colors">취소</button>
+                    <button type="submit" class="bg-black hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-md transition-colors">저장하기</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Other modals (comment, contact, donation, etc.) -->
-    <div id="commentModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <form id="commentForm" class="modal-content bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-lg text-left border border-slate-700">
-            <h3 class="text-2xl font-bold text-sky-400 mb-6 text-center">응원 댓글 작성</h3>
-            <div class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label for="commenterName" class="block text-sm font-medium text-gray-300 mb-1">닉네임</label>
-                        <input type="text" id="commenterName" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
-                    </div>
-                    <div>
-                        <label for="commenterInfo" class="block text-sm font-medium text-gray-300 mb-1">직업/레벨</label>
-                        <input type="text" id="commenterInfo" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500">
-                    </div>
-                </div>
-                <div>
-                    <label for="commentText" class="block text-sm font-medium text-gray-300 mb-1">응원 메시지</label>
-                    <textarea id="commentText" rows="4" required class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500"></textarea>
-                </div>
-            </div>
-            <div class="flex justify-end gap-4 mt-8">
-                <button type="button" class="modal-close-btn bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-lg transition-colors">취소</button>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">등록하기</button>
-            </div>
-        </form>
-    </div>
-    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center border border-slate-700">
-            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
-            <h3 class="text-2xl font-bold text-yellow-400">문의하기</h3>
-            <p class="text-gray-400 mt-2 mb-6">사이트 개선 제안이나 버그 제보는 언제나 환영입니다.</p>
-            <div class="space-y-4 mt-6">
-                <a href="mailto:esgroup129@gmail.com" class="w-full flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition"><i class="fas fa-envelope h-5 w-5 mr-3"></i>이메일</a>
-                <a href="https://open.kakao.com/o/s4YH6WFh" target="_blank" class="w-full flex items-center justify-center bg-[#FEE500] hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-lg transition"><i class="fas fa-comment h-5 w-5 mr-2"></i>카카오톡 오픈채팅</a>
-                <a href="https://discord.com/users/930037107823636540" target="_blank" class="w-full flex items-center justify-center bg-[#5865F2] hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg transition"><i class="fab fa-discord h-5 w-5 mr-2"></i>디스코드</a>
-            </div>
-        </div>
-    </div>
-    <div id="donationModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center border border-slate-700">
-            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
-            <h3 class="text-2xl font-bold text-yellow-400">후원 안내</h3>
-            <p class="text-gray-400 mt-2 mb-6">여러분의 따뜻한 응원 한 잔이 제겐 큰 힘이됩니다.</p>
-            <div class="my-6">
-                <div id="qrcode-container" class="w-48 h-48 mx-auto bg-white p-2 rounded-lg"></div>
-                <p class="mt-4 font-semibold text-white">카카오페이로 간편하게!</p>
-            </div>
-        </div>
-    </div>
-    <div id="updatesModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden">
-        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-2xl text-left border border-slate-700">
-            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
-            <h3 class="text-3xl font-bold text-sky-400 mb-6 text-center">업데이트 내역</h3>
-            <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-4 text-slate-300">
-                <div class="p-4 bg-slate-700/50 rounded-lg">
-                    <p class="font-bold text-lg text-white">2024-07-19: 후원 시스템 개선</p>
-                    <p class="mt-1">- '후기'를 '응원 댓글'로 변경하여 참여 장벽을 낮추고, '명예의 전당'과 자연스럽게 연결했습니다.</p>
-                </div>
-                <div class="p-4 bg-slate-700/50 rounded-lg">
-                    <p class="font-bold text-lg text-white">2024-07-18: '메피 버피' 신규 기능 추가!</p>
-                    <p class="mt-1">- 주요 스킬(홀리심볼, 샤프 아이즈 등)의 버프 지속시간을 관리하는 '메피 버피' 타이머를 추가했습니다.</p>
-                </div>
-                 <div class="p-4 bg-slate-700/50 rounded-lg">
-                    <p class="font-bold text-lg text-white">2024-07-17: UI/UX 개선</p>
-                    <p class="mt-1">- 모든 팝업창(모달)이 화면 중앙에 안정적으로 표시되도록 수정했습니다.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1003] hidden">
-        <div class="modal-content relative bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center border border-slate-700">
-            <h3 id="confirmTitle" class="text-xl font-bold text-white mb-4">확인</h3>
-            <p id="confirmMessage" class="text-gray-300 mb-6">이 작업을 수행하시겠습니까?</p>
-            <div id="confirmInputWrapper" class="hidden mb-4">
-                <input type="password" id="confirmInput" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-2 text-white focus:ring-2 focus:ring-sky-500" placeholder="관리자 암호를 입력하세요">
-            </div>
-            <div class="flex justify-center gap-4">
-                <button id="confirmCancelBtn" class="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-lg transition-colors">취소</button>
-                <button id="confirmOkBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">확인</button>
-            </div>
-        </div>
-    </div>
-
     <script type="module">
-        // Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { 
-            getAuth, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword, 
-            signOut, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            getDoc 
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // ---------------------------------
-        // Firebase Configuration
-        // ---------------------------------
-        const firebaseConfig = {
-            apiKey: "AIzaSyASDsgKULCrP_3I3jz5irdzfbO9TzSwBZ8",
-            authDomain: "mlfee-hub.firebaseapp.com",
-            projectId: "mlfee-hub",
-            storageBucket: "mlfee-hub.appspot.com",
-            messagingSenderId: "330580584999",
-            appId: "1:330580584999:web:66410250d754fa68a2fc02",
-            measurementId: "G-VLQR1NXFFM"
+        const AppConfig = {
+            firebase: {
+                apiKey: "AIzaSyASDsgKULCrP_3I3jz5irdzfbO9TzSwBZ8",
+                authDomain: "mlfee-hub.firebaseapp.com",
+                projectId: "mlfee-hub",
+                storageBucket: "mlfee-hub.appspot.com",
+                messagingSenderId: "330580584999",
+                appId: "1:330580584999:web:66410250d754fa68a2fc02",
+            },
+            navLinks: [
+                { name: '개발실록', href: '?category=개발실록' },
+                { name: '메이플랜드 도구', href: '?category=메이플랜드 도구' },
+                { name: '커뮤니티', href: 'community/index.html' },
+                { name: '사이트 소개', href: '#' },
+            ],
+            posts: [
+                {
+                    id: 'devlog-01',
+                    isFeatured: true,
+                    category: '개발실록',
+                    title: '"수수료로 500만 메소 날렸다고?" 분노의 AI 계산기 개발기',
+                    excerpt: '단순한 게임 속 불편함에서 시작된 작은 질문. AI라는 강력한 도구를 통해 내 손으로 직접 문제를 해결하며 느낀 성취감은, 득템의 기쁨과는 비교할 수 없는 것이었습니다.',
+                    author: '소년아서',
+                    date: '2025년 7월 26일',
+                    imageUrl: 'https://placehold.co/800x550/111111/ffffff?text=Fee+Calculator',
+                    content: `
+                        <p class="lead text-xl text-gray-500 mb-8">"드드득-" 메이플랜드에서 이 소리만큼 심장을 뛰게 하는 소리가 또 있을까. 며칠 밤낮으로 사냥하던 끝에 마침내 모니터 위에 떠오른 [뇌전 수리검]. 그 짜릿함은 겪어본 사람만이 안다. 하지만 그 기쁨도 잠시, 아이템을 판매하려고 교환창을 띄우는 순간 마주하는 막막함이 있다. 바로 '수수료'라는 세 글자다.</p>
+                        <h2 class="text-3xl font-bold my-6">답을 찾아 헤매다</h2>
+                        <p>가장 먼저 한 일은 인터넷 검색이었다. '메이플랜드 수수료 계산기'. 하지만 검색 결과는 처참했다. 그 어디에도 내가 원하는 간단한 계산기는 존재하지 않았다. 주변에 답답함을 토로하자 "엑셀 쓰면 되잖아" 라는 답이 돌아왔지만, 나 같은 '엑셀 초보'에게는 너무나 높은 벽처럼 느껴졌다.</p>
+                        <blockquote class="border-l-4 border-blue-500 pl-4 italic my-8">
+                            "내 소중한 메소가 증발한다... 이대로 그냥, 팔 때마다 어림짐작하며 아쉬워해야만 하는 걸까?"
+                        </blockquote>
+                        <h2 class="text-3xl font-bold my-6">AI, 너 혹시...?</h2>
+                        <p>포기하려던 찰나, 문득 요즘 유행하는 '그 녀석', AI가 떠올랐다. 밑져야 본전이라는 생각으로 Gemini에게 말을 걸어보기 시작했다. 배경을 설명하고, 내가 원하는 것을 명확하게 지시했다.</p>
+                        <pre><code>// 나의 프롬프트 (to Gemini):
+"메이플랜드의 아이템 교환 수수료율은 5%야. 
+판매 금액을 입력하면, 수수료 5%를 제외하고 
+실제로 내가 받게 되는 금액을 계산해주는 
+웹사이트 형태로 만들어줘. 눈으로 볼 수 있게!"</code></pre>
+                        <p class="mt-4">잠시 후, Gemini는 나에게 링크 하나를 던져주었다. 내 눈앞에는 실제로 작동하는 웹페이지 형태의 계산기가 나타났다. 하지만 '가독성'이 아쉬웠다. 나는 다시 AI와 대화를 시작했다. 마치 살아있는 개발자와 소통하듯이.</p>
+                        <h2 class="text-3xl font-bold my-6">코딩을 몰라도, 문제를 해결할 수 있는 시대</h2>
+                        <p>단 한 번의 추가 요청으로, 1,000단위 쉼표 기능이 추가된 '나만의 맞춤 계산기'가 탄생했다. 이 순간, 나는 단순한 사용자가 아니라 '창조자'가 된 기분이었다. 이제는 기술 지식이 없어도, 자신의 문제를 명확히 정의하고 AI에게 제대로 질문만 할 수 있다면, 우리 모두 '나만의 해결사'가 될 수 있는 시대가 왔다.</p>
+                    `
+                },
+                {
+                    id: 'maple-tool-01',
+                    category: '메이플랜드 도구',
+                    title: "N빵마스터 (수수료 계산기)",
+                    excerpt: "메소 수수료 '수작'부터 N인 파티 분배, 택배 정산, 목표 금액 역산까지 원클릭으로 해결하세요.",
+                    author: '소년아서',
+                    date: '2025년 7월 25일',
+                    imageUrl: 'https://placehold.co/400x300/dc2626/ffffff?text=N빵마스터',
+                    href: 'calc/index.html'
+                },
+                {
+                    id: 'maple-tool-02',
+                    category: '메이플랜드 도구',
+                    title: '레이드 크로니클 (리저 타이머)',
+                    excerpt: '비숍의 리저렉션 쿨타임을 정확히 체크하고, 다음 예상 시간을 공유하여 안정적인 레이드를 운영하세요.',
+                    author: '소년아서',
+                    date: '2025년 7월 24일',
+                    imageUrl: 'https://placehold.co/400x300/2563eb/ffffff?text=리저+타이머',
+                    href: 'timer/index.html'
+                },
+                {
+                    id: 'maple-tool-03',
+                    category: '메이플랜드 도구',
+                    title: '메피 버피 (실시간 버프 관리)',
+                    excerpt: '홀리심볼, 샤프 아이즈 등 주요 버프 스킬의 주기를 관리하고, 음성으로 리필 타이밍을 알려드립니다.',
+                    author: '소년아서',
+                    date: '2025년 7월 23일',
+                    imageUrl: 'https://placehold.co/400x300/16a34a/ffffff?text=메피+버피',
+                    href: 'buff/index.html'
+                },
+            ]
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        class Router {
+            constructor(uiManager) {
+                this.uiManager = uiManager;
+                this.init();
+            }
 
-        // ---------------------------------
-        // Auth Management Module
-        // ---------------------------------
+            init() {
+                window.addEventListener('popstate', () => this.route());
+                this.attachLinkListeners(document.body);
+                this.route();
+            }
+            
+            attachLinkListeners(container) {
+                 container.querySelectorAll('a[href^="?post="], a[href^="?category="], a[href="/"]').forEach(link => {
+                    if(link.getAttribute('data-listener-attached')) return;
+                    
+                    link.addEventListener('click', (e) => {
+                        if (link.hostname !== window.location.hostname || !link.href.includes('?')) {
+                           if(!link.href.endsWith('/')) return;
+                        }
+                        e.preventDefault();
+                        const url = new URL(link.href);
+                        history.pushState({}, '', url.pathname + url.search);
+                        this.route();
+                    });
+                     link.setAttribute('data-listener-attached', 'true');
+                });
+            }
+
+            route() {
+                const params = new URLSearchParams(window.location.search);
+                const postId = params.get('post');
+                const category = params.get('category');
+                
+                if (postId) {
+                    this.uiManager.renderPostDetailPage(postId);
+                } else {
+                    this.uiManager.renderHomePage(category);
+                }
+                this.attachLinkListeners(document.getElementById('page-content'));
+            }
+        }
+
+        class UIManager {
+            constructor(config) {
+                this.config = config;
+                this.elements = {
+                    pageContent: document.getElementById('page-content'),
+                    mainNav: document.getElementById('main-nav'),
+                    mobileNavContainer: document.getElementById('mobile-nav-container'),
+                    mobileMenuBtn: document.getElementById('mobile-menu-btn'),
+                };
+            }
+
+            init() {
+                this.renderNavigation();
+                this.initEventListeners();
+            }
+            
+            renderHomePage(category) {
+                const homeHTML = `
+                    <div class="container mx-auto px-4 pt-6">
+                        <div class="ad-slot h-[100px] w-full max-w-[728px] mx-auto">(광고 슬롯 728x90)</div>
+                    </div>
+                    <main class="container mx-auto px-4 py-8">
+                        <section id="hero-section" class="mb-12 border-b pb-12">
+                            ${this.createHeroPostHTML()}
+                        </section>
+                        <div class="grid lg:grid-cols-3 gap-8 lg:gap-12">
+                            <div class="lg:col-span-2 space-y-10">
+                                <h2 class="text-2xl font-bold text-black border-b-2 border-black pb-2">${category || '최신 글'}</h2>
+                                <div id="article-list">
+                                    ${this.createArticleListHTML(category)}
+                                </div>
+                            </div>
+                            <aside class="lg:col-span-1">
+                                <div class="sidebar-sticky space-y-8">
+                                    <div class="ad-slot h-[250px] w-full">(광고 슬롯 300x250)</div>
+                                    <div>
+                                        <h3 class="text-lg font-bold text-black mb-4 border-b-2 border-black pb-2">핵심 도구 바로가기</h3>
+                                        <div class="space-y-4">
+                                            ${this.createToolsSidebarHTML()}
+                                        </div>
+                                    </div>
+                                </div>
+                            </aside>
+                        </div>
+                    </main>
+                `;
+                this.elements.pageContent.innerHTML = homeHTML;
+            }
+
+            renderPostDetailPage(postId) {
+                const post = this.config.posts.find(p => p.id === postId);
+                if (!post) {
+                    this.elements.pageContent.innerHTML = `<div class="text-center py-20"><h2>404 - 페이지를 찾을 수 없습니다.</h2><a href="/" class="text-blue-600 mt-4 inline-block">홈으로 돌아가기</a></div>`;
+                    return;
+                }
+                const detailHTML = `
+                    <main class="container mx-auto px-4 py-8">
+                        <div class="max-w-4xl mx-auto">
+                            <a href="?category=${post.category}" class="text-blue-600 font-semibold text-sm hover:underline">${post.category}</a>
+                            <h1 class="font-serif text-4xl md:text-6xl font-bold text-black leading-tight mt-2">${post.title}</h1>
+                            <div class="flex items-center gap-4 text-sm text-gray-500 my-6 border-y border-gray-200 py-4">
+                                <span>By ${post.author}</span>
+                                <span>${post.date}</span>
+                            </div>
+                            <img src="${post.imageUrl.replace('800x550', '1200x700')}" alt="${post.title}" class="w-full h-auto object-cover rounded-lg shadow-lg mb-8">
+                            <article class="prose prose-lg max-w-none">
+                                ${post.content}
+                            </article>
+                            <div class="mt-12 pt-8 border-t border-gray-200">
+                                <a href="/" class="bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-md transition-colors">&larr; 목록으로 돌아가기</a>
+                            </div>
+                        </div>
+                    </main>
+                `;
+                this.elements.pageContent.innerHTML = detailHTML;
+                window.scrollTo(0, 0);
+            }
+
+            createHeroPostHTML() {
+                const featuredPost = this.config.posts.find(p => p.isFeatured);
+                if (!featuredPost) return '';
+                return `
+                    <a href="?post=${featuredPost.id}" class="block group">
+                        <img src="${featuredPost.imageUrl}" alt="${featuredPost.title}" class="w-full h-auto object-cover rounded-lg shadow-sm mb-4">
+                        <p class="text-sm text-blue-600 font-semibold mt-2">${featuredPost.category}</p>
+                        <h2 class="font-serif text-4xl md:text-5xl font-bold text-black leading-tight mt-2 group-hover:text-gray-700 transition-colors">${featuredPost.title}</h2>
+                        <p class="text-gray-600 mt-4">${featuredPost.excerpt}</p>
+                    </a>
+                `;
+            }
+
+            createArticleListHTML(category) {
+                let filteredPosts = this.config.posts;
+                if (category) {
+                    filteredPosts = this.config.posts.filter(p => p.category === category);
+                }
+                
+                return filteredPosts.map(post => `
+                    <article class="grid md:grid-cols-3 gap-6 border-b pb-10">
+                        <div class="md:col-span-2">
+                            <a href="?category=${post.category}" class="text-sm text-blue-600 font-semibold mb-1 hover:underline">${post.category}</a>
+                            <a href="${post.href && !post.href.startsWith('?') ? post.href : `?post=${post.id}`}" ${post.href && !post.href.startsWith('?') ? 'target="_blank"' : ''}>
+                                <h3 class="font-serif text-2xl font-bold hover:text-gray-700 transition-colors mt-1">${post.title}</h3>
+                            </a>
+                            <p class="text-gray-600 text-base mt-2">${post.excerpt}</p>
+                            <p class="text-xs text-gray-500 mt-3">By ${post.author} | ${post.date}</p>
+                        </div>
+                        <a href="${post.href && !post.href.startsWith('?') ? post.href : `?post=${post.id}`}" ${post.href && !post.href.startsWith('?') ? 'target="_blank"' : ''} class="md:col-span-1 block">
+                            <img src="${post.imageUrl.replace('800x550', '400x300')}" alt="${post.title}" class="object-cover w-full h-full rounded-lg shadow-sm">
+                        </a>
+                    </article>
+                `).join('');
+            }
+
+            createToolsSidebarHTML() {
+                const tools = this.config.posts.filter(p => p.category === '메이플랜드 도구');
+                return tools.map((tool, index) => `
+                    <a href="${tool.href}" target="_blank" class="flex items-center gap-4 group">
+                        <p class="font-serif text-3xl font-bold text-gray-300">${index + 1}</p>
+                        <div>
+                            <p class="font-bold text-black group-hover:underline text-sm leading-snug">${tool.title}</p>
+                        </div>
+                    </a>
+                `).join('');
+            }
+            
+            renderNavigation() {
+                const navHTML = this.config.navLinks.map(link => 
+                    `<a href="${link.href}" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">${link.name}</a>`
+                ).join('');
+                this.elements.mainNav.innerHTML = navHTML;
+                
+                const mobileNavHTML = this.config.navLinks.map(link =>
+                    `<a href="${link.href}" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">${link.name}</a>`
+                ).join('');
+                this.elements.mobileNavContainer.innerHTML = mobileNavHTML;
+            }
+
+            initEventListeners() {
+                this.elements.mobileMenuBtn?.addEventListener('click', () => {
+                    this.elements.mobileNavContainer.classList.toggle('hidden');
+                });
+            }
+        }
+
+        class ModalManager {
+             constructor() {
+                this.modals = {
+                    auth: { el: document.getElementById('authModal') },
+                    profile: { el: document.getElementById('profileModal') },
+                };
+                this._init();
+            }
+
+            _init() {
+                for (const key in this.modals) {
+                    const modal = this.modals[key];
+                    if (!modal.el) continue;
+                    modal.el.addEventListener('click', (e) => { if (e.target === modal.el) this.hide(key); });
+                    modal.el.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', () => this.hide(key)));
+                }
+            }
+
+            show(key) {
+                const modal = this.modals[key];
+                if (!modal?.el) return;
+                modal.el.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => modal.el.classList.add('modal-entering'), 10);
+            }
+
+            hide(key) {
+                const modal = this.modals[key];
+                if (!modal?.el) return;
+                modal.el.classList.remove('modal-entering');
+                document.body.style.overflow = '';
+                setTimeout(() => modal.el.classList.add('hidden'), 300);
+            }
+        }
+        
         class AuthManager {
             constructor(modalManager) {
+                this.auth = getAuth(initializeApp(AppConfig.firebase));
+                this.db = getFirestore(this.auth.app);
                 this.modalManager = modalManager;
                 this.isLoginMode = true;
-                this.elements = {
-                    authModal: document.getElementById('authModal'),
+                this.elements = this._queryElements();
+                this._init();
+            }
+
+            _queryElements() {
+                return {
+                    loginBtn: document.getElementById('login-btn'),
+                    logoutBtn: document.getElementById('logout-btn'),
                     authForm: document.getElementById('auth-form'),
                     authTitle: document.getElementById('auth-title'),
                     nicknameField: document.getElementById('nickname-field'),
@@ -566,108 +532,166 @@
                     loggedInView: document.getElementById('logged-in-view'),
                     userNickname: document.getElementById('user-nickname'),
                     userAvatar: document.getElementById('user-avatar'),
-                    logoutBtn: document.getElementById('logout-btn'),
+                    profileContainer: document.querySelector('#logged-in-view'),
+                    profileDropdown: document.querySelector('.profile-dropdown'),
+                    settingsLink: document.getElementById('profile-settings-link'),
+                    profileForm: document.getElementById('profile-form'),
+                    profileNicknameInput: document.getElementById('profile-nickname'),
+                    profileJobInput: document.getElementById('profile-job'),
+                    profileSuccessMessage: document.getElementById('profile-success'),
                 };
-                this._init();
             }
 
             _init() {
-                this.elements.authSwitchBtn.addEventListener('click', () => this.toggleMode());
-                this.elements.authForm.addEventListener('submit', (e) => this.handleSubmit(e));
+                this.elements.loginBtn.addEventListener('click', () => {
+                    if (!this.isLoginMode) this.toggleAuthMode();
+                    this.modalManager.show('auth');
+                });
                 this.elements.logoutBtn.addEventListener('click', () => this.logout());
-                this.listenAuthState();
+                this.elements.authSwitchBtn.addEventListener('click', () => this.toggleAuthMode());
+                this.elements.authForm.addEventListener('submit', (e) => this.handleAuthSubmit(e));
+                
+                this.elements.settingsLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (this.auth.currentUser) {
+                        this._loadProfileData(this.auth.currentUser.uid);
+                        this.modalManager.show('profile');
+                    }
+                });
+                this.elements.profileForm.addEventListener('submit', (e) => this.handleProfileSave(e));
+
+                this.elements.profileContainer?.querySelector('.profile-avatar-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.elements.profileDropdown.classList.toggle('show');
+                });
+                window.addEventListener('click', () => {
+                    this.elements.profileDropdown?.classList.remove('show');
+                });
+
+                onAuthStateChanged(this.auth, (user) => this._onAuthStateChanged(user));
             }
 
-            toggleMode() {
+            toggleAuthMode() {
                 this.isLoginMode = !this.isLoginMode;
                 this.elements.authError.textContent = '';
                 this.elements.authForm.reset(); 
+                const { authTitle, nicknameField, authSubmitBtn, authSwitchText, authSwitchBtn } = this.elements;
                 if (this.isLoginMode) {
-                    this.elements.authTitle.textContent = '로그인';
-                    this.elements.nicknameField.classList.add('hidden');
-                    this.elements.authSubmitBtn.textContent = '로그인';
-                    this.elements.authSwitchText.textContent = '계정이 없으신가요?';
-                    this.elements.authSwitchBtn.textContent = '회원가입';
+                    authTitle.textContent = '로그인';
+                    nicknameField.classList.add('hidden');
+                    authSubmitBtn.textContent = '로그인';
+                    authSwitchText.textContent = '계정이 없으신가요?';
+                    authSwitchBtn.textContent = '회원가입';
                 } else {
-                    this.elements.authTitle.textContent = '회원가입';
-                    this.elements.nicknameField.classList.remove('hidden');
-                    this.elements.authSubmitBtn.textContent = '회원가입';
-                    this.elements.authSwitchText.textContent = '이미 계정이 있으신가요?';
-                    this.elements.authSwitchBtn.textContent = '로그인';
+                    authTitle.textContent = '회원가입';
+                    nicknameField.classList.remove('hidden');
+                    authSubmitBtn.textContent = '회원가입';
+                    authSwitchText.textContent = '이미 계정이 있으신가요?';
+                    authSwitchBtn.textContent = '로그인';
                 }
             }
 
-            async handleSubmit(e) {
+            async handleAuthSubmit(e) {
                 e.preventDefault();
-                const email = this.elements.emailInput.value;
-                const password = this.elements.passwordInput.value;
-                const nickname = this.elements.nicknameInput.value;
-                this.elements.authError.textContent = '';
+                const { emailInput, passwordInput, nicknameInput, authError } = this.elements;
+                authError.textContent = '';
 
                 try {
                     if (this.isLoginMode) {
-                        await signInWithEmailAndPassword(auth, email, password);
+                        await signInWithEmailAndPassword(this.auth, emailInput.value, passwordInput.value);
                     } else {
-                        if (!nickname.trim()) {
-                            this.elements.authError.textContent = '닉네임을 입력해주세요.';
+                        if (!nicknameInput.value.trim()) {
+                            authError.textContent = '닉네임을 입력해주세요.';
                             return;
                         }
-                        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                        await setDoc(doc(db, "users", userCredential.user.uid), {
-                            nickname: nickname,
-                            email: email,
+                        const userCredential = await createUserWithEmailAndPassword(this.auth, emailInput.value, passwordInput.value);
+                        await setDoc(doc(this.db, "users", userCredential.user.uid), {
+                            nickname: nicknameInput.value,
+                            email: emailInput.value,
                             job: '',
                             createdAt: new Date()
                         });
                     }
                     this.modalManager.hide('auth');
-                    this.elements.authForm.reset();
                 } catch (error) {
-                    this.elements.authError.textContent = this.getErrorMessage(error.code);
+                    authError.textContent = this._getErrorMessage(error.code);
+                }
+            }
+
+            async handleProfileSave(e) {
+                e.preventDefault();
+                const user = this.auth.currentUser;
+                if (!user) return;
+
+                const newNickname = this.elements.profileNicknameInput.value;
+Use Control + Shift + m to toggle the tab key moving focus. Alternatively, use esc then tab to move to the next interactive element on the page.
+Editing mlfee-project/index.html at main · boy1arthur/mlfee-project
+
+
+                const newJob = this.elements.profileJobInput.value;
+
+                try {
+                    await setDoc(doc(this.db, "users", user.uid), {
+                        nickname: newNickname,
+                        job: newJob
+                    }, { merge: true });
+                    
+                    this._updateLoggedInUI(await this._getProfile(user.uid));
+                    this.elements.profileSuccessMessage.textContent = '프로필이 저장되었습니다.';
+                    setTimeout(() => {
+                        this.elements.profileSuccessMessage.textContent = '';
+                        this.modalManager.hide('profile');
+                    }, 1500);
+                } catch (error) {
+                    console.error("Error updating profile: ", error);
                 }
             }
 
             async logout() {
-                await signOut(auth);
+                await signOut(this.auth);
             }
 
-            listenAuthState() {
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        const userProfile = await this.getUserProfile(user.uid);
-                        this.updateUIForLoggedInUser(userProfile);
-                    } else {
-                        this.updateUIForLoggedOutUser();
-                    }
-                });
+            async _onAuthStateChanged(user) {
+                if (user) {
+                    const userProfile = await this._getProfile(user.uid);
+                    this._updateLoggedInUI(userProfile);
+                } else {
+                    this._updateLoggedOutUI();
+                }
             }
-
-            async getUserProfile(uid) {
-                const docRef = doc(db, "users", uid);
+            
+            async _getProfile(uid) {
+                const docRef = doc(this.db, "users", uid);
                 const docSnap = await getDoc(docRef);
                 return docSnap.exists() ? docSnap.data() : null;
             }
 
-            updateUIForLoggedInUser(profile) {
+            async _loadProfileData(uid) {
+                const profile = await this._getProfile(uid);
+                if (profile) {
+                    this.elements.profileNicknameInput.value = profile.nickname || '';
+                    this.elements.profileJobInput.value = profile.job || '';
+                }
+            }
+
+            _updateLoggedInUI(profile) {
                 if (!profile) return;
                 this.elements.loggedOutView.classList.add('hidden');
                 this.elements.loggedInView.classList.remove('hidden');
                 this.elements.userNickname.textContent = profile.nickname;
                 const firstChar = profile.nickname.charAt(0).toUpperCase();
-                this.elements.userAvatar.src = `https://placehold.co/32x32/3b82f6/ffffff?text=${firstChar}`;
+                this.elements.userAvatar.src = `https://placehold.co/32x32/333333/ffffff?text=${firstChar}`;
             }
 
-            updateUIForLoggedOutUser() {
+            _updateLoggedOutUI() {
                 this.elements.loggedOutView.classList.remove('hidden');
                 this.elements.loggedInView.classList.add('hidden');
             }
 
-            getErrorMessage(code) {
+            _getErrorMessage(code) {
                 switch (code) {
-                    case 'auth/invalid-email': return '유효하지 않은 이메일 형식입니다.';
-                    case 'auth/user-not-found':
-                    case 'auth/invalid-credential':
-                         return '이메일 또는 비밀번호가 일치하지 않습니다.';
+                    case 'auth/invalid-email': return '유효하지 않은 이메일 주소입니다.';
+                    case 'auth/user-not-found': return '가입되지 않은 이메일입니다.';
                     case 'auth/wrong-password': return '비밀번호가 일치하지 않습니다.';
                     case 'auth/email-already-in-use': return '이미 사용 중인 이메일입니다.';
                     case 'auth/weak-password': return '비밀번호는 6자리 이상이어야 합니다.';
@@ -676,255 +700,22 @@
             }
         }
         
-        // ---------------------------------
-        // Profile Management Module
-        // ---------------------------------
-        class ProfileManager {
-            constructor(modalManager) {
-                this.modalManager = modalManager;
-                this.elements = {
-                    profileModal: document.getElementById('profileModal'),
-                    profileForm: document.getElementById('profile-form'),
-                    nicknameInput: document.getElementById('profile-nickname'),
-                    jobInput: document.getElementById('profile-job'),
-                    successMessage: document.getElementById('profile-success'),
-                };
-                this._init();
-            }
-
-            _init() {
-                this.elements.profileForm.addEventListener('submit', (e) => this.handleSave(e));
-                document.getElementById('profile-settings-link').addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const user = auth.currentUser;
-                    if (user) {
-                        this.loadProfileData(user.uid);
-                        this.modalManager.show('profile');
-                    }
-                });
-            }
-
-            async loadProfileData(uid) {
-                const docRef = doc(db, "users", uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    this.elements.nicknameInput.value = data.nickname || '';
-                    this.elements.jobInput.value = data.job || '';
-                }
-            }
-
-            async handleSave(e) {
-                e.preventDefault();
-                const user = auth.currentUser;
-                if (!user) return;
-
-                const newNickname = this.elements.nicknameInput.value;
-                const newJob = this.elements.jobInput.value;
-
-                try {
-                    await setDoc(doc(db, "users", user.uid), {
-                        nickname: newNickname,
-                        job: newJob
-                    }, { merge: true });
-                    
-                    document.getElementById('user-nickname').textContent = newNickname;
-                    const firstChar = newNickname.charAt(0).toUpperCase();
-                    document.getElementById('user-avatar').src = `https://placehold.co/32x32/3b82f6/ffffff?text=${firstChar}`;
-
-                    this.elements.successMessage.textContent = '프로필이 저장되었습니다.';
-                    setTimeout(() => {
-                        this.elements.successMessage.textContent = '';
-                        this.modalManager.hide('profile');
-                    }, 1500);
-
-                } catch (error) {
-                    console.error("Error updating profile: ", error);
-                }
-            }
-        }
-
-        // Other classes (ModalManager, CommentSystem, Sidebar)
-        class ModalManager {
-            constructor(modals) {
-                this.modals = modals;
-                this._init();
-            }
-            _init() {
-                for (const key in this.modals) {
-                    const modal = this.modals[key];
-                    if (!modal.el) continue;
-                    modal.el.addEventListener('click', (e) => { if (e.target === modal.el) this.hide(key); });
-                    modal.el.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', () => this.hide(key)));
-                }
-            }
-            show(key) {
-                const modal = this.modals[key];
-                if (!modal?.el) return;
-                modal.el.classList.remove('hidden', 'modal-exiting');
-                modal.el.classList.add('modal-entering');
-            }
-            hide(key) {
-                const modal = this.modals[key];
-                if (!modal?.el) return;
-                modal.el.classList.remove('modal-entering');
-                modal.el.classList.add('modal-exiting');
-                setTimeout(() => modal.el.classList.add('hidden'), 300);
-            }
-        }
-        class CommentSystem {
-             constructor(listElement, modalManager) {
-                this.commentList = listElement;
-                this.modalManager = modalManager;
-                this.storageKey = 'userComments_mlfee';
-                this.defaultComments = [
-                    { id: 'default1', name: 'AA 법사z', info: 'Lv. ?? 아크메이지', text: '레이드 크로니클 덕분에 자쿰 원정 처음으로 안 짤리고 깼어요. 오더가 정말 편해집니다. 강추!', avatar: 'https://placehold.co/40x40/3b82f6/ffffff?text=M' },
-                    { id: 'default2', name: 'ㅁㅁ공대장', info: '자쿰 원정대', text: 'N빵마스터 없었을 땐 매번 계산기 두들기느라 힘들었는데, 이젠 클릭 한 번이면 끝이네요. 시간 엄청 아꼈어요.', avatar: 'https://placehold.co/40x40/ef4444/ffffff?text=L' },
-                    { id: 'default3', name: 'DD 프리', info: 'Lv. ?? 비숍', text: '파티원들한테 리저 시간 브리핑해주기 너무 편해요. 시간 클릭하면 바로 복사되는 기능 만든 분은 천재이신 듯.', avatar: 'https://placehold.co/40x40/22c55e/ffffff?text=B' }
-                ];
-            }
-            init() {
-                if (!this.commentList) return;
-                this.render();
-            }
-            render() {
-                if (!this.commentList) return;
-                this.commentList.innerHTML = '';
-                this.defaultComments.forEach(comment => {
-                    const commentCard = document.createElement('div');
-                    commentCard.className = 'bg-gray-800/50 p-6 rounded-2xl border border-gray-700 card-hover flex flex-col relative';
-                    commentCard.innerHTML = `
-                        <div class="flex-grow"><p class="text-gray-300 mb-6 break-words">${comment.text}</p></div>
-                        <div class="flex items-center mt-auto">
-                            <img src="${comment.avatar}" alt="User Avatar" class="w-10 h-10 rounded-full mr-4">
-                            <div><p class="font-bold text-white">${comment.name}</p><p class="text-sm text-gray-500">${comment.info}</p></div>
-                        </div>`;
-                    this.commentList.appendChild(commentCard);
-                });
-            }
-        }
-        class Sidebar {
-            constructor(elements) { this.elements = elements; }
-            init() {
-                if (!this.elements.toggleBtn || !this.elements.sidebarEl || !this.elements.overlayEl) return;
-                this.elements.toggleBtn.addEventListener('click', () => this.toggle());
-                this.elements.overlayEl.addEventListener('click', () => this.close());
-                this.elements.sidebarEl.addEventListener('click', (e) => { if(e.target.tagName === 'A') this.close(); });
-            }
-            toggle() {
-                this.elements.sidebarEl.classList.toggle('translate-x-full');
-                this.elements.toggleBtn.classList.toggle('active');
-                this.elements.overlayEl.classList.toggle('hidden');
-            }
-            close() {
-                this.elements.sidebarEl.classList.add('translate-x-full');
-                this.elements.toggleBtn.classList.remove('active');
-                this.elements.overlayEl.classList.add('hidden');
-            }
-        }
-
-        // ---------------------------------
-        // Main Application Controller
-        // ---------------------------------
         class App {
             constructor() {
-                this.elements = this._queryElements();
-                this.modalManager = new ModalManager(this.elements.modals);
+                this.uiManager = new UIManager(AppConfig);
+                this.modalManager = new ModalManager();
                 this.authManager = new AuthManager(this.modalManager);
-                this.profileManager = new ProfileManager(this.modalManager);
-                this.commentSystem = new CommentSystem(this.elements.commentList, this.modalManager);
-                this.sidebar = new Sidebar(this.elements.sidebar);
-                this.qrCodeGenerated = false;
-            }
-
-            _queryElements() {
-                return {
-                    modals: {
-                        auth: { el: document.getElementById('authModal') },
-                        profile: { el: document.getElementById('profileModal') },
-                        comment: { el: document.getElementById('commentModal'), form: document.getElementById('commentForm') },
-                        contact: { el: document.getElementById('contactModal') },
-                        updates: { el: document.getElementById('updatesModal') },
-                        donation: { el: document.getElementById('donationModal') },
-                        confirm: { el: document.getElementById('confirmModal') }
-                    },
-                    sidebar: {
-                        toggleBtn: document.getElementById('sidebar-toggle'),
-                        sidebarEl: document.getElementById('sidebar'),
-                        overlayEl: document.getElementById('sidebar-overlay')
-                    },
-                    // [추가] 프로필 드롭다운 메뉴 관련 요소
-                    profileContainer: document.getElementById('logged-in-view'),
-                    profileDropdown: document.querySelector('.profile-dropdown'),
-                    commentList: document.getElementById('comment-list'),
-                    loginBtn: document.getElementById('login-btn'),
-                    signupBtn: document.getElementById('signup-btn'),
-                    donateBtn: document.getElementById('donateBtn'),
-                    qrContainer: document.getElementById('qrcode-container'),
-                    navLinks: {
-                        guideLink: document.getElementById('guideLink'),
-                        updatesLink: document.getElementById('updatesLink'),
-                        contactLink: document.getElementById('contactLink')
-                    }
-                };
+                this.router = new Router(this.uiManager); // 라우터 추가
             }
 
             init() {
-                this.sidebar.init();
-                this.commentSystem.init();
-                this._initEventListeners();
-                (adsbygoogle = window.adsbygoogle || []).push({});
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-
-            _initEventListeners() {
-                this.elements.loginBtn?.addEventListener('click', () => {
-                    if (!this.authManager.isLoginMode) this.authManager.toggleMode();
-                    this.modalManager.show('auth');
-                });
-                this.elements.signupBtn?.addEventListener('click', () => {
-                    if (this.authManager.isLoginMode) this.authManager.toggleMode();
-                    this.modalManager.show('auth');
-                });
-                
-                // [추가] 프로필 메뉴 클릭 이벤트
-                this.elements.profileContainer?.querySelector('.cursor-pointer')?.addEventListener('click', (e) => {
-                    e.stopPropagation(); // 이벤트 버블링 방지
-                    this.elements.profileDropdown.classList.toggle('show');
-                });
-
-                this.elements.donateBtn?.addEventListener('click', () => {
-                    this.modalManager.show('donation');
-                    this._generateQRCode();
-                });
-                this.elements.navLinks.updatesLink?.addEventListener('click', (e) => { e.preventDefault(); this.modalManager.show('updates'); });
-                this.elements.navLinks.contactLink?.addEventListener('click', (e) => { e.preventDefault(); this.modalManager.show('contact'); });
-                this.elements.navLinks.guideLink?.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    document.getElementById('guides')?.scrollIntoView({ behavior: 'smooth' });
-                });
-
-                // [추가] 프로필 메뉴 바깥 영역 클릭 시 메뉴 닫기
-                window.addEventListener('click', (e) => {
-                    if (this.elements.profileContainer && !this.elements.profileContainer.contains(e.target)) {
-                        this.elements.profileDropdown?.classList.remove('show');
-                    }
-                });
-            }
-
-            _generateQRCode() {
-                if (this.qrCodeGenerated || !this.elements.qrContainer) return;
-                new QRCode(this.elements.qrContainer, {
-                    text: "https://qr.kakaopay.com/Fb3Rszvbr",
-                    width: 176, height: 176, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H
-                });
-                this.qrCodeGenerated = true;
+                this.uiManager.init();
+                console.log("MLFEE TIMES App Initialized");
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const app = new App();
-            app.init();
+            new App().init();
         });
     </script>
 </body>
