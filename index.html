@@ -34,7 +34,9 @@
         html { scroll-behavior: smooth; }
         body { 
             font-family: 'Inter', 'Noto Sans KR', sans-serif; 
-            background-color: #ffffff;
+            /* [신문지 효과] 미세한 질감의 배경 추가 */
+            background-color: #f8f7f2;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAAG3RSTlNAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAvEOwtAAAAYklEQVRIx+3NMQoAIAwEBP//Pa1HlEDG3t2ahDcAaIQDbw0c2HGY2T4U6BS2YYA7V5wBvStA9h0z8BLsjQ3a0G2gU2w5s62rZdPMtqgZkAErNOfc65+hJSFyAEoWLoIBPOAHzGU28wAAAABJRU5ErkJggg==');
             color: #111111;
         }
         .font-serif { font-family: 'Playfair Display', serif; }
@@ -42,23 +44,6 @@
         .header-shadow {
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
             border-bottom: 1px solid #e5e7eb;
-        }
-
-        .profile-dropdown {
-            display: none;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-        .profile-dropdown.show {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .sidebar-sticky {
-            position: sticky;
-            top: 100px;
         }
         
         .ad-slot {
@@ -76,14 +61,20 @@
         @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .modal-entering { animation: fadeIn 0.3s ease-out forwards; }
         .modal-entering .modal-content { animation: slideInUp 0.3s ease-out forwards; }
-        
-        .prose { color: #374151; }
-        .prose h1, .prose h2, .prose h3 { color: #111827; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
-        .prose a { color: #2563eb; text-decoration: underline; }
-        .prose blockquote { border-left-color: #3b82f6; color: #4b5563; }
-        .prose code { color: #be123c; background-color: #fef2f2; padding: 2px 5px; border-radius: 4px; font-weight: 600; }
-        .prose pre { background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; color: #d1d5db; }
-        .prose pre code { color: inherit; background-color: transparent; padding: 0; }
+
+        /* [만년필 이펙트] 타이핑 커서 애니메이션 */
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background-color: #333;
+            animation: blink 0.7s infinite;
+            margin-left: 4px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -94,47 +85,23 @@
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center gap-4">
                     <button id="mobile-menu-btn" class="lg:hidden text-xl"><i class="fas fa-bars"></i></button>
-                    <!-- [관리자 기능] 글쓰기 버튼. 관리자로 로그인 시 자동으로 나타납니다. -->
+                    <!-- [관리자 기능] 글쓰기 버튼. 관리자 로그인 시 자동으로 나타납니다. -->
                     <button id="write-post-btn" class="hidden bg-blue-600 text-white font-bold py-2 px-4 rounded-md text-sm hover:bg-blue-700 transition-colors">
                         <i class="fas fa-pen-to-square mr-1"></i> 글쓰기
                     </button>
                 </div>
                 <a href="index.html" class="text-3xl md:text-4xl font-serif font-bold text-black absolute left-1/2 -translate-x-1/2">MLFEE TIMES</a>
-                <div id="auth-container">
-                    <!-- Logged Out/In Views -->
-                    <div id="logged-out-view">
-                        <button id="login-btn" class="bg-black text-white font-bold py-2 px-5 rounded-md text-sm hover:bg-gray-800 transition-colors">로그인</button>
-                    </div>
-                    <div id="logged-in-view" class="hidden relative">
-                        <div class="flex items-center gap-2 cursor-pointer profile-avatar-btn">
-                            <img id="user-avatar" src="https://placehold.co/32x32/e9ecef/495057?text=M" alt="User Avatar" class="w-8 h-8 rounded-full border-2 border-gray-300">
-                        </div>
-                        <div class="profile-dropdown absolute right-0 mt-3 w-48 bg-white rounded-lg shadow-xl py-1 border border-gray-200 z-10">
-                            <div class="px-4 py-2 border-b border-gray-200">
-                                <p class="font-semibold text-sm text-gray-800 truncate" id="user-nickname">닉네임</p>
-                            </div>
-                            <a href="#" id="profile-settings-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">프로필 설정</a>
-                            <button id="logout-btn" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">로그아웃</button>
-                        </div>
-                    </div>
-                </div>
+                <div></div>
             </div>
-            <!-- 
-                [수동 관리] 네비게이션 메뉴
-                - 새로운 카테고리를 추가하려면 아래 <a> 태그를 복사하여 이름과 href 링크를 수정하세요.
-                - 예: <a href="it-trends.html" class="nav-link">IT 트렌드</a>
-            -->
             <nav id="main-nav" class="hidden lg:flex justify-center items-center gap-8 py-3 border-t border-gray-200">
                 <a href="devlog.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">개발실록</a>
                 <a href="maple-tools.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">메이플랜드 도구</a>
-                <a href="community/index.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">커뮤니티</a>
                 <a href="#" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">사이트 소개</a>
             </nav>
         </div>
         <div id="mobile-nav-container" class="hidden lg:hidden bg-white border-t border-gray-200">
              <a href="devlog.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">개발실록</a>
              <a href="maple-tools.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">메이플랜드 도구</a>
-             <a href="community/index.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">커뮤니티</a>
              <a href="#" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">사이트 소개</a>
         </div>
     </header>
@@ -145,18 +112,11 @@
             <div class="ad-slot h-[100px] w-full max-w-[728px] mx-auto">(광고 슬롯 728x90)</div>
         </div>
         <main class="container mx-auto px-4 py-8">
-            <!-- 
-                [수동 관리] 히어로 섹션 (메인 추천 글)
-                - 이 섹션의 내용을 바꾸려면 아래 <a> 태그 안의 내용을 수정하세요.
-                - href: 클릭 시 이동할 상세 페이지 주소 (예: posts/devlog-01.html)
-                - img src: 대표 이미지 URL
-                - 카테고리, 제목, 요약 내용을 수정합니다.
-            -->
             <section id="hero-section" class="mb-12 border-b pb-12">
                 <a href="posts/devlog-01.html" class="block group">
                     <img src="https://placehold.co/800x550/111111/ffffff?text=Fee+Calculator" alt="수수료 계산기 개발기" class="w-full h-auto object-cover rounded-lg shadow-sm mb-4">
                     <p class="text-sm text-blue-600 font-semibold mt-2">개발실록</p>
-                    <h1 class="font-serif text-4xl md:text-5xl font-bold text-black leading-tight mt-2 group-hover:text-gray-700 transition-colors">"수수료로 500만 메소 날렸다고?" 분노의 AI 계산기 개발기</h1>
+                    <h1 id="hero-title" class="font-serif text-4xl md:text-5xl font-bold text-black leading-tight mt-2 group-hover:text-gray-700 transition-colors"></h1>
                     <p class="text-gray-600 mt-4">단순한 게임 속 불편함에서 시작된 작은 질문. AI라는 강력한 도구를 통해 내 손으로 직접 문제를 해결하며 느낀 성취감은, 득템의 기쁨과는 비교할 수 없는 것이었습니다.</p>
                 </a>
             </section>
@@ -165,10 +125,6 @@
                 <div class="lg:col-span-2 space-y-10">
                     <h2 class="text-2xl font-bold text-black border-b-2 border-black pb-2">최신 글</h2>
                     <div id="article-list">
-                        <!-- 
-                            [수동 관리] 최신 글 목록
-                            - 새 글을 추가하려면 아래 <article>...</article> 블록 하나를 복사해서 붙여넣고 내용을 수정하세요.
-                        -->
                         <article class="grid md:grid-cols-3 gap-6 border-b pb-10">
                             <div class="md:col-span-2">
                                 <a href="maple-tools.html" class="text-sm text-blue-600 font-semibold mb-1 hover:underline">메이플랜드 도구</a>
@@ -182,8 +138,6 @@
                                 <img src="https://placehold.co/400x300/dc2626/ffffff?text=N빵마스터" alt="N빵마스터" class="object-cover w-full h-full rounded-lg shadow-sm">
                             </a>
                         </article>
-                        <!-- /// 새 글 추가 영역 /// -->
-
                     </div>
                 </div>
                 
@@ -193,10 +147,6 @@
                         <div>
                             <h3 class="text-lg font-bold text-black mb-4 border-b-2 border-black pb-2">핵심 도구 바로가기</h3>
                             <div class="space-y-4">
-                                <!-- 
-                                    [수동 관리] 핵심 도구 목록
-                                    - 새 도구를 추가하려면 아래 <a>...</a> 블록 하나를 복사해서 붙여넣고 내용을 수정하세요.
-                                -->
                                 <a href="calc/index.html" target="_blank" class="flex items-center gap-4 group">
                                     <p class="font-serif text-3xl font-bold text-gray-300">1</p>
                                     <div>
@@ -215,7 +165,6 @@
                                         <p class="font-bold text-black group-hover:underline text-sm leading-snug">메피 버피 (실시간 버프 관리)</p>
                                     </div>
                                 </a>
-                                <!-- /// 새 도구 추가 영역 /// -->
                             </div>
                         </div>
                     </div>
@@ -232,20 +181,15 @@
                 <a href="#" class="hover:underline">사이트 소개</a>
                 <a href="#" class="hover:underline">이용약관</a>
                 <a href="#" class="hover:underline">개인정보처리방침</a>
+                <span class="text-gray-300">|</span>
+                <button id="admin-login-btn" class="hover:underline">Admin</button>
             </div>
             <p class="text-gray-400 text-xs">&copy; 2025 MLFEE TIMES. All rights reserved. (소년아서 제작)</p>
         </div>
     </footer>
     
     <!-- Modals -->
-    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-[1002] hidden">
-        <!-- Auth Modal Content -->
-    </div>
-    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-[1002] hidden">
-        <!-- Profile Modal Content -->
-    </div>
     <div id="writingModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-[1002] hidden">
-        <!-- Writing Room Modal -->
         <div class="modal-content relative bg-white rounded-lg shadow-2xl p-8 w-full max-w-4xl text-left border">
             <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition text-2xl" aria-label="Close">&times;</button>
             <h3 class="font-serif text-2xl font-bold text-black mb-6">개발실록 새 글 작성</h3>
@@ -256,8 +200,8 @@
                         <input type="text" id="post-title" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition">
                     </div>
                     <div>
-                        <label for="post-id" class="block text-sm font-medium text-gray-700 mb-1">고유 ID (영문/숫자/하이픈)</label>
-                        <input type="text" id="post-id" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition" placeholder="예: devlog-02">
+                        <label for="post-filename" class="block text-sm font-medium text-gray-700 mb-1">파일 이름 (영문/숫자/하이픈)</label>
+                        <input type="text" id="post-filename" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition" placeholder="예: devlog-02.html">
                     </div>
                 </div>
                 <div>
@@ -272,39 +216,33 @@
                     <label for="post-content" class="block text-sm font-medium text-gray-700 mb-1">본문 (HTML 형식)</label>
                     <textarea id="post-content" rows="10" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition font-mono text-sm" placeholder="<p>내용을 입력하세요...</p>"></textarea>
                 </div>
+                
+                <!-- [버그 수정] 코드 생성 결과 표시 영역 -->
+                <div id="generated-code-area" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">생성된 HTML 코드</label>
+                    <div class="relative">
+                        <pre id="generated-code-pre" class="w-full rounded-md p-4 bg-gray-800 text-white font-mono text-xs max-h-60 overflow-y-auto"></pre>
+                        <button type="button" id="copy-code-btn" class="absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white font-bold py-1 px-3 rounded-md text-xs">Copy</button>
+                    </div>
+                    <p class="text-sm text-blue-600 mt-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        위 코드를 복사하여 <code class="text-xs bg-blue-100 p-1 rounded">posts</code> 폴더 안에 <code id="generated-filename" class="text-xs bg-blue-100 p-1 rounded"></code> 이름으로 새 파일을 만들어 붙여넣으세요.
+                    </p>
+                </div>
+
                 <p id="writing-status" class="text-green-600 text-sm h-5"></p>
                 <div class="flex justify-end gap-4 pt-4">
                     <button type="button" class="modal-close-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-md transition-colors">취소</button>
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition-colors">발행하기</button>
+                    <button type="submit" id="generate-code-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition-colors">코드 생성하기</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        const AppConfig = {
-            firebase: {
-                apiKey: "AIzaSyASDsgKULCrP_3I3jz5irdzfbO9TzSwBZ8",
-                authDomain: "mlfee-hub.firebaseapp.com",
-                projectId: "mlfee-hub",
-                storageBucket: "mlfee-hub.appspot.com",
-                messagingSenderId: "330580584999",
-                appId: "1:330580584999:web:66410250d754fa68a2fc02",
-            },
-            // [중요] 관리자 설정: 여기에 본인의 Firebase UID를 입력하세요.
-            // UID는 Firebase 콘솔 > Authentication > 사용자 탭에서 확인할 수 있습니다.
-            adminUID: "YOUR_FIREBASE_ADMIN_UID_HERE", 
-        };
-
         class ModalManager {
             constructor() {
                 this.modals = {
-                    auth: { el: document.getElementById('authModal') },
-                    profile: { el: document.getElementById('profileModal') },
                     writing: { el: document.getElementById('writingModal') },
                 };
                 this._init();
@@ -333,115 +271,184 @@
             }
         }
         
-        class AuthManager {
+        class AdminManager {
             constructor(modalManager) {
-                this.auth = getAuth(initializeApp(AppConfig.firebase));
                 this.modalManager = modalManager;
                 this.elements = {
+                    adminLoginBtn: document.getElementById('admin-login-btn'),
                     writePostBtn: document.getElementById('write-post-btn'),
                 };
+                this.ADMIN_PASSWORD = "admin";
                 this._init();
             }
 
             _init() {
-                onAuthStateChanged(this.auth, (user) => this._onAuthStateChanged(user));
-            }
-
-            _onAuthStateChanged(user) {
-                if (user && user.uid === AppConfig.adminUID) {
-                    this.elements.writePostBtn.classList.remove('hidden');
-                } else {
-                    this.elements.writePostBtn.classList.add('hidden');
-                }
-                // 로그인/로그아웃 UI 관련 로직은 여기에 추가할 수 있습니다.
+                this.elements.adminLoginBtn.addEventListener('click', () => {
+                    const password = prompt('관리자 비밀번호를 입력하세요:');
+                    if (password === this.ADMIN_PASSWORD) {
+                        alert('관리자 모드가 활성화되었습니다.');
+                        this.elements.writePostBtn.classList.remove('hidden');
+                    } else if (password) {
+                        alert('비밀번호가 일치하지 않습니다.');
+                    }
+                });
             }
         }
 
         class WritingManager {
-            constructor(modalManager, db) {
+            constructor(modalManager) {
                 this.modalManager = modalManager;
-                this.db = db;
                 this.elements = {
                     writePostBtn: document.getElementById('write-post-btn'),
                     writingForm: document.getElementById('writing-form'),
-                    statusMessage: document.getElementById('writing-status'),
                     titleInput: document.getElementById('post-title'),
-                    idInput: document.getElementById('post-id'),
+                    filenameInput: document.getElementById('post-filename'),
+                    generatedCodeArea: document.getElementById('generated-code-area'),
+                    generatedCodePre: document.getElementById('generated-code-pre'),
+                    generatedFilenameSpan: document.getElementById('generated-filename'),
+                    generateCodeBtn: document.getElementById('generate-code-btn'),
+                    copyCodeBtn: document.getElementById('copy-code-btn'),
                 };
                 this._init();
             }
 
             _init() {
                 this.elements.writePostBtn.addEventListener('click', () => {
+                    this.elements.generatedCodeArea.classList.add('hidden');
+                    this.elements.generateCodeBtn.textContent = '코드 생성하기';
                     this.modalManager.show('writing');
                 });
 
-                this.elements.writingForm.addEventListener('submit', async (e) => {
+                this.elements.writingForm.addEventListener('submit', (e) => {
                     e.preventDefault();
-                    await this.savePost();
+                    this.generatePostHTML();
                 });
 
                 this.elements.titleInput.addEventListener('input', (e) => {
-                    this.elements.idInput.value = e.target.value
+                    const filename = e.target.value
                         .trim()
                         .toLowerCase()
                         .replace(/\s+/g, '-') 
-                        .replace(/[^\w-]+/g, '');
+                        .replace(/[^\w-]+/g, '') + '.html';
+                    this.elements.filenameInput.value = filename;
+                });
+
+                this.elements.copyCodeBtn.addEventListener('click', () => {
+                    const codeToCopy = this.elements.generatedCodePre.textContent;
+                    navigator.clipboard.writeText(codeToCopy).then(() => {
+                        alert('코드가 클립보드에 복사되었습니다!');
+                    }, (err) => {
+                        console.error('클립보드 복사 실패:', err);
+                        alert('복사에 실패했습니다.');
+                    });
                 });
             }
 
-            async savePost() {
-                const postData = {
-                    id: this.elements.idInput.value,
-                    title: this.elements.titleInput.value,
-                    excerpt: document.getElementById('post-excerpt').value,
-                    imageUrl: document.getElementById('post-image-url').value,
-                    content: document.getElementById('post-content').value,
-                    category: '개발실록',
-                    author: '소년아서', 
-                    createdAt: serverTimestamp()
-                };
+            generatePostHTML() {
+                const title = this.elements.titleInput.value;
+                const filename = this.elements.filenameInput.value;
+                const excerpt = document.getElementById('post-excerpt').value;
+                const imageUrl = document.getElementById('post-image-url').value;
+                const content = document.getElementById('post-content').value;
+                const author = '소년아서';
+                const date = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 
-                if (!postData.id || !postData.title || !postData.content) {
-                    this.elements.statusMessage.textContent = 'ID, 제목, 본문은 필수 항목입니다.';
-                    this.elements.statusMessage.classList.add('text-red-600');
+                if (!filename || !title || !content) {
+                    alert('파일 이름, 제목, 본문은 필수 항목입니다.');
                     return;
                 }
 
-                try {
-                    this.elements.statusMessage.textContent = '발행 중...';
-                    this.elements.statusMessage.classList.remove('text-red-600', 'text-green-600');
-                    
-                    await setDoc(doc(this.db, "posts", postData.id), postData);
-
-                    this.elements.statusMessage.textContent = '성공적으로 발행되었습니다! 페이지를 새로고침하여 확인하세요.';
-                    this.elements.statusMessage.classList.add('text-green-600');
-                    
-                    setTimeout(() => {
-                        this.modalManager.hide('writing');
-                        this.elements.writingForm.reset();
-                        this.elements.statusMessage.textContent = '';
-                    }, 2000);
-
-                } catch (error) {
-                    console.error("Error saving post: ", error);
-                    this.elements.statusMessage.textContent = '발행 중 오류가 발생했습니다.';
-                    this.elements.statusMessage.classList.add('text-red-600');
-                }
+                const postHTML = `
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- [중요] 이 헤더 내용은 메인 페이지(index.html)의 헤더와 동일하게 유지해주세요. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title} | MLFEE TIMES</title>
+    <meta name="description" content="${excerpt}">
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: #f8f7f2; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAAG3RSTlNAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAvEOwtAAAAYklEQVRIx+3NMQoAIAwEBP//Pa1HlEDG3t2ahDcAaIQDbw0c2HGY2T4U6BS2YYA7V5wBvStA9h0z8BLsjQ3a0G2gU2w5s62rZdPMtqgZkAErNOfc65+hJSFyAEoWLoIBPOAHzGU28wAAAABJRU5ErkJggg=='); }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .prose { color: #374151; }
+        .prose h1, .prose h2, .prose h3 { color: #111827; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+        .prose a { color: #2563eb; text-decoration: underline; }
+        .prose blockquote { border-left-color: #3b82f6; color: #4b5563; }
+        .prose code { color: #be123c; background-color: #fef2f2; padding: 2px 5px; border-radius: 4px; font-weight: 600; }
+        .prose pre { background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; color: #d1d5db; }
+        .prose pre code { color: inherit; background-color: transparent; padding: 0; }
+    </style>
+</head>
+<body class="antialiased">
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <a href="../devlog.html" class="text-blue-600 font-semibold text-sm hover:underline">개발실록</a>
+            <h1 class="font-serif text-4xl md:text-6xl font-bold text-black leading-tight mt-2">${title}</h1>
+            <div class="flex items-center gap-4 text-sm text-gray-500 my-6 border-y border-gray-200 py-4">
+                <span>By ${author}</span>
+                <span>${date}</span>
+            </div>
+            <img src="${imageUrl}" alt="${title}" class="w-full h-auto object-cover rounded-lg shadow-lg mb-8">
+            <article class="prose prose-lg max-w-none">
+                ${content}
+            </article>
+            <div class="mt-12 pt-8 border-t border-gray-200">
+                <a href="../devlog.html" class="bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-md transition-colors">&larr; 개발실록 목록으로</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>`;
+                
+                // [버그 수정] textarea 대신 pre > code 태그에 텍스트를 삽입하여 HTML 깨짐 방지
+                this.elements.generatedCodePre.textContent = postHTML.trim();
+                this.elements.generatedFilenameSpan.textContent = filename;
+                this.elements.generatedCodeArea.classList.remove('hidden');
+                this.elements.generateCodeBtn.textContent = '다시 생성하기';
             }
         }
         
         class App {
             constructor() {
-                const app = initializeApp(AppConfig.firebase);
-                const db = getFirestore(app);
                 this.modalManager = new ModalManager();
-                this.authManager = new AuthManager(this.modalManager);
-                this.writingManager = new WritingManager(this.modalManager, db);
+                this.adminManager = new AdminManager(this.modalManager);
+                this.writingManager = new WritingManager(this.modalManager);
             }
 
             init() {
                 console.log("MLFEE TIMES App Initialized");
+                this.typewriterEffect();
+            }
+
+            typewriterEffect() {
+                const titleElement = document.getElementById('hero-title');
+                if (!titleElement) return;
+                const text = `"수수료로 500만 메소 날렸다고?" 분노의 AI 계산기 개발기`;
+                let i = 0;
+                titleElement.innerHTML = ''; // Clear existing text
+                const typing = () => {
+                    if (i < text.length) {
+                        titleElement.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(typing, 50); // 타이핑 속도 조절
+                    } else {
+                        // 타이핑 완료 후 커서 제거
+                        const cursor = titleElement.querySelector('.typing-cursor');
+                        if (cursor) cursor.remove();
+                    }
+                };
+
+                // 커서 추가
+                const cursorSpan = document.createElement('span');
+                cursorSpan.className = 'typing-cursor';
+                titleElement.appendChild(cursorSpan);
+
+                typing();
             }
         }
 
