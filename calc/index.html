@@ -1,66 +1,67 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLFEE TIMES | AI로 일상과 게임의 생산성을 바꾸다</title>
-    <meta name="description" content="비개발자가 AI를 활용해 메이플랜드 필수 유틸리티를 개발하고, 그 여정을 공유합니다. 당신의 생산성을 높여줄 AI 꿀팁과 개발 실록을 만나보세요.">
-    <meta name="keywords" content="AI, 비개발자, 개발 실록, 생산성, 메이플랜드, 유틸리티, 수수료 계산기, 리저렉션 타이머, MLFEE, Gemini, ChatGPT">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-site-verification" content="googlef09844df4586c2f0" />
+    <meta name="description" content="메이플랜드 N빵마스터! 수수료작, 파티 분배, 택배 정산, 그리고 목표 금액을 위한 역산까지. 가장 정확하고 빠른 자동 계산기로 당신의 소중한 메소를 지키세요.">
+    <meta name="keywords" content="메이플랜드, 메랜, N빵마스터, 수수료 계산기, 수작 계산기, N빵, 분배, 정산, 역산, 소년아서, MLFEE">
+    <title>N빵마스터 - 메이플랜드 수수료·정산·역산 자동 계산기</title>
     
-    <!-- Open Graph Meta Tags for Social Sharing -->
-    <meta property="og:title" content="MLFEE TIMES | AI로 당신의 문제를 해결합니다">
-    <meta property="og:description" content="코딩을 몰라도 괜찮아요. 비개발자가 AI로 메이플랜드 필수 도구를 만들고, 그 모든 과정을 공유합니다. 당신의 생산성을 높여줄 영감을 얻어가세요.">
-    <meta property="og:image" content="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png">
-    <meta property="og:image:width" content="1200"> 
-    <meta property="og:image:height" content="630">
-    <meta property="og:url" content="https://mlfee.com">
-    <meta property="og:type" content="website">
-
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    
     <!-- Favicon -->
     <link rel="icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
     
-    <!-- External Libraries: TailwindCSS, Fonts, Font Awesome -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
+    <!-- Open Graph for Social Sharing -->
+    <meta property="og:title" content="N빵마스터 - 메이플랜드 필수 계산기">
+    <meta property="og:description" content="자쿰, 혼테일 원정 후 복잡한 정산, N빵마스터 하나로 해결하세요! 수수료 '수작'부터 역산까지 완벽 지원.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png">
+    <meta property="og:image:width" content="1200"> 
+    <meta property="og:image:height" content="630">
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615" crossorigin="anonymous"></script>
-     
+      
     <style>
         html { scroll-behavior: smooth; }
         body { 
             font-family: 'Inter', 'Noto Sans KR', sans-serif; 
             background-color: #ffffff;
-            color: #111111;
+            color: #111827;
         }
-        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .summary-highlight { animation: pulse 2.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.01); } }
         
-        .header-shadow {
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .profile-dropdown {
-            display: none;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-        .profile-dropdown.show {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
         
-        .sidebar-sticky {
-            position: sticky;
-            top: 145px;
+        .mode-switch { display: flex; border-bottom: 2px solid #e5e7eb; }
+        .mode-switch button {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+            transform: translateY(2px);
         }
-        
+        .mode-switch button.active {
+            color: #111827;
+            border-bottom-color: #111827;
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
         .ad-slot {
             display: flex;
             align-items: center;
@@ -71,502 +72,113 @@
             font-size: 0.875rem;
             min-height: 90px;
         }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .modal-entering { animation: fadeIn 0.3s ease-out forwards; }
-        .modal-entering .modal-content { animation: slideInUp 0.3s ease-out forwards; }
-        
-        /* 게시물 상세 페이지 스타일 */
-        .prose { color: #374151; }
-        .prose h1, .prose h2, .prose h3 { color: #111827; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
-        .prose a { color: #2563eb; text-decoration: underline; }
-        .prose blockquote { border-left-color: #3b82f6; color: #4b5563; }
-        .prose code { color: #be123c; background-color: #fef2f2; padding: 2px 5px; border-radius: 4px; font-weight: 600; }
-        .prose pre { background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; color: #d1d5db; }
-        .prose pre code { color: inherit; background-color: transparent; padding: 0; }
-
-        /* 계산기 페이지 스타일 */
-        .calculator-card {
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-        }
-        .calculator-input {
-            background-color: #ffffff;
-            border: 1px solid #d1d5db;
-        }
-        .calculator-input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-            outline: none;
-        }
-        .mode-switch { display: flex; background-color: #e5e7eb; border-radius: 9999px; padding: 0.25rem; }
-        .mode-switch button {
-            flex: 1;
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            color: #4b5563;
-        }
-        .mode-switch button.active {
-            background-color: #ffffff;
-            color: #111827;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
-        }
     </style>
 </head>
 <body class="antialiased">
-    
-    <!-- Header -->
-    <header class="bg-white/95 backdrop-blur-sm sticky top-0 z-50 header-shadow">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center gap-4">
-                    <button id="mobile-menu-btn" class="lg:hidden text-xl"><i class="fas fa-bars"></i></button>
-                </div>
-                <a href="/" class="text-3xl md:text-4xl font-serif font-bold text-black absolute left-1/2 -translate-x-1/2">MLFEE TIMES</a>
-                <div id="auth-container">
-                    <!-- Logged Out/In Views -->
-                    <div id="logged-out-view">
-                        <button id="login-btn" class="bg-black text-white font-bold py-2 px-5 rounded-md text-sm hover:bg-gray-800 transition-colors">로그인</button>
-                    </div>
-                    <div id="logged-in-view" class="hidden relative">
-                        <div class="flex items-center gap-2 cursor-pointer profile-avatar-btn">
-                            <img id="user-avatar" src="https://placehold.co/32x32/e9ecef/495057?text=M" alt="User Avatar" class="w-8 h-8 rounded-full border-2 border-gray-300">
-                        </div>
-                        <div class="profile-dropdown absolute right-0 mt-3 w-48 bg-white rounded-lg shadow-xl py-1 border border-gray-200 z-10">
-                            <div class="px-4 py-2 border-b border-gray-200">
-                                <p class="font-semibold text-sm text-gray-800 truncate" id="user-nickname">닉네임</p>
-                            </div>
-                            <a href="#" id="profile-settings-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">프로필 설정</a>
-                            <button id="logout-btn" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">로그아웃</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <nav id="main-nav" class="hidden lg:flex justify-center items-center gap-8 py-3 border-t border-gray-200">
-                <!-- Navigation links will be dynamically inserted here -->
-            </nav>
-        </div>
-        <div id="mobile-nav-container" class="hidden lg:hidden bg-white border-t border-gray-200">
-             <!-- Mobile navigation links will be dynamically inserted here -->
-        </div>
-    </header>
-    
-    <!-- Main Content Area -->
-    <div id="page-content">
-        <!-- This area will be dynamically filled by the router -->
-    </div>
 
-    <!-- Footer -->
-    <footer class="py-10 mt-10 border-t border-gray-200 bg-white">
-        <div class="container mx-auto px-4 text-center space-y-4">
-            <a href="/" class="text-3xl font-serif font-bold text-black">MLFEE TIMES</a>
-            <div class="flex justify-center items-center space-x-4 text-gray-500 text-sm">
-                <a href="#" class="hover:underline">사이트 소개</a>
-                <a href="#" class="hover:underline">이용약관</a>
-                <a href="#" class="hover:underline">개인정보처리방침</a>
-            </div>
-            <p class="text-gray-400 text-xs">&copy; 2025 MLFEE TIMES. All rights reserved. (소년아서 제작)</p>
-        </div>
-    </footer>
-    
-    <!-- Modals (Auth, Profile etc.) -->
-    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-[1002] hidden">
-        <div class="modal-content relative bg-white rounded-lg shadow-2xl p-8 w-full max-w-sm text-left border">
-            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition text-2xl" aria-label="Close">&times;</button>
-            <h3 id="auth-title" class="font-serif text-2xl font-bold text-black mb-6 text-center">로그인</h3>
-            <form id="auth-form">
-                <div class="space-y-4">
-                    <div id="nickname-field" class="hidden">
-                        <label for="nickname" class="block text-sm font-medium text-gray-700 mb-1">닉네임</label>
-                        <input type="text" id="nickname" class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition" placeholder="사용하실 닉네임을 입력하세요">
+    <div class="main-content">
+        <div class="max-w-4xl mx-auto px-4">
+            <main class="w-full py-12 sm:py-16 md:py-20">
+                <header class="text-center mb-10 border-b-2 border-black pb-4">
+                    <h1 class="text-5xl sm:text-6xl font-black font-serif text-black">
+                        N빵마스터
+                    </h1>
+                    <p class="text-gray-500 mt-4 text-lg">메이플랜드 수수료 · 정산 · 역산 자동 계산기</p>
+                </header>
+
+                <!-- 중앙 상단 광고 -->
+                <div class="my-8 text-center ad-slot">
+                    <ins class="adsbygoogle" style="display:block; width:100%;" data-ad-client="ca-pub-8602495420447615" data-ad-slot="2222222222" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                </div>
+
+                <!-- 계산기 입력부 -->
+                <div class="bg-white p-6 sm:p-8 rounded-lg border border-gray-200 shadow-sm">
+                    <div class="mode-switch mb-6">
+                        <button id="mode-standard" class="active">정산 모드</button>
+                        <button id="mode-reverse">역산 모드</button>
                     </div>
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">이메일</label>
-                        <input type="email" id="email" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition">
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                        <div>
+                            <label for="mainAmount" id="mainAmountLabel" class="block text-sm font-medium text-gray-700 mb-1">총 거래 금액</label>
+                            <input type="text" id="mainAmount" placeholder="예: 100,000,000" class="w-full bg-white border border-gray-300 rounded-md p-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        </div>
+                        <div>
+                            <label for="transactionType" class="block text-sm font-medium text-gray-700 mb-1">거래 방식</label>
+                            <select id="transactionType" class="w-full bg-white border border-gray-300 rounded-md p-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                <option value="general">일반 거래</option>
+                                <option value="parcel">택배 거래</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="numPeople" class="block text-sm font-medium text-gray-700 mb-1">분배 인원</label>
+                            <input type="number" id="numPeople" placeholder="1명 (기본)" class="w-full bg-white border border-gray-300 rounded-md p-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        </div>
                     </div>
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">비밀번호</label>
-                        <input type="password" id="password" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition">
+                    
+                    <div id="parcelOptions" class="mt-4 hidden">
+                        <label class="flex items-center space-x-2 text-sm text-gray-600 cursor-pointer">
+                            <input type="checkbox" id="includeSelf" checked class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                            <span>본인 포함 분배 (총액을 N명으로 나눔)</span>
+                        </label>
+                    </div>
+                    
+                    <div id="error-message" class="text-red-600 text-sm mt-4 text-center h-5"></div>
+
+                    <div class="mt-6">
+                        <button id="calculateBtn" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-3 px-6 rounded-md transition duration-300">계산하기</button>
                     </div>
                 </div>
-                <p id="auth-error" class="text-red-600 text-sm mt-4 h-5"></p>
-                <div class="mt-6">
-                    <button type="submit" id="auth-submit-btn" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-md transition-colors">로그인</button>
-                </div>
-            </form>
-            <p class="text-center text-sm text-gray-500 mt-6">
-                <span id="auth-switch-text">계정이 없으신가요?</span>
-                <button id="auth-switch-btn" class="font-semibold text-black hover:underline">회원가입</button>
-            </p>
-        </div>
-    </div>
-    
-    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-[1002] hidden">
-        <div class="modal-content relative bg-white rounded-lg shadow-2xl p-8 w-full max-w-sm text-left border">
-            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition text-2xl" aria-label="Close">&times;</button>
-            <h3 class="font-serif text-2xl font-bold text-black mb-6 text-center">프로필 설정</h3>
-            <form id="profile-form">
-                <div class="space-y-4">
-                    <div>
-                        <label for="profile-nickname" class="block text-sm font-medium text-gray-700 mb-1">닉네임</label>
-                        <input type="text" id="profile-nickname" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition">
+
+                <!-- 결과 표시 영역 -->
+                <div id="resultArea" class="mt-6"></div>
+                
+                <div class="w-full h-px bg-gray-200 my-12"></div>
+
+                <div id="calculator-guide" class="mt-6">
+                    <div class="bg-gray-50 p-6 sm:p-8 rounded-lg border border-gray-200">
+                        <h2 class="text-2xl font-bold text-black mb-4 text-center font-serif">N빵마스터 활용 가이드</h2>
+                        <div class="grid md:grid-cols-2 gap-x-8 gap-y-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-3">왜 필요한가요?</h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    고가의 아이템을 거래하거나, 원정 후 전리품을 분배할 때 '수수료'는 생각보다 큰 변수입니다. N빵마스터는 '499작', '999작' 등 모든 수수료 절감 방식을 고려하여 최적의 분배 조합을 찾아드립니다. 당신의 시간을 갈아 넣어 얻은 소중한 메소, 단 한 푼도 허투루 쓰이지 않도록 지켜드리겠습니다.
+                                </p>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-3">활용 팁</h3>
+                                <ul class="space-y-3 text-gray-600">
+                                    <li class="flex items-start">
+                                        <span class="text-blue-500 mr-2 mt-1">💡</span>
+                                        <div><strong class="text-gray-800">원정대 필수 규칙:</strong> "분배는 N빵마스터 기준!"이라고 미리 약속하여 갈등 없는 클린한 정산을 경험하세요.</div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-blue-500 mr-2 mt-1">💡</span>
+                                        <div><strong class="text-gray-800">현명한 거래의 시작:</strong> 거래 전 미리 계산하여 구매자와 판매자 모두에게 이득이 되는 거래를 만드세요.</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label for="profile-job" class="block text-sm font-medium text-gray-700 mb-1">한 줄 소개</label>
-                        <input type="text" id="profile-job" class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition" placeholder="예: AI로 문제를 해결하는 비개발자">
+                </div>
+
+                <div class="my-8 text-center ad-slot">
+                    <ins class="adsbygoogle" style="display:block; width:100%;" data-ad-client="ca-pub-8602495420447615" data-ad-slot="4444444444" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                </div>
+
+                <footer class="text-center mt-10 mb-6 text-sm text-gray-500">
+                    <div class="flex justify-center space-x-4 mb-4">
+                        <a href="https://mlfee.com" class="hover:text-blue-600 transition">MLFEE TIMES 홈</a>
+                        <a href="#" class="hover:text-blue-600 transition">이용약관</a>
+                        <a href="#" class="hover:text-blue-600 transition">개인정보처리방침</a>
                     </div>
-                </div>
-                <p id="profile-success" class="text-green-600 text-sm mt-4 h-5"></p>
-                <div class="flex justify-end gap-4 mt-8">
-                    <button type="button" class="modal-close-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-md transition-colors">취소</button>
-                    <button type="submit" class="bg-black hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-md transition-colors">저장하기</button>
-                </div>
-            </form>
+                    <p>제작자: 소년아서</p>
+                </footer>
+            </main>
         </div>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        const AppConfig = {
-            firebase: {
-                apiKey: "AIzaSyASDsgKULCrP_3I3jz5irdzfbO9TzSwBZ8",
-                authDomain: "mlfee-hub.firebaseapp.com",
-                projectId: "mlfee-hub",
-                storageBucket: "mlfee-hub.appspot.com",
-                messagingSenderId: "330580584999",
-                appId: "1:330580584999:web:66410250d754fa68a2fc02",
-            },
-            navLinks: [
-                { name: '개발실록', href: '?category=개발실록' },
-                { name: '메이플랜드 도구', href: '?category=메이플랜드 도구' },
-                { name: '커뮤니티', href: 'community/index.html', isExternal: true },
-                { name: '사이트 소개', href: '#' },
-            ],
-            posts: [
-                {
-                    id: 'devlog-01',
-                    isFeatured: true,
-                    category: '개발실록',
-                    title: '"수수료로 500만 메소 날렸다고?" 분노의 AI 계산기 개발기',
-                    excerpt: '단순한 게임 속 불편함에서 시작된 작은 질문. AI라는 강력한 도구를 통해 내 손으로 직접 문제를 해결하며 느낀 성취감은, 득템의 기쁨과는 비교할 수 없는 것이었습니다.',
-                    author: '소년아서',
-                    date: '2025년 7월 26일',
-                    imageUrl: 'https://placehold.co/800x550/111111/ffffff?text=Fee+Calculator',
-                    content: `
-                        <p class="lead text-xl text-gray-500 mb-8">"드드득-" 메이플랜드에서 이 소리만큼 심장을 뛰게 하는 소리가 또 있을까. 며칠 밤낮으로 사냥하던 끝에 마침내 모니터 위에 떠오른 [뇌전 수리검]. 그 짜릿함은 겪어본 사람만이 안다. 하지만 그 기쁨도 잠시, 아이템을 판매하려고 교환창을 띄우는 순간 마주하는 막막함이 있다. 바로 '수수료'라는 세 글자다.</p>
-                        <h2 class="text-3xl font-bold my-6">답을 찾아 헤매다</h2>
-                        <p>가장 먼저 한 일은 인터넷 검색이었다. '메이플랜드 수수료 계산기'. 하지만 검색 결과는 처참했다. 그 어디에도 내가 원하는 간단한 계산기는 존재하지 않았다. 주변에 답답함을 토로하자 "엑셀 쓰면 되잖아" 라는 답이 돌아왔지만, 나 같은 '엑셀 초보'에게는 너무나 높은 벽처럼 느껴졌다.</p>
-                        <blockquote class="border-l-4 border-blue-500 pl-4 italic my-8">
-                            "내 소중한 메소가 증발한다... 이대로 그냥, 팔 때마다 어림짐작하며 아쉬워해야만 하는 걸까?"
-                        </blockquote>
-                        <h2 class="text-3xl font-bold my-6">AI, 너 혹시...?</h2>
-                        <p>포기하려던 찰나, 문득 요즘 유행하는 '그 녀석', AI가 떠올랐다. 밑져야 본전이라는 생각으로 Gemini에게 말을 걸어보기 시작했다. 배경을 설명하고, 내가 원하는 것을 명확하게 지시했다.</p>
-                        <pre><code>// 나의 프롬프트 (to Gemini):
-"메이플랜드의 아이템 교환 수수료율은 5%야. 
-판매 금액을 입력하면, 수수료 5%를 제외하고 
-실제로 내가 받게 되는 금액을 계산해주는 
-웹사이트 형태로 만들어줘. 눈으로 볼 수 있게!"</code></pre>
-                        <p class="mt-4">잠시 후, Gemini는 나에게 링크 하나를 던져주었다. 내 눈앞에는 실제로 작동하는 웹페이지 형태의 계산기가 나타났다. 하지만 '가독성'이 아쉬웠다. 나는 다시 AI와 대화를 시작했다. 마치 살아있는 개발자와 소통하듯이.</p>
-                        <h2 class="text-3xl font-bold my-6">코딩을 몰라도, 문제를 해결할 수 있는 시대</h2>
-                        <p>단 한 번의 추가 요청으로, 1,000단위 쉼표 기능이 추가된 '나만의 맞춤 계산기'가 탄생했다. 이 순간, 나는 단순한 사용자가 아니라 '창조자'가 된 기분이었다. 이제는 기술 지식이 없어도, 자신의 문제를 명확히 정의하고 AI에게 제대로 질문만 할 수 있다면, 우리 모두 '나만의 해결사'가 될 수 있는 시대가 왔다.</p>
-                    `
-                },
-                {
-                    id: 'maple-tool-01',
-                    category: '메이플랜드 도구',
-                    title: "N빵마스터 (수수료 계산기)",
-                    excerpt: "메소 수수료 '수작'부터 N인 파티 분배, 택배 정산, 목표 금액 역산까지 원클릭으로 해결하세요.",
-                    author: '소년아서',
-                    date: '2025년 7월 25일',
-                    imageUrl: 'https://placehold.co/400x300/dc2626/ffffff?text=N빵마스터',
-                    href: '?page=calculator' // 계산기 페이지로 연결
-                },
-                {
-                    id: 'maple-tool-02',
-                    category: '메이플랜드 도구',
-                    title: '레이드 크로니클 (리저 타이머)',
-                    excerpt: '비숍의 리저렉션 쿨타임을 정확히 체크하고, 다음 예상 시간을 공유하여 안정적인 레이드를 운영하세요.',
-                    author: '소년아서',
-                    date: '2025년 7월 24일',
-                    imageUrl: 'https://placehold.co/400x300/2563eb/ffffff?text=리저+타이머',
-                    href: 'timer/index.html', // 외부 링크
-                    isExternal: true
-                },
-                {
-                    id: 'maple-tool-03',
-                    category: '메이플랜드 도구',
-                    title: '메피 버피 (실시간 버프 관리)',
-                    excerpt: '홀리심볼, 샤프 아이즈 등 주요 버프 스킬의 주기를 관리하고, 음성으로 리필 타이밍을 알려드립니다.',
-                    author: '소년아서',
-                    date: '2025년 7월 23일',
-                    imageUrl: 'https://placehold.co/400x300/16a34a/ffffff?text=메피+버피',
-                    href: 'buff/index.html', // 외부 링크
-                    isExternal: true
-                },
-            ]
-        };
-
-        class Router {
-            constructor(uiManager) {
-                this.uiManager = uiManager;
-                this.init();
-            }
-
-            init() {
-                window.addEventListener('popstate', () => this.route());
-                this.attachLinkListeners(document.body);
-                this.route();
-            }
-            
-            attachLinkListeners(container) {
-                 container.querySelectorAll('a').forEach(link => {
-                    if(link.getAttribute('data-listener-attached') || link.getAttribute('target') === '_blank') return;
-                    
-                    const isInternalRoute = link.href.includes(window.location.origin) && (link.search.includes('?post=') || link.search.includes('?category=') || link.search.includes('?page=') || link.pathname === '/');
-                    if (!isInternalRoute) return;
-
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const url = new URL(link.href);
-                        history.pushState({}, '', url.pathname + url.search);
-                        this.route();
-                    });
-                     link.setAttribute('data-listener-attached', 'true');
-                });
-            }
-
-            route() {
-                const params = new URLSearchParams(window.location.search);
-                const postId = params.get('post');
-                const category = params.get('category');
-                const page = params.get('page');
-                
-                if (postId) {
-                    this.uiManager.renderPostDetailPage(postId);
-                } else if (page === 'calculator') {
-                    this.uiManager.renderCalculatorPage();
-                }
-                else {
-                    this.uiManager.renderHomePage(category);
-                }
-                this.attachLinkListeners(document.getElementById('page-content'));
-            }
-        }
-
-        class UIManager {
-            constructor(config) {
-                this.config = config;
-                this.elements = {
-                    pageContent: document.getElementById('page-content'),
-                    mainNav: document.getElementById('main-nav'),
-                    mobileNavContainer: document.getElementById('mobile-nav-container'),
-                    mobileMenuBtn: document.getElementById('mobile-menu-btn'),
-                };
-            }
-
-            init() {
-                this.renderNavigation();
-                this.initEventListeners();
-            }
-            
-            renderHomePage(category) {
-                const homeHTML = `
-                    <div class="container mx-auto px-4 pt-6">
-                        <div class="ad-slot h-[100px] w-full max-w-[728px] mx-auto">(광고 슬롯 728x90)</div>
-                    </div>
-                    <main class="container mx-auto px-4 py-8">
-                        <section id="hero-section" class="mb-12 border-b pb-12">
-                            ${this.createHeroPostHTML()}
-                        </section>
-                        <div class="grid lg:grid-cols-3 gap-8 lg:gap-12">
-                            <div class="lg:col-span-2 space-y-10">
-                                <h2 class="text-2xl font-bold text-black border-b-2 border-black pb-2">${category || '최신 글'}</h2>
-                                <div id="article-list">
-                                    ${this.createArticleListHTML(category)}
-                                </div>
-                            </div>
-                            <aside class="lg:col-span-1">
-                                <div class="sidebar-sticky space-y-8">
-                                    <div class="ad-slot h-[250px] w-full">(광고 슬롯 300x250)</div>
-                                    <div>
-                                        <h3 class="text-lg font-bold text-black mb-4 border-b-2 border-black pb-2">핵심 도구 바로가기</h3>
-                                        <div class="space-y-4">
-                                            ${this.createToolsSidebarHTML()}
-                                        </div>
-                                    </div>
-                                </div>
-                            </aside>
-                        </div>
-                    </main>
-                `;
-                this.elements.pageContent.innerHTML = homeHTML;
-            }
-
-            renderPostDetailPage(postId) {
-                const post = this.config.posts.find(p => p.id === postId);
-                if (!post) {
-                    this.elements.pageContent.innerHTML = `<main class="container mx-auto px-4 py-20 text-center"><h2>404 - 페이지를 찾을 수 없습니다.</h2><a href="/" class="text-blue-600 mt-4 inline-block">홈으로 돌아가기</a></main>`;
-                    return;
-                }
-                const detailHTML = `
-                    <main class="container mx-auto px-4 py-8">
-                        <div class="max-w-4xl mx-auto">
-                            <a href="?category=${post.category}" class="text-blue-600 font-semibold text-sm hover:underline">${post.category}</a>
-                            <h1 class="font-serif text-4xl md:text-6xl font-bold text-black leading-tight mt-2">${post.title}</h1>
-                            <div class="flex items-center gap-4 text-sm text-gray-500 my-6 border-y border-gray-200 py-4">
-                                <span>By ${post.author}</span>
-                                <span>${post.date}</span>
-                            </div>
-                            <img src="${post.imageUrl.replace('800x550', '1200x700')}" alt="${post.title}" class="w-full h-auto object-cover rounded-lg shadow-lg mb-8">
-                            <article class="prose prose-lg max-w-none">
-                                ${post.content}
-                            </article>
-                            <div class="mt-12 pt-8 border-t border-gray-200">
-                                <a href="/" class="bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-md transition-colors">&larr; 목록으로 돌아가기</a>
-                            </div>
-                        </div>
-                    </main>
-                `;
-                this.elements.pageContent.innerHTML = detailHTML;
-                window.scrollTo(0, 0);
-            }
-            
-            renderCalculatorPage() {
-                const calculatorHTML = `
-                    <main class="container mx-auto px-4 py-8">
-                        <div class="max-w-3xl mx-auto">
-                            <header class="text-center mb-8">
-                                <h1 class="text-4xl sm:text-5xl font-bold font-serif">
-                                    <span class="text-blue-600">N빵마스터</span>
-                                    <span class="text-gray-800">: 수수료·정산·역산 계산기</span>
-                                </h1>
-                                <p class="text-gray-500 mt-3">복잡한 분배와 수수료작, 이제 버튼 하나로 끝내세요.</p>
-                            </header>
-                            
-                            <div class="ad-slot my-8"></div>
-
-                            <div class="calculator-card p-6 sm:p-8 rounded-xl shadow-lg">
-                                <div class="mode-switch mb-6">
-                                    <button id="mode-standard" class="active">정산 모드</button>
-                                    <button id="mode-reverse">역산 모드</button>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-                                    <div>
-                                        <label for="mainAmount" id="mainAmountLabel" class="block text-sm font-medium text-gray-700 mb-1">총 거래 금액</label>
-                                        <input type="text" id="mainAmount" placeholder="예: 100,000,000" class="w-full calculator-input rounded-lg p-2.5">
-                                    </div>
-                                    <div>
-                                        <label for="transactionType" class="block text-sm font-medium text-gray-700 mb-1">거래 방식</label>
-                                        <select id="transactionType" class="w-full calculator-input rounded-lg p-2.5">
-                                            <option value="general">일반 거래</option>
-                                            <option value="parcel">택배 거래</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label for="numPeople" class="block text-sm font-medium text-gray-700 mb-1">분배 인원</label>
-                                        <input type="number" id="numPeople" placeholder="1명 (기본)" class="w-full calculator-input rounded-lg p-2.5">
-                                    </div>
-                                </div>
-                                <div id="parcelOptions" class="mt-4 hidden">
-                                    <label class="flex items-center space-x-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="checkbox" id="includeSelf" checked class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
-                                        <span>본인 포함 분배 (총액을 N명으로 나눔)</span>
-                                    </label>
-                                </div>
-                                <div id="error-message" class="text-red-600 text-sm mt-4 text-center h-5"></div>
-                                <div class="mt-6">
-                                    <button id="calculateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-lg hover:shadow-blue-500/50">계산하기</button>
-                                </div>
-                            </div>
-                            <div id="resultArea" class="mt-4"></div>
-                        </div>
-                    </main>
-                `;
-                this.elements.pageContent.innerHTML = calculatorHTML;
-                new CalculatorApp().init(); // 계산기 로직 초기화
-            }
-
-            createHeroPostHTML() {
-                const featuredPost = this.config.posts.find(p => p.isFeatured);
-                if (!featuredPost) return '';
-                return `
-                    <a href="?post=${featuredPost.id}" class="block group">
-                        <img src="${featuredPost.imageUrl}" alt="${featuredPost.title}" class="w-full h-auto object-cover rounded-lg shadow-sm mb-4">
-                        <p class="text-sm text-blue-600 font-semibold mt-2">${featuredPost.category}</p>
-                        <h2 class="font-serif text-4xl md:text-5xl font-bold text-black leading-tight mt-2 group-hover:text-gray-700 transition-colors">${featuredPost.title}</h2>
-                        <p class="text-gray-600 mt-4">${featuredPost.excerpt}</p>
-                    </a>
-                `;
-            }
-
-            createArticleListHTML(category) {
-                let filteredPosts = this.config.posts;
-                if (category) {
-                    filteredPosts = this.config.posts.filter(p => p.category === category);
-                }
-                
-                return filteredPosts.map(post => `
-                    <article class="grid md:grid-cols-3 gap-6 border-b pb-10">
-                        <div class="md:col-span-2">
-                            <a href="?category=${post.category}" class="text-sm text-blue-600 font-semibold mb-1 hover:underline">${post.category}</a>
-                            <a href="${post.href}" ${post.isExternal ? 'target="_blank"' : ''}>
-                                <h3 class="font-serif text-2xl font-bold hover:text-gray-700 transition-colors mt-1">${post.title}</h3>
-                            </a>
-                            <p class="text-gray-600 text-base mt-2">${post.excerpt}</p>
-                            <p class="text-xs text-gray-500 mt-3">By ${post.author} | ${post.date}</p>
-                        </div>
-                        <a href="${post.href}" ${post.isExternal ? 'target="_blank"' : ''} class="md:col-span-1 block">
-                            <img src="${post.imageUrl.replace('800x550', '400x300')}" alt="${post.title}" class="object-cover w-full h-full rounded-lg shadow-sm">
-                        </a>
-                    </article>
-                `).join('');
-            }
-
-            createToolsSidebarHTML() {
-                const tools = this.config.posts.filter(p => p.category === '메이플랜드 도구');
-                return tools.map((tool, index) => `
-                    <a href="${tool.href}" ${tool.isExternal ? 'target="_blank"' : ''} class="flex items-center gap-4 group">
-                        <p class="font-serif text-3xl font-bold text-gray-300">${index + 1}</p>
-                        <div>
-                            <p class="font-bold text-black group-hover:underline text-sm leading-snug">${tool.title}</p>
-                        </div>
-                    </a>
-                `).join('');
-            }
-            
-            renderNavigation() {
-                const navHTML = this.config.navLinks.map(link => 
-                    `<a href="${link.href}" ${link.isExternal ? 'target="_blank"' : ''} class="text-gray-700 hover:text-black font-medium transition-colors text-sm">${link.name}</a>`
-                ).join('');
-                this.elements.mainNav.innerHTML = navHTML;
-                
-                const mobileNavHTML = this.config.navLinks.map(link =>
-                    `<a href="${link.href}" ${link.isExternal ? 'target="_blank"' : ''} class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">${link.name}</a>`
-                ).join('');
-                this.elements.mobileNavContainer.innerHTML = mobileNavHTML;
-            }
-
-            initEventListeners() {
-                this.elements.mobileMenuBtn?.addEventListener('click', () => {
-                    this.elements.mobileNavContainer.classList.toggle('hidden');
-                });
-            }
-        }
-
-        class ModalManager { /* ... 이전과 동일 ... */ }
-        class AuthManager { /* ... 이전과 동일 ... */ }
-        
         class CalculatorApp {
             constructor() {
                 this.elements = this._queryElements();
@@ -598,6 +210,8 @@
             init() {
                 if (!this.elements.calculateBtn) return;
                 this._initEventListeners();
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
             }
 
             _initEventListeners() {
@@ -636,48 +250,298 @@
                     this.elements.parcelOptionsDiv.classList.toggle('hidden', this.elements.transactionTypeSelect.value !== 'parcel');
                 });
             }
+            
+            // Helper Functions
+            _formatNumber(num) { return num.toLocaleString('ko-KR'); }
+            _parseNumber(str) { return Number(String(str).replace(/,/g, '')); }
+
+            _getFeeRate(amount, feeSchedule) {
+                for (const [threshold, rate] of feeSchedule) {
+                    if (amount >= threshold) return rate;
+                }
+                return 0.0;
+            }
+
+            _calculateFee(amount, feeSchedule) {
+                const rate = this._getFeeRate(amount, feeSchedule);
+                return Math.floor(amount * rate);
+            }
+
+            // Calculation Logic
+            _getOptimalGeneralSplit(amount, feeSchedule, units) {
+                const leftover = amount % 1000;
+                const calculableAmount = amount - leftover;
+                let remainingAmount = calculableAmount;
+                let totalFee = 0;
+                let tradesHTML = '';
+                let tradeCount = 0;
+
+                for (const unit of units) {
+                    const count = Math.floor(remainingAmount / unit);
+                    if (count > 0) {
+                        totalFee += count * this._calculateFee(unit, feeSchedule);
+                        remainingAmount -= count * unit;
+                        const rate = (this._getFeeRate(unit, feeSchedule) * 100).toFixed(1);
+                        tradesHTML += `<p class="text-sm">${this._formatNumber(unit)} x ${count}회 <span class="text-xs text-gray-500">(${rate}%)</span></p>`;
+                        tradeCount += count;
+                    }
+                }
+                if (remainingAmount > 0) {
+                    totalFee += this._calculateFee(remainingAmount, feeSchedule);
+                    const rate = (this._getFeeRate(remainingAmount, feeSchedule) * 100).toFixed(1);
+                    tradesHTML += `<p class="text-sm">${this._formatNumber(remainingAmount)} x 1회 <span class="text-xs text-gray-500">(${rate}%)</span></p>`;
+                    tradeCount += 1;
+                }
+                return { fee: totalFee, html: tradesHTML, tradeCount: tradeCount, leftover: leftover };
+            }
+            
+            _getOptimalParcelSplit(amount, feeSchedule) {
+                const leftover = amount % 1000;
+                const calculableAmount = amount - leftover;
+                const scenarios = [];
+                
+                scenarios.push({
+                    name: '1회 발송',
+                    fee: this._calculateFee(calculableAmount, feeSchedule),
+                    tradeCount: 1,
+                    html: `<p class="text-sm">${this._formatNumber(calculableAmount)} x 1회</p>`,
+                    leftover: leftover
+                });
+
+                if (calculableAmount >= 2) {
+                    const splitPoint = Math.min(calculableAmount - 1, 25000000);
+                    const fee = this._calculateFee(splitPoint, feeSchedule) + this._calculateFee(calculableAmount - splitPoint, feeSchedule);
+                    scenarios.push({ name: '2회 분할 발송', fee: fee, tradeCount: 2, html: `<p class="text-sm">${this._formatNumber(splitPoint)} x 1회</p><p class="text-sm">${this._formatNumber(calculableAmount - splitPoint)} x 1회</p>`, leftover: leftover });
+                }
+
+                if (calculableAmount >= 3) {
+                    const part1 = Math.min(calculableAmount - 2, 25000000);
+                    const remaining = calculableAmount - part1;
+                    const part2 = Math.min(remaining - 1, 25000000);
+                    const part3 = remaining - part2;
+                    const fee = this._calculateFee(part1, feeSchedule) + this._calculateFee(part2, feeSchedule) + this._calculateFee(part3, feeSchedule);
+                    scenarios.push({ name: '3회 분할 발송', fee: fee, tradeCount: 3, html: `<p class="text-sm">${this._formatNumber(part1)} x 1회</p><p class="text-sm">${this._formatNumber(part2)} x 1회</p><p class="text-sm">${this._formatNumber(part3)} x 1회</p>`, leftover: leftover });
+                }
+                return scenarios;
+            }
+
+            _reverseCalculate(targetNetAmount, feeSchedule) {
+                let estimatedTotal = Math.floor(targetNetAmount / (1 - this._getFeeRate(targetNetAmount, feeSchedule)));
+                let iterations = 0;
+                const maxIterations = 100;
+
+                while (iterations < maxIterations) {
+                    let calculatedNet = estimatedTotal - this._calculateFee(estimatedTotal, feeSchedule);
+                    if (calculatedNet >= targetNetAmount) {
+                        let low = Math.floor(targetNetAmount / (1 - this._getFeeRate(estimatedTotal, feeSchedule))) -1;
+                        let high = estimatedTotal;
+                        while (high > low + 1) {
+                            let mid = Math.floor((low + high) / 2);
+                            if (mid - this._calculateFee(mid, feeSchedule) >= targetNetAmount) {
+                                high = mid;
+                            } else {
+                                low = mid;
+                            }
+                        }
+                        return high;
+                    }
+                    estimatedTotal++;
+                    iterations++;
+                }
+                return estimatedTotal;
+            }
+
+            // UI Rendering for Results
+            _generateDetailedResultsHTML(amount, feeSchedule, isParcel) {
+                const scenarios = [];
+                if (isParcel) {
+                    scenarios.push(...this._getOptimalParcelSplit(amount, feeSchedule));
+                } else {
+                    scenarios.push({
+                        name: '한 번에 거래',
+                        fee: this._calculateFee(amount, feeSchedule),
+                        tradeCount: 1,
+                        html: `<p class="text-lg">적용 수수료율: <span class="font-bold text-gray-800">${(this._getFeeRate(amount, feeSchedule) * 100).toFixed(1)}%</span></p>`,
+                        leftover: 0
+                    });
+                    for (let i = 0; i < this.SPLIT_UNITS.length; i++) {
+                        const currentUnits = this.SPLIT_UNITS.slice(i);
+                        if (amount >= currentUnits[0]) {
+                            const result = this._getOptimalGeneralSplit(amount, feeSchedule, currentUnits);
+                            scenarios.push({
+                                name: `${this._formatNumber(currentUnits[0])} 단위부터`,
+                                ...result
+                            });
+                        }
+                    }
+                }
+
+                const cheapestMethod = scenarios.reduce((prev, curr) => prev.fee <= curr.fee ? prev : curr);
+                const fastestMethod = scenarios.reduce((prev, curr) => prev.tradeCount <= curr.tradeCount ? prev : curr);
+                const noSujakFee = this._calculateFee(amount, feeSchedule);
+                const savings = noSujakFee - cheapestMethod.fee;
+
+                const addLeftoverHtml = (scenario) => {
+                    return scenario.leftover > 0 ? scenario.html + `<p class="text-xs text-gray-500 mt-1">+ 자투리 ${this._formatNumber(scenario.leftover)} 메소</p>` : scenario.html;
+                };
+
+                const tableRowsHTML = scenarios.map(s => {
+                    const isFastest = s.tradeCount === fastestMethod.tradeCount && s.fee === fastestMethod.fee;
+                    const isCheapest = s.fee === cheapestMethod.fee;
+                    let icon = '';
+                    if (isFastest && isCheapest) icon = '🥇';
+                    else if (isFastest) icon = '⚡️';
+                    else if (isCheapest) icon = '�';
+
+                    return `
+                        <tr class="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 align-top">
+                            <td class="p-3 text-left"><p class="font-semibold text-base">${s.name} ${icon}</p><div class="text-gray-600 pl-2 text-sm">${addLeftoverHtml(s)}</div></td>
+                            <td class="p-3 text-center text-base">${s.tradeCount}</td>
+                            <td class="p-3 text-right text-base font-semibold ${isCheapest ? 'text-green-600' : ''}">${this._formatNumber(s.fee)}</td>
+                            <td class="p-3 text-right text-base">${this._formatNumber(amount - s.fee)}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="border border-gray-200 p-6 rounded-xl">
+                                <h3 class="text-xl font-bold text-blue-600 border-b border-gray-200 pb-3 mb-4">⚡️ 간편 거래 (최소 횟수)</h3>
+                                <div class="space-y-1">${addLeftoverHtml(fastestMethod)}
+                                    <hr class="border-gray-200 my-2">
+                                    <p class="text-lg">총 수수료: <span class="font-bold">${this._formatNumber(fastestMethod.fee)} 메소</span></p>
+                                    <p class="text-lg mt-1">실수령액: <span class="font-bold">${this._formatNumber(amount - fastestMethod.fee)} 메소</span></p>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 p-6 rounded-xl">
+                                <h3 class="text-xl font-bold text-green-600 border-b border-gray-200 pb-3 mb-4">💰 최적 조합 (수수료 최소)</h3>
+                                <div class="space-y-1">${addLeftoverHtml(cheapestMethod)}
+                                    <hr class="border-gray-200 my-2">
+                                    <p class="text-lg">총 수수료: <span class="font-bold text-green-600">${this._formatNumber(cheapestMethod.fee)} 메소</span></p>
+                                    <p class="text-lg mt-1">실수령액: <span class="font-bold text-gray-900">${this._formatNumber(amount - cheapestMethod.fee)} 메소</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="advancedTableToggle" class="cursor-pointer bg-gray-50 p-4 rounded-t-xl border-x border-t border-gray-200"><h3 class="text-xl font-bold text-yellow-600 flex justify-between items-center"><span>방식별 상세 비교</span><span id="toggleIcon">▼</span></h3></div>
+                        <div id="advancedTable" class="collapsible-content bg-white rounded-b-xl border-x border-b border-gray-200"><div class="p-6"><p class="text-sm text-gray-500 mb-4">⚡️: 최소 횟수, 💰: 수수료 최소, 🥇: 둘 다 만족</p><div class="overflow-x-auto"><table class="w-full text-sm"><thead class="border-b-2 border-gray-300"><tr><th class="p-3 text-left">수작 조합</th><th class="p-3">횟수</th><th class="p-3 text-right">총 수수료</th><th class="p-3 text-right">실수령액</th></tr></thead><tbody>${tableRowsHTML}</tbody></table></div></div></div>
+                        <div class="mt-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-6 rounded-xl text-center shadow-lg summary-highlight">${savings > 0 ? `<h2 class="text-xl font-bold">👑 최적 조합으로 거래 시, <span class="underline">${this._formatNumber(savings)} 메소</span>를 절약할 수 있어요!</h2>` : `<h2>이 금액은 분할 거래의 이득이 없습니다.</h2>`}</div>
+                    </div>
+                `;
+            }
+
+            _generateReverseResultsHTML(targetAmount, numPeople, feeSchedule) {
+                const perPersonGross = this._reverseCalculate(targetAmount, feeSchedule);
+                const perPersonFee = perPersonGross - targetAmount;
+                let totalGrossAmount = perPersonGross * numPeople;
+                let deliveryFeeCost = 0;
+                
+                if (this.elements.transactionTypeSelect.value === 'parcel' && numPeople > 1) {
+                    const deliveryRecipients = this.elements.includeSelfCheckbox.checked ? numPeople - 1 : numPeople;
+                    deliveryFeeCost = this.DELIVERY_FEE * deliveryRecipients;
+                    totalGrossAmount += deliveryFeeCost;
+                }
+
+                return `
+                    <div class="border border-gray-200 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-blue-600 border-b border-gray-200 pb-2 mb-4">🎯 역산 결과</h3>
+                        <div class="space-y-3 text-lg">
+                            <p class="flex justify-between"><span>1인당 목표 실수령액:</span> <span class="font-bold text-gray-900">${this._formatNumber(targetAmount)}</span></p>
+                            <p class="flex justify-between"><span>➡️ 필요한 1인당 지급액:</span> <span class="font-bold text-yellow-600">${this._formatNumber(perPersonGross)}</span></p>
+                            <p class="flex justify-between text-sm text-red-600"><span>(1인당 예상 수수료:</span> <span>-${this._formatNumber(perPersonFee)})</span></p>
+                            <hr class="border-gray-200 my-2">
+                            ${numPeople > 1 ? `<p class="flex justify-between text-xl"><span>💰 ${numPeople}인 분배 시 총 필요 금액:</span> <span class="font-bold text-green-600">${this._formatNumber(totalGrossAmount)}</span></p>` : ''}
+                            ${deliveryFeeCost > 0 ? `<p class="text-sm text-gray-500 text-right">(택배비 ${this._formatNumber(deliveryFeeCost)} 메소 포함)</p>` : ''}
+                        </div>
+                        <p class="text-xs text-gray-500 mt-4">※ 이 총 금액으로 '정산 모드'에서 계산하면 각 파티원이 목표 실수령액을 받게 됩니다.</p>
+                    </div>
+                `;
+            }
 
             performCalculation() {
-                this.elements.errorMessageDiv.classList.add('hidden');
-                const amount = Number(this.elements.mainAmountInput.value.replace(/,/g, ''));
+                this.elements.errorMessageDiv.textContent = '';
+                this.elements.mainAmountInput.classList.remove('border-red-500');
+
+                const amount = this._parseNumber(this.elements.mainAmountInput.value);
+                const numPeople = Number(this.elements.numPeopleInput.value) || 1;
+                
                 if (isNaN(amount) || amount <= 0) {
                     this.elements.errorMessageDiv.textContent = '올바른 금액을 입력해주세요.';
-                    this.elements.errorMessageDiv.classList.remove('hidden');
+                    this.elements.mainAmountInput.classList.add('border-red-500');
                     return;
                 }
-                
-                const numPeople = Number(this.elements.numPeopleInput.value) || 1;
+
                 const feeSchedule = this.elements.transactionTypeSelect.value === 'general' ? this.GENERAL_FEES_SORTED : this.PARCEL_FEES_SORTED;
-
-                if (this.currentMode === 'standard') {
-                    // ... (정산 모드 로직)
-                } else {
-                    // ... (역산 모드 로직)
-                }
                 
-                // ... (결과 HTML 생성 및 표시 로직)
-                this.elements.resultArea.innerHTML = `<div>계산 결과가 여기에 표시됩니다.</div>`;
+                if (this.currentMode === 'standard') {
+                    let finalHtml = '';
+                    let calculationAmount = amount;
+                    
+                    if (numPeople > 1) {
+                        const includeSelf = this.elements.includeSelfCheckbox.checked;
+                        const distributionPeople = includeSelf ? numPeople : (numPeople > 1 ? numPeople - 1 : 1);
+                        
+                        if (distributionPeople <= 0) { return; }
+
+                        let distributableAmount = amount;
+                        let deliveryFeeCost = 0;
+                        if (this.elements.transactionTypeSelect.value === 'parcel') {
+                            const deliveryRecipients = includeSelf ? numPeople - 1 : numPeople;
+                            if(deliveryRecipients > 0) {
+                                deliveryFeeCost = this.DELIVERY_FEE * deliveryRecipients;
+                                if (amount < deliveryFeeCost) { return; }
+                                distributableAmount -= deliveryFeeCost;
+                            }
+                        }
+
+                        const perPersonRaw = distributableAmount / distributionPeople;
+                        calculationAmount = Math.floor(perPersonRaw / 1000) * 1000;
+                        const totalRemainder = distributableAmount - (calculationAmount * distributionPeople);
+                        
+                        const summaryHeader = `
+                            <div class="border border-gray-200 p-6 rounded-xl mb-6">
+                                <h3 class="text-xl font-bold text-cyan-600 border-b border-gray-200 pb-2 mb-4">👥 ${distributionPeople}인 분할 결과 요약</h3>
+                                <div class="space-y-2 text-gray-700">
+                                    <p class="text-base">총 수익: <span class="font-bold text-gray-900">${this._formatNumber(amount)} 메소</span></p>
+                                    ${deliveryFeeCost > 0 ? `<p class="text-base text-red-600">택배비 차감: -${this._formatNumber(deliveryFeeCost)} 메소</p>` : ''}
+                                    <p class="text-lg">분배 가능 총액: <span class="font-bold text-gray-900">${this._formatNumber(distributableAmount)} 메소</span></p>
+                                    <p class="text-lg">1인당 지급액 (1000단위): <span class="font-bold text-yellow-600">${this._formatNumber(calculationAmount)}</span> 메소</p>
+                                    ${totalRemainder > 0 ? `<p class="text-base text-yellow-600 mt-2">※ 정산 후 자투리 금액: ${this._formatNumber(totalRemainder)} 메소</p>` : ''}
+                                </div>
+                                <p class="text-center text-gray-500 text-xs mt-4">▼ 아래는 1인당 지급액 기준 상세 비교입니다 ▼</p>
+                            </div>
+                        `;
+                        finalHtml = summaryHeader + this._generateDetailedResultsHTML(calculationAmount, feeSchedule, this.elements.transactionTypeSelect.value === 'parcel');
+                    } else {
+                        finalHtml = this._generateDetailedResultsHTML(amount, feeSchedule, this.elements.transactionTypeSelect.value === 'parcel');
+                    }
+                    this.elements.resultArea.innerHTML = finalHtml;
+                } else {
+                    this.elements.resultArea.innerHTML = this._generateReverseResultsHTML(amount, numPeople, feeSchedule);
+                }
+
+                this.elements.resultArea.classList.remove('hidden');
+                const advancedTableToggle = document.getElementById('advancedTableToggle');
+                if(advancedTableToggle) {
+                    const advancedTable = document.getElementById('advancedTable');
+                    const toggleIcon = document.getElementById('toggleIcon');
+                    advancedTableToggle.addEventListener('click', () => {
+                        if (advancedTable.style.maxHeight) {
+                            advancedTable.style.maxHeight = null;
+                            toggleIcon.textContent = '▼';
+                        } else {
+                            advancedTable.style.maxHeight = advancedTable.scrollHeight + "px";
+                            toggleIcon.textContent = '▲';
+                        }
+                    });
+                }
             }
         }
-
-        class App {
-            constructor() {
-                this.uiManager = new UIManager(AppConfig);
-                this.modalManager = new ModalManager();
-                this.authManager = new AuthManager(this.modalManager);
-                this.router = new Router(this.uiManager);
-            }
-
-            init() {
-                this.uiManager.init();
-                console.log("MLFEE TIMES App Initialized");
-            }
-        }
-
+        
         document.addEventListener('DOMContentLoaded', () => {
-            new App().init();
+            new CalculatorApp().init();
         });
     </script>
 </body>
 </html>
-이코드에서 개발실록의 글을 작성할수있는 룸을 만
+�
