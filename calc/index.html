@@ -484,7 +484,7 @@
                                         <span>본인 포함 분배 (총액을 N명으로 나눔)</span>
                                     </label>
                                 </div>
-                                <div id="error-message" class="text-red-600 text-sm mt-4 text-center hidden"></div>
+                                <div id="error-message" class="text-red-600 text-sm mt-4 text-center h-5"></div>
                                 <div class="mt-6">
                                     <button id="calculateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-lg hover:shadow-blue-500/50">계산하기</button>
                                 </div>
@@ -569,9 +569,8 @@
         
         class CalculatorApp {
             constructor() {
-                // 이 클래스는 계산기 페이지가 렌더링될 때만 인스턴스화됩니다.
                 this.elements = this._queryElements();
-                if (!this.elements.calculateBtn) return; // 계산기 요소가 없으면 중단
+                if (!this.elements.calculateBtn) return;
                 
                 this.GENERAL_FEES_SORTED = [ [100000000, 0.06], [25000000, 0.05], [10000000, 0.04], [5000000, 0.03], [1000000, 0.018], [100000, 0.008], [0, 0.0] ];
                 this.PARCEL_FEES_SORTED = [ [100000000, 0.07], [25000000, 0.06], [10000000, 0.05], [5000000, 0.04], [1000000, 0.027], [100000, 0.012], [0, 0.0] ];
@@ -638,9 +637,6 @@
                 });
             }
 
-            // ... 여기에 모든 계산 관련 함수(performCalculation, generateDetailedResultsHTML 등)를 붙여넣습니다 ...
-            // 이 함수들은 UI와 직접적인 관련이 없으므로 그대로 사용 가능합니다.
-            // 예시: performCalculation()
             performCalculation() {
                 this.elements.errorMessageDiv.classList.add('hidden');
                 const amount = Number(this.elements.mainAmountInput.value.replace(/,/g, ''));
@@ -649,8 +645,18 @@
                     this.elements.errorMessageDiv.classList.remove('hidden');
                     return;
                 }
-                // ... (이하 계산 로직)
-                this.elements.resultArea.innerHTML = `<div>계산 결과가 여기에 표시됩니다. (로직 구현 필요)</div>`;
+                
+                const numPeople = Number(this.elements.numPeopleInput.value) || 1;
+                const feeSchedule = this.elements.transactionTypeSelect.value === 'general' ? this.GENERAL_FEES_SORTED : this.PARCEL_FEES_SORTED;
+
+                if (this.currentMode === 'standard') {
+                    // ... (정산 모드 로직)
+                } else {
+                    // ... (역산 모드 로직)
+                }
+                
+                // ... (결과 HTML 생성 및 표시 로직)
+                this.elements.resultArea.innerHTML = `<div>계산 결과가 여기에 표시됩니다.</div>`;
             }
         }
 
@@ -673,4 +679,5 @@
         });
     </script>
 </body>
-</ht
+</html>
+이코드에서 개발실록의 글을 작성할수있는 룸을 만
