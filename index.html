@@ -3,36 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>개발실록 | MLFEE TIMES</title>
-    <meta name="description" content="AI를 이용해 아이디어를 현실로 만드는 비개발자의 개발 여정을 기록합니다.">
+    <title>MLFEE TIMES | AI로 일상과 게임의 생산성을 바꾸다</title>
+    <meta name="description" content="비개발자가 AI를 활용해 메이플랜드 필수 유틸리티를 개발하고, 그 여정을 공유합니다. 당신의 생산성을 높여줄 AI 꿀팁과 개발 실록을 만나보세요.">
+    <meta name="keywords" content="AI, 비개발자, 개발 실록, 생산성, 메이플랜드, 유틸리티, 수수료 계산기, 리저렉션 타이머, MLFEE, Gemini, ChatGPT">
     
-    <!-- Open Graph Meta Tags for Social Sharing -->
-    <meta property="og:title" content="개발실록 | MLFEE TIMES">
-    <meta property="og:description" content="AI를 이용해 아이디어를 현실로 만드는 비개발자의 개발 여정을 기록합니다.">
+    <meta property="og:title" content="MLFEE TIMES | AI로 당신의 문제를 해결합니다">
+    <meta property="og:description" content="코딩을 몰라도 괜찮아요. 비개발자가 AI로 메이플랜드 필수 도구를 만들고, 그 모든 과정을 공유합니다. 당신의 생산성을 높여줄 영감을 얻어가세요.">
     <meta property="og:image" content="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png">
-    <meta property="og:url" content="https://mlfee.com/devlog/index.html">
+    <meta property="og:image:width" content="1200"> 
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://mlfee.com">
+    <meta property="og:type" content="website">
 
-    <!-- Favicon -->
     <link rel="icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
     
-    <!-- External Libraries: TailwindCSS, Fonts, Font Awesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615" crossorigin="anonymous"></script>
      
     <style>
         html { scroll-behavior: smooth; }
         body { 
             font-family: 'Inter', 'Noto Sans KR', sans-serif; 
-            background-color: #f8f7f2;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAAG3RSTlNAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAvEOwtAAAAYklEQVRIx+3NMQoAIAwEBP//Pa1HlEDG3t2ahDcAaIQDbw0c2HGY2T4U6BS2YYA7V5wBvStA9h0z8BLsjQ3a0G2gU2w5s62rZdPMtqgZkAErNOfc65+hJSFyAEoWLoIBPOAHzGU28wAAAABJRU5ErkJggg==');
-            color: #111111;
+            background-color: #fdfaf4;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAACVBMVEUAAAD///9tbW06gZ4rAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAMklEQVRIiWNgwA0YgYjDwMDAwODFwMDwY2BgeMPAwPCdAYoZMDA8YmBgeMTQ5wAAvy0f8P3b4x8AAAAASUVORK5CYII=');
+            color: #1f2937;
         }
         .font-serif { font-family: 'Playfair Display', serif; }
         
@@ -51,11 +51,25 @@
             font-size: 0.875rem;
             min-height: 90px;
         }
+
+        /* [만년필 이펙트] 타이핑 커서 애니메이션 */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: #333;
+            animation: blink 0.8s infinite;
+            margin-left: 5px;
+            transform: translateY(4px);
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
     </style>
 </head>
 <body class="antialiased">
     
-    <!-- Header -->
     <header class="bg-white/95 backdrop-blur-sm sticky top-0 z-50 header-shadow">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
@@ -66,85 +80,98 @@
                 <div></div>
             </div>
             <nav id="main-nav" class="hidden lg:flex justify-center items-center gap-8 py-3 border-t border-gray-200">
-                <a href="/devlog/index.html" class="text-black font-bold transition-colors text-sm">개발실록</a>
+                <a href="/devlog/index.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">개발실록</a>
                 <a href="/maple-tools/index.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">메이플랜드 도구</a>
                 <a href="/about.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">사이트 소개</a>
             </nav>
         </div>
         <div id="mobile-nav-container" class="hidden lg:hidden bg-white border-t border-gray-200">
-             <a href="/devlog/index.html" class="block py-3 px-4 text-black font-bold bg-gray-100">개발실록</a>
+             <a href="/devlog/index.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">개발실록</a>
              <a href="/maple-tools/index.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">메이플랜드 도구</a>
              <a href="/about.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">사이트 소개</a>
         </div>
     </header>
     
-    <!-- Main Content Area -->
     <div id="page-content">
         <div class="container mx-auto px-4 pt-6">
             <div class="ad-slot h-[100px] w-full max-w-[728px] mx-auto">(광고 슬롯 728x90)</div>
         </div>
         <main class="container mx-auto px-4 py-8">
-            <div class="max-w-4xl mx-auto">
-                <header class="text-center mb-12 border-b pb-8">
-                    <h1 class="text-5xl sm:text-7xl font-black font-serif text-black">
-                        개발실록
-                    </h1>
-                    <p class="text-gray-500 mt-4 text-lg max-w-2xl mx-auto">
-                        코딩을 몰라도 괜찮습니다. AI라는 강력한 파트너와 함께라면, 누구나 자신의 아이디어를 현실로 만들 수 있습니다. 비개발자의 삽질부터 성공까지, 그 모든 여정을 이곳에 기록합니다.
-                    </p>
-                </header>
+            <section id="hero-section" class="mb-12 border-b border-gray-300 pb-12">
+                <a href="/posts/devlog-01.html" class="block group">
+                    <img src="https://placehold.co/800x550/111111/ffffff?text=Fee+Calculator" alt="수수료 계산기 개발기" class="w-full h-auto object-cover rounded-lg shadow-sm mb-4">
+                    <p class="text-sm text-blue-600 font-semibold mt-2">개발실록</p>
+                    <h1 id="hero-title" class="font-serif text-4xl md:text-5xl font-bold text-black leading-tight mt-2 min-h-[1.2em]"></h1>
+                    <p class="text-gray-600 mt-4">단순한 게임 속 불편함에서 시작된 작은 질문. AI라는 강력한 도구를 통해 내 손으로 직접 문제를 해결하며 느낀 성취감은, 득템의 기쁨과는 비교할 수 없는 것이었습니다.</p>
+                </a>
+            </section>
 
-                <div id="article-list" class="space-y-12">
-                    <!-- 
-                        [수동 관리] 개발실록 글 목록
-                        - 새로운 글을 추가하려면 아래 <article>...</article> 블록 하나를 맨 위에 복사해서 붙여넣고 내용을 수정하세요.
-                        - 최신 글이 항상 위로 오도록 관리합니다.
-                    -->
-
-                    <!-- ############### 글 1 시작 ############### -->
-                    <article class="grid md:grid-cols-3 gap-8">
-                        <a href="/posts/devlog-01.html" class="md:col-span-1 block">
-                            <img src="https://placehold.co/400x300/111111/ffffff?text=Fee+Calculator" alt="수수료 계산기 개발기" class="object-cover w-full h-full rounded-lg shadow-md hover:shadow-xl transition-shadow">
-                        </a>
-                        <div class="md:col-span-2">
-                            <p class="text-sm text-gray-500 mb-1">2025년 7월 26일</p>
-                            <a href="/posts/devlog-01.html">
-                                <h2 class="font-serif text-3xl font-bold hover:text-gray-700 transition-colors">"수수료로 500만 메소 날렸다고?" 분노의 AI 계산기 개발기</h2>
+            <div class="grid lg:grid-cols-3 gap-8 lg:gap-12">
+                <div class="lg:col-span-2 space-y-10">
+                    <h2 class="text-2xl font-bold text-black border-b-2 border-black pb-2">최신 소식</h2>
+                    <div id="article-list">
+                        <article class="grid md:grid-cols-3 gap-6 border-b border-gray-200 pb-10">
+                            <div class="md:col-span-2">
+                                <a href="/maple-tools/index.html" class="text-sm text-blue-600 font-semibold mb-1 hover:underline">메이플랜드 도구</a>
+                                <a href="/timer/index.html" target="_blank">
+                                    <h3 class="font-serif text-2xl font-bold hover:text-gray-700 transition-colors mt-1">레이드 크로니클 (리저 타이머)</h3>
+                                </a>
+                                <p class="text-gray-600 text-base mt-2">비숍의 리저렉션 쿨타임을 정확히 체크하고, 다음 예상 시간을 공유하여 안정적인 레이드를 운영하세요.</p>
+                                <p class="text-xs text-gray-500 mt-3">By 소년아서 | 2025년 7월 24일</p>
+                            </div>
+                            <a href="/timer/index.html" target="_blank" class="md:col-span-1 block">
+                                <img src="https://placehold.co/400x300/2563eb/ffffff?text=리저+타이머" alt="레이드 크로니클" class="object-cover w-full h-full rounded-lg shadow-sm">
                             </a>
-                            <p class="text-gray-600 text-base mt-3">
-                                단순한 게임 속 불편함에서 시작된 작은 질문. AI라는 강력한 도구를 통해 내 손으로 직접 문제를 해결하며 느낀 성취감은, 득템의 기쁨과는 비교할 수 없는 것이었습니다.
-                            </p>
-                            <a href="/posts/devlog-01.html" class="text-blue-600 font-semibold mt-4 inline-block hover:underline">더 읽어보기 &rarr;</a>
-                        </div>
-                    </article>
-                    <!-- ############### 글 1 끝 ############### -->
-
-                    <!-- ############### 새 글 추가 영역 ############### -->
-                    <!-- 예시:
-                    <article class="grid md:grid-cols-3 gap-8 pt-12 border-t">
-                        <a href="/posts/devlog-02.html" class="md:col-span-1 block">
-                            <img src="[이미지 URL]" alt="[글 제목]" class="object-cover w-full h-full rounded-lg shadow-md hover:shadow-xl transition-shadow">
-                        </a>
-                        <div class="md:col-span-2">
-                            <p class="text-sm text-gray-500 mb-1">[작성 날짜]</p>
-                            <a href="/posts/devlog-02.html">
-                                <h2 class="font-serif text-3xl font-bold hover:text-gray-700 transition-colors">[글 제목]</h2>
+                        </article>
+                        
+                        <article class="grid md:grid-cols-3 gap-6 pt-10">
+                            <div class="md:col-span-2">
+                                <a href="/maple-tools/index.html" class="text-sm text-blue-600 font-semibold mb-1 hover:underline">메이플랜드 도구</a>
+                                <a href="/buff/index.html" target="_blank">
+                                    <h3 class="font-serif text-2xl font-bold hover:text-gray-700 transition-colors mt-1">메피 버피 (실시간 버프 관리)</h3>
+                                </a>
+                                <p class="text-gray-600 text-base mt-2">홀리심볼, 샤프 아이즈 등 주요 버프 스킬의 주기를 관리하고, 음성으로 리필 타이밍을 알려드립니다.</p>
+                                <p class="text-xs text-gray-500 mt-3">By 소년아서 | 2025년 7월 23일</p>
+                            </div>
+                            <a href="/buff/index.html" target="_blank" class="md:col-span-1 block">
+                                <img src="https://placehold.co/400x300/16a34a/ffffff?text=메피+버피" alt="메피 버피" class="object-cover w-full h-full rounded-lg shadow-sm">
                             </a>
-                            <p class="text-gray-600 text-base mt-3">
-                                [글 요약]
-                            </p>
-                            <a href="/posts/devlog-02.html" class="text-blue-600 font-semibold mt-4 inline-block hover:underline">더 읽어보기 &rarr;</a>
-                        </div>
-                    </article>
-                    -->
-                    <!-- ############### 새 글 추가 영역 끝 ############### -->
-
+                        </article>
+                    </div>
                 </div>
+                
+                <aside class="lg:col-span-1">
+                    <div class="sticky top-24 space-y-8">
+                        <div class="ad-slot h-[250px] w-full">(광고 슬롯 300x250)</div>
+                        <div>
+                            <h3 class="text-lg font-bold text-black mb-4 border-b-2 border-black pb-2">핵심 도구 바로가기</h3>
+                            <div class="space-y-4">
+                                <a href="/calc/index.html" target="_blank" class="flex items-center gap-4 group">
+                                    <p class="font-serif text-3xl font-bold text-gray-300">1</p>
+                                    <div>
+                                        <p class="font-bold text-black group-hover:underline text-sm leading-snug">N빵마스터 (수수료 계산기)</p>
+                                    </div>
+                                </a>
+                                <a href="/timer/index.html" target="_blank" class="flex items-center gap-4 group">
+                                    <p class="font-serif text-3xl font-bold text-gray-300">2</p>
+                                    <div>
+                                        <p class="font-bold text-black group-hover:underline text-sm leading-snug">레이드 크로니클 (리저 타이머)</p>
+                                    </div>
+                                </a>
+                                <a href="/buff/index.html" target="_blank" class="flex items-center gap-4 group">
+                                    <p class="font-serif text-3xl font-bold text-gray-300">3</p>
+                                    <div>
+                                        <p class="font-bold text-black group-hover:underline text-sm leading-snug">메피 버피 (실시간 버프 관리)</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
             </div>
         </main>
     </div>
 
-    <!-- Footer -->
     <footer class="py-10 mt-10 border-t border-gray-200 bg-white">
         <div class="container mx-auto px-4 text-center space-y-4">
             <a href="/index.html" class="text-3xl font-serif font-bold text-black">MLFEE TIMES</a>
@@ -158,25 +185,53 @@
     </footer>
     
     <script type="module">
-        // 이 페이지는 정적 콘텐츠를 표시하므로, 복잡한 JavaScript 로직 대신
-        // 모바일 메뉴 토글과 같은 기본적인 UI 스크립트만 포함합니다.
         class App {
             constructor() {
                 this.elements = {
                     mobileMenuBtn: document.getElementById('mobile-menu-btn'),
                     mobileNavContainer: document.getElementById('mobile-nav-container'),
+                    heroTitle: document.getElementById('hero-title'),
                 };
             }
 
             init() {
                 this._initEventListeners();
-                console.log("Devlog Page Initialized");
+                this.typewriterEffect();
+                console.log("Landing Page Initialized");
             }
 
             _initEventListeners() {
                 this.elements.mobileMenuBtn?.addEventListener('click', () => {
                     this.elements.mobileNavContainer.classList.toggle('hidden');
                 });
+            }
+
+            typewriterEffect() {
+                if (!this.elements.heroTitle) return;
+                
+                const originalText = `"수수료로 500만 메소 날렸다고?" 분노의 AI 계산기 개발기`;
+                let i = 0;
+                this.elements.heroTitle.innerHTML = ''; // 기존 텍스트 초기화
+                
+                const cursorSpan = document.createElement('span');
+                cursorSpan.className = 'typing-cursor';
+                this.elements.heroTitle.appendChild(cursorSpan);
+
+                const typing = () => {
+                    if (i < originalText.length) {
+                        // 커서 앞에 텍스트를 추가
+                        this.elements.heroTitle.insertBefore(document.createTextNode(originalText.charAt(i)), cursorSpan);
+                        i++;
+                        setTimeout(typing, 60); // 타이핑 속도 (ms)
+                    } else {
+                        // 타이핑 완료 후 1초 뒤 커서 제거
+                        setTimeout(() => {
+                           if(cursorSpan) cursorSpan.style.display = 'none';
+                        }, 1000);
+                    }
+                };
+
+                typing();
             }
         }
 
