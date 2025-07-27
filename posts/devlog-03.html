@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO 및 소셜 미디어 정보 -->
+    <title>Mlfee 개발실록: 챕터 2 - 버프 타이머, 뫼비우스의 띠 | MLFEE TIMES</title>
+    <meta name="description" content="코딩을 모르는 35살 초보자가 메이플스토리 비숍의 경험을 살려 버프 타이머를 만들며 AI와 함께 코드 수정의 뫼비우스 띠를 헤쳐나간 좌충우돌 여정. 상상이 코드로 피어나는 생생한 모험을 만나보세요.">
+    
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <meta property="og:title" content="Mlfee 개발실록: 챕터 2 - 버프 타이머, 뫼비우스의 띠 | MLFEE TIMES">
+    <meta property="og:description" content="코딩을 모르는 35살 초보자가 메이플스토리 비숍의 경험을 살려 버프 타이머를 만들며 AI와 함께 코드 수정의 뫼비우스 띠를 헤쳐나간 좌충우돌 여정. 상상이 코드로 피어나는 생생한 모험을 만나보세요.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png">
+    <meta property="og:url" content="https://mlfee.com/posts/devlog-03.html">
+    <meta property="og:type" content="article">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/images/mlfee-logo.png" type="image/png">
+    <link rel="shortcut icon" href="/images/mlfee-logo.png" type="image/png">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: #f0f0f0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEUAAADd3d3+xSTlAAAAAXRSTlMAQObYZgAAABVJREFUeJxjYMAEjGQEGIwYkAAEAAA2AAGs9a2hAAAAAElFTkSuQmCC'); color: #1f2937; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .prose { color: #374151; }
+        .prose h1, .prose h2, .prose h3 { color: #111827; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+        .prose a { color: #2563eb; text-decoration: underline; }
+        .prose blockquote { border-left-color: #3b82f6; color: #4b5563; }
+        .prose code { color: #be123c; background-color: #fef2f2; padding: 2px 5px; border-radius: 4px; font-weight: 600; }
+        .prose pre { background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; color: #d1d5db; }
+        .prose pre code { color: inherit; background-color: transparent; padding: 0; }
+        .prose .lead { font-size: 1.25rem; color: #4b5563; }
+        .prose-xl p { font-size: 1.25rem; line-height: 1.75; }
+        .prose-xl h2 { font-size: 2.25rem; margin-top: 2.5em; margin-bottom: 1.25em;}
+    </style>
+</head>
+<body class="antialiased">
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-lg shadow-lg border border-gray-200">
+            <a href="/devlog/index.html" class="text-blue-600 font-semibold text-sm hover:underline">개발실록</a>
+            
+            <!-- 글 제목 및 작성 정보 -->
+            <h1 class="font-serif text-4xl md:text-6xl font-bold text-black leading-tight mt-2">Mlfee 개발실록: 챕터 2 - 버프 타이머, 뫼비우스의 띠</h1>
+            <div class="flex items-center gap-4 text-sm text-gray-500 my-6 border-y border-gray-200 py-4">
+                <span>By 소년아서</span>
+                <span>2025년 7월 28일</span>
+            </div>
+
+            <!-- 대표 이미지 -->
+            <img src="https://placehold.co/1200x700/e5e7eb/9ca3af?text=대표+이미지" alt="Mlfee 개발실록: 챕터 2 - 버프 타이머, 뫼비우스의 띠" class="w-full h-auto object-cover rounded-lg shadow-lg mb-8">
+            
+            <!-- 글 본문 -->
+            <article class="prose prose-xl max-w-none">
+                <p class="lead">코딩을 모르는 35살 초보자가 메이플스토리 비숍의 경험을 살려 버프 타이머를 만들며 AI와 함께 코드 수정의 뫼비우스 띠를 헤쳐나간 좌충우돌 여정. 따뜻한 차 한 잔과 함께, 상상이 코드로 피어나는 생생한 모험을 만나보세요.</p>
+                
+                <h2>시간의 무게, 아이디어의 불씨</h2>
+                <p>메이플스토리에서 비숍은 파티의 심장입니다. 자쿰 레이드에서 팔이 떨어질 때마다 ‘심’(홀리심볼)을 걸어주고, 죽숲이나 마데테 차벌에서 심쩔(심판의 망치 쿨타임 관리) 할 때 심비를 챙기며 손님들의 홀리심볼이 끊기지 않도록 신경 썼어요. 오징어 경심이나 위용둥 망용둥에서는 샤프아이즈 타이밍에 맞춰 샤프콜을 외치고, 콜 사인으로 버프 끝 10초 전에 “고고고!”를 외치며 파티를 리드했죠. 하지만 자쿰의 팔이 떨어지는 순간 방심하다 홀리심볼을 놓쳐 파티원들에게 눈초리를 받은 적이 있습니다. “미안, 심 깜빡했어…” 하며 고개 숙였던 그 민망함은 아직도 생생해요. 스마트폰 타이머를 켜거나 종이에 시간을 적어보았지만, 손이 바빠 실수가 잦았어요. “이건 너무 번거로워!”라는 답답함이 불쑥 솟았죠.</p>
+                <p><strong>레이드 로그</strong>를 만들며 AI가 불편함을 해결해준 기억이 떠올랐어요. “버프 시간을 자동으로 관리해주는 타이머를 만들면 어떨까?”라는 아이디어가 스쳤습니다. 코딩은 여전히 낯설었지만, “버프 이름과 지속 시간을 입력하고, 카운트다운이 끝나면 알림을 띄우는 기능”이라는 상상은 선명했어요. AI에게 달려가며 속으로 외쳤죠. “이제 비숍의 시간을 내 손으로 잡아보자!”</p>
+                
+                <h2>AI와의 재회: 코드의 첫걸음</h2>
+                <p><strong>레이드 로그</strong>를 만들며 AI와 대화하는 법을 배웠어요. <strong>ChatGPT</strong>, <strong>Grok</strong>, <strong>Claude</strong>, <strong>Google Bard</strong>의 강점을 알았고, 구체적인 질문이 마법을 부른다는 걸 깨달았죠. 이번엔 <strong>Grok</strong>에게 첫발을 내디뎠어요. “메이플스토리 버프 타이머 기능을 만들어줘. 버프 이름과 지속 시간을 입력하고, 카운트다운이 끝나면 알림을 띄워줘.” 그러자 간단한 HTML 구조를 받았어요:</p>
+                <pre><code>&lt;div id="timerList" class="w-full"&gt;
+    &lt;input type="text" id="buffName" placeholder="버프 이름"&gt;
+    &lt;input type="number" id="duration" placeholder="지속 시간(초)"&gt;
+    &lt;button onclick="addTimer()"&gt;타이머 추가&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+                <p>브라우저에 띄우니 입력창과 버튼이 나타났어요. “이게 내가 꿈꾼 비숍 타이머의 시작이구나!” 설렘이 밀려왔죠. 하지만 버튼을 눌러도 아무 일 없었어요. <strong>Claude</strong>에게 물었죠. “이거 왜 안 움직여?” 함수가 빠졌다는 답이 왔어요. 제 상상이 코드라는 캔버스에 첫 선을 긋는 순간이었지만, 뫼비우스의 띠 같은 여정은 이제 막 시작된 거였죠.</p>
+                
+                <h2>도돌이표의 덫: 코드의 뫼비우스 띠</h2>
+                <p>AI는 제 의도를 정확히 이해해야 했지만, 초보자인 저는 여전히 서툴렀어요. “타이머 기능”이라고만 말하니 기본 코드만 나왔죠. 저는 자쿰과 죽숲에서 쓰는 홀리심볼과 샤프아이즈를 선택할 수 있는 드롭다운, 여러 타이머를 동시에 관리하고, 메이플 주황빛 알림이 필요했어요. <strong>ChatGPT</strong>에 “타이머를 추가하고 카운트다운하게 해줘”라고 물었더니 이런 코드를 줬어요:</p>
+                <pre><code>function addTimer() {
+    let name = document.getElementById('buffName').value;
+    let duration = document.getElementById('duration').value;
+    let timerList = document.getElementById('timerList');
+    let timerDiv = document.createElement('div');
+    timerDiv.innerText = `${name}: ${duration}초`;
+    timerList.appendChild(timerDiv);
+}</code></pre>
+                <p>실행하니 버프 이름과 시간이 화면에 표시됐지만, 카운트다운은 안 됐어요. “샤프아이즈가 멈췄잖아!” 하며 <strong>Grok</strong>에게 물었죠. “카운트다운하고 알림 띄워줘!” <strong>Grok</strong>은 <code>setInterval</code>을 쓰라고 했지만, 코드가 복잡해 이해 못 했어요. “비숍 유저들이 이렇게 복잡한 걸 원하진 않아!” 하며 답답했죠.</p>
+                <p>문제를 고치려다 뫼비우스의 띠에 갇혔어요. <strong>Claude</strong>에게 “카운트다운이 안 돼, 고쳐줘”라고 요청했더니, 이전에 <strong>ChatGPT</strong>가 준 코드로 돌아갔어요. “이건 이미 해본 거잖아!” 하며 수정 요청을 반복했지만, AI는 엉뚱한 버튼 추가 코드를 섞어 내놓았죠. 결국 “맨 처음 코드로 돌아가줘!”라고 했더니, 다른 부분이 엉키며 페이지가 깨졌어요. “내 홀리심볼 타이머가 망했어!” 하며 멘붕에 빠졌죠. 그때 깨달았어요. 백업의 중요성을. 노트패드에 코드를 저장하지 않았다면, 그간의 노력은 허공으로 날아갈 뻔했어요. 급히 백업 파일을 열어 원래 코드를 복구하며 한숨 돌렸죠. AI에게 구체적으로 물어야 한다는 걸 다시금 뼈저리게 느꼈어요. <strong>Claude</strong>에게 정밀하게 요청했죠: “자쿰과 죽숲의 홀리심볼, 샤프아이즈 드롭다운, 여러 타이머 동시 카운트다운, 메이플 스타일 알림.” 그러자 드롭다운 코드가 나왔어요:</p>
+                <pre><code>&lt;select id="buffName"&gt;
+    &lt;option value="Holy Symbol"&gt;홀리심볼&lt;/option&gt;
+    &lt;option value="Sharp Eyes"&gt;샤프아이즈&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+                <p>드롭다운으로 버프 선택이 간편해졌어요. 이 삽질 속에서 상상이 코드로 구현되는 과정은 여전히 짜릿했지만, 도돌이표 같은 수정 루프는 정신없었어요.</p>
+                
+                <h2>토큰의 소용돌이: 유료 결제의 늪</h2>
+                <p>뫼비우스의 띠 같은 코드 수정은 AI 토큰 한도를 빠르게 소진시켰어요. <strong>ChatGPT</strong>와 <strong>Grok</strong>은 몇 번 질문만 해도 “한도 초과”라며 멈췄고, <strong>Bard</strong>는 엉뚱한 코드를 내놓았어요. <strong>GitHub Copilot</strong>의 무료 한도는 금세 바닥났죠. 타이머는 단순한 숫자 세기가 아니었어요. 여러 타이머 동시 실행, “고고고!” 알림 스타일, 에러 처리까지 질문이 끝없이 이어졌어요. “카운트다운 왜 멈춰?”, “알림 소리 추가해!”, “오징어 경심 느낌으로 디자인해!” 매 질문마다 토큰이 쌓였죠.</p>
+                <p>계정 세 개를 돌려쓰다 한계에 부딪혔어요. 결국 <strong>ChatGPT Plus</strong>와 <strong>Grok Pro</strong>를 결제했죠. <strong>Claude</strong>의 유료 버전까지 추가하니, 어느새 AI Pro 모델이 세 개나 됐어요. 지갑이 가벼워지는데 <strong>Mlfee.com</strong>은 아직 수익 한 푼 내지 못했죠. “이게 초보자의 운명인가…” 하며 한숨 쉬었지만, 백업 파일을 보며 다짐했어요. “이 타이머가 비숍 유저들의 시간을 구하면, 이 결제도 빛을 볼 거야!” AI에게 빌드 내용을 요약해 전달하며 버텼죠:</p>
+                <blockquote>“HTML 입력창과 드롭다운으로 버프 타이머 만들었어. 여러 타이머 동시 카운트다운하고, 메이플 스타일 ‘고고고!’ 알림 추가해.”</blockquote>
+                <p>요약이 어긋나면 <strong>Bard</strong>가 버튼만 잔뜩 추가해 “내 샤프아이즈가 버튼 밭이 됐잖아!” 하며 웃음이 터졌어요. 노트에 백업과 질문 기록을 정리하며 뫼비우스의 띠를 벗어났죠. 이 소용돌이 속에서 AI 다루는 직감이 깊어졌어요.</p>
+                
+                <h2>상상의 구현: 코드의 완성</h2>
+                <p>버프 타이머를 만들며 가장 기억에 남는 건, 상상이 코드로 피어나는 순간이었어요. 텅 빈 입력창이 드롭다운으로 홀리심볼과 샤프아이즈를 선택하고, 여러 타이머가 동시에 카운트다운하며 생명을 얻었죠. “내가 비숍의 시간을 컨트롤하고 있구나!” 하며 혼자 웃었어요.</p>
+                <p>디자인도 메이플 감성을 입었어요. <strong>Claude</strong>에 “메이플 주황빛 알림으로 꾸며줘”라고 했더니 Tailwind CSS로 반짝이는 알림을 제안했죠. 타이머 종료 시 “고고고!” 알림은 오징어 경심의 콜 사인 같았어요. 삭제 버튼 추가엔 또 실수가 있었어요. <strong>ChatGPT</strong> 코드로 버튼을 눌렀더니 모든 타이머가 사라졌죠! <strong>Grok</strong>이 인덱스 문제를 지적해 고쳤어요:</p>
+                <pre><code>timerDiv.innerHTML += `&lt;button class="text-red-400 hover:text-red-600" onclick="deleteTimer(${timers.length - 1})"&gt;삭제&lt;/button&gt;`;</code></pre>
+                <p>홀리심볼 타이머를 삭제하며 “이제 자쿰 팔 떨어져도 눈초리 안 받아!”라는 쾌감이 밀려왔어요. 코드 한 줄이 상상을 현실로 바꿨죠. 도돌이표 같은 삽질, 백업으로 버티기, 유료 결제의 부담 속에서도 이 과정은 즐거웠어요. 코딩을 몰라도 아이디어만 있으면 비숍의 시간을 다룰 수 있다니, 새로운 세계가 펼쳐졌어요.</p>
+                
+                <h2>AI와의 동행: 노하우의 뿌리</h2>
+                <p>버프 타이머를 만들며 AI와의 대화가 깊어졌어요. 막연한 “타이머 만들어줘”에서 “자쿰과 죽숲 버프 드롭다운, 동시 카운트다운, 메이플 주황빛 ‘고고고!’ 알림” 같은 정교한 요청으로 바뀌었죠. <strong>Grok</strong>의 빠른 답변, <strong>Claude</strong>의 다정한 설명, <strong>Bard</strong>의 트렌디한 제안을 활용하며 팀워크를 이뤘어요.</p>
+                <p>실수는 성장의 발판이었어요. <strong>Bard</strong>가 타이머를 분홍빛으로 물들였을 때 “홀리심볼이 위용둥 망용둥 같네!” 하며 친구와 웃었죠. “빨간 버섯 색상으로!” 하며 고쳤어요. 백업 없었으면 망했을 뻔한 순간도 있었죠. 삽질마다 AI와의 대화가 자연스러워졌고, “이제 AI와 동료구나!”라는 자신감이 생겼어요.</p>
+                
+                <h2>커뮤니티의 울림: 상상의 메아리</h2>
+                <p><strong>Mlfee.com</strong>에 버프 타이머가 올라가자 메이플 커뮤니티가 들썩였어요. “샤프콜 타이밍 딱 맞네!”라는 댓글이 달리고, “오징어 경심 알림 소리 더 화려하게!”라는 제안이 왔죠. 가슴이 두근거렸어요. 내 도구가 비숍 유저들의 레이드를 더 짜릿하게 만들다니! 사용자 수가 25에서 50으로 늘며 미소가 번졌어요. 아직 수익은 없었지만, 이 반응이 유료 결제의 부담을 덜어줬죠.</p>
+                <p>타이머가 많아지니 페이지가 느려졌어요. <strong>Grok</strong>이 “렌더링 최적화”를 제안했고, 백업 파일에서 코드를 복구해 복붙하니 부드러워졌어요. AI와 문제를 풀며 상상이 코드 속에 뿌리내렸어요. 메이플은 계기일 뿐, “다음엔 어떤 불편함을 잡을까?”라는 설렘이 가득했죠.</p>
+                
+                <h2>초보자의 확신: 아이디어가 세상을 바꾼다</h2>
+                <p>버프 타이머를 만들며 깨달은 건, 코딩을 몰라도 아이디어만 있으면 세상을 바꿀 수 있다는 거였어요. <strong>ChatGPT</strong>, <strong>Grok</strong>, <strong>Claude</strong>, <strong>Bard</strong>는 제 부족함을 채워줬죠. 도돌이표 같은 코드 수정, 백업의 소중함, 토큰 한도로 인한 유료 결제의 부담도 있었지만, 그 모든 순간이 새로운 문을 열어줬어요. “코딩은 천재들만 한다”던 편견이 무너졌죠. AI 덕분에 초보자인 저도 비숍 유저들의 시간을 더 쉽게 만들었어요.</p>
+                <p>이 여정은 자신감을 심어줬어요. 아이디어를 명료히 말하면 AI가 길을 열어줍니다. 아직 <strong>Mlfee.com</strong>은 수익을 내지 못하지만, 커뮤니티의 반응은 그 자체로 보상이었어요. 제 이야기가 “나도 할 수 있겠다!”는 용기를 드리길 바랍니다. 버프 타이머는 작지만, 상상이 코드 속에 뿌리내린 증거예요. 여러분의 아이디어를 꺼내보세요. AI가 그 꿈을 현실로 이어줄 겁니다.</p>
+                
+                <h2>다음 챕터로</h2>
+                <p>이것이 <strong>Mlfee 개발실록</strong>의 두 번째 챕터입니다. 버프 타이머를 만들며 코딩을 몰랐던 제가 AI와 손잡고 뫼비우스의 띠를 벗어났죠. 다음 챕터에선 새로운 기능을 추가하며 겪은 이야기를 들려드릴게요. 또 어떤 웃픈 순간과 AI와의 모험이 기다릴까요?</p>
+                <p>코딩을 몰라도, 아이디어만 있다면 AI와 함께 꿈을 현실로 만들 수 있어요. <strong>Mlfee</strong>는 제 작은 모험입니다. 자, 여러분의 아이디어를 꺼내볼까요?</p>
+                <p><em>총 10,300자</em></p>
+            </article>
+
+            <div class="mt-12 pt-8 border-t border-gray-200">
+                <a href="/devlog/index.html" class="bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-md transition-colors">&larr; 개발실록 목록으로</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
