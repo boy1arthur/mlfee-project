@@ -3,186 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLFEE TIMES | AI로 일상과 게임의 생산성을 바꾸다</title>
-    <meta name="description" content="비개발자가 AI를 활용해 메이플랜드 필수 유틸리티를 개발하고, 그 여정을 공유합니다. 당신의 생산성을 높여줄 AI 꿀팁과 개발 실록을 만나보세요.">
-    <meta name="keywords" content="AI, 비개발자, 개발 실록, 생산성, 메이플랜드, 유틸리티, 수수료 계산기, 리저렉션 타이머, MLFEE, Gemini, ChatGPT">
+    <title>개발실록 | MLFEE TIMES</title>
+    <meta name="description" content="AI를 이용해 아이디어를 현실로 만드는 비개발자의 개발 여정을 기록합니다.">
     
-    <meta property="og:title" content="MLFEE TIMES | AI로 당신의 문제를 해결합니다">
-    <meta property="og:description" content="코딩을 몰라도 괜찮아요. 비개발자가 AI로 메이플랜드 필수 도구를 만들고, 그 모든 과정을 공유합니다. 당신의 생산성을 높여줄 영감을 얻어가세요.">
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="개발실록 | MLFEE TIMES">
+    <meta property="og:description" content="AI를 이용해 아이디어를 현실로 만드는 비개발자의 개발 여정을 기록합니다.">
     <meta property="og:image" content="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png">
-    <meta property="og:image:width" content="1200"> 
-    <meta property="og:image:height" content="630">
-    <meta property="og:url" content="https://mlfee.com">
-    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mlfee.com/devlog/index.html">
 
-    <link rel="icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
+    <!-- Favicon -->
+    <link rel="icon" href="/images/mlfee-logo.png" type="image/png">
+    <link rel="shortcut icon" href="/images/mlfee-logo.png" type="image/png">
     
+    <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
+    <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615" crossorigin="anonymous"></script>
      
     <style>
         html { scroll-behavior: smooth; }
         body { 
             font-family: 'Inter', 'Noto Sans KR', sans-serif; 
-            /* [테마 수정] 눈이 편안한 연회색 신문지 색상으로 변경 */
             background-color: #f0f0f0; 
-            /* [신문지 질감 강화] 더 미세한 노이즈 텍스처로 변경 */
             background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEUAAADd3d3+xSTlAAAAAXRSTlMAQObYZgAAABVJREFUeJxjYMAEjGQEGIwYkAAEAAA2AAGs9a2hAAAAAElFTkSuQmCC');
             color: #1f2937;
         }
         .font-serif { font-family: 'Playfair Display', serif; }
+        .header-shadow { box-shadow: 0 1px 2px rgba(0,0,0,0.05); border-bottom: 1px solid #e5e7eb; }
+        .ad-slot { display: flex; align-items: center; justify-content: center; background-color: #e5e7eb; border: 1px dashed #d1d5db; color: #9ca3af; font-size: 0.875rem; min-height: 90px; }
         
-        .header-shadow {
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .ad-slot {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #e5e7eb;
-            border: 1px dashed #d1d5db;
-            color: #9ca3af;
-            font-size: 0.875rem;
-            min-height: 90px;
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-entering { animation: fadeIn 0.3s ease-out forwards; }
+        .modal-entering .modal-content { animation: slideInUp 0.3s ease-out forwards; }
 
-        /* [만년필 이펙트] 타이핑 커서 애니메이션 */
-        .typing-cursor {
-            display: inline-block;
-            width: 3px;
-            height: 1em;
-            background-color: #333;
-            animation: blink 0.8s infinite;
-            margin-left: 5px;
-            transform: translateY(4px);
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
+        .prose { color: #374151; }
+        .prose h1, .prose h2, .prose h3 { color: #111827; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+        .prose a { color: #2563eb; text-decoration: underline; }
+        .prose blockquote { border-left-color: #3b82f6; color: #4b5563; }
+        .prose code { color: #be123c; background-color: #fef2f2; padding: 2px 5px; border-radius: 4px; font-weight: 600; }
+        .prose pre { background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; color: #d1d5db; }
+        .prose pre code { color: inherit; background-color: transparent; padding: 0; }
+        .prose .lead { font-size: 1.25rem; color: #4b5563; }
     </style>
 </head>
 <body class="antialiased">
     
+    <!-- Header -->
     <header class="bg-white/95 backdrop-blur-sm sticky top-0 z-50 header-shadow">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center gap-4">
                     <button id="mobile-menu-btn" class="lg:hidden text-xl"><i class="fas fa-bars"></i></button>
+                    <!-- [관리자 기능] 글쓰기 버튼. 관리자로 로그인 시 자동으로 나타납니다. -->
+                    <button id="write-post-btn" class="hidden bg-blue-600 text-white font-bold py-2 px-4 rounded-md text-sm hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-pen-to-square mr-1"></i> 새 글 작성
+                    </button>
                 </div>
                 <a href="/index.html" class="text-3xl md:text-4xl font-serif font-bold text-black absolute left-1/2 -translate-x-1/2">MLFEE TIMES</a>
-                <div></div>
+                <div id="auth-container">
+                    <!-- 로그인/로그아웃 버튼은 JavaScript로 관리됩니다. -->
+                </div>
             </div>
             <nav id="main-nav" class="hidden lg:flex justify-center items-center gap-8 py-3 border-t border-gray-200">
-                <a href="/devlog/index.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">개발실록</a>
+                <a href="/devlog/index.html" class="text-black font-bold transition-colors text-sm">개발실록</a>
                 <a href="/maple-tools/index.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">메이플랜드 도구</a>
                 <a href="/about.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">사이트 소개</a>
             </nav>
         </div>
         <div id="mobile-nav-container" class="hidden lg:hidden bg-white border-t border-gray-200">
-             <a href="/devlog/index.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">개발실록</a>
+             <a href="/devlog/index.html" class="block py-3 px-4 text-black font-bold bg-gray-100">개발실록</a>
              <a href="/maple-tools/index.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">메이플랜드 도구</a>
              <a href="/about.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">사이트 소개</a>
         </div>
     </header>
     
+    <!-- Main Content Area -->
     <div id="page-content">
-        <div class="container mx-auto px-4 pt-6">
-            <div class="ad-slot h-[100px] w-full max-w-[728px] mx-auto">(광고 슬롯 728x90)</div>
-        </div>
-        <main class="container mx-auto px-4 py-8">
-            <section id="hero-section" class="mb-12 border-b border-gray-300 pb-12">
-                <a href="/posts/devlog-01.html" class="block group">
-                    <!-- [아이콘 교체] Placeholder 이미지를 직접 그린 SVG 아이콘으로 교체 -->
-                    <div class="w-full h-auto object-cover rounded-lg shadow-sm mb-4 bg-gray-800 text-white p-8 flex items-center justify-center aspect-[800/550]">
-                         <svg class="w-1/2 h-1/2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 3h.008v.008H8.25v-.008Zm0 3h.008v.008H8.25v-.008Zm3-6h.008v.008H11.25v-.008Zm0 3h.008v.008H11.25v-.008Zm0 3h.008v.008H11.25v-.008Zm3-6h.008v.008H14.25v-.008Zm0 3h.008v.008H14.25v-.008Zm0 3h.008v.008H14.25v-.008ZM6 21v-7.5A2.25 2.25 0 0 1 8.25 12h7.5A2.25 2.25 0 0 1 18 13.5V21m-12 0h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 21Z" />
-                        </svg>
-                    </div>
-                    <p class="text-sm text-blue-600 font-semibold mt-2">개발실록</p>
-                    <h1 id="hero-title" class="font-serif text-4xl md:text-5xl font-bold text-black leading-tight mt-2 min-h-[1.2em]"></h1>
-                    <p class="text-gray-600 mt-4">단순한 게임 속 불편함에서 시작된 작은 질문. AI라는 강력한 도구를 통해 내 손으로 직접 문제를 해결하며 느낀 성취감은, 득템의 기쁨과는 비교할 수 없는 것이었습니다.</p>
-                </a>
-            </section>
-
-            <div class="grid lg:grid-cols-3 gap-8 lg:gap-12">
-                <div class="lg:col-span-2 space-y-10">
-                    <h2 class="text-2xl font-bold text-black border-b-2 border-black pb-2">최신 소식</h2>
-                    <div id="article-list">
-                        <article class="grid md:grid-cols-3 gap-6 border-b border-gray-200 pb-10">
-                            <div class="md:col-span-2">
-                                <a href="/maple-tools/index.html" class="text-sm text-blue-600 font-semibold mb-1 hover:underline">메이플랜드 도구</a>
-                                <a href="/timer/index.html" target="_blank">
-                                    <h3 class="font-serif text-2xl font-bold hover:text-gray-700 transition-colors mt-1">레이드 크로니클 (리저 타이머)</h3>
-                                </a>
-                                <p class="text-gray-600 text-base mt-2">비숍의 리저렉션 쿨타임을 정확히 체크하고, 다음 예상 시간을 공유하여 안정적인 레이드를 운영하세요.</p>
-                                <p class="text-xs text-gray-500 mt-3">By 소년아서 | 2025년 7월 24일</p>
-                            </div>
-                            <a href="/timer/index.html" target="_blank" class="md:col-span-1 block bg-blue-50 rounded-lg flex items-center justify-center p-4">
-                                <svg class="w-20 h-20 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-                            </a>
-                        </article>
-                        
-                        <article class="grid md:grid-cols-3 gap-6 pt-10">
-                            <div class="md:col-span-2">
-                                <a href="/maple-tools/index.html" class="text-sm text-blue-600 font-semibold mb-1 hover:underline">메이플랜드 도구</a>
-                                <a href="/buff/index.html" target="_blank">
-                                    <h3 class="font-serif text-2xl font-bold hover:text-gray-700 transition-colors mt-1">메피 버피 (실시간 버프 관리)</h3>
-                                </a>
-                                <p class="text-gray-600 text-base mt-2">홀리심볼, 샤프 아이즈 등 주요 버프 스킬의 주기를 관리하고, 음성으로 리필 타이밍을 알려드립니다.</p>
-                                <p class="text-xs text-gray-500 mt-3">By 소년아서 | 2025년 7월 23일</p>
-                            </div>
-                            <a href="/buff/index.html" target="_blank" class="md:col-span-1 block bg-green-50 rounded-lg flex items-center justify-center p-4">
-                               <svg class="w-20 h-20 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-                            </a>
-                        </article>
-                    </div>
-                </div>
-                
-                <aside class="lg:col-span-1">
-                    <div class="sticky top-24 space-y-8">
-                        <div class="ad-slot h-[250px] w-full">(광고 슬롯 300x250)</div>
-                        <div>
-                            <h3 class="text-lg font-bold text-black mb-4 border-b-2 border-black pb-2">핵심 도구 바로가기</h3>
-                            <div class="space-y-4">
-                                <a href="/calc/index.html" target="_blank" class="flex items-center gap-4 group">
-                                    <p class="font-serif text-3xl font-bold text-gray-300">1</p>
-                                    <div>
-                                        <p class="font-bold text-black group-hover:underline text-sm leading-snug">N빵마스터 (수수료 계산기)</p>
-                                    </div>
-                                </a>
-                                <a href="/timer/index.html" target="_blank" class="flex items-center gap-4 group">
-                                    <p class="font-serif text-3xl font-bold text-gray-300">2</p>
-                                    <div>
-                                        <p class="font-bold text-black group-hover:underline text-sm leading-snug">레이드 크로니클 (리저 타이머)</p>
-                                    </div>
-                                </a>
-                                <a href="/buff/index.html" target="_blank" class="flex items-center gap-4 group">
-                                    <p class="font-serif text-3xl font-bold text-gray-300">3</p>
-                                    <div>
-                                        <p class="font-bold text-black group-hover:underline text-sm leading-snug">메피 버피 (실시간 버프 관리)</p>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-            </div>
-        </main>
+        <!-- 페이지 내용은 JavaScript로 동적으로 렌더링됩니다. -->
     </div>
 
+    <!-- Footer -->
     <footer class="py-10 mt-10 border-t border-gray-200 bg-white">
         <div class="container mx-auto px-4 text-center space-y-4">
             <a href="/index.html" class="text-3xl font-serif font-bold text-black">MLFEE TIMES</a>
@@ -194,55 +101,276 @@
             <p class="text-gray-400 text-xs">&copy; 2025 MLFEE TIMES. All rights reserved. (소년아서 제작)</p>
         </div>
     </footer>
+
+    <!-- Modals -->
+    <div id="writingModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-[1002] hidden">
+        <div class="modal-content relative bg-white rounded-lg shadow-2xl p-8 w-full max-w-4xl text-left border">
+            <button class="modal-close-btn absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition text-2xl" aria-label="Close">&times;</button>
+            <h3 class="font-serif text-2xl font-bold text-black mb-6">개발실록 새 글 작성</h3>
+            <form id="writing-form" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="post-title" class="block text-sm font-medium text-gray-700 mb-1">제목</label>
+                        <input type="text" id="post-title" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition">
+                    </div>
+                    <div>
+                        <label for="post-id" class="block text-sm font-medium text-gray-700 mb-1">고유 ID (영문/숫자/하이픈)</label>
+                        <input type="text" id="post-id" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition" placeholder="예: devlog-02">
+                    </div>
+                </div>
+                <div>
+                    <label for="post-excerpt" class="block text-sm font-medium text-gray-700 mb-1">요약 (리스트에 표시될 내용)</label>
+                    <textarea id="post-excerpt" rows="2" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition"></textarea>
+                </div>
+                <div>
+                    <label for="post-image-url" class="block text-sm font-medium text-gray-700 mb-1">대표 이미지 URL</label>
+                    <input type="url" id="post-image-url" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition" placeholder="https://placehold.co/800x550/...">
+                </div>
+                <div>
+                    <label for="post-content" class="block text-sm font-medium text-gray-700 mb-1">본문 (HTML 형식)</label>
+                    <textarea id="post-content" rows="10" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition font-mono text-sm" placeholder="<p>내용을 입력하세요...</p>"></textarea>
+                </div>
+                <p id="writing-status" class="text-green-600 text-sm h-5"></p>
+                <div class="flex justify-end gap-4 pt-4">
+                    <button type="button" class="modal-close-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-md transition-colors">취소</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition-colors">발행하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <script type="module">
-        class App {
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const AppConfig = {
+            firebase: {
+                apiKey: "AIzaSyASDsgKULCrP_3I3jz5irdzfbO9TzSwBZ8",
+                authDomain: "mlfee-hub.firebaseapp.com",
+                projectId: "mlfee-hub",
+                storageBucket: "mlfee-hub.appspot.com",
+                messagingSenderId: "330580584999",
+                appId: "1:330580584999:web:66410250d754fa68a2fc02",
+            },
+            // [중요] 관리자 설정: 여기에 본인의 Firebase UID를 입력하세요.
+            adminUID: TUTnXUgJm1MDUNLI12kFaR9u01r1, 
+        };
+
+        class ModalManager {
             constructor() {
-                this.elements = {
-                    mobileMenuBtn: document.getElementById('mobile-menu-btn'),
-                    mobileNavContainer: document.getElementById('mobile-nav-container'),
-                    heroTitle: document.getElementById('hero-title'),
+                this.modals = {
+                    writing: { el: document.getElementById('writingModal') },
                 };
+                this._init();
+            }
+            _init() {
+                for (const key in this.modals) {
+                    const modal = this.modals[key];
+                    if (!modal.el) continue;
+                    modal.el.addEventListener('click', (e) => { if (e.target === modal.el) this.hide(key); });
+                    modal.el.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', () => this.hide(key)));
+                }
+            }
+            show(key) {
+                const modal = this.modals[key];
+                if (!modal?.el) return;
+                modal.el.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => modal.el.classList.add('modal-entering'), 10);
+            }
+            hide(key) {
+                const modal = this.modals[key];
+                if (!modal?.el) return;
+                modal.el.classList.remove('modal-entering');
+                document.body.style.overflow = '';
+                setTimeout(() => modal.el.classList.add('hidden'), 300);
+            }
+        }
+        
+        class AuthManager {
+            constructor() {
+                this.auth = getAuth(initializeApp(AppConfig.firebase));
+                this.provider = new GoogleAuthProvider();
+                this.elements = {
+                    authContainer: document.getElementById('auth-container'),
+                    writePostBtn: document.getElementById('write-post-btn'),
+                };
+                this._init();
             }
 
-            init() {
-                this._initEventListeners();
-                this.typewriterEffect();
-                console.log("Landing Page Initialized");
+            _init() {
+                onAuthStateChanged(this.auth, (user) => this._onAuthStateChanged(user));
             }
 
-            _initEventListeners() {
-                this.elements.mobileMenuBtn?.addEventListener('click', () => {
-                    this.elements.mobileNavContainer.classList.toggle('hidden');
+            _onAuthStateChanged(user) {
+                this.elements.authContainer.innerHTML = ''; // Clear previous state
+                if (user) {
+                    // Logged In
+                    this.elements.authContainer.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <img src="${user.photoURL}" alt="${user.displayName}" class="w-8 h-8 rounded-full border-2 border-gray-300">
+                            <button id="logout-btn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-md text-sm hover:bg-gray-300">로그아웃</button>
+                        </div>
+                    `;
+                    this.elements.authContainer.querySelector('#logout-btn').addEventListener('click', () => this.logout());
+
+                    if (user.uid === AppConfig.adminUID) {
+                        this.elements.writePostBtn.classList.remove('hidden');
+                    }
+                } else {
+                    // Logged Out
+                    this.elements.authContainer.innerHTML = `
+                        <button id="login-btn" class="bg-black text-white font-bold py-2 px-5 rounded-md text-sm hover:bg-gray-800 transition-colors">관리자 로그인</button>
+                    `;
+                    this.elements.authContainer.querySelector('#login-btn').addEventListener('click', () => this.login());
+                    this.elements.writePostBtn.classList.add('hidden');
+                }
+            }
+            
+            async login() {
+                try {
+                    await signInWithPopup(this.auth, this.provider);
+                } catch (error) {
+                    console.error("Login failed:", error);
+                }
+            }
+
+            async logout() {
+                await signOut(this.auth);
+            }
+        }
+
+        class WritingManager {
+            constructor(modalManager, db) {
+                this.modalManager = modalManager;
+                this.db = db;
+                this.elements = {
+                    writePostBtn: document.getElementById('write-post-btn'),
+                    writingForm: document.getElementById('writing-form'),
+                    statusMessage: document.getElementById('writing-status'),
+                    titleInput: document.getElementById('post-title'),
+                    idInput: document.getElementById('post-id'),
+                };
+                this._init();
+            }
+
+            _init() {
+                this.elements.writePostBtn.addEventListener('click', () => {
+                    this.modalManager.show('writing');
+                });
+
+                this.elements.writingForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    await this.savePost();
+                });
+
+                this.elements.titleInput.addEventListener('input', (e) => {
+                    this.elements.idInput.value = e.target.value
+                        .trim()
+                        .toLowerCase()
+                        .replace(/\s+/g, '-') 
+                        .replace(/[^\w-]+/g, '');
                 });
             }
 
-            typewriterEffect() {
-                if (!this.elements.heroTitle) return;
-                
-                const originalText = `"수수료로 500만 메소 날렸다고?" 분노의 AI 계산기 개발기`;
-                let i = 0;
-                this.elements.heroTitle.innerHTML = ''; // 기존 텍스트 초기화
-                
-                const cursorSpan = document.createElement('span');
-                cursorSpan.className = 'typing-cursor';
-                this.elements.heroTitle.appendChild(cursorSpan);
-
-                const typing = () => {
-                    if (i < originalText.length) {
-                        // 커서 앞에 텍스트를 추가
-                        this.elements.heroTitle.insertBefore(document.createTextNode(originalText.charAt(i)), cursorSpan);
-                        i++;
-                        setTimeout(typing, 60); // 타이핑 속도 (ms)
-                    } else {
-                        // 타이핑 완료 후 1초 뒤 커서 제거
-                        setTimeout(() => {
-                           if(cursorSpan) cursorSpan.style.display = 'none';
-                        }, 1000);
-                    }
+            async savePost() {
+                const postData = {
+                    id: this.elements.idInput.value,
+                    title: this.elements.titleInput.value,
+                    excerpt: document.getElementById('post-excerpt').value,
+                    imageUrl: document.getElementById('post-image-url').value,
+                    content: document.getElementById('post-content').value,
+                    author: '소년아서',
+                    createdAt: serverTimestamp()
                 };
 
-                typing();
+                if (!postData.id || !postData.title || !postData.content) {
+                    this.elements.statusMessage.textContent = 'ID, 제목, 본문은 필수 항목입니다.';
+                    this.elements.statusMessage.classList.add('text-red-600');
+                    return;
+                }
+
+                try {
+                    this.elements.statusMessage.textContent = '발행 중...';
+                    this.elements.statusMessage.classList.remove('text-red-600', 'text-green-600');
+                    
+                    await setDoc(doc(this.db, "devlogs", postData.id), postData);
+
+                    this.elements.statusMessage.textContent = '성공적으로 발행되었습니다!';
+                    this.elements.statusMessage.classList.add('text-green-600');
+                    
+                    setTimeout(() => {
+                        this.modalManager.hide('writing');
+                        this.elements.writingForm.reset();
+                        this.elements.statusMessage.textContent = '';
+                        window.location.reload();
+                    }, 1500);
+
+                } catch (error) {
+                    console.error("Error saving post: ", error);
+                    this.elements.statusMessage.textContent = '발행 중 오류가 발생했습니다.';
+                    this.elements.statusMessage.classList.add('text-red-600');
+                }
+            }
+        }
+        
+        class App {
+            constructor() {
+                const app = initializeApp(AppConfig.firebase);
+                this.db = getFirestore(app);
+                this.modalManager = new ModalManager();
+                this.authManager = new AuthManager();
+                this.writingManager = new WritingManager(this.modalManager, this.db);
+            }
+
+            async init() {
+                await this.renderPosts();
+                console.log("Devlog Page Initialized");
+            }
+            
+            async renderPosts() {
+                const pageContent = document.getElementById('page-content');
+                const postsRef = collection(this.db, "devlogs");
+                const q = query(postsRef, orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                let articlesHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const post = doc.data();
+                    const postDate = post.createdAt?.toDate().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) || '';
+                    articlesHTML += `
+                        <article class="grid md:grid-cols-3 gap-8 ${querySnapshot.docs[0].id !== doc.id ? 'pt-12 border-t' : ''}">
+                            <a href="/posts/${post.id}.html" class="md:col-span-1 block">
+                                <img src="${post.imageUrl}" alt="${post.title}" class="object-cover w-full h-full rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                            </a>
+                            <div class="md:col-span-2">
+                                <p class="text-sm text-gray-500 mb-1">${postDate}</p>
+                                <a href="/posts/${post.id}.html">
+                                    <h2 class="font-serif text-3xl font-bold hover:text-gray-700 transition-colors">${post.title}</h2>
+                                </a>
+                                <p class="text-gray-600 text-base mt-3">${post.excerpt}</p>
+                                <a href="/posts/${post.id}.html" class="text-blue-600 font-semibold mt-4 inline-block hover:underline">더 읽어보기 &rarr;</a>
+                            </div>
+                        </article>
+                    `;
+                });
+
+                pageContent.innerHTML = `
+                    <main class="container mx-auto px-4 py-8">
+                        <div class="max-w-4xl mx-auto">
+                            <header class="text-center mb-12 border-b pb-8">
+                                <h1 class="text-5xl sm:text-7xl font-black font-serif text-black">개발실록</h1>
+                                <p class="text-gray-500 mt-4 text-lg max-w-2xl mx-auto">
+                                    코딩을 몰라도 괜찮습니다. AI라는 강력한 파트너와 함께라면, 누구나 자신의 아이디어를 현실로 만들 수 있습니다. 비개발자의 삽질부터 성공까지, 그 모든 여정을 이곳에 기록합니다.
+                                </p>
+                            </header>
+                            <div id="article-list" class="space-y-12">
+                                ${articlesHTML || '<p class="text-center text-gray-500">아직 작성된 글이 없습니다. 관리자로 로그인하여 첫 글을 작성해보세요!</p>'}
+                            </div>
+                        </div>
+                    </main>
+                `;
             }
         }
 
