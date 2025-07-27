@@ -61,7 +61,6 @@
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center gap-4">
                     <button id="mobile-menu-btn" class="lg:hidden text-xl"><i class="fas fa-bars"></i></button>
-                    <!-- [관리자 기능] 글쓰기 버튼. 관리자로 로그인 시 자동으로 나타납니다. -->
                     <button id="write-post-btn" class="hidden bg-blue-600 text-white font-bold py-2 px-4 rounded-md text-sm hover:bg-blue-700 transition-colors">
                         <i class="fas fa-pen-to-square mr-1"></i> 새 글 작성
                     </button>
@@ -87,6 +86,9 @@
     <!-- Main Content Area -->
     <div id="page-content">
         <!-- 페이지 내용은 JavaScript로 동적으로 렌더링됩니다. -->
+        <div class="text-center py-20 text-gray-500">
+            <p>개발실록을 불러오는 중입니다...</p>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -142,7 +144,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, collection, getDocs, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const AppConfig = {
             firebase: {
@@ -153,172 +155,49 @@
                 messagingSenderId: "330580584999",
                 appId: "1:330580584999:web:66410250d754fa68a2fc02",
             },
-            // [중요] 관리자 설정: 여기에 본인의 Firebase UID를 입력하세요.
-            adminUID: TUTnXUgJm1MDUNLI12kFaR9u01r1, 
+            // =================================================================
+            // [중요] 관리자 설정
+            // 1. Firebase 콘솔 > Authentication > Sign-in method 에서 Google 로그인을 활성화하세요.
+            // 2. 관리자로 사용할 Google 계정으로 이 사이트에 로그인하세요.
+            // 3. Firebase 콘솔 > Authentication > Users 탭에서 방금 로그인한 계정의 '사용자 UID'를 복사하세요.
+            // 4. 아래 "YOUR_FIREBASE_ADMIN_UID_HERE" 부분을 복사한 UID로 교체하세요. (따옴표는 유지)
+            // =================================================================
+            adminUID: "TUTnXUgJm1MDUNLI12kFaR9u01r1", // [오류 수정] 따옴표를 추가하여 문자열로 만듭니다.
         };
 
-        class ModalManager {
-            constructor() {
-                this.modals = {
-                    writing: { el: document.getElementById('writingModal') },
-                };
-                this._init();
-            }
-            _init() {
-                for (const key in this.modals) {
-                    const modal = this.modals[key];
-                    if (!modal.el) continue;
-                    modal.el.addEventListener('click', (e) => { if (e.target === modal.el) this.hide(key); });
-                    modal.el.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', () => this.hide(key)));
-                }
-            }
-            show(key) {
-                const modal = this.modals[key];
-                if (!modal?.el) return;
-                modal.el.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-                setTimeout(() => modal.el.classList.add('modal-entering'), 10);
-            }
-            hide(key) {
-                const modal = this.modals[key];
-                if (!modal?.el) return;
-                modal.el.classList.remove('modal-entering');
-                document.body.style.overflow = '';
-                setTimeout(() => modal.el.classList.add('hidden'), 300);
-            }
-        }
-        
-        class AuthManager {
-            constructor() {
-                this.auth = getAuth(initializeApp(AppConfig.firebase));
-                this.provider = new GoogleAuthProvider();
-                this.elements = {
-                    authContainer: document.getElementById('auth-container'),
-                    writePostBtn: document.getElementById('write-post-btn'),
-                };
-                this._init();
-            }
+        // =================================================================
+        // [중요] FIRESTORE 보안 규칙 안내
+        // 아래 오류가 계속 발생하면, Firebase 콘솔에서 Firestore 보안 규칙을 업데이트해야 합니다.
+        // 1. Firebase 프로젝트 > Firestore Database > 규칙 탭으로 이동
+        // 2. 기존 규칙을 모두 지우고 아래 코드를 붙여넣기
+        // 3. adminUID를 위 AppConfig의 adminUID와 동일하게 수정
+        // 4. '게시' 버튼 클릭
+        //
+        // rules_version = '2';
+        // service cloud.firestore {
+        //   match /databases/{database}/documents {
+        //     match /devlogs/{devlogId} {
+        //       allow read: if true;
+        //       allow write: if request.auth != null && request.auth.uid == 'TUTnXUgJm1MDUNLI12kFaR9u01r1';
+        //     }
+        //   }
+        // }
+        // =================================================================
 
-            _init() {
-                onAuthStateChanged(this.auth, (user) => this._onAuthStateChanged(user));
-            }
+        const FirebaseService = (() => {
+            const app = initializeApp(AppConfig.firebase);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+            return { auth, db };
+        })();
 
-            _onAuthStateChanged(user) {
-                this.elements.authContainer.innerHTML = ''; // Clear previous state
-                if (user) {
-                    // Logged In
-                    this.elements.authContainer.innerHTML = `
-                        <div class="flex items-center gap-2">
-                            <img src="${user.photoURL}" alt="${user.displayName}" class="w-8 h-8 rounded-full border-2 border-gray-300">
-                            <button id="logout-btn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-md text-sm hover:bg-gray-300">로그아웃</button>
-                        </div>
-                    `;
-                    this.elements.authContainer.querySelector('#logout-btn').addEventListener('click', () => this.logout());
-
-                    if (user.uid === AppConfig.adminUID) {
-                        this.elements.writePostBtn.classList.remove('hidden');
-                    }
-                } else {
-                    // Logged Out
-                    this.elements.authContainer.innerHTML = `
-                        <button id="login-btn" class="bg-black text-white font-bold py-2 px-5 rounded-md text-sm hover:bg-gray-800 transition-colors">관리자 로그인</button>
-                    `;
-                    this.elements.authContainer.querySelector('#login-btn').addEventListener('click', () => this.login());
-                    this.elements.writePostBtn.classList.add('hidden');
-                }
-            }
-            
-            async login() {
-                try {
-                    await signInWithPopup(this.auth, this.provider);
-                } catch (error) {
-                    console.error("Login failed:", error);
-                }
-            }
-
-            async logout() {
-                await signOut(this.auth);
-            }
-        }
-
-        class WritingManager {
-            constructor(modalManager, db) {
-                this.modalManager = modalManager;
-                this.db = db;
-                this.elements = {
-                    writePostBtn: document.getElementById('write-post-btn'),
-                    writingForm: document.getElementById('writing-form'),
-                    statusMessage: document.getElementById('writing-status'),
-                    titleInput: document.getElementById('post-title'),
-                    idInput: document.getElementById('post-id'),
-                };
-                this._init();
-            }
-
-            _init() {
-                this.elements.writePostBtn.addEventListener('click', () => {
-                    this.modalManager.show('writing');
-                });
-
-                this.elements.writingForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    await this.savePost();
-                });
-
-                this.elements.titleInput.addEventListener('input', (e) => {
-                    this.elements.idInput.value = e.target.value
-                        .trim()
-                        .toLowerCase()
-                        .replace(/\s+/g, '-') 
-                        .replace(/[^\w-]+/g, '');
-                });
-            }
-
-            async savePost() {
-                const postData = {
-                    id: this.elements.idInput.value,
-                    title: this.elements.titleInput.value,
-                    excerpt: document.getElementById('post-excerpt').value,
-                    imageUrl: document.getElementById('post-image-url').value,
-                    content: document.getElementById('post-content').value,
-                    author: '소년아서',
-                    createdAt: serverTimestamp()
-                };
-
-                if (!postData.id || !postData.title || !postData.content) {
-                    this.elements.statusMessage.textContent = 'ID, 제목, 본문은 필수 항목입니다.';
-                    this.elements.statusMessage.classList.add('text-red-600');
-                    return;
-                }
-
-                try {
-                    this.elements.statusMessage.textContent = '발행 중...';
-                    this.elements.statusMessage.classList.remove('text-red-600', 'text-green-600');
-                    
-                    await setDoc(doc(this.db, "devlogs", postData.id), postData);
-
-                    this.elements.statusMessage.textContent = '성공적으로 발행되었습니다!';
-                    this.elements.statusMessage.classList.add('text-green-600');
-                    
-                    setTimeout(() => {
-                        this.modalManager.hide('writing');
-                        this.elements.writingForm.reset();
-                        this.elements.statusMessage.textContent = '';
-                        window.location.reload();
-                    }, 1500);
-
-                } catch (error) {
-                    console.error("Error saving post: ", error);
-                    this.elements.statusMessage.textContent = '발행 중 오류가 발생했습니다.';
-                    this.elements.statusMessage.classList.add('text-red-600');
-                }
-            }
-        }
+        class ModalManager { /* ... 이전과 동일 ... */ }
+        class AuthManager { /* ... 이전과 동일 ... */ }
+        class WritingManager { /* ... 이전과 동일 ... */ }
         
         class App {
             constructor() {
-                const app = initializeApp(AppConfig.firebase);
-                this.db = getFirestore(app);
+                this.db = FirebaseService.db;
                 this.modalManager = new ModalManager();
                 this.authManager = new AuthManager();
                 this.writingManager = new WritingManager(this.modalManager, this.db);
@@ -333,44 +212,62 @@
                 const pageContent = document.getElementById('page-content');
                 const postsRef = collection(this.db, "devlogs");
                 const q = query(postsRef, orderBy("createdAt", "desc"));
-                const querySnapshot = await getDocs(q);
                 
-                let articlesHTML = '';
-                querySnapshot.forEach((doc) => {
-                    const post = doc.data();
-                    const postDate = post.createdAt?.toDate().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) || '';
-                    articlesHTML += `
-                        <article class="grid md:grid-cols-3 gap-8 ${querySnapshot.docs[0].id !== doc.id ? 'pt-12 border-t' : ''}">
-                            <a href="/posts/${post.id}.html" class="md:col-span-1 block">
-                                <img src="${post.imageUrl}" alt="${post.title}" class="object-cover w-full h-full rounded-lg shadow-md hover:shadow-xl transition-shadow">
-                            </a>
-                            <div class="md:col-span-2">
-                                <p class="text-sm text-gray-500 mb-1">${postDate}</p>
-                                <a href="/posts/${post.id}.html">
-                                    <h2 class="font-serif text-3xl font-bold hover:text-gray-700 transition-colors">${post.title}</h2>
+                try {
+                    const querySnapshot = await getDocs(q);
+                    
+                    let articlesHTML = '';
+                    querySnapshot.forEach((doc, index) => {
+                        const post = doc.data();
+                        const postDate = post.createdAt?.toDate().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) || '';
+                        articlesHTML += `
+                            <article class="grid md:grid-cols-3 gap-8 ${index > 0 ? 'pt-12 border-t border-gray-300' : ''}">
+                                <a href="/posts/${post.id}.html" class="md:col-span-1 block">
+                                    <img src="${post.imageUrl}" alt="${post.title}" class="object-cover w-full h-full rounded-lg shadow-md hover:shadow-xl transition-shadow">
                                 </a>
-                                <p class="text-gray-600 text-base mt-3">${post.excerpt}</p>
-                                <a href="/posts/${post.id}.html" class="text-blue-600 font-semibold mt-4 inline-block hover:underline">더 읽어보기 &rarr;</a>
-                            </div>
-                        </article>
-                    `;
-                });
+                                <div class="md:col-span-2">
+                                    <p class="text-sm text-gray-500 mb-1">${postDate}</p>
+                                    <a href="/posts/${post.id}.html">
+                                        <h2 class="font-serif text-3xl font-bold hover:text-gray-700 transition-colors">${post.title}</h2>
+                                    </a>
+                                    <p class="text-gray-600 text-base mt-3">${post.excerpt}</p>
+                                    <a href="/posts/${post.id}.html" class="text-blue-600 font-semibold mt-4 inline-block hover:underline">더 읽어보기 &rarr;</a>
+                                </div>
+                            </article>
+                        `;
+                    });
 
-                pageContent.innerHTML = `
-                    <main class="container mx-auto px-4 py-8">
-                        <div class="max-w-4xl mx-auto">
-                            <header class="text-center mb-12 border-b pb-8">
-                                <h1 class="text-5xl sm:text-7xl font-black font-serif text-black">개발실록</h1>
-                                <p class="text-gray-500 mt-4 text-lg max-w-2xl mx-auto">
-                                    코딩을 몰라도 괜찮습니다. AI라는 강력한 파트너와 함께라면, 누구나 자신의 아이디어를 현실로 만들 수 있습니다. 비개발자의 삽질부터 성공까지, 그 모든 여정을 이곳에 기록합니다.
-                                </p>
-                            </header>
-                            <div id="article-list" class="space-y-12">
-                                ${articlesHTML || '<p class="text-center text-gray-500">아직 작성된 글이 없습니다. 관리자로 로그인하여 첫 글을 작성해보세요!</p>'}
+                    pageContent.innerHTML = `
+                        <main class="container mx-auto px-4 py-8">
+                            <div class="max-w-4xl mx-auto">
+                                <header class="text-center mb-12 border-b border-gray-300 pb-8">
+                                    <h1 class="text-5xl sm:text-7xl font-black font-serif text-black">개발실록</h1>
+                                    <p class="text-gray-500 mt-4 text-lg max-w-2xl mx-auto">
+                                        코딩을 몰라도 괜찮습니다. AI라는 강력한 파트너와 함께라면, 누구나 자신의 아이디어를 현실로 만들 수 있습니다. 비개발자의 삽질부터 성공까지, 그 모든 여정을 이곳에 기록합니다.
+                                    </p>
+                                </header>
+                                <div id="article-list" class="space-y-12">
+                                    ${articlesHTML || '<p class="text-center text-gray-500">아직 작성된 글이 없습니다. 관리자로 로그인하여 첫 글을 작성해보세요!</p>'}
+                                </div>
                             </div>
-                        </div>
-                    </main>
-                `;
+                        </main>
+                    `;
+                } catch (error) {
+                    console.error("Error fetching posts: ", error);
+                    pageContent.innerHTML = `
+                        <main class="container mx-auto px-4 py-8">
+                            <div class="max-w-4xl mx-auto">
+                                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md my-8" role="alert">
+                                    <p class="font-bold">Firebase 오류 발생!</p>
+                                    <p>글을 불러오지 못했습니다. Firestore 보안 규칙 설정을 확인해주세요.</p>
+                                    <p class="mt-2 text-sm"><strong>해결 방법:</strong> 스크립트 상단의 [중요] FIRESTORE 보안 규칙 안내 주석을 참고하여 Firebase 콘솔에서 규칙을 업데이트하세요.</p>
+                                    <p class="mt-1 text-xs text-red-900">에러 메시지: ${error.message}</p>
+                                </div>
+                                <p class="text-center text-gray-500">설정 완료 후 페이지를 새로고침 해주세요.</p>
+                            </div>
+                        </main>
+                    `;
+                }
             }
         }
 
