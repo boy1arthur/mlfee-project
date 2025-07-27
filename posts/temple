@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- =================================================================
+    [수동 관리 1/4] SEO 및 소셜 미디어 정보
+    - 이 섹션의 "[...]" 부분을 새 글의 내용에 맞게 수정하세요.
+    ================================================================== -->
+    <title>[여기에 글 제목 입력] | MLFEE TIMES</title>
+    <meta name="description" content="[여기에 글의 핵심 요약 문장을 입력하세요. (1-2 문장)]">
+    
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <meta property="og:title" content="[여기에 글 제목 입력] | MLFEE TIMES">
+    <meta property="og:description" content="[여기에 글의 핵심 요약 문장을 입력하세요.]">
+    <meta property="og:image" content="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png">
+    <meta property="og:url" content="https://mlfee.com/posts/[새 글 파일명].html">
+    <meta property="og:type" content="article">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/images/mlfee-logo.png" type="image/png">
+    <link rel="shortcut icon" href="/images/mlfee-logo.png" type="image/png">
+    
+    <!-- External Libraries (수정할 필요 없음) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: #f0f0f0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEUAAADd3d3+xSTlAAAAAXRSTlMAQObYZgAAABVJREFUeJxjYMAEjGQEGIwYkAAEAAA2AAGs9a2hAAAAAElFTkSuQmCC'); color: #1f2937; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .prose { color: #374151; }
+        .prose h1, .prose h2, .prose h3 { color: #111827; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+        .prose a { color: #2563eb; text-decoration: underline; }
+        .prose blockquote { border-left-color: #3b82f6; color: #4b5563; }
+        .prose code { color: #be123c; background-color: #fef2f2; padding: 2px 5px; border-radius: 4px; font-weight: 600; }
+        .prose pre { background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; color: #d1d5db; }
+        .prose pre code { color: inherit; background-color: transparent; padding: 0; }
+        .prose .lead { font-size: 1.25rem; color: #4b5563; }
+        .prose-xl p { font-size: 1.25rem; line-height: 1.75; }
+        .prose-xl h2 { font-size: 2.25rem; margin-top: 2.5em; margin-bottom: 1.25em;}
+    </style>
+</head>
+<body class="antialiased">
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-lg shadow-lg border border-gray-200">
+            <a href="/devlog/index.html" class="text-blue-600 font-semibold text-sm hover:underline">개발실록</a>
+            
+            <!-- =================================================================
+            [수동 관리 2/4] 글 제목 및 작성 정보
+            - h1 태그와 span 태그 안의 "[...]" 부분을 수정하세요.
+            ================================================================== -->
+            <h1 class="font-serif text-4xl md:text-6xl font-bold text-black leading-tight mt-2">[여기에 글 제목 입력]</h1>
+            <div class="flex items-center gap-4 text-sm text-gray-500 my-6 border-y border-gray-200 py-4">
+                <span>By 소년아서</span>
+                <span>[YYYY년 M월 D일]</span>
+            </div>
+
+            <!-- =================================================================
+            [수동 관리 3/4] 대표 이미지
+            - img 태그의 src 속성에 새 글의 대표 이미지 URL을 입력하세요.
+            ================================================================== -->
+            <img src="https://placehold.co/1200x700/e5e7eb/9ca3af?text=대표+이미지" alt="[글 제목에 대한 이미지 설명]" class="w-full h-auto object-cover rounded-lg shadow-lg mb-8">
+            
+            <!-- =================================================================
+            [수동 관리 4/4] 글 본문
+            - <article> 태그 안에 새 글의 본문을 HTML 형식으로 작성하세요.
+            - <p>, <h2>, <blockquote>, <pre><code> 등의 태그를 자유롭게 사용하세요.
+            ================================================================== -->
+            <article class="prose prose-xl max-w-none">
+                
+                <p class="lead">[여기에 도입 문단을 작성하세요. lead 클래스로 조금 더 강조할 수 있습니다.]</p>
+                
+                <h2>[여기에 소제목 1 입력]</h2>
+                <p>[여기에 본문 내용을 작성하세요.]</p>
+                
+                <blockquote>[여기에 인용구나 강조하고 싶은 문장을 넣으세요.]</blockquote>
+
+                <h2>[여기에 소제목 2 입력]</h2>
+                <p>[여기에 코드 예시가 필요하다면 아래처럼 작성하세요.]</p>
+                <pre><code>function example() {
+    console.log("Hello, World!");
+}</code></pre>
+                
+                <p>[여기에 글을 마무리하는 문단을 작성하세요.]</p>
+
+            </article>
+
+            <div class="mt-12 pt-8 border-t border-gray-200">
+                <a href="/devlog/index.html" class="bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-md transition-colors">&larr; 개발실록 목록으로</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
