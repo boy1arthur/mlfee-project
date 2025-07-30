@@ -74,7 +74,7 @@
         
         .summary-value { color: #007bff; font-weight: bold; font-size: 1.2rem; }
         .payout-value { color: #28a745; font-weight: bold; font-size: 1rem; }
-        .final-payout { color: #ffc107; font-weight: bold; font-size: 1rem; }
+        .final-payout { color: #000; font-weight: bold; font-size: 1rem; } /* Changed to bold black */
         .net-profit-value { color: #007bff; font-weight: bold; font-size: 2rem; }
         .section-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; border-bottom: 2px solid #555; padding-bottom: 0.5rem;}
         
@@ -466,11 +466,20 @@
             elements.addItemBtn.addEventListener('click', () => createItemRow());
             elements.resetMembersBtn.addEventListener('click', () => showConfirm('목록 전체 삭제', '정말 모든 대상자 목록을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.', () => { elements.memberList.innerHTML = ''; createMemberRow(); calculateAll(); hideConfirm(); }));
             elements.resetItemsBtn.addEventListener('click', () => showConfirm('아이템 초기화', '정말 모든 아이템 목록을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.', () => { elements.itemList.innerHTML = ''; createItemRow(); calculateAll(); hideConfirm(); }));
+            
+            // Corrected "Apply Totals" button logic
             elements.applyItemTotalsBtn.addEventListener('click', () => { 
-                elements.itemSalesTotal.value = elements.calculatedItemSales.textContent; 
-                elements.feeTotal.value = elements.calculatedItemFees.textContent; 
+                const currentSales = parseFormattedNumber(elements.itemSalesTotal.value);
+                const currentFees = parseFormattedNumber(elements.feeTotal.value);
+                const calculatedSales = parseFormattedNumber(elements.calculatedItemSales.textContent);
+                const calculatedFees = parseFormattedNumber(elements.calculatedItemFees.textContent);
+
+                elements.itemSalesTotal.value = formatNumber(currentSales + calculatedSales);
+                elements.feeTotal.value = formatNumber(currentFees + calculatedFees);
+                
                 recalculateSummaryTotals(); 
             });
+
             elements.pasteMembersBtn.addEventListener('click', () => elements.pasteModal.classList.remove('hidden'));
             elements.closePasteModalBtn.addEventListener('click', () => elements.pasteModal.classList.add('hidden'));
             elements.applyPasteBtn.addEventListener('click', handlePaste);
