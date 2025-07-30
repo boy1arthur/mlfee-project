@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>혼테일렛저 (Horntail's Ledger)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #111827;
+            color: #d1d5db;
+        }
+        .card {
+            background-color: #1f2937;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 1px solid #374151;
+        }
+        .input-field {
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            color: #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            width: 100%;
+            text-align: right;
+            transition: all 0.2s;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: #1f2937;
+        }
+        .label-input {
+            background-color: transparent;
+            border: 1px solid transparent;
+            color: #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            width: 100%;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .label-input:hover, .label-input:focus {
+            background-color: #374151;
+            border-color: #4b5563;
+        }
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn:hover { background-color: #2563eb; }
+        .btn-secondary { background-color: #4b5563; }
+        .btn-secondary:hover { background-color: #6b7280; }
+        .btn-danger { background-color: #991b1b; }
+        .btn-danger:hover { background-color: #b91c1c; }
+        .summary-value { color: #60a5fa; font-weight: bold; font-size: 1.25rem; }
+        .payout-value { color: #4ade80; font-weight: bold; font-size: 1.1rem; }
+        .final-payout { color: #facc15; font-weight: bold; font-size: 1.1rem; }
+        .net-profit-value { color: #60a5fa; font-weight: bold; font-size: 2.25rem; }
+        .section-title { font-size: 1.25rem; font-weight: 700; }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 50; backdrop-filter: blur(4px); }
+        #toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; z-index: 100; opacity: 0; transition: opacity 0.3s, transform 0.3s; }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-screen-xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">혼테일렛저</h1>
+            <p class="text-gray-400 mt-3">Horntail's Ledger by 소년아서</p>
+            <div class="mt-6 flex justify-center gap-4">
+                <button id="save-data-btn" class="btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v4.5h2a.5.5 0 0 1 .354.854l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5A.5.5 0 0 1 5.5 6.5h2V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/></svg>저장하기</button>
+                <button id="load-data-btn" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2zm1 0v12h8V2H5zm0-1h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm2 5.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5z"/></svg>불러오기</button>
+                <button id="export-csv-btn" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>PC로 내보내기</button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <div class="lg:col-span-2 flex flex-col gap-6">
+                <div class="card">
+                    <h2 class="section-title border-b border-gray-700 pb-2 mb-4">요약 및 계산</h2>
+                    <div class="space-y-6">
+                        <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-4">
+                            <h3 class="text-lg font-semibold text-green-400 mb-3">수입</h3>
+                            <div class="space-y-2 text-sm">
+                                <div class="grid grid-cols-3 items-center gap-2"><input type="text" class="label-input" id="guest-income-label" value="손님"><input type="text" inputmode="numeric" id="guest-income" class="input-field col-span-2" value="0"></div>
+                                <div class="grid grid-cols-3 items-center gap-2"><input type="text" class="label-input" id="item-sales-total-label" value="판매 합산"><input type="text" inputmode="numeric" id="item-sales-total" class="input-field col-span-2" value="0"></div>
+                                <div class="grid grid-cols-3 items-center gap-2 border-t border-gray-600 pt-2 mt-2"><span class="font-bold">수입 계</span><span id="total-income" class="summary-value col-span-2 font-mono text-right pr-2">0</span></div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-4">
+                            <h3 class="text-lg font-semibold text-red-400 mb-3">지출</h3>
+                            <div class="space-y-2 text-sm">
+                                <div class="grid grid-cols-3 items-center gap-2"><input type="text" class="label-input" id="leader-incentive-label" value="공대장 인센티브"><input type="text" inputmode="numeric" id="leader-incentive" class="input-field col-span-2" value="0"></div>
+                                <div class="grid grid-cols-3 items-center gap-2"><input type="text" class="label-input" id="buff-fee-label" value="알버프 이용"><input type="text" inputmode="numeric" id="buff-fee" class="input-field col-span-2" value="0"></div>
+                                <div class="grid grid-cols-3 items-center gap-2"><input type="text" class="label-input" id="mercenary-cost-label" value="용병 비용"><input type="text" inputmode="numeric" id="mercenary-cost" class="input-field col-span-2" value="0"></div>
+                                <div class="grid grid-cols-3 items-center gap-2"><input type="text" class="label-input" id="fee-total-label" value="교환 수수료"><input type="text" inputmode="numeric" id="fee-total" class="input-field col-span-2" value="0"></div>
+                                <div class="grid grid-cols-3 items-center gap-2 border-t border-gray-600 pt-2 mt-2"><span class="font-bold">지출 계</span><span id="total-expense" class="summary-value col-span-2 font-mono text-right pr-2">0</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-t-2 border-blue-500 pt-4 mt-6 text-center"><span class="text-lg font-bold">총 분배금</span><p id="net-profit" class="net-profit-value font-mono">0</p></div>
+                    <div class="border-t border-gray-700 pt-4 mt-6">
+                        <h3 class="text-lg font-semibold mb-3">분배 설정 요약</h3>
+                        <div class="flex justify-around bg-gray-900/50 p-3 rounded-md mb-4">
+                            <div class="text-center"><label class="font-bold text-sm text-gray-400">총 인원</label><p id="total-members" class="summary-value text-2xl font-mono">0</p></div>
+                            <div class="text-center"><label class="font-bold text-sm text-gray-400">총 지분</label><p id="total-shares" class="summary-value text-2xl font-mono">0.0</p></div>
+                        </div>
+                        <h4 class="text-md font-semibold mb-2">티어별 1인당 지급액</h4>
+                        <div class="space-y-2">
+                            <div class="grid grid-cols-3 items-center gap-2 p-1 rounded-md hover:bg-gray-800"><span class="font-bold">100%</span><span class="text-gray-400 text-sm">(<span id="p100-count">0</span>명)</span><span id="p100-payout" class="payout-value font-mono text-right">0</span></div>
+                            <div class="grid grid-cols-3 items-center gap-2 p-1 rounded-md hover:bg-gray-800"><span class="font-bold">90%</span><span class="text-gray-400 text-sm">(<span id="p90-count">0</span>명)</span><span id="p90-payout" class="payout-value font-mono text-right">0</span></div>
+                            <div class="grid grid-cols-3 items-center gap-2 p-1 rounded-md hover:bg-gray-800"><span class="font-bold">80%</span><span class="text-gray-400 text-sm">(<span id="p80-count">0</span>명)</span><span id="p80-payout" class="payout-value font-mono text-right">0</span></div>
+                            <div class="grid grid-cols-3 items-center gap-2 p-1 rounded-md hover:bg-gray-800"><span class="font-bold">50%</span><span class="text-gray-400 text-sm">(<span id="p50-count">0</span>명)</span><span id="p50-payout" class="payout-value font-mono text-right">0</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-3 flex flex-col gap-6">
+                <div class="card flex-grow">
+                    <div class="flex justify-between items-center mb-4 flex-wrap gap-2"><h2 class="section-title">분배 대상자 목록</h2><div class="flex gap-2 flex-wrap"><button id="paste-members-btn" class="btn btn-secondary text-sm">목록 붙여넣기</button><button id="copy-results-btn" class="btn btn-secondary text-sm">결과 복사</button><button id="reset-members-btn" class="btn btn-danger text-sm">전체 삭제</button><button id="add-member-btn" class="btn btn-secondary text-sm">+ 인원 추가</button></div></div>
+                    <div class="overflow-x-auto"><table class="w-full text-left"><thead class="text-gray-400"><tr><th class="p-2">닉네임</th><th class="p-2">분배 %</th><th class="p-2">선지급금</th><th class="p-2 text-right">최종 분배금</th><th class="p-2 text-center">삭제</th></tr></thead><tbody id="member-list"></tbody></table></div>
+                </div>
+                <div class="card">
+                    <div class="flex justify-between items-center mb-4 flex-wrap gap-2"><h2 class="section-title">아이템 판매 기록</h2><div class="flex gap-2 flex-wrap"><button id="reset-items-btn" class="btn btn-danger text-sm">초기화</button><button id="add-item-btn" class="btn btn-secondary text-sm">+ 아이템 추가</button></div></div>
+                    <div class="overflow-x-auto"><table class="w-full text-left"><thead class="text-gray-400"><tr><th class="p-2 w-12 text-center">완료</th><th class="p-2">드랍템</th><th class="p-2">가격</th><th class="p-2">수수료</th><th class="p-2 text-right">실수령액</th><th class="p-2 text-center">삭제</th></tr></thead><tbody id="item-list"></tbody></table></div>
+                    <div id="item-summary" class="mt-4 p-4 bg-gray-900/50 rounded-md flex justify-between items-center flex-wrap gap-2">
+                        <div class="text-sm"><p>선택된 아이템 합계: <span class="font-bold text-green-400" id="calculated-item-sales">0</span></p><p>선택된 아이템 수수료: <span class="font-bold text-red-400" id="calculated-item-fees">0</span></p></div>
+                        <button id="apply-item-totals-btn" class="btn text-sm">합계 반영하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="paste-modal" class="modal-overlay hidden"><div class="card w-full max-w-lg"><h2 class="section-title border-b border-gray-700 pb-2 mb-4">분배 대상자 목록 붙여넣기</h2><p class="text-sm text-gray-400 mb-4">이곳에 복사한 명단을 붙여넣으세요. (예: 닉네임 분배율)<br>각 항목은 한 줄씩 구분해주세요.</p><textarea id="paste-textarea" class="input-field !text-left w-full h-48 p-2 bg-gray-900" placeholder="전사1 100&#10;도적2 90%&#10;법사3 80"></textarea><div class="flex justify-end gap-4 mt-4"><button id="close-paste-modal-btn" class="btn btn-secondary">취소</button><button id="apply-paste-btn" class="btn">적용하기</button></div></div></div>
+    <div id="confirm-modal" class="modal-overlay hidden"><div class="card w-full max-w-sm"><h3 id="confirm-modal-title" class="text-lg font-bold mb-4">확인</h3><p id="confirm-modal-text" class="mb-6">이 작업을 정말로 실행하시겠습니까?</p><div class="flex justify-end gap-4"><button id="confirm-modal-cancel" class="btn btn-secondary">취소</button><button id="confirm-modal-ok" class="btn btn-danger">확인</button></div></div></div>
+    <div id="toast"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = {
+                guestIncome: document.getElementById('guest-income'), itemSalesTotal: document.getElementById('item-sales-total'), totalIncome: document.getElementById('total-income'),
+                leaderIncentive: document.getElementById('leader-incentive'), buffFee: document.getElementById('buff-fee'), mercenaryCost: document.getElementById('mercenary-cost'), feeTotal: document.getElementById('fee-total'), totalExpense: document.getElementById('total-expense'),
+                netProfit: document.getElementById('net-profit'), totalMembers: document.getElementById('total-members'), totalShares: document.getElementById('total-shares'),
+                p100Count: document.getElementById('p100-count'), p90Count: document.getElementById('p90-count'), p80Count: document.getElementById('p80-count'), p50Count: document.getElementById('p50-count'),
+                p100Payout: document.getElementById('p100-payout'), p90Payout: document.getElementById('p90-payout'), p80Payout: document.getElementById('p80-payout'), p50Payout: document.getElementById('p50-payout'),
+                addMemberBtn: document.getElementById('add-member-btn'), memberList: document.getElementById('member-list'), resetMembersBtn: document.getElementById('reset-members-btn'),
+                addItemBtn: document.getElementById('add-item-btn'), itemList: document.getElementById('item-list'), resetItemsBtn: document.getElementById('reset-items-btn'),
+                calculatedItemSales: document.getElementById('calculated-item-sales'), calculatedItemFees: document.getElementById('calculated-item-fees'), applyItemTotalsBtn: document.getElementById('apply-item-totals-btn'),
+                pasteMembersBtn: document.getElementById('paste-members-btn'), copyResultsBtn: document.getElementById('copy-results-btn'),
+                pasteModal: document.getElementById('paste-modal'), closePasteModalBtn: document.getElementById('close-paste-modal-btn'), applyPasteBtn: document.getElementById('apply-paste-btn'), pasteTextarea: document.getElementById('paste-textarea'),
+                saveDataBtn: document.getElementById('save-data-btn'), loadDataBtn: document.getElementById('load-data-btn'), exportCsvBtn: document.getElementById('export-csv-btn'),
+                toast: document.getElementById('toast'),
+                confirmModal: document.getElementById('confirm-modal'), confirmModalTitle: document.getElementById('confirm-modal-title'), confirmModalText: document.getElementById('confirm-modal-text'), confirmModalOk: document.getElementById('confirm-modal-ok'), confirmModalCancel: document.getElementById('confirm-modal-cancel'),
+            };
+
+            let confirmCallback = null;
+
+            const parseFormattedNumber = (str) => parseFloat(String(str).replace(/,/g, '')) || 0;
+            const formatNumber = (num) => Math.floor(num).toLocaleString('en-US');
+
+            const showToast = (message) => {
+                elements.toast.textContent = message;
+                elements.toast.classList.add('show');
+                setTimeout(() => { elements.toast.classList.remove('show'); }, 3000);
+            };
+
+            const showConfirm = (title, text, onConfirm) => {
+                elements.confirmModalTitle.textContent = title;
+                elements.confirmModalText.textContent = text;
+                confirmCallback = onConfirm;
+                elements.confirmModal.classList.remove('hidden');
+            };
+
+            const hideConfirm = () => {
+                elements.confirmModal.classList.add('hidden');
+                confirmCallback = null;
+            };
+
+            const formatInputAsNumber = (e) => {
+                const input = e.target;
+                let value = input.value;
+                let num = parseFormattedNumber(value);
+                input.value = num > 0 ? formatNumber(num) : (value === '0' ? '0' : '');
+                calculateAll();
+            };
+            
+            const calculateAll = () => {
+                let calculatedItemSales = 0, calculatedItemFees = 0;
+                document.querySelectorAll('#item-list tr').forEach(row => {
+                    const soldCheckbox = row.querySelector('.item-sold');
+                    const price = parseFormattedNumber(row.querySelector('.item-price').value);
+                    const fee = parseFormattedNumber(row.querySelector('.item-fee').value);
+                    const netAmount = price - fee;
+                    row.querySelector('.item-net-amount').textContent = formatNumber(netAmount);
+                    if (soldCheckbox.checked) {
+                        calculatedItemSales += price;
+                        calculatedItemFees += fee;
+                    }
+                });
+                elements.calculatedItemSales.textContent = formatNumber(calculatedItemSales);
+                elements.calculatedItemFees.textContent = formatNumber(calculatedItemFees);
+                const incomeTotal = parseFormattedNumber(elements.guestIncome.value) + parseFormattedNumber(elements.itemSalesTotal.value);
+                elements.totalIncome.textContent = formatNumber(incomeTotal);
+                const expenseTotal = parseFormattedNumber(elements.leaderIncentive.value) + parseFormattedNumber(elements.buffFee.value) + parseFormattedNumber(elements.mercenaryCost.value) + parseFormattedNumber(elements.feeTotal.value);
+                elements.totalExpense.textContent = formatNumber(expenseTotal);
+                const netProfit = incomeTotal - expenseTotal;
+                elements.netProfit.textContent = formatNumber(netProfit);
+                let totalMembers = 0, totalShares = 0, tierCounts = { 100: 0, 90: 0, 80: 0, 50: 0 };
+                document.querySelectorAll('#member-list tr').forEach(row => {
+                    totalMembers++;
+                    const tier = parseFloat(row.querySelector('.member-tier').value);
+                    tierCounts[tier]++;
+                    totalShares += tier / 100;
+                });
+                elements.totalMembers.textContent = totalMembers;
+                elements.totalShares.textContent = totalShares.toFixed(1);
+                elements.p100Count.textContent = tierCounts[100];
+                elements.p90Count.textContent = tierCounts[90];
+                elements.p80Count.textContent = tierCounts[80];
+                elements.p50Count.textContent = tierCounts[50];
+                const basePayout = totalShares > 0 ? netProfit / totalShares : 0;
+                elements.p100Payout.textContent = formatNumber(basePayout);
+                elements.p90Payout.textContent = formatNumber(basePayout * 0.9);
+                elements.p80Payout.textContent = formatNumber(basePayout * 0.8);
+                elements.p50Payout.textContent = formatNumber(basePayout * 0.5);
+                document.querySelectorAll('#member-list tr').forEach(row => {
+                    const tier = parseFloat(row.querySelector('.member-tier').value);
+                    const advance = parseFormattedNumber(row.querySelector('.member-advance').value);
+                    const memberPayout = (basePayout * (tier / 100)) - advance;
+                    row.querySelector('.final-payout').textContent = formatNumber(memberPayout);
+                });
+            };
+
+            const createMemberRow = (data = {}) => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-700 hover:bg-gray-800';
+                row.innerHTML = `
+                    <td class="p-2"><input type="text" placeholder="닉네임" class="member-name input-field !text-left bg-transparent border-0 w-full p-1 text-sm" value="${data.name || ''}"></td>
+                    <td class="p-2"><select class="member-tier input-field !text-left bg-transparent border-0 w-full p-1 text-sm"><option value="100">100%</option><option value="90">90%</option><option value="80">80%</option><option value="50">50%</option></select></td>
+                    <td class="p-2"><input type="text" inputmode="numeric" value="${data.advance || '0'}" class="member-advance input-field bg-transparent border-0 w-full p-1 text-sm"></td>
+                    <td class="p-2 text-right"><span class="final-payout font-mono">0</span></td>
+                    <td class="p-2 text-center"><button class="delete-btn text-red-400 hover:text-red-300">✖</button></td>
+                `;
+                row.querySelector('.member-tier').value = data.tier || '100';
+                row.querySelector('.delete-btn').addEventListener('click', () => { row.remove(); calculateAll(); });
+                elements.memberList.appendChild(row);
+                addEventListenersToLastRow(elements.memberList);
+                return row;
+            };
+
+            const createItemRow = (data = {}) => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-700 hover:bg-gray-800';
+                row.innerHTML = `
+                    <td class="p-2 text-center"><input type="checkbox" class="item-sold form-checkbox h-5 w-5 bg-gray-900 border-gray-600 text-blue-400 focus:ring-blue-500 rounded"></td>
+                    <td class="p-2"><input type="text" placeholder="아이템명" class="item-name input-field !text-left bg-transparent border-0 w-full p-1 text-sm" value="${data.name || ''}"></td>
+                    <td class="p-2"><input type="text" inputmode="numeric" value="${data.price || '0'}" class="item-price input-field bg-transparent border-0 w-full p-1 text-sm"></td>
+                    <td class="p-2"><input type="text" inputmode="numeric" value="${data.fee || '0'}" class="item-fee input-field bg-transparent border-0 w-full p-1 text-sm"></td>
+                    <td class="p-2 text-right"><span class="item-net-amount font-mono text-sm">0</span></td>
+                    <td class="p-2 text-center"><button class="delete-btn text-red-400 hover:text-red-300">✖</button></td>
+                `;
+                row.querySelector('.item-sold').checked = data.sold || false;
+                row.querySelector('.delete-btn').addEventListener('click', () => { row.remove(); calculateAll(); });
+                elements.itemList.appendChild(row);
+                addEventListenersToLastRow(elements.itemList);
+            };
+            
+            const addEventListenersToLastRow = (list) => {
+                const lastRow = list.rows[list.rows.length - 1];
+                lastRow.querySelectorAll('input[type="text"], select, input[type="checkbox"]').forEach(el => {
+                    if (el.getAttribute('inputmode') === 'numeric') el.addEventListener('input', formatInputAsNumber);
+                    else el.addEventListener('input', calculateAll);
+                });
+            };
+
+            const handlePaste = () => {
+                elements.memberList.innerHTML = ''; 
+                const text = elements.pasteTextarea.value;
+                const lines = text.split('\n').filter(line => line.trim() !== '');
+                if (lines.length === 0) { createMemberRow(); } 
+                else {
+                    lines.forEach(line => {
+                        const parts = line.trim().split(/[\s\t]+/).filter(p => p);
+                        if (parts.length === 0) return;
+                        let nickname = '', tierValue = 100;
+                        const lastPart = parts[parts.length - 1];
+                        const potentialNumber = parseFloat(lastPart.replace('%', ''));
+                        if (!isNaN(potentialNumber)) {
+                            nickname = parts.slice(0, -1).join(' ');
+                            tierValue = potentialNumber;
+                        } else {
+                            nickname = parts.join(' ');
+                        }
+                        const validTiers = [100, 90, 80, 50];
+                        const closestTier = validTiers.reduce((prev, curr) => (Math.abs(curr - tierValue) < Math.abs(prev - tierValue) ? curr : prev));
+                        createMemberRow({ name: nickname, tier: closestTier });
+                    });
+                }
+                elements.pasteTextarea.value = '';
+                elements.pasteModal.classList.add('hidden');
+                calculateAll();
+            };
+
+            const copyResults = () => {
+                const results = [];
+                document.querySelectorAll('#member-list tr').forEach(row => {
+                    const nickname = row.querySelector('.member-name').value;
+                    const payout = row.querySelector('.final-payout').textContent;
+                    if (nickname) results.push(`${nickname}: ${payout}`);
+                });
+                const resultString = results.join(', ');
+                navigator.clipboard.writeText(resultString).then(() => {
+                    showToast('결과가 클립보드에 복사되었습니다.');
+                });
+            };
+
+            const saveData = () => {
+                const data = { inputs: {}, members: [], items: [] };
+                document.querySelectorAll('.input-field[id], .label-input[id]').forEach(input => {
+                    data.inputs[input.id] = input.value;
+                });
+                document.querySelectorAll('#member-list tr').forEach(row => { data.members.push({ name: row.querySelector('.member-name').value, tier: row.querySelector('.member-tier').value, advance: row.querySelector('.member-advance').value }); });
+                document.querySelectorAll('#item-list tr').forEach(row => { data.items.push({ name: row.querySelector('.item-name').value, price: row.querySelector('.item-price').value, fee: row.querySelector('.item-fee').value, sold: row.querySelector('.item-sold').checked }); });
+                localStorage.setItem('raidCalculatorData', JSON.stringify(data));
+                showToast('데이터가 브라우저에 저장되었습니다.');
+            };
+
+            const loadData = () => {
+                const dataString = localStorage.getItem('raidCalculatorData');
+                if (!dataString) { showToast('저장된 데이터가 없습니다.'); return; }
+                const data = JSON.parse(dataString);
+                for (const id in data.inputs) { 
+                    const input = document.getElementById(id); 
+                    if (input) input.value = data.inputs[id]; 
+                }
+                elements.memberList.innerHTML = '';
+                if (data.members && data.members.length > 0) { data.members.forEach(member => createMemberRow(member)); } else { createMemberRow(); }
+                elements.itemList.innerHTML = '';
+                if (data.items && data.items.length > 0) { data.items.forEach(item => createItemRow(item)); } else { createItemRow(); }
+                calculateAll();
+                showToast('저장된 데이터를 불러왔습니다.');
+            };
+
+            const exportToCsv = () => {
+                let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+                csvContent += "분배 대상자 목록\n닉네임,분배 %,선지급금,최종 분배금\n";
+                document.querySelectorAll('#member-list tr').forEach(row => {
+                    const name = row.querySelector('.member-name').value; const tier = row.querySelector('.member-tier').value + '%'; const advance = row.querySelector('.member-advance').value; const final = row.querySelector('.final-payout').textContent;
+                    csvContent += `"${name}","${tier}","${advance}","${final}"\n`;
+                });
+                csvContent += "\n아이템 판매 기록\n판매완료,드랍템,가격,수수료,실수령액\n";
+                document.querySelectorAll('#item-list tr').forEach(row => {
+                    const sold = row.querySelector('.item-sold').checked ? 'Y' : 'N'; const name = row.querySelector('.item-name').value; const price = row.querySelector('.item-price').value; const fee = row.querySelector('.item-fee').value; const net = row.querySelector('.item-net-amount').textContent;
+                    csvContent += `"${sold}","${name}","${price}","${fee}","${net}"\n`;
+                });
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "정산내역.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showToast('정산 내역이 CSV 파일로 다운로드됩니다.');
+            };
+
+            // Event Listeners
+            elements.addMemberBtn.addEventListener('click', () => createMemberRow());
+            elements.addItemBtn.addEventListener('click', () => createItemRow());
+            elements.resetMembersBtn.addEventListener('click', () => showConfirm('목록 전체 삭제', '정말 모든 대상자 목록을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.', () => { elements.memberList.innerHTML = ''; createMemberRow(); calculateAll(); hideConfirm(); }));
+            elements.resetItemsBtn.addEventListener('click', () => showConfirm('아이템 초기화', '정말 모든 아이템 목록을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.', () => { elements.itemList.innerHTML = ''; createItemRow(); calculateAll(); hideConfirm(); }));
+            elements.applyItemTotalsBtn.addEventListener('click', () => { elements.itemSalesTotal.value = elements.calculatedItemSales.textContent; elements.feeTotal.value = elements.calculatedItemFees.textContent; calculateAll(); });
+            elements.pasteMembersBtn.addEventListener('click', () => elements.pasteModal.classList.remove('hidden'));
+            elements.closePasteModalBtn.addEventListener('click', () => elements.pasteModal.classList.add('hidden'));
+            elements.applyPasteBtn.addEventListener('click', handlePaste);
+            elements.copyResultsBtn.addEventListener('click', copyResults);
+            elements.saveDataBtn.addEventListener('click', saveData);
+            elements.loadDataBtn.addEventListener('click', loadData);
+            elements.exportCsvBtn.addEventListener('click', exportToCsv);
+            elements.confirmModalCancel.addEventListener('click', hideConfirm);
+            elements.confirmModalOk.addEventListener('click', () => { if (confirmCallback) confirmCallback(); });
+
+            // Initial setup
+            createMemberRow();
+            createItemRow();
+            calculateAll();
+        });
+    </script>
+</body>
+</html>
