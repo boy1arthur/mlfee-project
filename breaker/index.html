@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>혼테일 브레이커</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #121212; /* Dark background */
+            color: #e0e0e0; /* Light text */
+        }
+        .main-title-container {
+            text-align: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+        }
+        .main-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #d4af37, #ffd700, #e6bf4a, #ffd700, #d4af37);
+            background-size: 200% auto;
+            color: #000;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 8s linear infinite;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .main-title:hover {
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6);
+            transform: scale(1.02);
+        }
+        .sub-title {
+            font-size: 1.25rem;
+            color: #a0aec0; /* gray-500 */
+            margin-top: 0.5rem;
+        }
+        .card {
+            background-color: #1e1e1e;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            border: 1px solid #444;
+            display: flex;
+            flex-direction: column;
+        }
+        textarea, .party-list {
+            background-color: #2a2a2a;
+            border: 1px solid #555;
+            color: #e0e0e0;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        textarea {
+            resize: vertical;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #ffd700;
+            background-color: #333;
+        }
+        .btn {
+            background-color: #333;
+            color: #ffd700;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            border: 1px solid #ffd700;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-align: center;
+        }
+        .btn:hover:not(:disabled) { 
+            background-color: #ffd700;
+            color: #121212;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .btn:disabled {
+            background-color: #2a2a2a;
+            color: #666;
+            border-color: #444;
+            cursor: not-allowed;
+        }
+        .btn.active {
+            background-color: #e53e3e;
+            color: white;
+            border-color: #e53e3e;
+        }
+        .btn-danger { background-color: #8B0000; border-color: #ff6b6b; color: #ff6b6b; }
+        .btn-danger:hover:not(:disabled) { background-color: #ff6b6b; color: #121212; }
+        
+        .section-title { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            margin-bottom: 1.5rem; 
+            padding-bottom: 0.5rem;
+            text-align: center;
+            color: #ffd700;
+            border-bottom: 1px solid #ffd700;
+        }
+        
+        .party-list {
+            min-height: 200px;
+            flex-grow: 1;
+        }
+        .draggable-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #2a2a2a;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.375rem;
+            border-left: 4px solid #ffd700;
+            cursor: grab;
+            user-select: none;
+        }
+        .sortable-ghost {
+            opacity: 0.4;
+            background: #444;
+        }
+        .btn-death {
+            background-color: transparent;
+            color: #ff6b6b;
+            padding: 0.1rem 0.5rem;
+            font-size: 0.8rem;
+            border: 1px solid #ff6b6b;
+            border-radius: 4px;
+        }
+        .btn-death:hover:not(:disabled) {
+            background-color: #ff6b6b;
+            color: #121212;
+        }
+        .btn-death:disabled {
+            color: #666;
+            border-color: #444;
+            background-color: #2a2a2a;
+        }
+        .death-timer-display {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #ff8e8e;
+            margin-left: 0.5rem;
+            width: 50px;
+            text-align: right;
+        }
+        #copy-feedback {
+            transition: opacity 0.3s;
+            color: #68d391; /* green-400 */
+        }
+        .time-display {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="p-4">
+
+    <div class="w-full max-w-screen-2xl mx-auto">
+        <div class="main-title-container">
+            <h1 class="main-title">혼테일 브레이커</h1>
+            <p class="sub-title">by 소년아서</p>
+        </div>
+        
+        <div class="card mb-8">
+            <div class="flex flex-col md:flex-row justify-around items-center text-center gap-4">
+                <div>
+                    <h3 class="font-bold text-xl text-gray-400 mb-2">현재 시간</h3>
+                    <p id="browser-clock" class="text-3xl font-mono"></p>
+                </div>
+                <div>
+                     <h3 class="font-bold text-xl text-gray-400 mb-2">혼테일 제한시간</h3>
+                     <p id="countdown-12h-display" class="text-3xl font-mono text-yellow-400">12시간 00분 00초</p>
+                     <button id="start-12h-countdown" class="btn w-48 mt-2 text-md p-2 rounded">시작</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 타이머 섹션 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div class="card">
+                <h2 class="section-title">⚔️ 혼테일 공무 타이머</h2>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <button id="timer-p1" class="btn timer-btn flex-col h-24"><span class="font-bold text-lg">1페이즈 (좌)</span><span class="time-display" data-time="45">45초</span></button>
+                    <button id="timer-p2" class="btn timer-btn flex-col h-24"><span class="font-bold text-lg">2페이즈 (우)</span><span class="time-display" data-time="45">45초</span></button>
+                </div>
+                <div class="mt-auto border-t-2 border-dashed border-gray-600 pt-4">
+                    <h3 class="text-center font-bold mb-2 text-yellow-400">3페이즈</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-2">
+                        <button id="timer-left" class="btn timer-btn flex-col h-24"><span class="font-bold text-3xl">L</span><span class="font-semibold">좌머리</span><span class="time-display" data-time="45">45초</span></button>
+                        <button id="timer-right" class="btn timer-btn flex-col h-24"><span class="font-bold text-3xl">R</span><span class="font-semibold">우머리</span><span class="time-display" data-time="45">45초</span></button>
+                    </div>
+                    <button id="timer-center" class="btn timer-btn w-full flex-col h-24"><span class="font-bold text-3xl">C</span><span class="font-semibold">중앙머리</span><span class="time-display" data-time="45">45초</span></button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="section-title">✨ 버프 해제 타이머</h2>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <button id="buff-5m" class="btn timer-btn flex-col h-28"><span class="font-bold text-4xl">5</span><span class="font-semibold">5분 버프</span><span class="time-display" data-time="300">5:00</span></button>
+                    <button id="buff-3m" class="btn timer-btn flex-col h-28"><span class="font-bold text-4xl">3</span><span class="font-semibold">3분 버프</span><span class="time-display" data-time="180">3:00</span></button>
+                </div>
+                <button id="buff-restart" class="btn w-full text-lg mb-6">동시 재시작</button>
+                <div class="space-y-4 mt-auto">
+                    <h3 class="text-xl font-bold text-center">버프 해제 시간</h3>
+                    <div class="flex justify-between items-center p-3 bg-black/20 rounded-md"><span>5분:</span><span id="buff-5m-expire" class="font-bold">--:--:--</span></div>
+                    <div class="flex justify-between items-center p-3 bg-black/20 rounded-md"><span>3분:</span><span id="buff-3m-expire" class="font-bold">--:--:--</span></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="section-title">💖 리저렉션 관리</h2>
+                <div class="flex items-center justify-center gap-4 mb-6">
+                    <span class="font-semibold">리저렉션 갯수:</span>
+                    <button id="res-minus" class="btn w-10 h-10 text-2xl font-bold">-</button>
+                    <span class="text-2xl font-bold w-10 text-center text-yellow-400" id="res-count">1</span>
+                    <button id="res-plus" class="btn w-10 h-10 text-2xl font-bold">+</button>
+                </div>
+                <div id="res-timers-container" class="space-y-4"></div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="card md:col-span-2">
+                 <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+                    <div class="flex items-center gap-4">
+                         <h2 class="text-2xl font-bold">📋 파티 명단 관리</h2>
+                         <div class="flex items-center justify-center gap-2">
+                            <span class="font-semibold">파티 수:</span>
+                            <button id="party-minus-btn" class="btn w-10 h-10 text-xl font-bold">-</button>
+                            <span id="party-count-display" class="text-2xl font-bold w-8 text-center text-yellow-400">4</span>
+                            <button id="party-plus-btn" class="btn w-10 h-10 text-xl font-bold">+</button>
+                        </div>
+                    </div>
+                    <div>
+                        <button id="copy-list-btn" class="btn">파티 명단 복사</button>
+                        <span id="copy-feedback" class="font-bold ml-2 opacity-0">복사 완료!</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <div class="md:col-span-1 flex flex-col">
+                        <h3 class="font-bold text-lg mb-2 text-center">대기 명단</h3>
+                        <textarea id="party-list-input" rows="8" class="input-field mb-2" placeholder="명단 붙여넣기..."></textarea>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button id="generate-list-btn" class="btn w-full">적용</button>
+                            <button id="reset-list-btn" class="btn btn-danger w-full">초기화</button>
+                        </div>
+                        <div id="waiting-list" class="party-list mt-2"></div>
+                    </div>
+                    <div id="party-container" class="md:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="section-title">📝 메모장</h2>
+                <textarea id="memo-pad" class="input-field w-full h-full min-h-[200px]" placeholder="여기에 메모를 입력하세요..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const timers = {};
+            const resTimers = {};
+            const deathTimers = {};
+            let countdown12hInterval;
+
+            const browserClockEl = document.getElementById('browser-clock');
+            const countdown12hDisplay = document.getElementById('countdown-12h-display');
+            const start12hBtn = document.getElementById('start-12h-countdown');
+
+            setInterval(() => {
+                browserClockEl.textContent = new Date().toLocaleTimeString('ko-KR', { hour12: false });
+            }, 1000);
+
+            start12hBtn.addEventListener('click', () => {
+                if (countdown12hInterval) clearInterval(countdown12hInterval);
+                const endTime = Date.now() + 12 * 60 * 60 * 1000;
+                countdown12hInterval = setInterval(() => {
+                    const diff = endTime - Date.now();
+                    if (diff <= 0) {
+                        clearInterval(countdown12hInterval);
+                        countdown12hDisplay.textContent = "0시간 00분 00초";
+                        return;
+                    }
+                    const hours = Math.floor(diff / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff / 1000 / 60) % 60);
+                    const seconds = Math.floor((diff / 1000) % 60);
+                    countdown12hDisplay.textContent = `${hours}시간 ${String(minutes).padStart(2, '0')}분 ${String(seconds).padStart(2, '0')}초`;
+                }, 1000);
+            });
+
+            document.querySelectorAll('.timer-btn').forEach(button => {
+                const id = button.id;
+                const timerDisplay = button.querySelector('.time-display');
+                if (!timerDisplay) return;
+
+                const initialSeconds = parseInt(timerDisplay.dataset.time, 10);
+                button.addEventListener('click', () => {
+                    if (timers[id]) clearInterval(timers[id].interval);
+                    if (timers[id] && timers[id].button) timers[id].button.classList.remove('active');
+                    
+                    button.classList.add('active');
+                    const endTime = Date.now() + initialSeconds * 1000;
+
+                    if (id.includes('buff')) {
+                        document.getElementById(`${id}-expire`).textContent = new Date(endTime).toLocaleTimeString('ko-KR', { hour12: false });
+                    }
+
+                    timers[id] = {
+                        endTime, initialSeconds, display: timerDisplay, button,
+                        interval: setInterval(() => {
+                            const diff = timers[id].endTime - Date.now();
+                            if (diff <= 0) {
+                                clearInterval(timers[id].interval);
+                                timers[id].display.textContent = formatTime(timers[id].initialSeconds, id.includes('buff'));
+                                timers[id].button.classList.remove('active');
+                                delete timers[id];
+                                return;
+                            }
+                            timers[id].display.textContent = formatTime(Math.ceil(diff / 1000), id.includes('buff'));
+                        }, 100)
+                    };
+                });
+            });
+            
+            document.getElementById('buff-restart').addEventListener('click', () => {
+                document.getElementById('buff-5m').click();
+                document.getElementById('buff-3m').click();
+            });
+
+
+            function formatTime(totalSeconds, isBuff) {
+                if (isBuff || totalSeconds >= 60) {
+                    const minutes = Math.floor(totalSeconds / 60);
+                    const seconds = totalSeconds % 60;
+                    return `${minutes}:${String(seconds).padStart(2, '0')}`;
+                }
+                return `${totalSeconds}초`;
+            }
+
+            const resMinusBtn = document.getElementById('res-minus');
+            const resPlusBtn = document.getElementById('res-plus');
+            const resCountEl = document.getElementById('res-count');
+            const resContainer = document.getElementById('res-timers-container');
+            let resCount = 1;
+
+            function updateResurrectionButtons() {
+                resContainer.innerHTML = '';
+                for (let i = 1; i <= resCount; i++) {
+                    const resId = `res-${i}`;
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'flex items-center gap-4';
+                    const button = document.createElement('button');
+                    button.id = resId;
+                    button.className = 'btn flex-grow text-lg';
+                    const expireEl = document.createElement('span');
+                    expireEl.id = `${resId}-expire`;
+                    expireEl.className = 'font-bold text-center w-24';
+                    wrapper.append(button, expireEl);
+                    resContainer.appendChild(wrapper);
+                    button.addEventListener('click', () => handleResurrectionClick(resId, button, expireEl));
+                    if (resTimers[resId] && resTimers[resId].interval) {
+                        button.disabled = true;
+                        expireEl.textContent = new Date(resTimers[resId].endTime).toLocaleTimeString('ko-KR', { hour12: false });
+                        const diff = resTimers[resId].endTime - Date.now();
+                        const remainingMinutes = Math.floor(Math.ceil(diff / 1000) / 60);
+                        const remainingSeconds = Math.ceil(diff / 1000) % 60;
+                        button.textContent = `${String(remainingMinutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+                    } else {
+                        button.textContent = `리저렉션`;
+                        expireEl.textContent = '--:--:--';
+                    }
+                }
+            }
+            function handleResurrectionClick(resId, button, expireEl) {
+                if (button.disabled) return;
+                button.disabled = true;
+                const endTime = Date.now() + 1800 * 1000;
+                expireEl.textContent = new Date(endTime).toLocaleTimeString('ko-KR', { hour12: false });
+                resTimers[resId] = {
+                    endTime,
+                    interval: setInterval(() => {
+                        const diff = resTimers[resId].endTime - Date.now();
+                        if (diff <= 0) {
+                            clearInterval(resTimers[resId].interval);
+                            button.textContent = `리저렉션`;
+                            button.disabled = false;
+                            expireEl.textContent = '--:--:--';
+                            delete resTimers[resId];
+                            return;
+                        }
+                        const remainingMinutes = Math.floor(Math.ceil(diff / 1000) / 60);
+                        const remainingSeconds = Math.ceil(diff / 1000) % 60;
+                        button.textContent = `${String(remainingMinutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+                    }, 1000)
+                };
+            }
+            resMinusBtn.addEventListener('click', () => { if (resCount > 1) { resCount--; resCountEl.textContent = resCount; updateResurrectionButtons(); } });
+            resPlusBtn.addEventListener('click', () => { if (resCount < 10) { resCount++; resCountEl.textContent = resCount; updateResurrectionButtons(); } });
+            updateResurrectionButtons();
+
+            const partyListInput = document.getElementById('party-list-input');
+            const generateListBtn = document.getElementById('generate-list-btn');
+            const resetListBtn = document.getElementById('reset-list-btn');
+            const waitingListEl = document.getElementById('waiting-list');
+            const partyContainer = document.getElementById('party-container');
+            const copyListBtn = document.getElementById('copy-list-btn');
+            const copyFeedback = document.getElementById('copy-feedback');
+            const partyMinusBtn = document.getElementById('party-minus-btn');
+            const partyPlusBtn = document.getElementById('party-plus-btn');
+            const partyCountDisplay = document.getElementById('party-count-display');
+            
+            let partyCount = 4;
+            const MAX_PARTIES = 8;
+            const MIN_PARTIES = 1;
+
+            const sortableOptions = { group: 'party', animation: 150, ghostClass: 'sortable-ghost' };
+            new Sortable(waitingListEl, sortableOptions);
+
+            function createDraggableItem(name, id) {
+                const item = document.createElement('div');
+                item.className = 'draggable-item';
+                item.dataset.id = id;
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = name.trim();
+                const controlsDiv = document.createElement('div');
+                controlsDiv.className = 'flex items-center';
+                const timerDisplay = document.createElement('span');
+                timerDisplay.className = 'death-timer-display';
+                const deathBtn = document.createElement('button');
+                deathBtn.className = 'btn btn-death';
+                deathBtn.textContent = '다이';
+                controlsDiv.append(timerDisplay, deathBtn);
+                item.append(nameSpan, controlsDiv);
+                return item;
+            }
+
+            document.querySelector('.w-full.max-w-screen-2xl').addEventListener('click', (e) => {
+                if (e.target.classList.contains('btn-death')) {
+                    const item = e.target.closest('.draggable-item');
+                    const memberId = item.dataset.id;
+                    const display = item.querySelector('.death-timer-display');
+                    if (deathTimers[memberId]) return;
+                    e.target.disabled = true;
+                    const endTime = Date.now() + 15 * 60 * 1000;
+                    deathTimers[memberId] = {
+                        endTime,
+                        interval: setInterval(() => {
+                            const diff = deathTimers[memberId].endTime - Date.now();
+                            if (diff <= 0) {
+                                clearInterval(deathTimers[memberId].interval);
+                                delete deathTimers[memberId];
+                                display.textContent = '';
+                                e.target.disabled = false;
+                                return;
+                            }
+                            const minutes = Math.floor((diff / 1000 / 60) % 60);
+                            const seconds = Math.floor((diff / 1000) % 60);
+                            display.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                        }, 1000)
+                    };
+                }
+            });
+
+            function updatePartyLayout() {
+                const memberStates = new Map();
+                document.querySelectorAll('.draggable-item').forEach(item => {
+                    memberStates.set(item.dataset.id, {
+                        name: item.querySelector('span:first-child').textContent,
+                        listId: item.parentElement.id
+                    });
+                });
+
+                if (document.querySelectorAll('#party-container > div').length > partyCount) {
+                    const lastPartyId = `party-${document.querySelectorAll('#party-container > div').length}`;
+                    document.querySelectorAll(`#${lastPartyId} .draggable-item`).forEach(item => {
+                        memberStates.get(item.dataset.id).listId = 'waiting-list';
+                    });
+                }
+                
+                partyContainer.innerHTML = '';
+                for (let i = 1; i <= partyCount; i++) {
+                    const partyWrapper = document.createElement('div');
+                    partyWrapper.className = 'flex flex-col';
+                    const partyTitle = document.createElement('h3');
+                    partyTitle.className = 'font-bold text-lg mb-2 text-center';
+                    partyTitle.textContent = `${i}파티`;
+                    const partyList = document.createElement('div');
+                    partyList.className = 'party-list';
+                    partyList.id = `party-${i}`;
+                    partyWrapper.append(partyTitle, partyList);
+                    partyContainer.appendChild(partyWrapper);
+                    new Sortable(partyList, sortableOptions);
+                }
+                
+                const partyGrid = partyContainer.children.length;
+                partyContainer.style.gridTemplateColumns = `repeat(${Math.min(partyGrid, 4)}, 1fr)`;
+
+
+                waitingListEl.innerHTML = '';
+                memberStates.forEach((state, id) => {
+                    const targetList = document.getElementById(state.listId) || waitingListEl;
+                    targetList.appendChild(createDraggableItem(state.name, id));
+                });
+
+                partyCountDisplay.textContent = partyCount;
+            }
+            
+            partyPlusBtn.addEventListener('click', () => { if (partyCount < MAX_PARTIES) { partyCount++; updatePartyLayout(); } });
+            partyMinusBtn.addEventListener('click', () => { if (partyCount > MIN_PARTIES) { partyCount--; updatePartyLayout(); } });
+
+            generateListBtn.addEventListener('click', () => {
+                const names = partyListInput.value.split('\n').filter(name => name.trim() !== '');
+                names.forEach(name => {
+                    const uniqueId = `member-${Date.now()}-${Math.random()}`;
+                    waitingListEl.appendChild(createDraggableItem(name, uniqueId));
+                });
+                partyListInput.value = '';
+            });
+
+            resetListBtn.addEventListener('click', () => {
+                waitingListEl.innerHTML = '';
+                document.querySelectorAll('#party-container .party-list').forEach(list => {
+                    list.innerHTML = '';
+                });
+                for (const key in deathTimers) {
+                    clearInterval(deathTimers[key].interval);
+                    delete deathTimers[key];
+                }
+            });
+
+            copyListBtn.addEventListener('click', () => {
+                let fullPartyList = '';
+                document.querySelectorAll('#party-container > div').forEach((listWrapper, index) => {
+                    const list = listWrapper.querySelector('.party-list');
+                    const members = Array.from(list.children).map(item => `- ${item.querySelector("span:first-child").textContent}`);
+                    if (members.length > 0) {
+                        fullPartyList += `[${index + 1}파티]\n${members.join('\n')}\n\n`;
+                    }
+                });
+                
+                const waitingMembers = Array.from(waitingListEl.children).map(item => `- ${item.querySelector("span:first-child").textContent}`);
+                if (waitingMembers.length > 0) {
+                    fullPartyList += `[대기]\n${waitingMembers.join('\n')}\n`;
+                }
+
+                if (!fullPartyList.trim()) return;
+
+                navigator.clipboard.writeText(fullPartyList.trim()).then(() => {
+                    copyFeedback.style.opacity = '1';
+                    setTimeout(() => { copyFeedback.style.opacity = '0'; }, 2000);
+                });
+            });
+
+            updatePartyLayout();
+        });
+    </script>
+</body>
+</html>
