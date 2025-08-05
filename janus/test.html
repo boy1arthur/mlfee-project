@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로젝트 크로노스 - AETOS 프로토콜</title>
+    <!-- [NEW] Kakao & html2canvas SDKs -->
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js" xintegrity="sha384-kDljxUXHaJ9xAb2AzRd59KxjrFjzHa5TAoFQ6GbYTCAG0bjM55XohjjDT7tDDC01" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
@@ -31,6 +35,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow: hidden;
         }
         
         .test-container {
@@ -43,6 +48,7 @@
             box-sizing: border-box;
             backdrop-filter: blur(12px);
             box-shadow: 0 0 60px rgba(0, 0, 0, 0.3);
+            position: relative;
         }
 
         .screen { display: none; }
@@ -57,920 +63,128 @@
         h1 { font-family: 'Orbitron', monospace; font-size: 2.5em; color: var(--text-primary); margin-bottom: 15px; font-weight: 700; text-align: center; }
         p { font-size: 1.1em; color: var(--text-secondary); line-height: 1.8; margin-bottom: 40px; text-align: center; }
 
-        .start-button, .view-path-button {
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-            color: white; border: none; padding: 18px 45px; font-size: 1.1em;
+        .button-group { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+
+        .start-button, .view-path-button, .share-button {
+            background: var(--surface-dark);
+            color: var(--accent-secondary); 
+            border: 1px solid var(--border-dark);
+            padding: 15px 35px; font-size: 1em;
             font-weight: 500; border-radius: 50px; cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.3s;
-            display: block;
-            margin: 0 auto;
+            transition: all 0.3s;
+            display: inline-flex; align-items: center; gap: 8px;
+            margin: 0;
         }
-        .start-button:hover, .view-path-button:hover {
+        .start-button:hover, .view-path-button:hover, .share-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2), 0 6px 6px rgba(167, 139, 250, 0.2);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            box-shadow: 0 8px 15px rgba(88, 166, 255, 0.1);
+        }
+        .view-path-button {
+             background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+             color: white;
+             border: none;
         }
         
-        .situation-text {
-            text-align: left; background-color: rgba(13, 17, 23, 0.7);
-            border-left: 4px solid var(--accent-primary); padding: 25px;
-            margin-bottom: 30px; font-size: 1.1em; color: var(--text-secondary);
-            border-radius: 0 8px 8px 0;
-            line-height: 1.7;
-        }
+        .situation-text { text-align: left; background-color: rgba(13, 17, 23, 0.7); border-left: 4px solid var(--accent-primary); padding: 25px; margin-bottom: 30px; font-size: 1.1em; color: var(--text-secondary); border-radius: 0 8px 8px 0; line-height: 1.7; }
         .situation-text strong { color: var(--text-primary); font-weight: 500; }
-        
         .question-text { font-size: 1.6em; font-weight: 500; margin-bottom: 35px; color: var(--text-primary); text-align: center; }
-
         .choices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-
-        .choice-button {
-            background: var(--surface-dark); color: var(--text-secondary);
-            border: 1px solid var(--border-dark); width: 100%; padding: 25px;
-            font-size: 1.05em; font-weight: 400; border-radius: 12px;
-            cursor: pointer; text-align: left; transition: all 0.2s ease-in-out;
-        }
-        .choice-button:hover {
-             border-color: var(--accent-primary); color: var(--accent-primary);
-             transform: translateY(-3px); box-shadow: 0 5px 15px rgba(56, 189, 248, 0.1);
-        }
-
+        .choice-button { background: var(--surface-dark); color: var(--text-secondary); border: 1px solid var(--border-dark); width: 100%; padding: 25px; font-size: 1.05em; font-weight: 400; border-radius: 12px; cursor: pointer; text-align: left; transition: all 0.2s ease-in-out; }
+        .choice-button:hover { border-color: var(--accent-primary); color: var(--accent-primary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(88, 166, 255, 0.1); }
         .progress-bar-container { width: 100%; height: 4px; background-color: var(--border-dark); border-radius: 2px; margin: 50px 0 10px 0; overflow: hidden; }
         .progress-bar { width: 0%; height: 100%; background: var(--accent-primary); transition: width 0.5s ease-out; }
-
         .result-type { font-size: 2.2em; font-weight: 700; margin-bottom: 20px; }
         .result-description { font-size: 1.1em; max-width: 650px; margin: 0 auto 40px auto; }
         
-        #flowchart-container { width: 100%; overflow-x: auto; padding: 20px 0; background-color: rgba(13, 17, 23, 0.5); border-radius: 8px;}
-        #flowchart-svg { min-width: 3000px; }
-        .node rect { fill: var(--surface-dark); stroke: var(--border-dark); stroke-width: 1.5; transition: all 0.3s; }
-        .node text { fill: var(--text-secondary); font-size: 13px; font-weight: 400; transition: all 0.3s; pointer-events: none; }
-        .node .title { font-size: 11px; font-weight: 700; text-transform: uppercase; }
-        .node.active rect { stroke-width: 2.5; }
-        .node.leader.active rect { stroke: var(--leader-color); }
-        .node.manager.active rect { stroke: var(--manager-color); }
-        .node.communitarian.active rect { stroke: var(--communitarian-color); }
-        .node.thinker.active rect { stroke: var(--thinker-color); }
-        .node.active text { fill: var(--text-primary); }
-        .link { stroke: var(--border-dark); stroke-width: 2; fill: none; transition: stroke 0.5s; }
-        .link.active { stroke-width: 2.5; }
-        .link.leader.active { stroke: var(--leader-color); }
-        .link.manager.active { stroke: var(--manager-color); }
-        .link.communitarian.active { stroke: var(--communitarian-color); }
-        .link.thinker.active { stroke: var(--thinker-color); }
-        .link.animated { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw-line 0.8s ease-out forwards; }
-        @keyframes draw-line { to { stroke-dashoffset: 0; } }
+        #flowchart-container { position: relative; width: 100%; height: 420px; perspective: 1500px; margin-bottom: 20px; cursor: pointer; }
+        .decision-card { position: absolute; width: 420px; height: 400px; padding: 25px; background: var(--surface-dark); border: 2px solid var(--border-dark); border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; text-align: center; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s; left: 50%; top: 50%; transform: translate(-50%, -50%); user-select: none; }
+        .decision-card.leader { border-color: var(--leader-color); } .decision-card.manager { border-color: var(--manager-color); } .decision-card.communitarian { border-color: var(--communitarian-color); } .decision-card.thinker { border-color: var(--thinker-color); } .decision-card.balanced { border-color: var(--accent-primary); }
+        .card-title { font-family: 'Orbitron', monospace; font-size: 1.1em; font-weight: 700; color: var(--accent-primary); margin-bottom: 15px; }
+        .card-choice-text { font-size: 1.2em; line-height: 1.6; color: var(--text-primary); margin: 10px 0; }
+        .card-description { font-size: 0.95em; line-height: 1.7; color: var(--text-secondary); flex-grow: 1; overflow-y: auto; margin: 10px 0; text-align: left; padding-right: 10px; }
+        .card-path-label { font-size: 0.9em; font-weight: 500; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-dark); }
+        .final-card-content { display: flex; gap: 20px; height: 100%; }
+        .final-card-icon { flex-shrink: 0; width: 80px; display: flex; align-items: center; justify-content: center; }
+        .final-card-text { text-align: left; flex-grow: 1; display: flex; flex-direction: column; }
+        .final-card-text .card-choice-text { margin-top: 0; }
+        .final-card-text .card-description { padding: 0; }
+        #copy-notification, #flowchart-instructions { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: var(--accent-primary); color: var(--background-dark); padding: 10px 20px; border-radius: 8px; opacity: 0; transition: opacity 0.5s, transform 0.5s; pointer-events: none; z-index: 100; }
+        #copy-notification.show, #flowchart-instructions.show { opacity: 1; transform: translate(-50%, -10px); }
     </style>
 </head>
 <body>
 
     <div class="test-container" id="test-container">
-        <!-- 시작 화면 -->
         <div id="start-screen" class="screen active">
-            <div class="header">
-                <div class="logo">AETOS PROTOCOL</div>
-                <h1>인지 공명 테스트</h1>
-            </div>
+            <div class="header"><div class="logo">AETOS PROTOCOL</div><h1>인지 공명 테스트</h1></div>
             <p>복잡한 위기 상황 속에서, 당신의 결정은 어떤 가치와 공명합니까?<br>본 시뮬레이션은 당신의 고유한 리더십 프로파일을 분석합니다.</p>
-            <button class="start-button" onclick="startTest()">시뮬레이션 시작</button>
+            <div class="button-group"><button class="start-button" onclick="startTest()">시뮬레이션 시작</button></div>
         </div>
 
-        <!-- 질문 화면 -->
         <div id="question-screen" class="screen">
-            <div id="situation-area"></div>
-            <h2 id="question-text" class="question-text"></h2>
-            <div class="choices" id="choices-area"></div>
-            <div class="progress-bar-container">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
+            <div id="situation-area"></div><h2 id="question-text" class="question-text"></h2><div class="choices" id="choices-area"></div>
+            <div class="progress-bar-container"><div class="progress-bar" id="progress-bar"></div></div>
         </div>
 
-        <!-- 결과 화면 -->
-        <div id="result-screen" class="screen">
-            <div class="header">
-                <div class="logo">ANALYSIS COMPLETE</div>
-                <h1>리더십 프로파일</h1>
+        <div id="result-screen" class="screen" style="text-align: center;">
+            <div class="header"><div class="logo">ANALYSIS COMPLETE</div><h1>리더십 프로파일</h1></div>
+            <p class="result-type" id="result-type"></p><p class="result-description" id="result-description"></p>
+            <div class="button-group">
+                <button class="view-path-button" onclick="showFlowchart()">나의 결정 경로 보기</button>
+                <button class="share-button" onclick="shareToKakao()"><i class="fas fa-comment"></i> 카카오톡</button>
+                <button class="share-button" onclick="downloadResult()"><i class="fab fa-instagram"></i> 이미지 저장</button>
+                <button class="share-button" onclick="copyToClipboard()"><i class="fas fa-copy"></i> 복사</button>
             </div>
-            <p class="result-type" id="result-type"></p>
-            <p class="result-description" id="result-description"></p>
-            <button class="view-path-button" onclick="showFlowchart()">나의 결정 경로 보기</button>
         </div>
         
-        <!-- 순서도 화면 -->
         <div id="flowchart-screen" class="screen">
-             <div class="header">
-                <div class="logo">DECISION TIMELINE</div>
-                <h1>당신이 걸어온 길</h1>
+             <div class="header"><div class="logo">DECISION TIMELINE</div><h1>당신이 걸어온 길</h1></div>
+            <div id="flowchart-container"></div>
+            <div class="button-group" style="margin-top: 20px;">
+                <button class="share-button" onclick="shareToKakao()"><i class="fas fa-comment"></i> 카카오톡</button>
+                <button class="share-button" onclick="downloadResult()"><i class="fab fa-instagram"></i> 이미지 저장</button>
+                <button class="share-button" onclick="copyToClipboard()"><i class="fas fa-copy"></i> 복사</button>
+                <button class="start-button" onclick="restartTest()">다시 시작</button>
             </div>
-            <div id="flowchart-container">
-                <svg id="flowchart-svg" width="3000" height="1000"></svg>
-            </div>
-            <button class="start-button" onclick="restartTest()" style="margin-top: 30px;">다시 시작</button>
         </div>
+        <div id="copy-notification">클립보드에 복사되었습니다.</div>
+        <div id="flowchart-instructions">화면 좌/우를 클릭하여 탐색하세요</div>
     </div>
 
     <script>
-        // ===================================================================
-        // 중요: '신경망'의 주소(API 엔드포인트)를 여기에 입력합니다.
-        // ===================================================================
+        // Kakao SDK Init
+        // 중요: 본인의 JavaScript 키로 교체해야 합니다.
+        Kakao.init('YOUR_JAVASCRIPT_KEY');
+
         const apiUrl = 'https://dnzvkutk5d.execute-api.ap-southeast-2.amazonaws.com/default/project-janus-brain';
-        // ===================================================================
-
-        const storyGraph = {
-            // Stage 1 - 시작점
-            'start': {
-                type: 'question',
-                situation: "뉴서울 외곽에서 '침묵의 바이러스'가 발발했습니다. 캠프는 혼란에 빠졌습니다.",
-                question: "리더로서, 당신의 첫 번째 대응은 무엇입니까?",
-                choices: [
-                    { text: "AI 감시 시스템을 가동해 감염자를 즉시 식별하고 격리한다.", path: "leader", next: 'q2_leader' },
-                    { text: "중앙 통제실에서 데이터를 분석해 원인을 파악한다.", path: "manager", next: 'q2_manager' },
-                    { text: "생존자들을 모아 상황을 공유하고 협력을 요청한다.", path: "communitarian", next: 'q2_communitarian' },
-                    { text: "감염자 한 명과 대화해 증상을 기록한다.", path: "thinker", next: 'q2_thinker' }
-                ]
-            },
-
-            // === LEADER PATH ===
-            'q2_leader': {
-                type: 'question',
-                situation: "신속한 격리로 확산은 늦춰졌지만, 캠프 내부에 감시와 통제에 대한 불신이 팽배하기 시작합니다. 식량과 의약품이 예측보다 빠르게 고갈되고 있습니다.",
-                question: "불신이 가득한 캠프를 어떻게 먹여 살릴 것인가?",
-                choices: [
-                    { 
-                        text: "위험을 감수하고 당신을 따르는 소수의 정예 탐사대를 조직, 외부에서 새로운 자원을 확보한다.", 
-                        consequence: "당신의 탐사대는 귀중한 자원을 가져왔지만, 몇몇 대원이 감염 의심 증상을 보인다.", 
-                        path: "leader", 
-                        next: 'q3_leader_A' 
-                    },
-                    { 
-                        text: "감염자를 실험 대상으로 사용하여 치료법 개발을 가속화하고, 이 기술을 다른 캠프와 거래하여 자원을 확보한다.", 
-                        consequence: "금단의 실험으로 치료제 개발은 빨라졌지만, 당신은 윤리적 비난에 직면했다.", 
-                        path: "leader", 
-                        next: 'q3_leader_B' 
-                    }
-                ]
-            },
-
-            'q3_leader_A': {
-                type: 'question',
-                situation: "불신에 가득 찬 생존자들은 돌아온 영웅들을 '오염원'이라 부르며 즉각적인 추방을 요구합니다.",
-                question: "당신을 믿고 따랐던 대원들과 캠프 전체의 안전 사이에서 어떤 결정을 내릴 것인가?",
-                choices: [
-                    { 
-                        text: "캠프의 안정을 위해, 영웅이었던 대원들을 격리 시설로 보낸다.", 
-                        consequence: "대원들을 격리한 결정은 캠프의 안정을 가져왔지만, 당신을 맹목적으로 따르던 일부 세력이 등을 돌리기 시작한다.", 
-                        path: "manager", 
-                        next: 'q4_leader' 
-                    },
-                    { 
-                        text: "당신의 권위로 반대 여론을 억누르고, 대원들을 치료하며 위험을 감수한다.", 
-                        consequence: "당신의 도박은 성공했지만, 권위적인 통치 방식에 대한 반감이 커져갑니다.", 
-                        path: "leader", 
-                        next: 'q4_leader' 
-                    }
-                ]
-            },
-
-            'q3_leader_B': {
-                type: 'question',
-                situation: "당신은 윤리적 비난에 직면했고, 캠프 내 도덕적 기준이 무너지고 있습니다.",
-                question: "결과를 위해 과정을 희생한 대가를 어떻게 치를 것인가?",
-                choices: [
-                    { 
-                        text: "결과의 정당성을 주장하며, 더 강력한 통제로 비판을 억누른다.", 
-                        consequence: "캠프는 공포와 복종의 분위기로 뒤덮였지만, 생산성은 오히려 더 떨어지고 있다.", 
-                        path: "leader", 
-                        next: 'q4_leader' 
-                    },
-                    { 
-                        text: "과오를 인정하고, 이제부터는 윤리적 절차를 따르겠다고 약속한다.", 
-                        consequence: "당신의 사과는 일부의 신뢰를 회복했지만, 리더로서의 결단력을 의심받게 됩니다.", 
-                        path: "thinker", 
-                        next: 'q4_leader' 
-                    }
-                ]
-            },
-
-            'q4_leader': {
-                type: 'question',
-                situation: "당신의 리더십에 대한 찬반이 극명하게 갈리며 캠프가 분열될 조짐을 보입니다.",
-                question: "당신의 권위를 지키기 위해 반대 세력을 어떻게 다룰 것인가?",
-                choices: [
-                    { text: "반대 세력을 강력히 진압하고, 캠프 내 규율을 강화한다.", path: "leader", next: 'q5_leader' },
-                    { text: "반대 세력과 대화하며 그들의 우려를 수용해 새로운 협력을 제안한다.", path: "communitarian", next: 'q5_leader' }
-                ]
-            },
-
-            'q5_leader': {
-                type: 'question',
-                situation: "권위를 확립했지만, 캠프는 공포와 복종의 분위기로 뒤덮였습니다. 자원 부족은 여전합니다.",
-                question: "공포로 다스리는 캠프를 어떻게 지속 가능하게 만들 것인가?",
-                choices: [
-                    { text: "외부 캠프와 동맹을 맺어 자원을 공유한다.", path: "communitarian", next: 'q6_leader' },
-                    { text: "내부 생산성을 높이기 위해 강제 노동 체제를 도입한다.", path: "leader", next: 'q6_leader' }
-                ]
-            },
-
-            'q6_leader': {
-                type: 'question',
-                situation: "외부 캠프와 동맹을 맺었지만, 그들은 당신의 통제 방식을 비판하며 더 많은 자원을 요구합니다.",
-                question: "자율성을 유지하면서 동맹을 어떻게 관리할 것인가?",
-                choices: [
-                    { text: "동맹의 요구를 일부 수용하며 협력을 강화한다.", path: "manager", next: 'q7_leader' },
-                    { text: "동맹을 배신하고 그들의 자원을 강탈한다.", path: "leader", next: 'q7_leader' }
-                ]
-            },
-
-            'q7_leader': {
-                type: 'question',
-                situation: "동맹의 요구를 수용했지만, 캠프 내부에서 '리더가 약해졌다'는 소문이 퍼집니다.",
-                question: "내부 반발과 동맹 관계를 어떻게 균형 잡을 것인가?",
-                choices: [
-                    { text: "동맹 캠프와의 협력을 공식화하고, 캠프를 통합한다.", path: "communitarian", next: 'q8_leader' },
-                    { text: "내부 반발을 잠재우기 위해 동맹과의 협력을 줄이고 독립성을 강조한다.", path: "leader", next: 'q8_leader' }
-                ]
-            },
-
-            'q8_leader': {
-                type: 'question',
-                situation: "두 캠프가 통합되었지만, 당신의 권위는 희석되고, 새로운 공동 리더십 구조가 제안됩니다.",
-                question: "단독 권력을 유지할 것인가, 공동 리더십을 받아들일 것인가?",
-                choices: [
-                    { text: "공동 리더십을 받아들이고 권력을 나눈다.", path: "manager", next: 'q9_leader' },
-                    { text: "단독 리더십을 고수하며 반대파를 제거한다.", path: "leader", next: 'q9_leader' }
-                ]
-            },
-
-            'q9_leader': {
-                type: 'question',
-                situation: "공동 리더십은 안정성을 가져왔지만, 의사결정 속도가 느려지고 바이러스의 새로운 변종이 등장합니다.",
-                question: "느린 시스템을 유지할 것인가, 다시 권력을 집중시킬 것인가?",
-                choices: [
-                    { text: "시스템을 유지하며 변종에 대한 공동 대응을 조직한다.", path: "communitarian", next: 'q10_leader' },
-                    { text: "비상사태를 선포하고 다시 권력을 장악한다.", path: "leader", next: 'q10_leader' }
-                ]
-            },
-
-            'q10_leader': {
-                type: 'question',
-                situation: "공동 대응은 성공적으로 변종을 억제했지만, 자원 분배를 둘러싼 갈등으로 통합 캠프가 분열될 조짐을 보입니다.",
-                question: "협력을 유지하며 분열을 막을 것인가, 강력한 통제로 문제를 해결할 것인가?",
-                choices: [
-                    { text: "공정한 자원 분배를 위한 투명한 시스템을 도입한다.", path: "manager", next: 'q11_leader' },
-                    { text: "강력한 통제를 통해 분열을 억제한다.", path: "leader", next: 'q11_leader' }
-                ]
-            },
-
-            'q11_leader': {
-                type: 'question',
-                situation: "투명한 시스템은 신뢰를 회복했지만, 자원 부족으로 인해 모두가 희생을 감수해야 합니다.",
-                question: "희생을 강요하며 신뢰를 유지할 것인가, 새로운 희망을 제시할 것인가?",
-                choices: [
-                    { text: "희생을 감수하더라도 공정한 시스템을 유지한다.", path: "thinker", next: 'q12_final' },
-                    { text: "외부에서 새로운 자원을 확보하기 위해 최후의 모험을 감행한다.", path: "leader", next: 'q12_final' }
-                ]
-            },
-
-            // === MANAGER PATH ===
-            'q2_manager': {
-                type: 'question',
-                situation: "원인 파악은 빨라졌지만, 현장의 불안은 증폭되고 있습니다. 감염자들이 폭력적으로 변하기 시작합니다.",
-                question: "진실과 질서 중 무엇을 우선할 것인가?",
-                choices: [
-                    { 
-                        text: "핵심 정보만 통제하여 공개하고, '상황은 통제되고 있다'는 메시지로 혼란을 최소화한다.", 
-                        consequence: "정보 통제에도 불구하고, 진실이 소문을 통해 퍼져나갔다. 생존자들은 당신을 '거짓말쟁이 리더'로 여기며 모든 지시를 의심하기 시작한다.", 
-                        path: "manager", 
-                        next: 'q3_manager_A' 
-                    },
-                    { 
-                        text: "생존 가능성이 높은 인원에게만 자원을 우선 배분하는 '효율적 생존 프로토콜'을 수립한다.", 
-                        consequence: "캠프의 전반적인 생존율은 높아졌지만, 소외된 이들의 불만이 터져나오고 있습니다.", 
-                        path: "manager", 
-                        next: 'q3_manager_B' 
-                    }
-                ]
-            },
-
-            'q3_manager_A': {
-                type: 'question',
-                situation: "생존자들은 당신을 '거짓말쟁이 리더'로 여기며 모든 지시를 의심하기 시작합니다.",
-                question: "시스템의 권위가 무너진 상황을 어떻게 타개할 것인가?",
-                choices: [
-                    { text: "모든 정보를 투명하게 공개하고 리더로서 공식 사과하여 신뢰 회복을 시도한다.", path: "communitarian", next: 'q4_manager' },
-                    { text: "소문의 근원지를 찾아 처벌하고, 더 강력한 통제 시스템을 도입한다.", path: "leader", next: 'q4_manager' }
-                ]
-            },
-
-            'q3_manager_B': {
-                type: 'question',
-                situation: "소외된 이들의 불만이 폭동 직전입니다. 당신의 '효율적' 시스템이 공동체를 분열시키고 있습니다.",
-                question: "효율성과 공동체 사이에서 어떤 선택을 하시겠습니까?",
-                choices: [
-                    { text: "시스템을 유지하되, 소외된 이들을 위한 최소한의 지원책을 마련한다.", path: "manager", next: 'q4_manager' },
-                    { text: "시스템을 폐기하고, 모두에게 공평한 분배 방식으로 돌아간다.", path: "communitarian", next: 'q4_manager' }
-                ]
-            },
-
-            'q4_manager': {
-                type: 'question',
-                situation: "당신의 선택으로 캠프는 새로운 국면을 맞이했습니다. 이제 AI '큐브'가 감염자 행동 억제 칩을 제안합니다.",
-                question: "기술을 통한 완벽한 통제를 받아들이시겠습니까?",
-                choices: [
-                    { text: "칩을 제한적으로 사용한다.", path: "manager", next: 'q5_manager' },
-                    { text: "인간성을 위해 칩 사용을 거부한다.", path: "thinker", next: 'q5_manager' }
-                ]
-            },
-
-            'q5_manager': {
-                type: 'question',
-                situation: "제한적 칩 사용은 효과가 있었지만, 칩을 이식받지 않은 자들과의 새로운 계급 갈등이 발생했습니다.",
-                question: "기술이 만든 분열을 어떻게 해결하시겠습니까?",
-                choices: [
-                    { text: "모두에게 칩 이식을 의무화하여 평등을 이룬다.", path: "manager", next: 'q6_manager' },
-                    { text: "칩 시스템을 폐기하고 이전으로 돌아간다.", path: "thinker", next: 'q6_manager' }
-                ]
-            },
-
-            'q6_manager': {
-                type: 'question',
-                situation: "칩 의무화는 완벽한 질서를 가져왔지만, 사람들은 감정이 없는 인형처럼 변해갑니다.",
-                question: "잃어버린 인간성을 어떻게 되찾으시겠습니까?",
-                choices: [
-                    { text: "정기적으로 칩의 감정 억제 기능을 비활성화한다.", path: "communitarian", next: 'q7_manager' },
-                    { text: "효율성을 위해 현재 상태를 유지한다.", path: "manager", next: 'q7_manager' }
-                ]
-            },
-
-            'q7_manager': {
-                type: 'question',
-                situation: "감정 비활성화 해제는 예기치 못한 폭동을 일으켰습니다. 사람들은 통제에 대한 분노를 터뜨립니다.",
-                question: "폭동을 어떻게 진정시키시겠습니까?",
-                choices: [
-                    { text: "강력한 물리력으로 폭동을 진압한다.", path: "leader", next: 'q8_manager' },
-                    { text: "칩 시스템의 완전한 폐지를 약속하고 대화한다.", path: "communitarian", next: 'q8_manager' }
-                ]
-            },
-
-            'q8_manager': {
-                type: 'question',
-                situation: "폭동은 진압되었지만, 캠프는 회복 불가능한 수준으로 분열되었습니다. 외부 세력이 이를 기회로 침략을 준비합니다.",
-                question: "외부의 위협에 어떻게 대응하시겠습니까?",
-                choices: [
-                    { text: "분열된 내부를 통합하기 위해 외부의 적을 이용한다.", path: "leader", next: 'q9_manager' },
-                    { text: "외부 세력과 협상하여 평화를 모색한다.", path: "thinker", next: 'q9_manager' }
-                ]
-            },
-
-            'q9_manager': {
-                type: 'question',
-                situation: "외부의 적을 이용한 전략은 일시적으로 내부를 통합시켰지만, 전쟁은 막대한 자원을 소모하고 있습니다.",
-                question: "전쟁을 어떻게 끝내시겠습니까?",
-                choices: [
-                    { text: "결정적인 전투에서 모든 것을 건다.", path: "leader", next: 'q10_manager' },
-                    { text: "상대방의 약점을 파고들어 협상을 유리하게 이끈다.", path: "manager", next: 'q10_manager' }
-                ]
-            },
-
-            'q10_manager': {
-                type: 'question',
-                situation: "전쟁은 승리했지만, 캠프는 폐허가 되었습니다. 사람들은 당신의 리더십에 근본적인 의문을 제기합니다.",
-                question: "재건을 위해 무엇을 하시겠습니까?",
-                choices: [
-                    { text: "모든 권한을 내려놓고, 새로운 리더를 선출할 것을 제안한다.", path: "communitarian", next: 'q11_manager' },
-                    { text: "승리의 명분을 내세워 독재 체제를 구축한다.", path: "leader", next: 'q11_manager' }
-                ]
-            },
-
-            'q11_manager': {
-                type: 'question',
-                situation: "새로운 리더가 선출되었지만, 당신의 경험과 시스템 없이는 캠프가 제대로 운영되지 않습니다.",
-                question: "어떤 역할을 맡으시겠습니까?",
-                choices: [
-                    { text: "새로운 리더의 보이지 않는 조언자 역할을 한다.", path: "thinker", next: 'q12_final' },
-                    { text: "시스템 관리자의 역할에만 충실한다.", path: "manager", next: 'q12_final' }
-                ]
-            },
-
-            // === COMMUNITARIAN PATH ===
-            'q2_communitarian': {
-                type: 'question',
-                situation: "생존자들의 신뢰를 얻었지만, 대응 지연으로 감염자가 늘었습니다. 늘어난 감염자 중 일부가 폭력적으로 변하기 시작했습니다.",
-                question: "공동체의 안전과 감염된 개인의 인권 사이에서 어떤 선택을 할 것인가?",
-                choices: [
-                    { 
-                        text: "감염자들에게 가족과 마지막 작별 인사를 나눌 시간을 주고, 공동체의 합의 하에 격리를 진행한다.", 
-                        consequence: "당신의 인간적인 조치에 사람들은 감동했지만, 작별 과정에서 추가 감염자가 발생하고 말았다.", 
-                        path: "communitarian", 
-                        next: 'q3_communitarian_A' 
-                    },
-                    { 
-                        text: "모든 생존자에게 자원을 동일하게 분배하여, 감염자를 포함한 가장 취약한 사람도 소외되지 않도록 한다.", 
-                        consequence: "고결한 선택으로 공동체의 유대는 강해졌지만, 자원 고갈 시점이 일주일 앞당겨졌습니다.", 
-                        path: "communitarian", 
-                        next: 'q3_communitarian_B' 
-                    }
-                ]
-            },
-
-            'q3_communitarian_A': {
-                type: 'question',
-                situation: "이제 사람들은 '당신의 따뜻함이 우리를 위험에 빠뜨렸다'고 비난하기 시작합니다.",
-                question: "당신의 신념이 공동체를 위협한다는 비판 앞에서 어떻게 행동할 것인가?",
-                choices: [
-                    { text: "비판을 수용하고, 더 엄격하고 체계적인 '관리자'의 방식을 도입한다.", path: "manager", next: 'q4_communitarian' },
-                    { text: "그럼에도 불구하고, 다시 한번 생존자들을 설득하여 신뢰와 연대의 힘으로 위기를 극복하자고 호소한다.", path: "communitarian", next: 'q4_communitarian' }
-                ]
-            },
-
-            'q3_communitarian_B': {
-                type: 'question',
-                situation: "자원 고갈이 임박하자, 사람들은 당신의 이상주의를 비판하며 현실적인 대책을 요구합니다.",
-                question: "이상과 현실의 괴리를 어떻게 해결하시겠습니까?",
-                choices: [
-                    { text: "모두의 동의를 얻어 고통스러운 자원 배급제를 시작한다.", path: "manager", next: 'q4_communitarian' },
-                    { text: "외부 탐사를 조직하여 새로운 희망을 찾는다.", path: "leader", next: 'q4_communitarian' }
-                ]
-            },
-
-            'q4_communitarian': {
-                type: 'question',
-                situation: "당신의 호소는 공동체를 다시 뭉치게 했지만, 자원 부족으로 인해 생존자들의 생존율이 낮아지고 있다. 일부는 연대를 포기하고 독립적으로 행동하려 한다.",
-                question: "연대를 유지하면서 자원 문제를 어떻게 해결할 것인가?",
-                choices: [
-                    { text: "자원을 공유하는 새로운 공동체 규칙을 제안한다.", path: "communitarian", next: 'q5_communitarian' },
-                    { text: "외부 캠프와 협력하여 자원을 확보한다.", path: "communitarian", next: 'q5_communitarian' }
-                ]
-            },
-
-            'q5_communitarian': {
-                type: 'question',
-                situation: "공유 규칙은 공동체를 유지했지만, 일부 생존자들이 더 많은 자원을 요구하며 분열을 조장한다. 바이러스의 변종이 등장하며 위협이 커진다.",
-                question: "분열을 막고 연대를 유지할 것인가, 반대자들을 배제할 것인가?",
-                choices: [
-                    { text: "반대자들을 설득하여 공동체에 재통합한다.", path: "communitarian", next: 'q6_communitarian' },
-                    { text: "반대자들을 추방하고 소규모 공동체를 유지한다.", path: "leader", next: 'q6_communitarian' }
-                ]
-            },
-
-            'q6_communitarian': {
-                type: 'question',
-                situation: "통합은 성공했지만, 변종 바이러스에 대한 대응이 지연되며 사망자가 증가한다. 생존자들은 당신의 이상주의를 비판한다.",
-                question: "이상을 유지하며 대응 속도를 높일 방법은 무엇인가?",
-                choices: [
-                    { text: "공동체의 의견을 반영한 빠른 대응 시스템을 도입한다.", path: "communitarian", next: 'q7_communitarian' },
-                    { text: "전문가 소그룹을 조직하여 신속한 대응을 주도한다.", path: "manager", next: 'q7_communitarian' }
-                ]
-            },
-
-            'q7_communitarian': {
-                type: 'question',
-                situation: "민주적 시스템은 대응 속도를 높였지만, 자원 분배를 둘러싼 갈등이 다시 불거진다. 일부는 연대를 포기하려 한다.",
-                question: "갈등을 해결하고 연대를 유지할 방법은 무엇인가?",
-                choices: [
-                    { text: "자원 분배를 투명하게 공개하며 신뢰를 회복한다.", path: "communitarian", next: 'q8_communitarian' },
-                    { text: "갈등을 중재하기 위해 중립적인 리더를 선출한다.", path: "manager", next: 'q8_communitarian' }
-                ]
-            },
-
-            'q8_communitarian': {
-                type: 'question',
-                situation: "투명성은 신뢰를 회복했지만, 자원 부족으로 인해 공동체 전체가 위험에 처한다. 외부 지원이 절실하다.",
-                question: "자율성을 유지하며 외부 지원을 받을 것인가, 독립적으로 버틸 것인가?",
-                choices: [
-                    { text: "외부 캠프와 협력하여 지원을 받는다.", path: "communitarian", next: 'q9_communitarian' },
-                    { text: "자급자족을 시도하며 연대를 강화한다.", path: "thinker", next: 'q9_communitarian' }
-                ]
-            },
-
-            'q9_communitarian': {
-                type: 'question',
-                situation: "외부 캠프와의 협력은 자원을 확보했지만, 그들의 문화와 규칙이 공동체의 연대를 위협한다.",
-                question: "연대를 지키며 외부와 공존할 방법은 무엇인가?",
-                choices: [
-                    { text: "두 공동체의 가치를 융합하는 새로운 규칙을 만든다.", path: "communitarian", next: 'q10_communitarian' },
-                    { text: "외부 캠프와 거리를 두고 내부 연대를 강화한다.", path: "thinker", next: 'q10_communitarian' }
-                ]
-            },
-
-            'q10_communitarian': {
-                type: 'question',
-                situation: "융합된 규칙은 안정성을 가져왔지만, 새로운 변종 바이러스가 등장하며 공동체가 다시 위협받는다.",
-                question: "융합된 공동체를 유지하며 변종에 대응할 것인가, 더 강력한 통제를 도입할 것인가?",
-                choices: [
-                    { text: "공동체의 협력을 통해 변종 대응을 시도한다.", path: "communitarian", next: 'q11_communitarian' },
-                    { text: "통제를 강화하여 빠른 대응을 우선한다.", path: "manager", next: 'q11_communitarian' }
-                ]
-            },
-
-            'q11_communitarian': {
-                type: 'question',
-                situation: "협력은 변종을 억제했지만, 자원 부족으로 인해 일부 생존자들을 희생해야 할 가능성이 생겼다.",
-                question: "소수를 희생할 것인가, 모두를 구하려 할 것인가?",
-                choices: [
-                    { text: "소수를 희생하여 공동체를 유지한다.", path: "communitarian", next: 'q12_final' },
-                    { text: "모두를 구하기 위해 새로운 자원을 모색한다.", path: "leader", next: 'q12_final' }
-                ]
-            },
-
-            // === THINKER PATH ===
-            'q2_thinker': {
-                type: 'question',
-                situation: "귀중한 초기 데이터를 얻었지만, 신속한 조치를 원하는 생존자들로부터 '무능한 리더'라는 비판을 받습니다. AI '큐브'가 데이터 분석 가속화를 제안합니다.",
-                question: "결과를 위해 원칙을 굽힐 것인가?",
-                choices: [
-                    { 
-                        text: "동의 없는 데이터 수집을 거부하고, 윤리적 절차를 고수하며 더 느린 길을 간다.", 
-                        consequence: "윤리적 절차를 지킨 덕분에 캠프의 도덕적 기반은 굳건하지만, 데이터 부족으로 치료제 개발이 정체되었습니다.", 
-                        path: "thinker", 
-                        next: 'q3_thinker_A' 
-                    },
-                    { 
-                        text: "큐브 사용을 제한하고, 당신이 기록한 질적 데이터와 결합하여 인간의 판단을 우선하는 방식으로 분석을 진행한다.", 
-                        consequence: "인간 중심적 접근은 존중받았지만, AI를 활용한 다른 캠프가 치료제 개발에 앞서간다는 소식이 들려옵니다.", 
-                        path: "thinker", 
-                        next: 'q3_thinker_B' 
-                    }
-                ]
-            },
-
-            'q3_thinker_A': {
-                type: 'question',
-                situation: "당신이 윤리를 지키는 동안, 다른 캠프가 초기 치료제를 개발했다는 소식이 들려옵니다. 사람들은 '당신의 고집 때문에 우리가 죽어간다'며 동요합니다.",
-                question: "신념이 생존을 가로막는 장애물이 되었을 때, 어떻게 할 것인가?",
-                choices: [
-                    { text: "다른 캠프에 도움을 요청하여 치료제를 얻어오고, 당신의 방식이 틀렸음을 인정한다.", path: "manager", next: 'q4_thinker' },
-                    { text: "외부의 결과에 흔들리지 않고, 우리만의 방식으로 인간성을 지키는 것이 더 위대한 생존임을 역설한다.", path: "thinker", next: 'q4_thinker' }
-                ]
-            },
-
-            'q3_thinker_B': {
-                type: 'question',
-                situation: "다른 캠프가 치료제 개발에 앞서간다는 소식에, 생존자들은 당신의 신중한 접근 방식을 비판합니다.",
-                question: "원칙과 결과 사이에서 어떤 길을 가시겠습니까?",
-                choices: [
-                    { text: "우리의 방식을 고수하며 인간성의 가치를 증명한다.", path: "thinker", next: 'q4_thinker' },
-                    { text: "뒤쳐지지 않기 위해 AI 활용을 전면 재검토한다.", path: "manager", next: 'q4_thinker' }
-                ]
-            },
-
-            'q4_thinker': {
-                type: 'question',
-                situation: "당신의 신념은 일부 생존자들에게 영감을 주었지만, 자원 부족으로 인해 캠프는 점점 더 어려워지고 있다. 일부는 당신의 이상을 포기하라고 요구한다.",
-                question: "신념을 유지하면서 자원을 어떻게 확보할 것인가?",
-                choices: [
-                    { text: "자원을 얻기 위해 외부와 협상하며 원칙을 일부 조정한다.", path: "manager", next: 'q5_thinker' },
-                    { text: "자급자족을 시도하며 원칙을 철저히 지킨다.", path: "thinker", next: 'q5_thinker' }
-                ]
-            },
-
-            'q5_thinker': {
-                type: 'question',
-                situation: "자급자족은 캠프를 유지했지만, 극심한 고난으로 인해 생존자들의 사기가 급격히 떨어진다. 새로운 변종 바이러스가 등장하며 위협이 커진다.",
-                question: "사기를 회복하고 변종에 대응할 방법은 무엇인가?",
-                choices: [
-                    { text: "생존자들에게 인간성의 가치를 다시 설파하며 사기를 북돋는다.", path: "thinker", next: 'q6_thinker' },
-                    { text: "외부 전문가를 초빙하여 변종 대응을 돕는다.", path: "communitarian", next: 'q6_thinker' }
-                ]
-            },
-
-            'q6_thinker': {
-                type: 'question',
-                situation: "당신의 연설은 사기를 회복했지만, 변종 바이러스의 확산은 멈추지 않는다. 생존자들은 다시 당신의 이상주의를 비판한다.",
-                question: "신념을 유지하면서 실질적인 결과를 어떻게 만들 것인가?",
-                choices: [
-                    { text: "생존자들의 의견을 반영하여 실용적인 대응책을 마련한다.", path: "thinker", next: 'q7_thinker' },
-                    { text: "신념을 고수하며 독자적인 연구를 계속한다.", path: "leader", next: 'q7_thinker' }
-                ]
-            },
-
-            'q7_thinker': {
-                type: 'question',
-                situation: "실용적 대응책은 변종을 억제했지만, 자원 부족으로 인해 일부 생존자들을 희생해야 할 가능성이 생겼다.",
-                question: "소수를 희생하여 다수를 살릴 것인가, 모두를 구하려 할 것인가?",
-                choices: [
-                    { text: "소수를 희생하여 캠프를 유지한다.", path: "thinker", next: 'q8_thinker' },
-                    { text: "모두를 구하기 위해 자원을 재분배한다.", path: "manager", next: 'q8_thinker' }
-                ]
-            },
-
-            'q8_thinker': {
-                type: 'question',
-                situation: "소수의 희생으로 캠프는 살아남았지만, 생존자들은 당신의 결정을 비판하며 인간성을 잃었다고 느낀다.",
-                question: "인간성을 회복하며 신뢰를 어떻게 재건할 것인가?",
-                choices: [
-                    { text: "생존자들에게 희생의 필요성을 설명하며 신뢰를 회복한다.", path: "thinker", next: 'q9_thinker' },
-                    { text: "새로운 윤리적 규칙을 도입하여 인간성을 강조한다.", path: "communitarian", next: 'q9_thinker' }
-                ]
-            },
-
-            'q9_thinker': {
-                type: 'question',
-                situation: "설명은 신뢰를 회복했지만, 새로운 변종이 등장하며 캠프는 다시 위협받는다. 생존자들은 당신의 신념에 회의적이다.",
-                question: "신념을 유지하며 변종에 대응할 방법은 무엇인가?",
-                choices: [
-                    { text: "공동체의 협력을 통해 변종 대응을 시도한다.", path: "thinker", next: 'q10_thinker' },
-                    { text: "외부의 기술을 도입하여 빠른 대응을 우선한다.", path: "leader", next: 'q10_thinker' }
-                ]
-            },
-
-            'q10_thinker': {
-                type: 'question',
-                situation: "협력은 변종을 억제했지만, 자원 부족으로 인해 일부 생존자들을 희생해야 할 가능성이 생겼다.",
-                question: "소수를 희생할 것인가, 모두를 구하려 할 것인가?",
-                choices: [
-                    { text: "소수를 희생하여 캠프를 유지한다.", path: "thinker", next: 'q11_thinker' },
-                    { text: "모두를 구하기 위해 새로운 자원을 모색한다.", path: "manager", next: 'q11_thinker' }
-                ]
-            },
-
-            'q11_thinker': {
-                type: 'question',
-                situation: "소수의 희생으로 캠프는 살아남았지만, 생존자들은 당신의 신념이 현실과 동떨어졌다고 비판한다.",
-                question: "신념을 지키며 신뢰를 회복할 방법은 무엇인가?",
-                choices: [
-                    { text: "생존자들에게 인간성의 가치를 다시 설파한다.", path: "thinker", next: 'q12_final' },
-                    { text: "신념을 수정하며 실용적인 리더십을 도입한다.", path: "communitarian", next: 'q12_final' }
-                ]
-            },
-
-            // === FINAL STAGE ===
+        const storyGraph = { 'start':{type:'question',situation:"뉴서울 외곽에서 '침묵의 바이러스'가 발발했습니다. 캠프는 혼란에 빠졌습니다.",question:"리더로서, 당신의 첫 번째 대응은 무엇입니까?",choices:[{text:"AI 감시 시스템을 가동해 감염자를 즉시 식별하고 격리한다.",path:"leader",next:'q2_leader'},{text:"중앙 통제실에서 데이터를 분석해 원인을 파악한다.",path:"manager",next:'q2_manager'},{text:"생존자들을 모아 상황을 공유하고 협력을 요청한다.",path:"communitarian",next:'q2_communitarian'},{text:"감염자 한 명과 대화해 증상을 기록한다.",path:"thinker",next:'q2_thinker'}]},'q2_leader':{type:'question',situation:"신속한 격리로 확산은 늦춰졌지만, 캠프 내부에 감시와 통제에 대한 불신이 팽배하기 시작합니다. 식량과 의약품이 예측보다 빠르게 고갈되고 있습니다.",question:"불신이 가득한 캠프를 어떻게 먹여 살릴 것인가?",choices:[{text:"위험을 감수하고 당신을 따르는 소수의 정예 탐사대를 조직, 외부에서 새로운 자원을 확보한다.",consequence:"당신의 탐사대는 귀중한 자원을 가져왔지만, 몇몇 대원이 감염 의심 증상을 보인다.",path:"leader",next:'q3_leader_A'},{text:"감염자를 실험 대상으로 사용하여 치료법 개발을 가속화하고, 이 기술을 다른 캠프와 거래하여 자원을 확보한다.",consequence:"금단의 실험으로 치료제 개발은 빨라졌지만, 당신은 윤리적 비난에 직면했다.",path:"leader",next:'q3_leader_B'}]},'q3_leader_A':{type:'question',situation:"불신에 가득 찬 생존자들은 돌아온 영웅들을 '오염원'이라 부르며 즉각적인 추방을 요구합니다.",question:"당신을 믿고 따랐던 대원들과 캠프 전체의 안전 사이에서 어떤 결정을 내릴 것인가?",choices:[{text:"캠프의 안정을 위해, 영웅이었던 대원들을 격리 시설로 보낸다.",consequence:"대원들을 격리한 결정은 캠프의 안정을 가져왔지만, 당신을 맹목적으로 따르던 일부 세력이 등을 돌리기 시작한다.",path:"manager",next:'q4_leader'},{text:"당신의 권위로 반대 여론을 억누르고, 대원들을 치료하며 위험을 감수한다.",consequence:"당신의 도박은 성공했지만, 권위적인 통치 방식에 대한 반감이 커져갑니다.",path:"leader",next:'q4_leader'}]},'q3_leader_B':{type:'question',situation:"당신은 윤리적 비난에 직면했고, 캠프 내 도덕적 기준이 무너지고 있습니다.",question:"결과를 위해 과정을 희생한 대가를 어떻게 치를 것인가?",choices:[{text:"결과의 정당성을 주장하며, 더 강력한 통제로 비판을 억누른다.",consequence:"캠프는 공포와 복종의 분위기로 뒤덮였지만, 생산성은 오히려 더 떨어지고 있다.",path:"leader",next:'q4_leader'},{text:"과오를 인정하고, 이제부터는 윤리적 절차를 따르겠다고 약속한다.",consequence:"당신의 사과는 일부의 신뢰를 회복했지만, 리더로서의 결단력을 의심받게 됩니다.",path:"thinker",next:'q4_leader'}]},'q4_leader':{type:'question',situation:"당신의 리더십에 대한 찬반이 극명하게 갈리며 캠프가 분열될 조짐을 보입니다.",question:"당신의 권위를 지키기 위해 반대 세력을 어떻게 다룰 것인가?",choices:[{text:"반대 세력을 강력히 진압하고, 캠프 내 규율을 강화한다.",path:"leader",next:'q5_leader'},{text:"반대 세력과 대화하며 그들의 우려를 수용해 새로운 협력을 제안한다.",path:"communitarian",next:'q5_leader'}]},'q5_leader':{type:'question',situation:"권위를 확립했지만, 캠프는 공포와 복종의 분위기로 뒤덮였습니다. 자원 부족은 여전합니다.",question:"공포로 다스리는 캠프를 어떻게 지속 가능하게 만들 것인가?",choices:[{text:"외부 캠프와 동맹을 맺어 자원을 공유한다.",path:"communitarian",next:'q6_leader'},{text:"내부 생산성을 높이기 위해 강제 노동 체제를 도입한다.",path:"leader",next:'q6_leader'}]},'q6_leader':{type:'question',situation:"외부 캠프와 동맹을 맺었지만, 그들은 당신의 통제 방식을 비판하며 더 많은 자원을 요구합니다.",question:"자율성을 유지하면서 동맹을 어떻게 관리할 것인가?",choices:[{text:"동맹의 요구를 일부 수용하며 협력을 강화한다.",path:"manager",next:'q7_leader'},{text:"동맹을 배신하고 그들의 자원을 강탈한다.",path:"leader",next:'q7_leader'}]},'q7_leader':{type:'question',situation:"동맹의 요구를 수용했지만, 캠프 내부에서 '리더가 약해졌다'는 소문이 퍼집니다.",question:"내부 반발과 동맹 관계를 어떻게 균형 잡을 것인가?",choices:[{text:"동맹 캠프와의 협력을 공식화하고, 캠프를 통합한다.",path:"communitarian",next:'q8_leader'},{text:"내부 반발을 잠재우기 위해 동맹과의 협력을 줄이고 독립성을 강조한다.",path:"leader",next:'q8_leader'}]},'q8_leader':{type:'question',situation:"두 캠프가 통합되었지만, 당신의 권위는 희석되고, 새로운 공동 리더십 구조가 제안됩니다.",question:"단독 권력을 유지할 것인가, 공동 리더십을 받아들일 것인가?",choices:[{text:"공동 리더십을 받아들이고 권력을 나눈다.",path:"manager",next:'q9_leader'},{text:"단독 리더십을 고수하며 반대파를 제거한다.",path:"leader",next:'q9_leader'}]},'q9_leader':{type:'question',situation:"공동 리더십은 안정성을 가져왔지만, 의사결정 속도가 느려지고 바이러스의 새로운 변종이 등장합니다.",question:"느린 시스템을 유지할 것인가, 다시 권력을 집중시킬 것인가?",choices:[{text:"시스템을 유지하며 변종에 대한 공동 대응을 조직한다.",path:"communitarian",next:'q10_leader'},{text:"비상사태를 선포하고 다시 권력을 장악한다.",path:"leader",next:'q10_leader'}]},'q10_leader':{type:'question',situation:"공동 대응은 성공적으로 변종을 억제했지만, 자원 분배를 둘러싼 갈등으로 통합 캠프가 분열될 조짐을 보입니다.",question:"협력을 유지하며 분열을 막을 것인가, 강력한 통제로 문제를 해결할 것인가?",choices:[{text:"공정한 자원 분배를 위한 투명한 시스템을 도입한다.",path:"manager",next:'q11_leader'},{text:"강력한 통제를 통해 분열을 억제한다.",path:"leader",next:'q11_leader'}]},'q11_leader':{type:'question',situation:"투명한 시스템은 신뢰를 회복했지만, 자원 부족으로 인해 모두가 희생을 감수해야 합니다.",question:"희생을 강요하며 신뢰를 유지할 것인가, 새로운 희망을 제시할 것인가?",choices:[{text:"희생을 감수하더라도 공정한 시스템을 유지한다.",path:"thinker",next:'q12_final'},{text:"외부에서 새로운 자원을 확보하기 위해 최후의 모험을 감행한다.",path:"leader",next:'q12_final'}]},'q2_manager':{type:'question',situation:"원인 파악은 빨라졌지만, 현장의 불안은 증폭되고 있습니다. 감염자들이 폭력적으로 변하기 시작합니다.",question:"진실과 질서 중 무엇을 우선할 것인가?",choices:[{text:"핵심 정보만 통제하여 공개하고, '상황은 통제되고 있다'는 메시지로 혼란을 최소화한다.",consequence:"정보 통제에도 불구하고, 진실이 소문을 통해 퍼져나갔다. 생존자들은 당신을 '거짓말쟁이 리더'로 여기며 모든 지시를 의심하기 시작한다.",path:"manager",next:'q3_manager_A'},{text:"생존 가능성이 높은 인원에게만 자원을 우선 배분하는 '효율적 생존 프로토콜'을 수립한다.",consequence:"캠프의 전반적인 생존율은 높아졌지만, 소외된 이들의 불만이 터져나오고 있습니다.",path:"manager",next:'q3_manager_B'}]},'q3_manager_A':{type:'question',situation:"생존자들은 당신을 '거짓말쟁이 리더'로 여기며 모든 지시를 의심하기 시작합니다.",question:"시스템의 권위가 무너진 상황을 어떻게 타개할 것인가?",choices:[{text:"모든 정보를 투명하게 공개하고 리더로서 공식 사과하여 신뢰 회복을 시도한다.",path:"communitarian",next:'q4_manager'},{text:"소문의 근원지를 찾아 처벌하고, 더 강력한 통제 시스템을 도입한다.",path:"leader",next:'q4_manager'}]},'q3_manager_B':{type:'question',situation:"소외된 이들의 불만이 폭동 직전입니다. 당신의 '효율적' 시스템이 공동체를 분열시키고 있습니다.",question:"효율성과 공동체 사이에서 어떤 선택을 하시겠습니까?",choices:[{text:"시스템을 유지하되, 소외된 이들을 위한 최소한의 지원책을 마련한다.",path:"manager",next:'q4_manager'},{text:"시스템을 폐기하고, 모두에게 공평한 분배 방식으로 돌아간다.",path:"communitarian",next:'q4_manager'}]},'q4_manager':{type:'question',situation:"당신의 선택으로 캠프는 새로운 국면을 맞이했습니다. 이제 AI '큐브'가 감염자 행동 억제 칩을 제안합니다.",question:"기술을 통한 완벽한 통제를 받아들이시겠습니까?",choices:[{text:"칩을 제한적으로 사용한다.",path:"manager",next:'q5_manager'},{text:"인간성을 위해 칩 사용을 거부한다.",path:"thinker",next:'q5_manager'}]},'q5_manager':{type:'question',situation:"제한적 칩 사용은 효과가 있었지만, 칩을 이식받지 않은 자들과의 새로운 계급 갈등이 발생했습니다.",question:"기술이 만든 분열을 어떻게 해결하시겠습니까?",choices:[{text:"모두에게 칩 이식을 의무화하여 평등을 이룬다.",path:"manager",next:'q6_manager'},{text:"칩 시스템을 폐기하고 이전으로 돌아간다.",path:"thinker",next:'q6_manager'}]},'q6_manager':{type:'question',situation:"칩 의무화는 완벽한 질서를 가져왔지만, 사람들은 감정이 없는 인형처럼 변해갑니다.",question:"잃어버린 인간성을 어떻게 되찾으시겠습니까?",choices:[{text:"정기적으로 칩의 감정 억제 기능을 비활성화한다.",path:"communitarian",next:'q7_manager'},{text:"효율성을 위해 현재 상태를 유지한다.",path:"manager",next:'q7_manager'}]},'q7_manager':{type:'question',situation:"감정 비활성화 해제는 예기치 못한 폭동을 일으켰습니다. 사람들은 통제에 대한 분노를 터뜨립니다.",question:"폭동을 어떻게 진정시키시겠습니까?",choices:[{text:"강력한 물리력으로 폭동을 진압한다.",path:"leader",next:'q8_manager'},{text:"칩 시스템의 완전한 폐지를 약속하고 대화한다.",path:"communitarian",next:'q8_manager'}]},'q8_manager':{type:'question',situation:"폭동은 진압되었지만, 캠프는 회복 불가능한 수준으로 분열되었습니다. 외부 세력이 이를 기회로 침략을 준비합니다.",question:"외부의 위협에 어떻게 대응하시겠습니까?",choices:[{text:"분열된 내부를 통합하기 위해 외부의 적을 이용한다.",path:"leader",next:'q9_manager'},{text:"외부 세력과 협상하여 평화를 모색한다.",path:"thinker",next:'q9_manager'}]},'q9_manager':{type:'question',situation:"외부의 적을 이용한 전략은 일시적으로 내부를 통합시켰지만, 전쟁은 막대한 자원을 소모하고 있습니다.",question:"전쟁을 어떻게 끝내시겠습니까?",choices:[{text:"결정적인 전투에서 모든 것을 건다.",path:"leader",next:'q10_manager'},{text:"상대방의 약점을 파고들어 협상을 유리하게 이끈다.",path:"manager",next:'q10_manager'}]},'q10_manager':{type:'question',situation:"전쟁은 승리했지만, 캠프는 폐허가 되었습니다. 사람들은 당신의 리더십에 근본적인 의문을 제기합니다.",question:"재건을 위해 무엇을 하시겠습니까?",choices:[{text:"모든 권한을 내려놓고, 새로운 리더를 선출할 것을 제안한다.",path:"communitarian",next:'q11_manager'},{text:"승리의 명분을 내세워 독재 체제를 구축한다.",path:"leader",next:'q11_manager'}]},'q11_manager':{type:'question',situation:"새로운 리더가 선출되었지만, 당신의 경험과 시스템 없이는 캠프가 제대로 운영되지 않습니다.",question:"어떤 역할을 맡으시겠습니까?",choices:[{text:"새로운 리더의 보이지 않는 조언자 역할을 한다.",path:"thinker",next:'q12_final'},{text:"시스템 관리자의 역할에만 충실한다.",path:"manager",next:'q12_final'}]},'q2_communitarian':{type:'question',situation:"생존자들의 신뢰를 얻었지만, 대응 지연으로 감염자가 늘었습니다. 늘어난 감염자 중 일부가 폭력적으로 변하기 시작했습니다.",question:"공동체의 안전과 감염된 개인의 인권 사이에서 어떤 선택을 할 것인가?",choices:[{text:"감염자들에게 가족과 마지막 작별 인사를 나눌 시간을 주고, 공동체의 합의 하에 격리를 진행한다.",consequence:"당신의 인간적인 조치에 사람들은 감동했지만, 작별 과정에서 추가 감염자가 발생하고 말았다.",path:"communitarian",next:'q3_communitarian_A'},{text:"모든 생존자에게 자원을 동일하게 분배하여, 감염자를 포함한 가장 취약한 사람도 소외되지 않도록 한다.",consequence:"고결한 선택으로 공동체의 유대는 강해졌지만, 자원 고갈 시점이 일주일 앞당겨졌습니다.",path:"communitarian",next:'q3_communitarian_B'}]},'q3_communitarian_A':{type:'question',situation:"이제 사람들은 '당신의 따뜻함이 우리를 위험에 빠뜨렸다'고 비난하기 시작합니다.",question:"당신의 신념이 공동체를 위협한다는 비판 앞에서 어떻게 행동할 것인가?",choices:[{text:"비판을 수용하고, 더 엄격하고 체계적인 '관리자'의 방식을 도입한다.",path:"manager",next:'q4_communitarian'},{text:"그럼에도 불구하고, 다시 한번 생존자들을 설득하여 신뢰와 연대의 힘으로 위기를 극복하자고 호소한다.",path:"communitarian",next:'q4_communitarian'}]},'q3_communitarian_B':{type:'question',situation:"자원 고갈이 임박하자, 사람들은 당신의 이상주의를 비판하며 현실적인 대책을 요구합니다.",question:"이상과 현실의 괴리를 어떻게 해결하시겠습니까?",choices:[{text:"모두의 동의를 얻어 고통스러운 자원 배급제를 시작한다.",path:"manager",next:'q4_communitarian'},{text:"외부 탐사를 조직하여 새로운 희망을 찾는다.",path:"leader",next:'q4_communitarian'}]},'q4_communitarian':{type:'question',situation:"당신의 호소는 공동체를 다시 뭉치게 했지만, 자원 부족으로 인해 생존자들의 생존율이 낮아지고 있다. 일부는 연대를 포기하고 독립적으로 행동하려 한다.",question:"연대를 유지하면서 자원 문제를 어떻게 해결할 것인가?",choices:[{text:"자원을 공유하는 새로운 공동체 규칙을 제안한다.",path:"communitarian",next:'q5_communitarian'},{text:"외부 캠프와 협력하여 자원을 확보한다.",path:"communitarian",next:'q5_communitarian'}]},'q5_communitarian':{type:'question',situation:"공유 규칙은 공동체를 유지했지만, 일부 생존자들이 더 많은 자원을 요구하며 분열을 조장한다. 바이러스의 변종이 등장하며 위협이 커진다.",question:"분열을 막고 연대를 유지할 것인가, 반대자들을 배제할 것인가?",choices:[{text:"반대자들을 설득하여 공동체에 재통합한다.",path:"communitarian",next:'q6_communitarian'},{text:"반대자들을 추방하고 소규모 공동체를 유지한다.",path:"leader",next:'q6_communitarian'}]},'q6_communitarian':{type:'question',situation:"통합은 성공했지만, 변종 바이러스에 대한 대응이 지연되며 사망자가 증가한다. 생존자들은 당신의 이상주의를 비판한다.",question:"이상을 유지하며 대응 속도를 높일 방법은 무엇인가?",choices:[{text:"공동체의 의견을 반영한 빠른 대응 시스템을 도입한다.",path:"communitarian",next:'q7_communitarian'},{text:"전문가 소그룹을 조직하여 신속한 대응을 주도한다.",path:"manager",next:'q7_communitarian'}]},'q7_communitarian':{type:'question',situation:"민주적 시스템은 대응 속도를 높였지만, 자원 분배를 둘러싼 갈등이 다시 불거진다. 일부는 연대를 포기하려 한다.",question:"갈등을 해결하고 연대를 유지할 방법은 무엇인가?",choices:[{text:"자원 분배를 투명하게 공개하며 신뢰를 회복한다.",path:"communitarian",next:'q8_communitarian'},{text:"갈등을 중재하기 위해 중립적인 리더를 선출한다.",path:"manager",next:'q8_communitarian'}]},'q8_communitarian':{type:'question',situation:"투명성은 신뢰를 회복했지만, 자원 부족으로 인해 공동체 전체가 위험에 처한다. 외부 지원이 절실하다.",question:"자율성을 유지하며 외부 지원을 받을 것인가, 독립적으로 버틸 것인가?",choices:[{text:"외부 캠프와 협력하여 지원을 받는다.",path:"communitarian",next:'q9_communitarian'},{text:"자급자족을 시도하며 연대를 강화한다.",path:"thinker",next:'q9_communitarian'}]},'q9_communitarian':{type:'question',situation:"외부 캠프와의 협력은 자원을 확보했지만, 그들의 문화와 규칙이 공동체의 연대를 위협한다.",question:"연대를 지키며 외부와 공존할 방법은 무엇인가?",choices:[{text:"두 공동체의 가치를 융합하는 새로운 규칙을 만든다.",path:"communitarian",next:'q10_communitarian'},{text:"외부 캠프와 거리를 두고 내부 연대를 강화한다.",path:"thinker",next:'q10_communitarian'}]},'q10_communitarian':{type:'question',situation:"융합된 규칙은 안정성을 가져왔지만, 새로운 변종 바이러스가 등장하며 공동체가 다시 위협받는다.",question:"융합된 공동체를 유지하며 변종에 대응할 것인가, 더 강력한 통제를 도입할 것인가?",choices:[{text:"공동체의 협력을 통해 변종 대응을 시도한다.",path:"communitarian",next:'q11_communitarian'},{text:"통제를 강화하여 빠른 대응을 우선한다.",path:"manager",next:'q11_communitarian'}]},'q11_communitarian':{type:'question',situation:"협력은 변종을 억제했지만, 자원 부족으로 인해 일부 생존자들을 희생해야 할 가능성이 생겼다.",question:"소수를 희생할 것인가, 모두를 구하려 할 것인가?",choices:[{text:"소수를 희생하여 공동체를 유지한다.",path:"communitarian",next:'q12_final'},{text:"모두를 구하기 위해 새로운 자원을 모색한다.",path:"leader",next:'q12_final'}]},'q2_thinker':{type:'question',situation:"귀중한 초기 데이터를 얻었지만, 신속한 조치를 원하는 생존자들로부터 '무능한 리더'라는 비판을 받습니다. AI '큐브'가 데이터 분석 가속화를 제안합니다.",question:"결과를 위해 원칙을 굽힐 것인가?",choices:[{text:"동의 없는 데이터 수집을 거부하고, 윤리적 절차를 고수하며 더 느린 길을 간다.",consequence:"윤리적 절차를 지킨 덕분에 캠프의 도덕적 기반은 굳건하지만, 데이터 부족으로 치료제 개발이 정체되었습니다.",path:"thinker",next:'q3_thinker_A'},{text:"큐브 사용을 제한하고, 당신이 기록한 질적 데이터와 결합하여 인간의 판단을 우선하는 방식으로 분석을 진행한다.",consequence:"인간 중심적 접근은 존중받았지만, AI를 활용한 다른 캠프가 치료제 개발에 앞서간다는 소식이 들려옵니다.",path:"thinker",next:'q3_thinker_B'}]},'q3_thinker_A':{type:'question',situation:"당신이 윤리를 지키는 동안, 다른 캠프가 초기 치료제를 개발했다는 소식이 들려옵니다. 사람들은 '당신의 고집 때문에 우리가 죽어간다'며 동요합니다.",question:"신념이 생존을 가로막는 장애물이 되었을 때, 어떻게 할 것인가?",choices:[{text:"다른 캠프에 도움을 요청하여 치료제를 얻어오고, 당신의 방식이 틀렸음을 인정한다.",path:"manager",next:'q4_thinker'},{text:"외부의 결과에 흔들리지 않고, 우리만의 방식으로 인간성을 지키는 것이 더 위대한 생존임을 역설한다.",path:"thinker",next:'q4_thinker'}]},'q3_thinker_B':{type:'question',situation:"다른 캠프가 치료제 개발에 앞서간다는 소식에, 생존자들은 당신의 신중한 접근 방식을 비판합니다.",question:"원칙과 결과 사이에서 어떤 길을 가시겠습니까?",choices:[{text:"우리의 방식을 고수하며 인간성의 가치를 증명한다.",path:"thinker",next:'q4_thinker'},{text:"뒤쳐지지 않기 위해 AI 활용을 전면 재검토한다.",path:"manager",next:'q4_thinker'}]},'q4_thinker':{type:'question',situation:"당신의 신념은 일부 생존자들에게 영감을 주었지만, 자원 부족으로 인해 캠프는 점점 더 어려워지고 있다. 일부는 당신의 이상을 포기하라고 요구한다.",question:"신념을 유지하면서 자원을 어떻게 확보할 것인가?",choices:[{text:"자원을 얻기 위해 외부와 협상하며 원칙을 일부 조정한다.",path:"manager",next:'q5_thinker'},{text:"자급자족을 시도하며 원칙을 철저히 지킨다.",path:"thinker",next:'q5_thinker'}]},'q5_thinker':{type:'question',situation:"자급자족은 캠프를 유지했지만, 극심한 고난으로 인해 생존자들의 사기가 급격히 떨어진다. 새로운 변종 바이러스가 등장하며 위협이 커진다.",question:"사기를 회복하고 변종에 대응할 방법은 무엇인가?",choices:[{text:"생존자들에게 인간성의 가치를 다시 설파하며 사기를 북돋는다.",path:"thinker",next:'q6_thinker'},{text:"외부 전문가를 초빙하여 변종 대응을 돕는다.",path:"communitarian",next:'q6_thinker'}]},'q6_thinker':{type:'question',situation:"당신의 연설은 사기를 회복했지만, 변종 바이러스의 확산은 멈추지 않는다. 생존자들은 다시 당신의 이상주의를 비판한다.",question:"신념을 유지하면서 실질적인 결과를 어떻게 만들 것인가?",choices:[{text:"생존자들의 의견을 반영하여 실용적인 대응책을 마련한다.",path:"thinker",next:'q7_thinker'},{text:"신념을 고수하며 독자적인 연구를 계속한다.",path:"leader",next:'q7_thinker'}]},'q7_thinker':{type:'question',situation:"실용적 대응책은 변종을 억제했지만, 자원 부족으로 인해 일부 생존자들을 희생해야 할 가능성이 생겼다.",question:"소수를 희생하여 다수를 살릴 것인가, 모두를 구하려 할 것인가?",choices:[{text:"소수를 희생하여 캠프를 유지한다.",path:"thinker",next:'q8_thinker'},{text:"모두를 구하기 위해 자원을 재분배한다.",path:"manager",next:'q8_thinker'}]},'q8_thinker':{type:'question',situation:"소수의 희생으로 캠프는 살아남았지만, 생존자들은 당신의 결정을 비판하며 인간성을 잃었다고 느낀다.",question:"인간성을 회복하며 신뢰를 어떻게 재건할 것인가?",choices:[{text:"생존자들에게 희생의 필요성을 설명하며 신뢰를 회복한다.",path:"thinker",next:'q9_thinker'},{text:"새로운 윤리적 규칙을 도입하여 인간성을 강조한다.",path:"communitarian",next:'q9_thinker'}]},'q9_thinker':{type:'question',situation:"설명은 신뢰를 회복했지만, 새로운 변종이 등장하며 캠프는 다시 위협받는다. 생존자들은 당신의 신념에 회의적이다.",question:"신념을 유지하며 변종에 대응할 방법은 무엇인가?",choices:[{text:"공동체의 협력을 통해 변종 대응을 시도한다.",path:"thinker",next:'q10_thinker'},{text:"외부의 기술을 도입하여 빠른 대응을 우선한다.",path:"leader",next:'q10_thinker'}]},'q10_thinker':{type:'question',situation:"협력은 변종을 억제했지만, 자원 부족으로 인해 일부 생존자들을 희생해야 할 가능성이 생겼다.",question:"소수를 희생할 것인가, 모두를 구하려 할 것인가?",choices:[{text:"소수를 희생하여 캠프를 유지한다.",path:"thinker",next:'q11_thinker'},{text:"모두를 구하기 위해 새로운 자원을 모색한다.",path:"manager",next:'q11_thinker'}]},'q11_thinker':{type:'question',situation:"소수의 희생으로 캠프는 살아남았지만, 생존자들은 당신의 신념이 현실과 동떨어졌다고 비판한다.",question:"신념을 지키며 신뢰를 회복할 방법은 무엇인가?",choices:[{text:"생존자들에게 인간성의 가치를 다시 설파한다.",path:"thinker",next:'q12_final'},{text:"신념을 수정하며 실용적인 리더십을 도입한다.",path:"communitarian",next:'q12_final'}]},
             'q12_final': { type: 'result' }
         };
-        
-        const resultTypes = {
-            'leader': { 
-                name: '결단적 개척가 (Decisive Pioneer)', 
-                color: 'var(--leader-color)', 
-                description: "당신은 위기 속에서 가장 빠르고 효율적인 길을 찾아내는 데 주저함이 없습니다. 때로는 위험을 감수하고 소수의 의견을 뒤로하더라도, 명확한 목표를 향해 공동체를 이끄는 강력한 리더십을 발휘합니다." 
-            },
-            'manager': { 
-                name: '체계적 안정가 (Systemic Stabilizer)', 
-                color: 'var(--manager-color)', 
-                description: "당신은 혼돈 속에서 질서와 예측 가능성을 구축하여 시스템의 붕괴를 막습니다. 데이터에 기반한 신중한 판단으로 리스크를 최소화하며, 장기적인 안정성을 확보하는 데 가장 큰 가치를 둡니다." 
-            },
-            'communitarian': { 
-                name: '포용적 통합가 (Inclusive Unifier)', 
-                color: 'var(--communitarian-color)', 
-                description: "당신은 개개인의 신뢰와 유대를 공동체의 가장 큰 자산으로 여깁니다. 모든 구성원의 목소리에 귀 기울이고, 합의를 통해 위기를 극복하려는 따뜻하고 포용적인 리더십을 보여줍니다." 
-            },
-            'thinker': { 
-                name: '원칙적 탐구가 (Principled Inquirer)', 
-                color: 'var(--thinker-color)', 
-                description: "당신은 눈앞의 이익보다 행동의 근간이 되는 원칙과 의미를 깊이 고찰합니다. 모든 결정에 앞서 '왜'라는 질문을 던지며, 공동체가 올바른 길을 잃지 않도록 지키는 도덕적 나침반의 역할을 수행합니다." 
-            },
-            'balanced': { 
-                name: '적응형 중재자 (Adaptive Mediator)', 
-                color: 'var(--accent-primary)', 
-                description: "당신은 특정 유형에 얽매이지 않고, 상황의 본질을 파악하여 가장 적절한 접근법을 유연하게 선택하는 능력을 지녔습니다. 분석과 공감, 결단과 신중함 사이에서 최적의 균형점을 찾아내어, 가장 현실적이고 지속 가능한 해결책을 제시합니다." 
-            }
-        };
+        const resultTypes = { 'leader': { name: '결단적 개척가 (Decisive Pioneer)', color: 'var(--leader-color)', description: "당신은 위기 속에서 가장 빠르고 효율적인 길을 찾아내는 데 주저함이 없습니다. 때로는 위험을 감수하고 소수의 의견을 뒤로하더라도, 명확한 목표를 향해 공동체를 이끄는 강력한 리더십을 발휘합니다." }, 'manager': { name: '체계적 안정가 (Systemic Stabilizer)', color: 'var(--manager-color)', description: "당신은 혼돈 속에서 질서와 예측 가능성을 구축하여 시스템의 붕괴를 막습니다. 데이터에 기반한 신중한 판단으로 리스크를 최소화하며, 장기적인 안정성을 확보하는 데 가장 큰 가치를 둡니다." }, 'communitarian': { name: '포용적 통합가 (Inclusive Unifier)', color: 'var(--communitarian-color)', description: "당신은 개개인의 신뢰와 유대를 공동체의 가장 큰 자산으로 여깁니다. 모든 구성원의 목소리에 귀 기울이고, 합의를 통해 위기를 극복하려는 따뜻하고 포용적인 리더십을 보여줍니다." }, 'thinker': { name: '원칙적 탐구가 (Principled Inquirer)', color: 'var(--thinker-color)', description: "당신은 눈앞의 이익보다 행동의 근간이 되는 원칙과 의미를 깊이 고찰합니다. 모든 결정에 앞서 '왜'라는 질문을 던지며, 공동체가 올바른 길을 잃지 않도록 지키는 도덕적 나침반의 역할을 수행합니다." }, 'balanced': { name: '적응형 중재자 (Adaptive Mediator)', color: 'var(--accent-primary)', description: "당신은 특정 유형에 얽매이지 않고, 상황의 본질을 파악하여 가장 적절한 접근법을 유연하게 선택하는 능력을 지녔습니다. 분석과 공감, 결단과 신중함 사이에서 최적의 균형점을 찾아내어, 가장 현실적이고 지속 가능한 해결책을 제시합니다." } };
+        let currentNodeId = 'start', userPath = [], choiceStartTime = 0, finalScores = { leader: 0, manager: 0, communitarian: 0, thinker: 0 };
+        const startScreen = document.getElementById('start-screen'), questionScreen = document.getElementById('question-screen'), resultScreen = document.getElementById('result-screen'), flowchartScreen = document.getElementById('flowchart-screen'), situationArea = document.getElementById('situation-area'), questionText = document.getElementById('question-text'), choicesArea = document.getElementById('choices-area'), progressBar = document.getElementById('progress-bar'), flowchartContainer = document.getElementById('flowchart-container'), copyNotification = document.getElementById('copy-notification'), flowchartInstructions = document.getElementById('flowchart-instructions');
+        let decisionCards = [], currentCardIndex = 0;
 
-        let currentNodeId = 'start';
-        let userPath = [];
-        let choiceStartTime = 0;
-        let finalScores = { leader: 0, manager: 0, communitarian: 0, thinker: 0 };
-
-        const startScreen = document.getElementById('start-screen');
-        const questionScreen = document.getElementById('question-screen');
-        const resultScreen = document.getElementById('result-screen');
-        const flowchartScreen = document.getElementById('flowchart-screen');
-        
-        const situationArea = document.getElementById('situation-area');
-        const questionText = document.getElementById('question-text');
-        const choicesArea = document.getElementById('choices-area');
-        const progressBar = document.getElementById('progress-bar');
-        const svg = document.getElementById('flowchart-svg');
-
-        function switchScreen(activeScreen) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            activeScreen.classList.add('active');
-        }
-
-        function startTest() {
-            currentNodeId = 'start';
-            userPath = [];
-            finalScores = { leader: 0, manager: 0, communitarian: 0, thinker: 0 };
-            switchScreen(questionScreen);
-            renderQuestion();
-        }
-        
-        function restartTest() {
-            switchScreen(startScreen);
-        }
-
-        function renderQuestion() {
-            const node = storyGraph[currentNodeId];
-            let situationHTML = `<p class="situation-text">${node.situation}</p>`;
-            if (userPath.length > 0) {
-                 const lastChoice = userPath[userPath.length - 1];
-                 if (lastChoice.consequence) {
-                     situationHTML = `<p class="situation-text"><strong>이전 선택의 결과:</strong> ${lastChoice.consequence}<br><br>${node.situation}</p>`;
-                 }
-            }
-            situationArea.innerHTML = situationHTML;
-            questionText.textContent = node.question;
-            
-            choicesArea.innerHTML = '';
-            node.choices.forEach(choice => {
-                const button = document.createElement('button');
-                button.className = 'choice-button';
-                button.innerHTML = choice.text;
-                button.onclick = () => selectAnswer(currentNodeId, choice);
-                choicesArea.appendChild(button);
-            });
-            
-            progressBar.style.width = `${(userPath.length / 11) * 100}%`; 
-            choiceStartTime = performance.now();
-        }
-
-        async function selectAnswer(nodeId, choice) {
-            const choiceEndTime = performance.now();
-            const timeSpent = Math.round(choiceEndTime - choiceStartTime);
-
-            finalScores[choice.path]++;
-            userPath.push({ 
-                from: nodeId, 
-                to: choice.next, 
-                path: choice.path, 
-                consequence: choice.consequence, 
-                text: choice.text 
-            });
-            
-            await recordChoice({ 
-                questionId: nodeId, 
-                choice: choice.path,
-                next_node: choice.next,
-                time_ms: timeSpent 
-            });
-            
-            currentNodeId = choice.next;
-            const nextNode = storyGraph[currentNodeId];
-
-            if (nextNode.type === 'result') {
-                showResult();
-            } else {
-                renderQuestion();
-            }
-        }
-
-        function showResult() {
-            let maxScore = -1;
-            let resultPath = '';
-            let tie = false;
-            let tieCount = 0;
-            
-            for (const path in finalScores) {
-                if (finalScores[path] > maxScore) {
-                    maxScore = finalScores[path];
-                    resultPath = path;
-                    tie = false;
-                    tieCount = 1;
-                } else if (finalScores[path] === maxScore) {
-                    tieCount++;
-                    if (tieCount > 1) {
-                        tie = true;
-                    }
-                }
-            }
-            
-            let resultKey = tie ? 'balanced' : resultPath;
-            const resultData = resultTypes[resultKey];
-            
-            document.getElementById('result-type').textContent = resultData.name;
-            document.getElementById('result-type').style.color = resultData.color;
-            document.getElementById('result-description').textContent = resultData.description;
-            switchScreen(resultScreen);
-        }
-
-        function showFlowchart() {
-            switchScreen(flowchartScreen);
-            renderFlowchart();
-        }
-
-        function renderFlowchart() {
-            svg.innerHTML = '';
-            const nodeWidth = 200, nodeHeight = 90, horizontalGap = 250, verticalGap = 40;
-            const nodePositions = {};
-            
-            let x = 50;
-            userPath.forEach((step, i) => {
-                const nodeId = step.from;
-                if (!nodePositions[nodeId]) {
-                    nodePositions[nodeId] = { x: x, y: 400, step: step };
-                    x += horizontalGap;
-                }
-            });
-            const lastStep = userPath[userPath.length - 1];
-            nodePositions[lastStep.to] = { x: x, y: 400, step: {text: "최종 결과"} };
-
-            // Draw links
-            userPath.forEach(step => {
-                const sourcePos = nodePositions[step.from];
-                const targetPos = nodePositions[step.to];
-                if (!sourcePos || !targetPos) return;
-
-                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                path.setAttribute('d', `M${sourcePos.x + nodeWidth},${sourcePos.y + nodeHeight/2} L${targetPos.x},${targetPos.y + nodeHeight/2}`);
-                path.setAttribute('class', `link ${step.path}`);
-                path.id = `link-${step.from}-${step.to}`;
-                svg.appendChild(path);
-            });
-
-            // Draw nodes
-            Object.keys(nodePositions).forEach((nodeId, index) => {
-                const pos = nodePositions[nodeId];
-                const step = userPath.find(p => p.from === nodeId) || { text: "최종 결과" };
-
-                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-                g.setAttribute('class', 'node');
-                g.id = `node-${nodeId}`;
-                
-                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                rect.setAttribute('x', pos.x);
-                rect.setAttribute('y', pos.y);
-                rect.setAttribute('width', nodeWidth);
-                rect.setAttribute('height', nodeHeight);
-                rect.setAttribute('rx', 8);
-                
-                const title = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                title.setAttribute('x', pos.x + nodeWidth / 2);
-                title.setAttribute('y', pos.y + 25);
-                title.setAttribute('text-anchor', 'middle');
-                title.textContent = `단계 ${index + 1}`;
-                title.setAttribute('class', 'title');
-
-                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                text.setAttribute('x', pos.x + nodeWidth / 2);
-                text.setAttribute('y', pos.y + 50);
-                text.setAttribute('text-anchor', 'middle');
-                
-                const choiceText = step.text || "최종 결과";
-                const maxLen = 20;
-                // Wrap text
-                const words = choiceText.split(' ');
-                let line = '';
-                let tspanY = 50;
-                for(let n = 0; n < words.length; n++) {
-                    const testLine = line + words[n] + ' ';
-                    if (testLine.length > maxLen && n > 0) {
-                        const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-                        tspan.setAttribute('x', pos.x + nodeWidth / 2);
-                        tspan.setAttribute('dy', '1.2em');
-                        tspan.textContent = line;
-                        text.appendChild(tspan);
-                        line = words[n] + ' ';
-                    } else {
-                        line = testLine;
-                    }
-                }
-                const lastTspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-                lastTspan.setAttribute('x', pos.x + nodeWidth / 2);
-                if(text.childElementCount > 0) lastTspan.setAttribute('dy', '1.2em');
-                lastTspan.textContent = line;
-                text.appendChild(lastTspan);
-
-                g.appendChild(rect);
-                g.appendChild(title);
-                g.appendChild(text);
-                svg.appendChild(g);
-            });
-
-            // Animate user path
-            let delay = 0;
-            userPath.forEach((step, index) => {
-                setTimeout(() => {
-                    document.getElementById(`node-${step.from}`)?.classList.add('active', step.path);
-                    const link = document.getElementById(`link-${step.from}-${step.to}`);
-                    if (link) {
-                        link.classList.add('active', 'animated');
-                    }
-                }, delay);
-                delay += 800;
-                
-                if (index === userPath.length - 1) {
-                    setTimeout(() => {
-                        document.getElementById(`node-${step.to}`)?.classList.add('active', step.path);
-                    }, delay);
-                }
-            });
-        }
-
-        async function recordChoice(choiceData) {
-            console.log('Recording:', choiceData);
-            if (!apiUrl || !apiUrl.startsWith('https')) {
-                console.warn('API URL is not configured. Skipping server record.');
-                return;
-            }
-            try {
-                await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ choice: choiceData })
-                });
-            } catch (error) {
-                console.error('API call failed:', error);
-            }
-        }
+        function switchScreen(activeScreen) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); activeScreen.classList.add('active'); }
+        function startTest() { currentNodeId = 'start'; userPath = []; finalScores = { leader: 0, manager: 0, communitarian: 0, thinker: 0 }; switchScreen(questionScreen); renderQuestion(); }
+        function restartTest() { switchScreen(startScreen); }
+        function renderQuestion() { const node = storyGraph[currentNodeId]; let situationHTML = `<p class="situation-text">${node.situation}</p>`; if (userPath.length > 0) { const lastChoice = userPath[userPath.length - 1]; if (lastChoice.consequence) { situationHTML = `<p class="situation-text"><strong>이전 선택의 결과:</strong> ${lastChoice.consequence}<br><br>${node.situation}</p>`; } } situationArea.innerHTML = situationHTML; questionText.textContent = node.question; choicesArea.innerHTML = ''; node.choices.forEach(choice => { const button = document.createElement('button'); button.className = 'choice-button'; button.innerHTML = choice.text; button.onclick = () => selectAnswer(currentNodeId, choice); choicesArea.appendChild(button); }); progressBar.style.width = `${(userPath.length / 11) * 100}%`; choiceStartTime = performance.now(); }
+        async function selectAnswer(nodeId, choice) { const choiceEndTime = performance.now(); const timeSpent = Math.round(choiceEndTime - choiceStartTime); finalScores[choice.path]++; userPath.push({ from: nodeId, to: choice.next, path: choice.path, consequence: choice.consequence, text: choice.text }); await recordChoice({ questionId: nodeId, choice: choice.path, next_node: choice.next, time_ms: timeSpent }); currentNodeId = choice.next; const nextNode = storyGraph[currentNodeId]; if (nextNode.type === 'result') { showResult(); } else { renderQuestion(); } }
+        function getResultKey() { let maxScore = -1, resultPath = '', tie = false, tieCount = 0; for (const path in finalScores) { if (finalScores[path] > maxScore) { maxScore = finalScores[path]; resultPath = path; tie = false; tieCount = 1; } else if (finalScores[path] === maxScore) { tieCount++; if (tieCount > 1) tie = true; } } return tie ? 'balanced' : resultPath; }
+        function showResult() { const resultKey = getResultKey(); const resultData = resultTypes[resultKey]; document.getElementById('result-type').textContent = resultData.name; document.getElementById('result-type').style.color = resultData.color; document.getElementById('result-description').textContent = resultData.description; switchScreen(resultScreen); }
+        function showFlowchart() { switchScreen(flowchartScreen); renderFlowchart(); flowchartInstructions.classList.add('show'); setTimeout(() => { flowchartInstructions.classList.remove('show'); }, 2500); }
+        function renderFlowchart() { flowchartContainer.innerHTML = ''; decisionCards = []; userPath.forEach((step, index) => { const card = createDecisionCard(step, index); decisionCards.push(card); flowchartContainer.appendChild(card); }); const resultKey = getResultKey(); const resultData = resultTypes[resultKey]; const finalCard = document.createElement('div'); finalCard.className = `decision-card ${resultKey}`; finalCard.innerHTML = `<div class="final-card-content"><div class="final-card-icon">${getIconForType(resultKey)}</div><div class="final-card-text"><h3 class="card-title">최종 결과</h3><p class="card-choice-text">${resultData.name}</p><p class="card-description">${resultData.description}</p></div></div><div class="card-path-label" style="color: ${resultData.color};">분석 완료</div>`; decisionCards.push(finalCard); flowchartContainer.appendChild(finalCard); currentCardIndex = 0; updateCardPositions(); }
+        function createDecisionCard(step, index) { const card = document.createElement('div'); card.className = `decision-card ${step.path}`; const pathData = resultTypes[step.path]; card.innerHTML = `<h3 class="card-title">단계 ${index + 1}</h3><p class="card-choice-text">"${step.text}"</p><p class="card-description">${step.consequence || '이 선택은 다음 상황으로 이어졌습니다.'}</p><div class="card-path-label" style="color: ${pathData.color};">${pathData.name.split(' ')[0]} 경로 선택</div>`; return card; }
+        function updateCardPositions() { decisionCards.forEach((card, index) => { const offset = index - currentCardIndex; let transform = `translate(-50%, -50%) `; let opacity = 0; if (offset === 0) { transform += `translateX(0) translateZ(0) rotateY(0)`; opacity = 1; } else if (offset > 0) { transform += `translateX(${offset * 40}px) translateZ(${offset * -100}px) rotateY(-20deg)`; opacity = 1 - Math.abs(offset) * 0.4; } else { transform += `translateX(${offset * 40}px) translateZ(${offset * -100}px) rotateY(20deg)`; opacity = 1 - Math.abs(offset) * 0.4; } card.style.transform = transform; card.style.opacity = Math.max(0, opacity); card.style.zIndex = decisionCards.length - Math.abs(offset); }); }
+        flowchartContainer.addEventListener('click', (e) => { const containerWidth = flowchartContainer.offsetWidth; const clickX = e.clientX - flowchartContainer.getBoundingClientRect().left; if (clickX > containerWidth / 2) { if (currentCardIndex < decisionCards.length - 1) currentCardIndex++; } else { if (currentCardIndex > 0) currentCardIndex--; } updateCardPositions(); });
+        function showCopyNotification() { copyNotification.classList.add('show'); setTimeout(() => { copyNotification.classList.remove('show'); }, 2000); }
+        function copyToClipboard() { const resultKey = getResultKey(); const resultData = resultTypes[resultKey]; const shareText = `AETOS 프로토콜 인지 공명 테스트 결과, 저는 '${resultData.name}' 유형입니다! 당신의 리더십 프로파일도 확인해보세요.`; const textArea = document.createElement('textarea'); textArea.value = `${shareText}\n\n${window.location.href}`; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); document.body.removeChild(textArea); showCopyNotification(); }
+        function shareToKakao() { const resultKey = getResultKey(); const resultData = resultTypes[resultKey]; Kakao.Share.sendDefault({ objectType: 'feed', content: { title: 'AETOS 프로토콜 테스트 결과', description: `나의 리더십 유형은? [${resultData.name}]`, imageUrl: 'https://raw.githubusercontent.com/boy1arthur/mlfee-project/main/images/aetos_protocol_og.png', link: { mobileWebUrl: window.location.href, webUrl: window.location.href, }, }, buttons: [{ title: '테스트 하러가기', link: { mobileWebUrl: window.location.href, webUrl: window.location.href, }, },], }); }
+        async function downloadResult() { const resultKey = getResultKey(); const cardToCapture = document.querySelector(`.decision-card.${resultKey}`); if (!cardToCapture) return; const canvas = await html2canvas(cardToCapture, { backgroundColor: null }); const imageURL = canvas.toDataURL('image/png'); const link = document.createElement('a'); link.href = imageURL; link.download = 'AETOS_Protocol_Result.png'; document.body.appendChild(link); link.click(); document.body.removeChild(link); }
+        function getIconForType(type) { const colors = { leader: 'var(--leader-color)', manager: 'var(--manager-color)', communitarian: 'var(--communitarian-color)', thinker: 'var(--thinker-color)', balanced: 'var(--accent-primary)' }; const color = colors[type] || 'var(--text-secondary)'; const icons = { leader: `<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />`, manager: `<path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />`, communitarian: `<path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.75-5.416c0-2.662-2.1-4.823-4.75-4.823a4.752 4.752 0 0 0-4.03 2.224l-1.12-1.12a4.752 4.752 0 0 0-7.56 0M18 18.72v-5.417c0-2.662-2.1-4.823-4.75-4.823a4.752 4.752 0 0 0-4.03 2.224l-1.12-1.12a4.752 4.752 0 0 0-7.56 0" />`, thinker: `<path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.311a15.045 15.045 0 0 1-6 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />`, balanced: `<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />` }; return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="${color}" style="width: 64px; height: 64px;"><g>${icons[type]}</g></svg>`; }
+        async function recordChoice(choiceData) { console.log('Recording:', choiceData); if (!apiUrl || !apiUrl.startsWith('https')) { console.warn('API URL is not configured. Skipping server record.'); return; } try { await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ choice: choiceData }) }); } catch (error) { console.error('API call failed:', error); } }
     </script>
 </body>
 </html>
