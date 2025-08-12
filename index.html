@@ -1,376 +1,150 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLFEE TIMES | AI로 일상과 게임의 생산성을 바꾸다</title>
-    <meta name="description" content="비개발자가 AI를 활용해 메이플랜드 필수 유틸리티를 개발하고, 그 여정을 공유합니다. 당신의 생산성을 높여줄 AI 꿀팁과 개발 실록을 만나보세요.">
-    <meta name="keywords" content="AI, 비개발자, 개발 실록, 생산성, 메이플랜드, 유틸리티, 수수료 계산기, 리저렉션 타이머, 혼테일렛저, 혼테일 브레이커, MLFEE, Gemini, ChatGPT, 프로젝트 야누스, 인지 테스트">
-    
-    <meta property="og:title" content="MLFEE TIMES | AI로 당신의 문제를 해결합니다">
-    <meta property="og:description" content="코딩을 몰라도 괜찮아요. 비개발자가 AI로 메이플랜드 필수 도구를 만들고, 그 모든 과정을 공유합니다. 당신의 생산성을 높여줄 영감을 얻어가세요.">
-    <meta property="og:image" content="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png">
-    <meta property="og:image:width" content="1200"> 
-    <meta property="og:image:height" content="630">
-    <meta property="og:url" content="https://mlfee.com">
-    <meta property="og:type" content="website">
-
-    <link rel="icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615" crossorigin="anonymous"></script>
-     
-    <style>
-        html { scroll-behavior: smooth; }
-        body { 
-            font-family: 'Inter', 'Noto Sans KR', sans-serif; 
-            background-color: #f0f0f0; 
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEUAAADd3d3+xSTlAAAAAXRSTlMAQObYZgAAABVJREFUeJxjYMAEjGQEGIwYkAAEAAA2AAGs9a2hAAAAAElFTkSuQmCC');
-            color: #1f2937;
-        }
-        .font-serif { font-family: 'Playfair Display', serif; }
-        
-        .header-shadow {
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .ad-slot {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #e5e7eb;
-            border: 1px dashed #d1d5db;
-            color: #9ca3af;
-            font-size: 0.875rem;
-            min-height: 90px;
-        }
-
-        .typing-cursor {
-            display: inline-block;
-            width: 3px;
-            height: 1em;
-            background-color: #333;
-            animation: blink 0.8s infinite;
-            margin-left: 5px;
-            transform: translateY(4px);
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        /* Dropdown Styles - CSS for hover */
-        .dropdown-container:hover .dropdown-menu {
-            display: block;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MLFEE TIMES | AI와 게임의 생산성 혁신</title>
+  <meta name="description" content="비개발자가 AI를 활용해 메이플랜드 필수 유틸리티를 개발하고, 그 과정을 공유합니다.">
+  <meta name="keywords" content="AI, 메이플랜드, 게임 유틸리티, 개발기, 생산성, 혼테일, 수수료계산기, 리저 타이머">
+  <meta property="og:title" content="MLFEE TIMES | AI와 게임의 생산성 혁신">
+  <meta property="og:description" content="코딩을 몰라도 괜찮아요. AI로 제작한 필수 게임 도구와 개발 실록을 만나보세요.">
+  <meta property="og:image" content="images/mlfee-logo.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://mlfee.com">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="images/mlfee-logo.png" type="image/png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    body{font-family:'Inter','Noto Sans KR',sans-serif;background:#f9fafb}
+    .typing-cursor{display:inline-block;width:3px;height:1em;background:#fff;animation:blink 0.8s infinite;vertical-align:bottom;margin-left:2px;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  </style>
 </head>
 <body class="antialiased">
-    
-    <header class="bg-white/95 backdrop-blur-sm sticky top-0 z-50 header-shadow">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center gap-4">
-                    <button id="mobile-menu-btn" class="lg:hidden text-xl"><i class="fas fa-bars"></i></button>
-                </div>
-                <a href="/index.html" class="text-3xl md:text-4xl font-serif font-bold text-black absolute left-1/2 -translate-x-1/2">MLFEE TIMES</a>
-                <div></div>
-            </div>
-            <nav id="main-nav" class="hidden lg:flex justify-center items-center gap-8 py-3 border-t border-gray-200">
-                <a href="/devlog/index.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">개발실록</a>
-                <!-- [Added] Janus Project Links -->
-                <a href="/janus/roadmap.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">야누스 로드맵</a>
-                <a href="/janus/test.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">인지 테스트</a>
-                <div class="relative dropdown-container py-2">
-                    <button class="text-gray-700 hover:text-black font-medium transition-colors text-sm flex items-center gap-1">
-                        메이플랜드 도구 <i class="fas fa-chevron-down text-xs"></i>
-                    </button>
-                    <div class="dropdown-menu hidden absolute top-full left-1/2 -translate-x-1/2 pt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1">
-                        <a href="/breaker/index.html" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">혼테일 브레이커</a>
-                        <a href="/ledger/index.html" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">혼테일렛저</a>
-                        <a href="/calc/index.html" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">N빵마스터 (수수료 계산기)</a>
-                        <a href="/timer/index.html" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">레이드 크로니클 (리저 타이머)</a>
-                        <a href="/buff/index.html" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">메피 버피 (실시간 버프 관리)</a>
-                    </div>
-                </div>
-                <a href="/about.html" class="text-gray-700 hover:text-black font-medium transition-colors text-sm">사이트 소개</a>
-            </nav>
+
+<!-- HEADER -->
+<header class="bg-white/90 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-200">
+  <div class="container mx-auto px-4 flex justify-between items-center h-16">
+    <button id="mobile-menu-btn" class="lg:hidden text-2xl"><i class="fas fa-bars"></i></button>
+    <a href="/index.html" class="font-serif text-2xl font-bold">MLFEE TIMES</a>
+    <nav class="hidden lg:flex gap-6 font-medium text-gray-700">
+      <a href="/devlog/index.html" class="hover:text-black">개발실록</a>
+      <a href="/janus/roadmap.html" class="hover:text-black">야누스 로드맵</a>
+      <a href="/janus/test.html" class="hover:text-black">인지 테스트</a>
+      <div class="relative group">
+        <span class="cursor-pointer hover:text-black">메이플랜드 도구 <i class="fa fa-chevron-down text-xs"></i></span>
+        <div class="hidden group-hover:block absolute bg-white shadow-lg border rounded mt-2 w-48 z-50">
+          <a href="/breaker/index.html" target="_blank" class="block px-4 py-2 hover:bg-gray-50 text-sm">혼테일 브레이커</a>
+          <a href="/ledger/index.html" target="_blank" class="block px-4 py-2 hover:bg-gray-50 text-sm">혼테일렛저</a>
+          <a href="/calc/index.html" target="_blank" class="block px-4 py-2 hover:bg-gray-50 text-sm">N빵마스터</a>
+          <a href="/timer/index.html" target="_blank" class="block px-4 py-2 hover:bg-gray-50 text-sm">리저 타이머</a>
+          <a href="/buff/index.html" target="_blank" class="block px-4 py-2 hover:bg-gray-50 text-sm">메피 버피</a>
         </div>
-        <div id="mobile-nav-container" class="hidden lg:hidden bg-white border-t border-gray-200">
-            <a href="/devlog/index.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">개발실록</a>
-            <!-- [Added] Mobile Janus Project Links -->
-            <a href="/janus/roadmap.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">야누스 로드맵</a>
-            <a href="/janus/test.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">인지 테스트</a>
-            <div>
-                <button id="mobile-tools-btn" class="w-full text-left flex justify-between items-center py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">
-                    <span>메이플랜드 도구</span>
-                    <i class="fas fa-chevron-down text-xs"></i>
-                </button>
-                <div id="mobile-tools-submenu" class="hidden pl-8">
-                    <a href="/breaker/index.html" target="_blank" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 text-sm">혼테일 브레이커</a>
-                    <a href="/ledger/index.html" target="_blank" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 text-sm">혼테일렛저</a>
-                    <a href="/calc/index.html" target="_blank" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 text-sm">N빵마스터 (수수료 계산기)</a>
-                    <a href="/timer/index.html" target="_blank" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 text-sm">레이드 크로니클 (리저 타이머)</a>
-                    <a href="/buff/index.html" target="_blank" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 text-sm">메피 버피 (실시간 버프 관리)</a>
-                </div>
-            </div>
-            <a href="/about.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">사이트 소개</a>
-        </div>
-    </header>
-    
-    <div id="page-content">
-        <div class="container mx-auto px-4 pt-6">
-            <div class="ad-slot h-[100px] w-full max-w-[728px] mx-auto">(광고 슬롯 728x90)</div>
-        </div>
-        <main class="container mx-auto px-4 py-8">
-            <section id="hero-section" class="mb-12 border-b border-gray-300 pb-12">
-                <div class="grid lg:grid-cols-2 gap-8 items-center">
-                    <div class="lg:order-2">
-                        <a href="/posts/devlog-01.html" class="block group">
-                            <img src="images/hy.png" alt="수수료 계산기 개발기" class="w-full h-auto object-cover rounded-lg shadow-sm border border-gray-200 aspect-square" onerror="this.onerror=null;this.src='https://placehold.co/600x600/e2e8f0/4a5568?text=Image';">
-                        </a>
-                    </div>
-                    <div class="lg:order-1">
-                        <p class="text-sm text-blue-600 font-semibold">개발실록</p>
-                        <a href="/posts/devlog-01.html" class="block group">
-                            <h1 id="hero-title" class="font-serif text-4xl md:text-5xl font-bold text-black leading-tight mt-2 min-h-[1.2em]"></h1>
-                        </a>
-                        <p class="text-gray-600 mt-4">단순한 게임 속 불편함에서 시작된 작은 질문. AI라는 강력한 도구를 통해 내 손으로 직접 문제를 해결하며 느낀 성취감은, 득템의 기쁨과는 비교할 수 없는 것이었습니다.</p>
-                    </div>
-                </div>
-            </section>
+      </div>
+      <a href="/about.html" class="hover:text-black">사이트 소개</a>
+    </nav>
+  </div>
+  <div id="mobile-nav" class="lg:hidden hidden border-t border-gray-200 bg-white">
+    <a href="/devlog/index.html" class="block px-4 py-3 hover:bg-gray-50">개발실록</a>
+    <a href="/janus/roadmap.html" class="block px-4 py-3 hover:bg-gray-50">야누스 로드맵</a>
+    <a href="/janus/test.html" class="block px-4 py-3 hover:bg-gray-50">인지 테스트</a>
+    <a href="/breaker/index.html" target="_blank" class="block px-4 py-3 hover:bg-gray-50">혼테일 브레이커</a>
+    <a href="/ledger/index.html" target="_blank" class="block px-4 py-3 hover:bg-gray-50">혼테일렛저</a>
+    <a href="/calc/index.html" target="_blank" class="block px-4 py-3 hover:bg-gray-50">N빵마스터</a>
+    <a href="/timer/index.html" target="_blank" class="block px-4 py-3 hover:bg-gray-50">리저 타이머</a>
+    <a href="/buff/index.html" target="_blank" class="block px-4 py-3 hover:bg-gray-50">메피 버피</a>
+    <a href="/about.html" class="block px-4 py-3 hover:bg-gray-50">사이트 소개</a>
+  </div>
+</header>
 
-            <div class="grid lg:grid-cols-3 gap-8 lg:gap-12">
-                <div class="lg:col-span-2 space-y-10">
-                    <h2 class="text-2xl font-bold text-black border-b-2 border-black pb-2">최신 소식</h2>
-                    <div id="article-list" class="space-y-10">
-                        
-                        <!-- [Added] Janus Cognitive Test Article -->
-                        <article class="grid md:grid-cols-3 gap-6 border-b border-gray-200 pb-10">
-                            <div class="md:col-span-2">
-                                <a href="/janus/" class="text-sm text-indigo-600 font-semibold mb-1 hover:underline">프로젝트 야누스</a>
-                                <a href="/janus/test.html">
-                                    <h3 class="font-serif text-2xl font-bold hover:text-gray-700 transition-colors mt-1">야누스 인지 테스트: 당신의 성향은?</h3>
-                                </a>
-                                <p class="text-gray-600 text-base mt-2">간단한 테스트를 통해 '프로젝트 야누스' 세계관 속 당신의 리더십 유형과 성향을 알아보세요. 당신은 결단적 개척가일까요, 혹은 신중한 전략가일까요?</p>
-                                <p class="text-xs text-gray-500 mt-3">By 소년아서 | 2025년 8월 5일</p>
-                            </div>
-                            <a href="/janus/test.html" class="md:col-span-1 block bg-indigo-50 rounded-lg flex items-center justify-center p-4">
-                                <svg class="w-20 h-20 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.572L16.5 21.75l-.398-1.178a3.375 3.375 0 00-2.3-2.3L12.75 18l1.178-.398a3.375 3.375 0 002.3-2.3L16.5 14.25l.398 1.178a3.375 3.375 0 002.3 2.3l1.178.398-1.178.398a3.375 3.375 0 00-2.3 2.3z" />
-                                </svg>
-                            </a>
-                        </article>
-                        
-                        <!-- [Added] Janus Roadmap Article -->
-                        <article class="grid md:grid-cols-3 gap-6 border-b border-gray-200 pb-10">
-                            <div class="md:col-span-2">
-                                <a href="/janus/" class="text-sm text-purple-600 font-semibold mb-1 hover:underline">프로젝트 야누스</a>
-                                <a href="/janus/roadmap.html">
-                                    <h3 class="font-serif text-2xl font-bold hover:text-gray-700 transition-colors mt-1">프로젝트 야누스: 로드맵</h3>
-                                </a>
-                                <p class="text-gray-600 text-base mt-2">인류의 미래를 결정할 거대한 시뮬레이션, '프로젝트 야누스'의 개발 현황과 향후 업데이트 계획을 확인하세요.</p>
-                                <p class="text-xs text-gray-500 mt-3">By 소년아서 | 2025년 8월 5일</p>
-                            </div>
-                            <a href="/janus/roadmap.html" class="md:col-span-1 block bg-purple-50 rounded-lg flex items-center justify-center p-4">
-                                <svg class="w-20 h-20 text-purple-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v18M9.75 3v18M15.75 3v18M21.75 3v18M3.75 9h18M3.75 15h18" />
-                                </svg>
-                            </a>
-                        </article>
+<!-- HERO -->
+<section class="relative bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 text-white py-20 overflow-hidden">
+  <div class="container mx-auto px-6 text-center">
+    <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4" id="hero-title"></h1>
+    <p class="text-lg max-w-2xl mx-auto mb-6">AI와 게임의 만남, 새로운 생산성 시대를 엽니다.</p>
+    <a href="/maple-tools/index.html" class="inline-block px-8 py-3 bg-white text-black rounded-lg shadow-lg hover:scale-105 transition-transform" data-aos="zoom-in">
+      AI 도구 시작하기
+    </a>
+  </div>
+  <div class="absolute -top-20 -left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-0 right-0 w-96 h-96 bg-pink-400/20 rounded-full blur-3xl"></div>
+</section>
 
-                        <article class="grid md:grid-cols-3 gap-6 border-b border-gray-200 pb-10">
-                            <div class="md:col-span-2">
-                                <a href="/maple-tools/index.html" class="text-sm text-blue-600 font-semibold mb-1 hover:underline">메이플랜드 도구</a>
-                                <a href="/breaker/index.html" target="_blank">
-                                    <h3 class="font-serif text-2xl font-bold hover:text-gray-700 transition-colors mt-1">혼테일 브레이커 (타이머 공대 매니저)</h3>
-                                </a>
-                                <p class="text-gray-600 text-base mt-2">성공적인 혼테일 레이드를 위한 필수 전략 도구, 혼테일 브레이커.</p>
-                                <p class="text-xs text-gray-500 mt-3">By 소년아서 | 2025년 7월 31일</p>
-                            </div>
-                            <a href="/breaker/index.html" target="_blank" class="md:col-span-1 block bg-red-50 rounded-lg flex items-center justify-center p-4">
-                                <svg class="w-20 h-20 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                                </svg>
-                            </a>
-                        </article>
+<!-- 최신 소식 -->
+<main class="container mx-auto px-4 py-12">
+  <h2 class="text-2xl font-bold border-b-2 border-black pb-2 mb-8">최신 소식</h2>
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                        <article class="grid md:grid-cols-3 gap-6 border-b border-gray-200 pb-10">
-                            <div class="md:col-span-2">
-                                <a href="/maple-tools/index.html" class="text-sm text-blue-600 font-semibold mb-1 hover:underline">메이플랜드 도구</a>
-                                <a href="/ledger/index.html" target="_blank">
-                                    <h3 class="font-serif text-2xl font-bold hover:text-gray-700 transition-colors mt-1">혼테일렛저 (레이드 정산 시스템)</h3>
-                                </a>
-                                <p class="text-gray-600 text-base mt-2">복잡한 레이드 수입과 지출, 인원별 분배금을 손쉽게 관리하고, 모든 내역을 저장하고 PC로 추출하세요.</p>
-                                <p class="text-xs text-gray-500 mt-3">By 소년아서 | 2025년 7월 30일</p>
-                            </div>
-                            <a href="/ledger/index.html" target="_blank" class="md:col-span-1 block bg-yellow-50 rounded-lg flex items-center justify-center p-4">
-                                <svg class="w-20 h-20 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 3h.008v.008H8.25v-.008Zm0 3h.008v.008H8.25v-.008Zm3-6h.008v.008H11.25v-.008Zm0 3h.008v.008H11.25v-.008Zm0 3h.008v.008H11.25v-.008Zm3-6h.008v.008H14.25v-.008Zm0 3h.008v.008H14.25v-.008Zm0 3h.008v.008H14.25v-.008ZM4.5 21V3m0 0h15M4.5 3v18m0 0h15m-15 0H3v-3.75h.008v.008H3v3.75Zm0-3.75V3.75m0 13.5h15"></path>
-                                </svg>
-                            </a>
-                        </article>
-
-                        <article class="grid md:grid-cols-3 gap-6 border-b border-gray-200 pb-10">
-                            <div class="md:col-span-2">
-                                <a href="/maple-tools/index.html" class="text-sm text-blue-600 font-semibold mb-1 hover:underline">메이플랜드 도구</a>
-                                <a href="/timer/index.html" target="_blank">
-                                    <h3 class="font-serif text-2xl font-bold hover:text-gray-700 transition-colors mt-1">레이드 크로니클 (리저 타이머)</h3>
-                                </a>
-                                <p class="text-gray-600 text-base mt-2">비숍의 리저렉션 쿨타임을 정확히 체크하고, 다음 예상 시간을 공유하여 안정적인 레이드를 운영하세요.</p>
-                                <p class="text-xs text-gray-500 mt-3">By 소년아서 | 2025년 7월 24일</p>
-                            </div>
-                            <a href="/timer/index.html" target="_blank" class="md:col-span-1 block bg-blue-50 rounded-lg flex items-center justify-center p-4">
-                                <svg class="w-20 h-20 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-                            </a>
-                        </article>
-                        
-                        <article class="grid md:grid-cols-3 gap-6">
-                            <div class="md:col-span-2">
-                                <a href="/maple-tools/index.html" class="text-sm text-blue-600 font-semibold mb-1 hover:underline">메이플랜드 도구</a>
-                                <a href="/buff/index.html" target="_blank">
-                                    <h3 class="font-serif text-2xl font-bold hover:text-gray-700 transition-colors mt-1">메피 버피 (실시간 버프 관리)</h3>
-                                </a>
-                                <p class="text-gray-600 text-base mt-2">홀리심볼, 샤프 아이즈 등 주요 버프 스킬의 주기를 관리하고, 음성으로 리필 타이밍을 알려드립니다.</p>
-                                <p class="text-xs text-gray-500 mt-3">By 소년아서 | 2025년 7월 23일</p>
-                            </div>
-                            <a href="/buff/index.html" target="_blank" class="md:col-span-1 block bg-green-50 rounded-lg flex items-center justify-center p-4">
-                               <svg class="w-20 h-20 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-                            </a>
-                        </article>
-                    </div>
-                </div>
-                
-                <aside class="lg:col-span-1">
-                    <div class="sticky top-24 space-y-8">
-                        <div class="ad-slot h-[250px] w-full">(광고 슬롯 300x250)</div>
-                        <div>
-                            <h3 class="text-lg font-bold text-black mb-4 border-b-2 border-black pb-2">핵심 도구 바로가기</h3>
-                            <div class="space-y-4">
-                                <a href="/breaker/index.html" target="_blank" class="flex items-center gap-4 group">
-                                    <p class="font-serif text-3xl font-bold text-gray-300">1</p>
-                                    <div>
-                                        <p class="font-bold text-black group-hover:underline text-sm leading-snug">혼테일 브레이커 (타이머 공대 매니저)</p>
-                                    </div>
-                                </a>
-                                <a href="/ledger/index.html" target="_blank" class="flex items-center gap-4 group">
-                                    <p class="font-serif text-3xl font-bold text-gray-300">2</p>
-                                    <div>
-                                        <p class="font-bold text-black group-hover:underline text-sm leading-snug">혼테일렛저 (레이드 정산 시스템)</p>
-                                    </div>
-                                </a>
-                                <a href="/calc/index.html" target="_blank" class="flex items-center gap-4 group">
-                                    <p class="font-serif text-3xl font-bold text-gray-300">3</p>
-                                    <div>
-                                        <p class="font-bold text-black group-hover:underline text-sm leading-snug">N빵마스터 (수수료 계산기)</p>
-                                    </div>
-                                </a>
-                                <a href="/timer/index.html" target="_blank" class="flex items-center gap-4 group">
-                                    <p class="font-serif text-3xl font-bold text-gray-300">4</p>
-                                    <div>
-                                        <p class="font-bold text-black group-hover:underline text-sm leading-snug">레이드 크로니클 (리저 타이머)</p>
-                                    </div>
-                                </a>
-                                <a href="/buff/index.html" target="_blank" class="flex items-center gap-4 group">
-                                    <p class="font-serif text-3xl font-bold text-gray-300">5</p>
-                                    <div>
-                                        <p class="font-bold text-black group-hover:underline text-sm leading-snug">메피 버피 (실시간 버프 관리)</p>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-            </div>
-        </main>
+    <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
+      <a href="/posts/devlog-01.html"><img src="images/hy.png" class="w-full h-48 object-cover" alt=""></a>
+      <div class="p-4">
+        <span class="text-sm text-blue-600 font-semibold">개발실록</span>
+        <h3 class="font-serif text-lg font-bold mt-1 mb-2">"수수료로 500만 메소 날렸다?" AI 계산기 개발기</h3>
+        <p class="text-gray-600 text-sm">게임 속 불편함을 AI로 해결한 개발 이야기.</p>
+      </div>
     </div>
 
-    <footer class="py-10 mt-10 border-t border-gray-200 bg-white">
-        <div class="container mx-auto px-4 text-center space-y-4">
-            <a href="/index.html" class="text-3xl font-serif font-bold text-black">MLFEE TIMES</a>
-            <div class="flex justify-center items-center space-x-4 text-gray-500 text-sm">
-                <a href="/about.html" class="hover:underline">사이트 소개</a>
-                <a href="/terms.html" class="hover:underline">이용약관</a>
-                <a href="/privacy.html" class="hover:underline">개인정보처리방침</a>
-            </div>
-            <p class="text-gray-400 text-xs">&copy; 2025 MLFEE TIMES. All rights reserved. (소년아서 제작)</p>
-        </div>
-    </footer>
-    
-    <script type="module">
-        class App {
-            constructor() {
-                this.elements = {
-                    mobileMenuBtn: document.getElementById('mobile-menu-btn'),
-                    mobileNavContainer: document.getElementById('mobile-nav-container'),
-                    mobileToolsBtn: document.getElementById('mobile-tools-btn'),
-                    mobileToolsSubmenu: document.getElementById('mobile-tools-submenu'),
-                    heroTitle: document.getElementById('hero-title'),
-                };
-            }
+    <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
+      <a href="/janus/test.html"><img src="images/cool.png" class="w-full h-48 object-cover" alt=""></a>
+      <div class="p-4">
+        <span class="text-sm text-indigo-600 font-semibold">프로젝트 야누스</span>
+        <h3 class="font-serif text-lg font-bold mt-1 mb-2">야누스 인지 테스트</h3>
+        <p class="text-gray-600 text-sm">세계관 속 당신의 리더십 유형을 테스트해보세요.</p>
+      </div>
+    </div>
 
-            init() {
-                this._initEventListeners();
-                this.typewriterEffect();
-                console.log("Landing Page Initialized");
-            }
+    <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
+      <a href="/janus/roadmap.html"><img src="images/kakaoqr.png" class="w-full h-48 object-cover" alt=""></a>
+      <div class="p-4">
+        <span class="text-sm text-purple-600 font-semibold">프로젝트 야누스</span>
+        <h3 class="font-serif text-lg font-bold mt-1 mb-2">프로젝트 야누스 로드맵</h3>
+        <p class="text-gray-600 text-sm">개발 진행 현황과 업데이트 계획.</p>
+      </div>
+    </div>
 
-            _initEventListeners() {
-                this.elements.mobileMenuBtn?.addEventListener('click', () => {
-                    this.elements.mobileNavContainer.classList.toggle('hidden');
-                });
+  </div>
+</main>
 
-                this.elements.mobileToolsBtn?.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    this.elements.mobileToolsSubmenu.classList.toggle('hidden');
-                    const icon = this.elements.mobileToolsBtn.querySelector('i');
-                    icon.classList.toggle('fa-chevron-down');
-                    icon.classList.toggle('fa-chevron-up');
-                });
-            }
+<!-- 핵심 도구 -->
+<section class="bg-indigo-50 py-12">
+  <div class="container mx-auto px-4 text-center">
+    <h3 class="text-xl font-bold mb-6">메이플랜드 핵심 도구 모음</h3>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="/breaker/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">혼테일 브레이커</a>
+      <a href="/ledger/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">혼테일렛저</a>
+      <a href="/calc/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">N빵마스터</a>
+      <a href="/timer/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">리저 타이머</a>
+      <a href="/buff/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">메피 버피</a>
+    </div>
+  </div>
+</section>
 
-            typewriterEffect() {
-                if (!this.elements.heroTitle) return;
-                
-                const originalText = `"수수료로 500만 메소 날렸다고?" 분노의 AI 계산기 개발기`;
-                let i = 0;
-                this.elements.heroTitle.innerHTML = ''; // Clear existing text
-                
-                const cursorSpan = document.createElement('span');
-                cursorSpan.className = 'typing-cursor';
-                this.elements.heroTitle.appendChild(cursorSpan);
+<!-- FOOTER -->
+<footer class="bg-white border-t border-gray-200 py-8">
+  <div class="container mx-auto px-4 text-center text-sm text-gray-500 space-y-2">
+    <div class="flex justify-center space-x-4">
+      <a href="/about.html" class="hover:underline">사이트 소개</a>
+      <a href="/terms.html" class="hover:underline">이용약관</a>
+      <a href="/privacy.html" class="hover:underline">개인정보처리방침</a>
+    </div>
+    <p>&copy; 2025 MLFEE TIMES. All rights reserved.</p>
+  </div>
+</footer>
 
-                const typing = () => {
-                    if (i < originalText.length) {
-                        // Insert text before the cursor
-                        this.elements.heroTitle.insertBefore(document.createTextNode(originalText.charAt(i)), cursorSpan);
-                        i++;
-                        setTimeout(typing, 60); // Typing speed (ms)
-                    } else {
-                        // Hide cursor after typing is complete
-                        setTimeout(() => {
-                           if(cursorSpan) cursorSpan.style.display = 'none';
-                        }, 1000);
-                    }
-                };
-
-                typing();
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            new App().init();
-        });
-    </script>
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init();
+  document.getElementById('mobile-menu-btn').addEventListener('click',()=>{document.getElementById('mobile-nav').classList.toggle('hidden');});
+  const heroTitle=document.getElementById('hero-title');
+  const text='"수수료로 500만 메소 날렸다고?" 분노의 AI 계산기 개발기';
+  let i=0;
+  const cursor=document.createElement('span');cursor.className='typing-cursor';heroTitle.appendChild(cursor);
+  (function typing(){if(i<text.length){heroTitle.insertBefore(document.createTextNode(text.charAt(i)),cursor);i++;setTimeout(typing,60);}else{cursor.style.display='none';}})();
+</script>
 </body>
 </html>
