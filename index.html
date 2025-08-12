@@ -22,6 +22,8 @@
     body{font-family:'Inter','Noto Sans KR',sans-serif;background:#f9fafb}
     .typing-cursor{display:inline-block;width:3px;height:1em;background:#fff;animation:blink 0.8s infinite;vertical-align:bottom;margin-left:2px;}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+    /* 이미지 반응형 안전장치 */
+    img{max-width:100%;height:auto}
   </style>
 </head>
 <body class="antialiased">
@@ -29,14 +31,14 @@
 <!-- HEADER -->
 <header class="bg-white/90 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-200">
   <div class="container mx-auto px-4 flex justify-between items-center h-16">
-    <button id="mobile-menu-btn" class="lg:hidden text-2xl"><i class="fas fa-bars"></i></button>
+    <button id="mobile-menu-btn" class="lg:hidden text-2xl" aria-label="모바일 메뉴 열기"><i class="fas fa-bars"></i></button>
     <a href="/index.html" class="font-serif text-2xl font-bold">MLFEE TIMES</a>
-    <nav class="hidden lg:flex gap-6 font-medium text-gray-700">
+    <nav class="hidden lg:flex gap-6 font-medium text-gray-700" aria-label="주요 메뉴">
       <a href="/devlog/index.html" class="hover:text-black">개발실록</a>
       <a href="/janus/roadmap.html" class="hover:text-black">야누스 로드맵</a>
       <a href="/janus/test.html" class="hover:text-black">인지 테스트</a>
       <div class="relative group">
-        <span class="cursor-pointer hover:text-black">메이플랜드 도구 <i class="fa fa-chevron-down text-xs"></i></span>
+        <span class="cursor-pointer hover:text-black">메이플랜드 도구 <i class="fa fa-chevron-down text-xs" aria-hidden="true"></i></span>
         <div class="hidden group-hover:block absolute bg-white shadow-lg border rounded mt-2 w-48 z-50">
           <a href="/breaker/index.html" target="_blank" class="block px-4 py-2 hover:bg-gray-50 text-sm">혼테일 브레이커</a>
           <a href="/ledger/index.html" target="_blank" class="block px-4 py-2 hover:bg-gray-50 text-sm">혼테일렛저</a>
@@ -66,12 +68,13 @@
   <div class="container mx-auto px-6 text-center">
     <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4" id="hero-title"></h1>
     <p class="text-lg max-w-2xl mx-auto mb-6">AI와 게임의 만남, 새로운 생산성 시대를 엽니다.</p>
-    <a href="/maple-tools/index.html" class="inline-block px-8 py-3 bg-white text-black rounded-lg shadow-lg hover:scale-105 transition-transform" data-aos="zoom-in">
+    <a href="/maple-tools/index.html" class="inline-block px-8 py-3 bg-white text-black rounded-lg shadow-lg hover:scale-105 transition-transform">
       AI 도구 시작하기
     </a>
   </div>
-  <div class="absolute -top-20 -left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
-  <div class="absolute bottom-0 right-0 w-96 h-96 bg-pink-400/20 rounded-full blur-3xl"></div>
+  <!-- 장식 요소: 스크린리더 패스 -->
+  <div class="absolute -top-20 -left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl" aria-hidden="true"></div>
+  <div class="absolute bottom-0 right-0 w-96 h-96 bg-pink-400/20 rounded-full blur-3xl" aria-hidden="true"></div>
 </section>
 
 <!-- 최신 소식 -->
@@ -79,8 +82,13 @@
   <h2 class="text-2xl font-bold border-b-2 border-black pb-2 mb-8">최신 소식</h2>
   <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
+    <!-- 개발실록 카드: 실제 스크린샷 -->
     <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
-      <a href="/posts/devlog-01.html"><img src="images/hy.png" class="w-full h-48 object-cover" alt=""></a>
+      <a href="/posts/devlog-01.html">
+        <img src="images/hy.png"
+             width="672" height="672" loading="eager"
+             alt="수수료 계산기 개발기 미리보기 — 메소 수수료 계산 자동화 사례">
+      </a>
       <div class="p-4">
         <span class="text-sm text-blue-600 font-semibold">개발실록</span>
         <h3 class="font-serif text-lg font-bold mt-1 mb-2">"수수료로 500만 메소 날렸다?" AI 계산기 개발기</h3>
@@ -88,17 +96,28 @@
       </div>
     </div>
 
+    <!-- 인지 테스트: 주제 일치 썸네일 (없으면 images/cool.png 유지 가능) -->
     <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
-      <a href="/janus/test.html"><img src="images/cool.png" class="w-full h-48 object-cover" alt=""></a>
+      <a href="/janus/test.html">
+        <img src="images/cool.png"
+             width="672" height="378" loading="lazy"
+             alt="야누스 인지 테스트 시작 화면 미리보기 — 리더십 성향 자가진단">
+      </a>
       <div class="p-4">
         <span class="text-sm text-indigo-600 font-semibold">프로젝트 야누스</span>
         <h3 class="font-serif text-lg font-bold mt-1 mb-2">야누스 인지 테스트</h3>
-        <p class="text-gray-600 text-sm">세계관 속 당신의 리더십 유형을 테스트해보세요.</p>
+        <p class="text-gray-600 text-sm">세계관 속 리더십 유형을 테스트하세요.</p>
       </div>
     </div>
 
+    <!-- 로드맵: QR 이미지 제거 → 주제 일치 프리뷰 (없으면 텍스트 카드로 대체 가능) -->
     <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
-      <a href="/janus/roadmap.html"><img src="images/kakaoqr.png" class="w-full h-48 object-cover" alt=""></a>
+      <a href="/janus/roadmap.html">
+        <!-- 대체 썸네일이 아직 없다면 kakaoqr.png 사용 금지, 임시로 gitch. 또는 로고 사용 가능 -->
+        <img src="images/mlfee-logo.png"
+             width="630" height="330" loading="lazy"
+             alt="프로젝트 야누스 로드맵 미리보기 — 개발 타임라인과 업데이트 계획">
+      </a>
       <div class="p-4">
         <span class="text-sm text-purple-600 font-semibold">프로젝트 야누스</span>
         <h3 class="font-serif text-lg font-bold mt-1 mb-2">프로젝트 야누스 로드맵</h3>
@@ -109,7 +128,7 @@
   </div>
 </main>
 
-<!-- 핵심 도구 -->
+<!-- 메이플랜드 핵심 도구 -->
 <section class="bg-indigo-50 py-12">
   <div class="container mx-auto px-4 text-center">
     <h3 class="text-xl font-bold mb-6">메이플랜드 핵심 도구 모음</h3>
@@ -119,6 +138,24 @@
       <a href="/calc/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">N빵마스터</a>
       <a href="/timer/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">리저 타이머</a>
       <a href="/buff/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">메피 버피</a>
+    </div>
+  </div>
+</section>
+
+<!-- 후원하기 섹션: QR 전용 배치 + 링크 대안 제공 -->
+<section class="bg-white py-12 border-t">
+  <div class="container mx-auto px-4 text-center">
+    <h3 class="text-xl font-bold mb-3">프로젝트를 응원해 주세요</h3>
+    <p class="text-gray-600 mb-6">카카오페이로 간편 후원이 가능합니다.</p>
+    <div class="flex flex-col items-center gap-4">
+      <!-- 주의: 이 이미지는 실제 로드맵 썸네일이 아닌 후원 QR로, 전용 섹션에서만 사용 -->
+      <img src="images/kakaoqr.png"
+           width="240" height="240" loading="lazy"
+           alt="카카오페이 후원 QR 코드 — 모바일 카카오페이 앱으로 스캔하여 후원 페이지로 이동">
+      <!-- 실제 후원 링크가 있다면 href에 설정 -->
+      <a href="#" class="inline-block px-4 py-2 rounded bg-black text-white hover:opacity-90 transition" target="_blank" rel="noopener">
+        카카오페이로 후원 링크 열기
+      </a>
     </div>
   </div>
 </section>
@@ -136,10 +173,12 @@
 </footer>
 
 <!-- JS -->
-<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <script>
-  AOS.init();
-  document.getElementById('mobile-menu-btn').addEventListener('click',()=>{document.getElementById('mobile-nav').classList.toggle('hidden');});
+  // 모바일 메뉴
+  document.getElementById('mobile-menu-btn').addEventListener('click',()=>{
+    document.getElementById('mobile-nav').classList.toggle('hidden');
+  });
+  // 히어로 타이핑
   const heroTitle=document.getElementById('hero-title');
   const text='"수수료로 500만 메소 날렸다고?" 분노의 AI 계산기 개발기';
   let i=0;
