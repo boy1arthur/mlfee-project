@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>개발실록 | MLFEE TIMES</title>
     <meta name="description" content="AI를 이용해 아이디어를 현실로 만드는 비개발자의 개발 여정을 기록합니다.">
-    
+
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="개발실록 | MLFEE TIMES">
     <meta property="og:description" content="AI를 이용해 아이디어를 현실로 만드는 비개발자의 개발 여정을 기록합니다.">
@@ -15,17 +15,17 @@
     <!-- Favicon -->
     <link rel="icon" href="/images/mlfee-logo.png" type="image/png">
     <link rel="shortcut icon" href="/images/mlfee-logo.png" type="image/png">
-    
+
     <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615" crossorigin="anonymous"></script>
-      
+
     <style>
         html { scroll-behavior: smooth; }
         body { 
@@ -37,7 +37,7 @@
         .font-serif { font-family: 'Playfair Display', serif; }
         .header-shadow { box-shadow: 0 1px 2px rgba(0,0,0,0.05); border-bottom: 1px solid #e5e7eb; }
         .ad-slot { display: flex; align-items: center; justify-content: center; background-color: #e5e7eb; border: 1px dashed #d1d5db; color: #9ca3af; font-size: 0.875rem; min-height: 90px; }
-        
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .modal-entering { animation: fadeIn 0.3s ease-out forwards; }
@@ -54,20 +54,21 @@
     </style>
 </head>
 <body class="antialiased">
-    
+
     <!-- Header -->
     <header class="bg-white/95 backdrop-blur-sm sticky top-0 z-50 header-shadow">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center gap-4">
                     <button id="mobile-menu-btn" class="lg:hidden text-xl"><i class="fas fa-bars"></i></button>
+                    <!-- [관리자 기능] 글쓰기 버튼. 관리자 로그인 시 자동으로 나타납니다. -->
                     <button id="write-post-btn" class="hidden bg-blue-600 text-white font-bold py-2 px-4 rounded-md text-sm hover:bg-blue-700 transition-colors">
                         <i class="fas fa-pen-to-square mr-1"></i> 새 글 작성
                     </button>
                 </div>
                 <a href="/index.html" class="text-3xl md:text-4xl font-serif font-bold text-black absolute left-1/2 -translate-x-1/2">MLFEE TIMES</a>
-                <div id="auth-container">
-                    <!-- 로그인/로그아웃 버튼이 여기에 동적으로 추가됩니다. -->
+                <div>
+                     <!-- 관리자 로그인 버튼은 푸터로 이동했습니다. -->
                 </div>
             </div>
             <nav id="main-nav" class="hidden lg:flex justify-center items-center gap-8 py-3 border-t border-gray-200">
@@ -82,7 +83,7 @@
              <a href="/about.html" class="block py-3 px-4 text-gray-700 hover:bg-gray-50 font-medium">사이트 소개</a>
         </div>
     </header>
-    
+
     <!-- Main Content Area -->
     <div id="page-content">
         <main class="container mx-auto px-4 py-8">
@@ -94,11 +95,52 @@
                     </p>
                 </header>
                 <div id="article-list" class="space-y-12">
-                    <!-- 게시글이 여기에 동적으로 로드됩니다. -->
-                    <div id="loading-spinner" class="text-center py-12">
-                        <i class="fas fa-spinner fa-spin text-4xl text-gray-400"></i>
-                        <p class="mt-4 text-gray-500">글을 불러오는 중...</p>
-                    </div>
+                    <!-- 
+                        [수동 관리] 개발실록 글 목록
+                        - 이 영역은 '글쓰기 룸'에서 생성된 코드를 붙여넣는 곳입니다.
+                        - 새 글일수록 위쪽에 붙여넣어주세요.
+                    -->
+                    <!-- ############### Mlfee 개발실록: 프롤로그 - 코딩 모르는 35살, AI로 내 문제를 풀다 시작 ############### -->
+<article class="grid md:grid-cols-3 gap-8 pt-12 border-t">
+    <a href="/posts/devlog-02.html" class="md:col-span-1 block">
+        <img src="https://placehold.co/600x400?text=prologe" alt="Mlfee 개발실록: 프롤로그 - 코딩 모르는 35살, AI로 내 문제를 풀다" class="object-cover w-full h-full rounded-lg shadow-md hover:shadow-xl transition-shadow">
+    </a>
+    <div class="md:col-span-2">
+        <p class="text-sm text-gray-500 mb-1">2025년 7월 27일</p>
+        <a href="/posts/devlog-02.html">
+            <h2 class="font-serif text-3xl font-bold hover:text-gray-700 transition-colors">Mlfee 개발실록: 프롤로그 - 코딩 모르는 35살, AI로 내 문제를 풀다</h2>
+        </a>
+        <p class="text-gray-600 text-base mt-3">살면서 누구나 한 번쯤 느끼죠. 뭔가 불편한데, 딱 맞는 해결책이 없는 순간들. 저도 그랬어요. 35년을 살면서 일상 곳곳에서 마주친 사소한 불편함들이 제 꿈의 불씨가 됐죠.
+
+
+
+
+
+
+
+저는 비개발자입니다. it와 프로그래밍하곤 거리가 멀죠. 컴퓨터 공학은 꿈도 안 꿨고, 코딩 수업은커녕 엑셀도 다룰줄 모릅니다. 오로지 게임만 설치하고 플레이하는게 제 컴퓨터 실력의 전부였어요.</p>
+        <a href="/posts/devlog-02.html" class="text-blue-600 font-semibold mt-4 inline-block hover:underline">더 읽어보기 &rarr;</a>
+    </div>
+</article>
+<!-- ############### Mlfee 개발실록: 프롤로그 - 코딩 모르는 35살, AI로 내 문제를 풀다 끝 ############### -->
+                    <!-- ############### 글 1 시작 ############### -->
+                    <article class="grid md:grid-cols-3 gap-8">
+                        <a href="/posts/devlog-01.html" class="md:col-span-1 block">
+                            <img src="https://placehold.co/400x300/111111/ffffff?text=Fee+Calculator" alt="수수료 계산기 개발기" class="object-cover w-full h-full rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                        </a>
+                        <div class="md:col-span-2">
+                            <p class="text-sm text-gray-500 mb-1">2025년 7월 26일</p>
+                            <a href="/posts/devlog-01.html">
+                                <h2 class="font-serif text-3xl font-bold hover:text-gray-700 transition-colors">"수수료로 500만 메소 날렸다고?" 분노의 AI 계산기 개발기</h2>
+                            </a>
+                            <p class="text-gray-600 text-base mt-3">단순한 게임 속 불편함에서 시작된 작은 질문. AI라는 강력한 도구를 통해 내 손으로 직접 문제를 해결하며 느낀 성취감은, 득템의 기쁨과는 비교할 수 없는 것이었습니다.</p>
+                            <a href="/posts/devlog-01.html" class="text-blue-600 font-semibold mt-4 inline-block hover:underline">더 읽어보기 &rarr;</a>
+                        </div>
+                    </article>
+                    <!-- ############### 글 1 끝 ############### -->
+
+                    <!-- /// 새 글 목록 코드 붙여넣는 곳 /// -->
+
                 </div>
             </div>
         </main>
@@ -112,6 +154,8 @@
                 <a href="/about.html" class="hover:underline">사이트 소개</a>
                 <a href="/terms.html" class="hover:underline">이용약관</a>
                 <a href="/privacy.html" class="hover:underline">개인정보처리방침</a>
+                <span class="text-gray-300">|</span>
+                <button id="admin-login-btn" class="hover:underline">Admin</button>
             </div>
             <p class="text-gray-400 text-xs">&copy; 2025 MLFEE TIMES. All rights reserved. (소년아서 제작)</p>
         </div>
@@ -129,9 +173,9 @@
                         <input type="text" id="post-title" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition">
                     </div>
                     <div>
-                        <label for="post-slug" class="block text-sm font-medium text-gray-700 mb-1">URL 경로 (영문/숫자/하이픈)</label>
-                        <input type="text" id="post-slug" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition" placeholder="예: my-first-post">
-                        <p class="text-xs text-gray-500 mt-1">※ 이 글의 고유 주소가 됩니다.</p>
+                        <label for="post-filename" class="block text-sm font-medium text-gray-700 mb-1">파일 이름 (영문/숫자/하이픈)</label>
+                        <input type="text" id="post-filename" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition" placeholder="예: devlog-02.html">
+                        <p class="text-xs text-gray-500 mt-1">※ 이 이름이 실제 파일 주소가 됩니다. (예: /posts/devlog-02.html)</p>
                     </div>
                 </div>
                 <div>
@@ -146,172 +190,231 @@
                     <label for="post-content" class="block text-sm font-medium text-gray-700 mb-1">본문 (HTML 형식)</label>
                     <textarea id="post-content" rows="10" required class="w-full rounded-md p-2.5 bg-gray-100 border-gray-300 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/20 outline-none transition font-mono text-sm" placeholder="<p>내용을 입력하세요...</p>"></textarea>
                 </div>
-                
+
+                <div id="generated-code-container" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-800 mb-1">1. `devlog/index.html`에 추가할 코드</label>
+                        <div class="relative">
+                            <textarea id="generated-list-code" rows="8" readonly class="w-full rounded-md p-2.5 bg-gray-800 text-white font-mono text-xs"></textarea>
+                            <button type="button" class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white font-bold py-1 px-3 rounded-md text-xs">복사</button>
+                        </div>
+                    </div>
+                     <div>
+                        <label class="block text-sm font-bold text-gray-800 mb-1">2. `posts` 폴더에 새로 만들 파일의 전체 코드</label>
+                        <div class="relative">
+                           <textarea id="generated-post-code" rows="12" readonly class="w-full rounded-md p-2.5 bg-gray-800 text-white font-mono text-xs"></textarea>
+                           <button type="button" class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white font-bold py-1 px-3 rounded-md text-xs">복사</button>
+                        </div>
+                        <p class="text-sm text-blue-600 mt-2">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            이 코드를 복사하여 <code class="text-xs bg-blue-100 p-1 rounded">posts</code> 폴더 안에 <code id="generated-filename" class="text-xs bg-blue-100 p-1 rounded"></code> 이름으로 새 파일을 만들어 붙여넣으세요.
+                        </p>
+                    </div>
+                </div>
+
                 <div class="flex justify-end gap-4 pt-4">
                     <button type="button" class="modal-close-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-md transition-colors">취소</button>
-                    <button type="submit" id="publish-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition-colors flex items-center">
-                        <span id="publish-spinner" class="hidden"><i class="fas fa-spinner fa-spin mr-2"></i></span>
-                        <span>글 게시하기</span>
-                    </button>
+                    <button type="submit" id="generate-code-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition-colors">코드 생성하기</button>
                 </div>
             </form>
         </div>
     </div>
-    
-    <!-- Firebase SDK -->
+
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: 
-            authDomain: "mlfee-devlog.firebaseapp.com",
-            projectId: "mlfee-devlog",
-            storageBucket: "mlfee-devlog.firebasestorage.app",
-            messagingSenderId: "790588943412",
-            appId: "1:790588943412:web:28c371a5c6bca71bc92e61",
-            measurementId: "G-VMMRDEGG81"
-        };
-
-        const ADMIN_UID = "100078454499707733076"; 
-        
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        
-        const articleList = document.getElementById('article-list');
-        const loadingSpinner = document.getElementById('loading-spinner');
-        const authContainer = document.getElementById('auth-container');
-        const writePostBtn = document.getElementById('write-post-btn');
-
-        // [수정] 페이지 로드 시, 인증 상태 확인 중임을 표시
-        authContainer.innerHTML = `<span class="text-sm text-gray-500">인증 확인 중...</span>`;
-
-        initializeWritingFeature(auth, db);
-        initializeAuth(auth);
-        loadArticles(db);
-
-        function initializeWritingFeature(auth, db) {
-            const writingModal = document.getElementById('writingModal');
-            const writingForm = document.getElementById('writing-form');
-            const publishBtn = document.getElementById('publish-btn');
-            const publishSpinner = document.getElementById('publish-spinner');
-            const modalCloseBtns = document.querySelectorAll('.modal-close-btn');
-
-            writePostBtn.addEventListener('click', () => {
-                writingForm.reset();
-                writingModal.classList.remove('hidden');
-            });
-
-            modalCloseBtns.forEach(btn => btn.addEventListener('click', () => {
-                writingModal.classList.add('hidden');
-            }));
-
-            writingForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                publishBtn.disabled = true;
-                publishSpinner.classList.remove('hidden');
-
-                const post = {
-                    title: document.getElementById('post-title').value,
-                    slug: document.getElementById('post-slug').value,
-                    excerpt: document.getElementById('post-excerpt').value,
-                    imageUrl: document.getElementById('post-image-url').value,
-                    content: document.getElementById('post-content').value,
-                    createdAt: serverTimestamp()
+        class ModalManager {
+            constructor() {
+                this.modals = {
+                    writing: { el: document.getElementById('writingModal') },
                 };
-
-                try {
-                    await addDoc(collection(db, "posts"), post);
-                    alert('글이 성공적으로 게시되었습니다!');
-                    writingModal.classList.add('hidden');
-                    loadArticles(db);
-                } catch (error) {
-                    console.error("Error adding document: ", error);
-                    alert('글 게시에 실패했습니다. 콘솔을 확인해주세요.');
-                } finally {
-                    publishBtn.disabled = false;
-                    publishSpinner.classList.add('hidden');
+                this._init();
+            }
+            _init() {
+                for (const key in this.modals) {
+                    const modal = this.modals[key];
+                    if (!modal.el) continue;
+                    modal.el.addEventListener('click', (e) => { if (e.target === modal.el) this.hide(key); });
+                    modal.el.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', () => this.hide(key)));
                 }
-            });
-        }
-
-        function initializeAuth(auth) {
-            const provider = new GoogleAuthProvider();
-
-            // 페이지 로드 시 리디렉션 결과 처리
-            getRedirectResult(auth).catch((error) => {
-                console.error("로그인 리디렉션 중 오류 발생:", error);
-            });
-
-            // 인증 상태 변경 감지
-            onAuthStateChanged(auth, (user) => {
-                authContainer.innerHTML = ''; // 이전 버튼 내용 초기화
-                if (user) {
-                    // 로그인 된 경우
-                    const logoutBtn = document.createElement('button');
-                    logoutBtn.className = "bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-md text-sm hover:bg-gray-300 transition-colors";
-                    logoutBtn.innerHTML = `<i class="fas fa-right-from-bracket mr-1"></i> 로그아웃`;
-                    logoutBtn.onclick = () => signOut(auth);
-                    authContainer.appendChild(logoutBtn);
-
-                    if (user.uid === ADMIN_UID) {
-                        writePostBtn.classList.remove('hidden');
-                    } else {
-                        writePostBtn.classList.add('hidden');
-                    }
-                } else {
-                    // 로그아웃 된 경우
-                    const loginBtn = document.createElement('button');
-                    loginBtn.className = "bg-black text-white font-bold py-2 px-4 rounded-md text-sm hover:bg-gray-800 transition-colors";
-                    loginBtn.innerHTML = `<i class="fab fa-google mr-2"></i> 관리자 로그인`;
-                    loginBtn.onclick = () => signInWithRedirect(auth, provider);
-                    authContainer.appendChild(loginBtn);
-                    writePostBtn.classList.add('hidden');
-                }
-            });
-        }
-
-        async function loadArticles(db) {
-            articleList.innerHTML = '';
-            loadingSpinner.classList.remove('hidden');
-
-            try {
-                const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-                const querySnapshot = await getDocs(q);
-                
-                if (querySnapshot.empty) {
-                    articleList.innerHTML = '<p class="text-center text-gray-500">아직 작성된 글이 없습니다.</p>';
-                } else {
-                    querySnapshot.forEach((doc) => {
-                        const post = doc.data();
-                        const postDate = post.createdAt?.toDate().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) || '날짜 없음';
-                        
-                        const articleHTML = `
-                        <article class="grid md:grid-cols-3 gap-8 pt-12 border-t first:pt-0 first:border-t-0">
-                            <a href="/posts/post.html?id=${doc.id}" class="md:col-span-1 block">
-                                <img src="${post.imageUrl}" alt="${post.title}" class="object-cover w-full h-full rounded-lg shadow-md hover:shadow-xl transition-shadow">
-                            </a>
-                            <div class="md:col-span-2">
-                                <p class="text-sm text-gray-500 mb-1">${postDate}</p>
-                                <a href="/posts/post.html?id=${doc.id}">
-                                    <h2 class="font-serif text-3xl font-bold hover:text-gray-700 transition-colors">${post.title}</h2>
-                                </a>
-                                <p class="text-gray-600 text-base mt-3">${post.excerpt}</p>
-                                <a href="/posts/post.html?id=${doc.id}" class="text-blue-600 font-semibold mt-4 inline-block hover:underline">더 읽어보기 &rarr;</a>
-                            </div>
-                        </article>`;
-                        articleList.innerHTML += articleHTML;
-                    });
-                }
-            } catch (error) {
-                console.error("Error getting documents: ", error);
-                articleList.innerHTML = '<p class="text-center text-red-500">글을 불러오는 데 실패했습니다.</p>';
-            } finally {
-                loadingSpinner.classList.add('hidden');
+            }
+            show(key) {
+                const modal = this.modals[key];
+                if (!modal?.el) return;
+                modal.el.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => modal.el.classList.add('modal-entering'), 10);
+            }
+            hide(key) {
+                const modal = this.modals[key];
+                if (!modal?.el) return;
+                modal.el.classList.remove('modal-entering');
+                document.body.style.overflow = '';
+                setTimeout(() => modal.el.classList.add('hidden'), 300);
             }
         }
+
+        class AdminManager {
+            constructor(modalManager) {
+                this.modalManager = modalManager;
+                this.elements = {
+                    adminLoginBtn: document.getElementById('admin-login-btn'),
+                    writePostBtn: document.getElementById('write-post-btn'),
+                };
+                this.ADMIN_PASSWORD = "admin"; // 실제 운영 시에는 더 복잡한 비밀번호로 변경하세요.
+                this.ADMIN_PASSWORD = "admin4129"; // 실제 운영 시에는 더 복잡한 비밀번호로 변경하세요.
+                this._init();
+            }
+
+            _init() {
+                this.elements.adminLoginBtn.addEventListener('click', () => {
+                    const password = prompt('관리자 비밀번호를 입력하세요:');
+                    if (password === this.ADMIN_PASSWORD) {
+                        alert('관리자 모드가 활성화되었습니다.');
+                        this.elements.writePostBtn.classList.remove('hidden');
+                    } else if (password) {
+                        alert('비밀번호가 일치하지 않습니다.');
+                    }
+                });
+            }
+        }
+
+        class WritingManager {
+            constructor(modalManager) {
+                this.modalManager = modalManager;
+                this.elements = {
+                    writePostBtn: document.getElementById('write-post-btn'),
+                    writingForm: document.getElementById('writing-form'),
+                    titleInput: document.getElementById('post-title'),
+                    filenameInput: document.getElementById('post-filename'),
+                    generatedCodeContainer: document.getElementById('generated-code-container'),
+                    generatedListCodeTextarea: document.getElementById('generated-list-code'),
+                    generatedPostCodeTextarea: document.getElementById('generated-post-code'),
+                    generatedFilenameSpan: document.getElementById('generated-filename'),
+                    generateCodeBtn: document.getElementById('generate-code-btn'),
+                };
+                this._init();
+            }
+
+            _init() {
+                this.elements.writePostBtn.addEventListener('click', () => {
+                    this.elements.generatedCodeContainer.classList.add('hidden');
+                    this.elements.generateCodeBtn.textContent = '코드 생성하기';
+                    this.elements.writingForm.reset();
+                    this.modalManager.show('writing');
+                });
+
+                this.elements.writingForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.generatePostHTML();
+                });
+
+                // [오류 수정] 제목 입력 시 파일 이름이 자동으로 변경되는 로직 제거
+                // this.elements.titleInput.addEventListener('input', ...);
+
+                document.querySelectorAll('.copy-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const textarea = e.target.previousElementSibling;
+                        navigator.clipboard.writeText(textarea.value).then(() => {
+                            alert('코드가 클립보드에 복사되었습니다!');
+                        }, (err) => {
+                            console.error('클립보드 복사 실패:', err);
+                            alert('복사에 실패했습니다.');
+                        });
+                    });
+                });
+            }
+
+            generatePostHTML() {
+                const title = this.elements.titleInput.value;
+                const filename = this.elements.filenameInput.value;
+                const excerpt = document.getElementById('post-excerpt').value;
+                const imageUrl = document.getElementById('post-image-url').value;
+                const content = document.getElementById('post-content').value;
+                const date = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+
+                if (!filename || !title || !content) {
+                    alert('파일 이름, 제목, 본문은 필수 항목입니다.');
+                    return;
+                }
+
+                const listItemHTML = `
+<!-- ############### ${title} 시작 ############### -->
+<article class="grid md:grid-cols-3 gap-8 pt-12 border-t">
+    <a href="/posts/${filename}" class="md:col-span-1 block">
+        <img src="${imageUrl.replace('800x550', '400x300')}" alt="${title}" class="object-cover w-full h-full rounded-lg shadow-md hover:shadow-xl transition-shadow">
+    </a>
+    <div class="md:col-span-2">
+        <p class="text-sm text-gray-500 mb-1">${date}</p>
+        <a href="/posts/${filename}">
+            <h2 class="font-serif text-3xl font-bold hover:text-gray-700 transition-colors">${title}</h2>
+        </a>
+        <p class="text-gray-600 text-base mt-3">${excerpt}</p>
+        <a href="/posts/${filename}" class="text-blue-600 font-semibold mt-4 inline-block hover:underline">더 읽어보기 &rarr;</a>
+    </div>
+</article>
+<!-- ############### ${title} 끝 ############### -->`;
+
+                const postPageHTML = `
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title} | MLFEE TIMES</title>
+    <meta name="description" content="${excerpt}">
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: #f0f0f0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEUAAADd3d3+xSTlAAAAAXRSTlMAQObYZgAAABVJREFUeJxjYMAEjGQEGIwYkAAEAAA2AAGs9a2hAAAAAElFTkSuQmCC'); color: #1f2937; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .prose { color: #374151; } .prose h1, .prose h2, .prose h3 { color: #111827; } .prose a { color: #2563eb; } .prose blockquote { border-left-color: #3b82f6; } .prose code { color: #be123c; background-color: #fef2f2; } .prose pre { background-color: #1f2937; color: #d1d5db; } .prose pre code { color: inherit; background-color: transparent; }
+    </style>
+</head>
+<body class="antialiased">
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-lg shadow-lg border border-gray-200">
+            <a href="/devlog/index.html" class="text-blue-600 font-semibold text-sm hover:underline">개발실록</a>
+            <h1 class="font-serif text-4xl md:text-6xl font-bold text-black leading-tight mt-2">${title}</h1>
+            <div class="flex items-center gap-4 text-sm text-gray-500 my-6 border-y border-gray-200 py-4">
+                <span>By 소년아서</span>
+                <span>${date}</span>
+            </div>
+            <img src="${imageUrl}" alt="${title}" class="w-full h-auto object-cover rounded-lg shadow-lg mb-8">
+            <article class="prose prose-lg max-w-none">
+                ${content}
+            </article>
+            <div class="mt-12 pt-8 border-t border-gray-200">
+                <a href="/devlog/index.html" class="bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-md transition-colors">&larr; 개발실록 목록으로</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>`;
+
+                this.elements.generatedListCodeTextarea.value = listItemHTML.trim();
+                this.elements.generatedPostCodeTextarea.value = postPageHTML.trim();
+                this.elements.generatedFilenameSpan.textContent = filename;
+                this.elements.generatedCodeContainer.classList.remove('hidden');
+                this.elements.generateCodeBtn.textContent = '다시 생성하기';
+            }
+        }
+
+        class App {
+            constructor() {
+                this.modalManager = new ModalManager();
+                this.adminManager = new AdminManager(this.modalManager);
+                this.writingManager = new WritingManager(this.modalManager);
+            }
+
+            init() {
+                console.log("Devlog Page Initialized");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new App().init();
+        });
     </script>
 </body>
 </html>
