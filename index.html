@@ -24,23 +24,22 @@
     }
     .dark body { background-color: #0A0A0A; color: #E5E7EB; }
     
-    /* Cinematic Hero Section with Particle Effect */
+    /* Cinematic Hero Section with Dreamlike Particle Effect */
     .hero-section {
         position: relative;
         overflow: hidden;
     }
     .hero-background {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        top: -5%; /* Parallax 효과를 위한 여백 */
+        left: -5%;
+        width: 110%;
+        height: 110%;
         background-image: linear-gradient(to top, #0A0A0A 15%, transparent 60%), url('https://raw.githubusercontent.com/boy1arthur/mlfee-project/main/images/hyun.jpg');
-        /* 이미지가 좌우를 꽉 채우도록 cover로 변경했습니다. */
         background-size: cover;
         background-repeat: no-repeat;
-        /* 이미지가 항상 위쪽을 기준으로 표시되도록 수정했습니다. */
         background-position: center top;
+        transition: transform 0.3s ease-out;
     }
     #particle-canvas {
         position: absolute;
@@ -209,7 +208,18 @@
       }
     };
 
-    // --- Particle Effect Logic ---
+    // --- 3D Parallax Effect ---
+    const heroSection = document.querySelector('.hero-section');
+    const heroBackground = document.querySelector('.hero-background');
+    heroSection.addEventListener('mousemove', (e) => {
+        const { clientWidth, clientHeight } = heroSection;
+        const x = (e.clientX / clientWidth) - 0.5;
+        const y = (e.clientY / clientHeight) - 0.5;
+        const intensity = 20; 
+        heroBackground.style.transform = `translate3d(${-x * intensity}px, ${-y * intensity}px, 0)`;
+    });
+
+    // --- Dreamlike Particle Effect Logic ---
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -223,14 +233,9 @@
 
     class Particle {
         constructor(x, y, radius, color, velocity) {
-            this.x = x;
-            this.y = y;
-            this.radius = radius;
-            this.color = color;
-            this.velocity = velocity;
-            this.alpha = 1;
+            this.x = x; this.y = y; this.radius = radius; this.color = color;
+            this.velocity = velocity; this.alpha = 1;
         }
-
         draw() {
             ctx.save();
             ctx.globalAlpha = this.alpha;
@@ -240,26 +245,25 @@
             ctx.fill();
             ctx.restore();
         }
-
         update() {
             this.x += this.velocity.x;
             this.y += this.velocity.y;
-            this.alpha -= 0.005;
+            this.alpha -= 0.003; // 천천히 사라지도록
             this.draw();
         }
     }
 
     function initParticles() {
         particles = [];
-        const particleCount = 100;
+        const particleCount = 200; // 입자 수를 늘려 풍성하게
         for (let i = 0; i < particleCount; i++) {
-            const radius = Math.random() * 2 + 1;
+            const radius = Math.random() * 1.5 + 0.5;
             const x = Math.random() * canvas.width;
             const y = Math.random() * canvas.height;
-            const color = `rgba(167, 139, 250, ${Math.random()})`;
+            const color = `rgba(255, 255, 255, ${Math.random() * 0.4})`; // 더 은은한 흰색 계열
             const velocity = {
-                x: (Math.random() - 0.5) * 0.5,
-                y: (Math.random() - 0.5) * 0.5
+                x: (Math.random() - 0.5) * 0.2, // 더 느리게
+                y: (Math.random() - 0.5) * 0.2  // 더 느리게
             };
             particles.push(new Particle(x, y, radius, color, velocity));
         }
@@ -270,17 +274,12 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         particles.forEach((particle, index) => {
             if (particle.alpha <= 0) {
-                particles.splice(index, 1);
-                // Create a new particle to maintain count
-                const radius = Math.random() * 2 + 1;
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height;
-                const color = `rgba(167, 139, 250, ${Math.random()})`;
-                const velocity = { x: (Math.random() - 0.5) * 0.5, y: (Math.random() - 0.5) * 0.5 };
-                particles.push(new Particle(x, y, radius, color, velocity));
-            } else {
-                particle.update();
+                // 화면 밖에서 다시 생성
+                particle.x = Math.random() * canvas.width;
+                particle.y = Math.random() * canvas.height;
+                particle.alpha = 1;
             }
+            particle.update();
         });
     }
 
