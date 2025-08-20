@@ -61,7 +61,6 @@
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center gap-4">
                     <button id="mobile-menu-btn" class="lg:hidden text-xl"><i class="fas fa-bars"></i></button>
-                    <!-- [관리자 기능] 글쓰기 버튼. 관리자 로그인 시 자동으로 나타납니다. -->
                     <button id="write-post-btn" class="hidden bg-blue-600 text-white font-bold py-2 px-4 rounded-md text-sm hover:bg-blue-700 transition-colors">
                         <i class="fas fa-pen-to-square mr-1"></i> 새 글 작성
                     </button>
@@ -161,118 +160,117 @@
     
     <!-- Firebase SDK -->
     <script type="module">
-        // [1단계] Firebase SDK 스크립트를 가져옵니다.
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        // [수정] signInWithPopup 대신 signInWithRedirect와 getRedirectResult를 가져옵니다.
         import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // [2단계] 여기에 1단계 설정에서 복사한 firebaseConfig 객체를 붙여넣으세요.
+        // [1단계] '비밀 열쇠'가 적용되었습니다.
         const firebaseConfig = {
             apiKey: "AIzaSyDpZwSHo6uU3BLyVZArdm8V8hLWSjdJ8Mc",
             authDomain: "mlfee-devlog.firebaseapp.com",
             projectId: "mlfee-devlog",
             storageBucket: "mlfee-devlog.firebasestorage.app",
             messagingSenderId: "790588943412",
-            appId: "1:790588943412:web:28c371a5c6bca71bc92e61"
+            appId: "1:790588943412:web:28c371a5c6bca71bc92e61",
             measurementId: "G-VMMRDEGG81"
         };
 
-        // [3단계] 여기에 본인의 구글 UID를 붙여넣으세요. (로그인 후 개발자 도구 콘솔에서 확인)
-        const ADMIN_UID = "100078454499707733076";
-
-        // Firebase 앱 초기화
+        // [2단계] 사장님의 '관리자 ID'가 적용되었습니다.
+        const ADMIN_UID = "100078454499707733076"; 
+        
+        // --- 아래부터는 자동으로 작동하는 코드입니다. ---
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
-        // --- 관리자 및 글쓰기 로직 ---
-        const writePostBtn = document.getElementById('write-post-btn');
-        const writingModal = document.getElementById('writingModal');
-        const writingForm = document.getElementById('writing-form');
-        const publishBtn = document.getElementById('publish-btn');
-        const publishSpinner = document.getElementById('publish-spinner');
-        const modalCloseBtns = document.querySelectorAll('.modal-close-btn');
-
-        writePostBtn.addEventListener('click', () => {
-            writingForm.reset();
-            writingModal.classList.remove('hidden');
-        });
-
-        modalCloseBtns.forEach(btn => btn.addEventListener('click', () => {
-            writingModal.classList.add('hidden');
-        }));
-
-        writingForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            publishBtn.disabled = true;
-            publishSpinner.classList.remove('hidden');
-
-            const post = {
-                title: document.getElementById('post-title').value,
-                slug: document.getElementById('post-slug').value,
-                excerpt: document.getElementById('post-excerpt').value,
-                imageUrl: document.getElementById('post-image-url').value,
-                content: document.getElementById('post-content').value,
-                createdAt: serverTimestamp()
-            };
-
-            try {
-                await addDoc(collection(db, "posts"), post);
-                alert('글이 성공적으로 게시되었습니다!');
-                writingModal.classList.add('hidden');
-                loadArticles(); // 새 글 포함하여 목록 새로고침
-            } catch (error) {
-                console.error("Error adding document: ", error);
-                alert('글 게시에 실패했습니다. 콘솔을 확인해주세요.');
-            } finally {
-                publishBtn.disabled = false;
-                publishSpinner.classList.add('hidden');
-            }
-        });
-
-        // --- 인증 로직 ---
+        
+        const articleList = document.getElementById('article-list');
+        const loadingSpinner = document.getElementById('loading-spinner');
         const authContainer = document.getElementById('auth-container');
-        const provider = new GoogleAuthProvider();
+        const writePostBtn = document.getElementById('write-post-btn');
 
-        // [수정] 페이지 로드 시 리디렉션 결과를 확인하는 로직 추가
-        getRedirectResult(auth)
-            .catch((error) => {
+        initializeWritingFeature(auth, db);
+        initializeAuth(auth);
+        loadArticles(db);
+
+        function initializeWritingFeature(auth, db) {
+            const writingModal = document.getElementById('writingModal');
+            const writingForm = document.getElementById('writing-form');
+            const publishBtn = document.getElementById('publish-btn');
+            const publishSpinner = document.getElementById('publish-spinner');
+            const modalCloseBtns = document.querySelectorAll('.modal-close-btn');
+
+            writePostBtn.addEventListener('click', () => {
+                writingForm.reset();
+                writingModal.classList.remove('hidden');
+            });
+
+            modalCloseBtns.forEach(btn => btn.addEventListener('click', () => {
+                writingModal.classList.add('hidden');
+            }));
+
+            writingForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                publishBtn.disabled = true;
+                publishSpinner.classList.remove('hidden');
+
+                const post = {
+                    title: document.getElementById('post-title').value,
+                    slug: document.getElementById('post-slug').value,
+                    excerpt: document.getElementById('post-excerpt').value,
+                    imageUrl: document.getElementById('post-image-url').value,
+                    content: document.getElementById('post-content').value,
+                    createdAt: serverTimestamp()
+                };
+
+                try {
+                    await addDoc(collection(db, "posts"), post);
+                    alert('글이 성공적으로 게시되었습니다!');
+                    writingModal.classList.add('hidden');
+                    loadArticles(db);
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert('글 게시에 실패했습니다. 콘솔을 확인해주세요.');
+                } finally {
+                    publishBtn.disabled = false;
+                    publishSpinner.classList.add('hidden');
+                }
+            });
+        }
+
+        function initializeAuth(auth) {
+            const provider = new GoogleAuthProvider();
+
+            getRedirectResult(auth).catch((error) => {
                 console.error("로그인 리디렉션 중 오류 발생:", error);
             });
 
-        onAuthStateChanged(auth, (user) => {
-            authContainer.innerHTML = ''; // 버튼 초기화
-            if (user) {
-                console.log("로그인된 사용자 UID:", user.uid);
-                const logoutBtn = document.createElement('button');
-                logoutBtn.className = "bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-md text-sm hover:bg-gray-300 transition-colors";
-                logoutBtn.innerHTML = `<i class="fas fa-right-from-bracket mr-1"></i> 로그아웃`;
-                logoutBtn.onclick = () => signOut(auth);
-                authContainer.appendChild(logoutBtn);
+            onAuthStateChanged(auth, (user) => {
+                authContainer.innerHTML = '';
+                if (user) {
+                    const logoutBtn = document.createElement('button');
+                    logoutBtn.className = "bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-md text-sm hover:bg-gray-300 transition-colors";
+                    logoutBtn.innerHTML = `<i class="fas fa-right-from-bracket mr-1"></i> 로그아웃`;
+                    logoutBtn.onclick = () => signOut(auth);
+                    authContainer.appendChild(logoutBtn);
 
-                if (user.uid === ADMIN_UID) {
-                    writePostBtn.classList.remove('hidden');
+                    if (user.uid === ADMIN_UID) {
+                        writePostBtn.classList.remove('hidden');
+                    } else {
+                        writePostBtn.classList.add('hidden');
+                    }
                 } else {
+                    const loginBtn = document.createElement('button');
+                    loginBtn.className = "bg-black text-white font-bold py-2 px-4 rounded-md text-sm hover:bg-gray-800 transition-colors";
+                    loginBtn.innerHTML = `<i class="fab fa-google mr-2"></i> 관리자 로그인`;
+                    loginBtn.onclick = () => signInWithRedirect(auth, provider);
+                    authContainer.appendChild(loginBtn);
                     writePostBtn.classList.add('hidden');
                 }
-            } else {
-                const loginBtn = document.createElement('button');
-                loginBtn.className = "bg-black text-white font-bold py-2 px-4 rounded-md text-sm hover:bg-gray-800 transition-colors";
-                loginBtn.innerHTML = `<i class="fab fa-google mr-2"></i> 관리자 로그인`;
-                // [수정] 팝업 방식 대신 리디렉션 방식으로 변경
-                loginBtn.onclick = () => signInWithRedirect(auth, provider);
-                authContainer.appendChild(loginBtn);
-                writePostBtn.classList.add('hidden');
-            }
-        });
+            });
+        }
 
-        // --- 게시글 로딩 로직 ---
-        const articleList = document.getElementById('article-list');
-        const loadingSpinner = document.getElementById('loading-spinner');
-
-        async function loadArticles() {
-            articleList.innerHTML = ''; // 기존 목록 초기화
+        async function loadArticles(db) {
+            articleList.innerHTML = '';
             loadingSpinner.classList.remove('hidden');
 
             try {
@@ -310,10 +308,6 @@
                 loadingSpinner.classList.add('hidden');
             }
         }
-        
-        // 페이지 로드 시 글 목록 불러오기
-        loadArticles();
-
     </script>
 </body>
 </html>
