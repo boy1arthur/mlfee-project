@@ -49,9 +49,14 @@
         z-index: 5; /* 텍스트보다 뒤, 배경보다 앞에 위치 */
     }
 
+    /* 시네마틱 줌 애니메이션을 수정했습니다. */
     @keyframes cinematicZoom {
-        0% { transform: scale(1.1); }
-        100% { transform: scale(1); }
+        0% {
+            transform: scale(1); /* 시작 시 정상 크기 */
+        }
+        100% {
+            transform: scale(1.1); /* 종료 시 약간 확대된 상태 */
+        }
     }
 
     /* Header Style */
@@ -93,7 +98,7 @@
         <select id="language-switcher" class="text-sm appearance-none bg-transparent border border-slate-600 rounded-md py-1 pl-2 pr-7 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
           <option value="ko">🇰🇷 한국어</option>
           <option value="en">🇺🇸 English</option>
-          <option value="ja">�🇵 日本語</option>
+          <option value="ja">🇯🇵 日本語</option>
         </select>
         <!-- 인라인 SVG 아이콘 (Globe) -->
         <svg class="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3.75h.008v.008H12v-.008ZM3.75 7.5H7.5m3 12c-.312-.312-.623-.633-.928-.962M12 21c.305-.329.616-.65.928-.962m-3.072-1.462c.312.312.623-.633.928-.962M12 3.75c.305.329.616.65.928-.962m-3.072 1.462c.312-.312.623-.633.928-.962M3 12c0 2.485 2.015 4.5 4.5 4.5s4.5-2.015 4.5-4.5S9.985 7.5 7.5 7.5 3 9.515 3 12Zm12 0c0 2.485 2.015 4.5 4.5 4.5s4.5-2.015 4.5-4.5S18.985 7.5 16.5 7.5 12 9.515 12 12Z" /></svg>
@@ -315,4 +320,3 @@
 </script>
 </body>
 </html>
-�
