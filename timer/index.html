@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>레이드 크로니클 - 메이플랜드 리저렉션 타이머</title>    
+    <title>레이드 크로니클 - 메이플랜드 리저렉션 타이머</title>   
     <!-- SEO Meta Tags -->
     <meta name="description" content="자쿰, 혼테일 원정 필수 도구! 레이드 크로니클로 비숍의 리저렉션 쿨타임을 완벽하게 관리하고, 파티원들과 실시간으로 상황을 공유하세요.">
     <meta name="keywords" content="메이플랜드, 메랜, 리저렉션, 타이머, 리저, 자쿰, 혼테일, 원정대, 레이드, 비숍, MLFEE, 메피">
@@ -27,9 +27,10 @@
     
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
+    <!-- 애드센스 자동 광고 스크립트 -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615"
      crossorigin="anonymous"></script>
-     
+      
     <style>
         /* 기본 스타일 및 CSS 변수 정의 */
         :root, .theme-default {
@@ -122,10 +123,7 @@
             color: var(--text-primary);
         }
         
-        .main-control-btn {
-            @apply w-full max-w-lg text-6xl sm:text-8xl font-black py-10 sm:py-12 px-6 rounded-full shadow-lg border-4 transition-all duration-200 relative overflow-hidden;
-        }
-        .main-control-btn:not(:disabled):active { @apply transform scale-95 shadow-inner; }
+        .main-control-btn:not(:disabled):active { transform: scale(0.95); box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); }
         .main-control-btn:disabled { 
             background-color: var(--bg-tertiary);
             border-color: var(--bg-interactive);
@@ -147,10 +145,9 @@
 
         .status-cooldown { color: #f97316; }
 
-        .modal-backdrop { @apply fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002]; animation: fadeIn 0.3s ease-out; }
-        .modal-content { 
+        .modal-backdrop-custom { animation: fadeIn 0.3s ease-out; }
+        .modal-content-custom { 
             background-color: var(--bg-primary);
-            @apply backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full text-center border; 
             animation: slideIn 0.3s ease-out;
             border-color: var(--border-color);
         }
@@ -164,7 +161,7 @@
             padding-top: 0; padding-bottom: 0; margin-bottom: 0;
         }
         .summary-container.expanded {
-            max-height: 1000px;
+            max-height: 2000px;
             padding-top: 1.5rem; padding-bottom: 1.5rem; margin-bottom: 1.5rem;
             border-top: 2px solid var(--border-color);
             border-bottom: 2px solid var(--border-color);
@@ -193,25 +190,20 @@
         <a href="https://www.mlfee.com/calc/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
         <a href="https://www.mlfee.com/timer/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
         <a href="https://www.mlfee.com/buff/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
-        <a href="#how-to-guide" id="guideLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
-        <a href="#" id="contactLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의</a>
+        <a href="#supporters-hub" id="supportersLink" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">서포터즈 허브</a>
     </nav>
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[999] hidden"></div>
 
     <!-- App Container -->
-    <div id="app" class="w-full max-w-4xl mx-auto">
+    <div id="app" class="w-full max-w-4xl mx-auto p-4">
         <div id="raid-view">
             <div class="bg-primary rounded-2xl shadow-2xl p-6 relative backdrop-blur-sm border border-slate-700">
-                <!-- 상단 헤더 영역: 로고 및 모든 제어 버튼들을 포함합니다. -->
+                <!-- 상단 헤더 영역 -->
                 <header class="flex flex-wrap justify-between items-center mb-6 pt-4 px-2">
-                    <!-- 로고 -->
                     <a href="https://mlfee.com" class="inline-block flex-shrink-0">
                         <img src="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" alt="MLFEE 로고" class="h-8 sm:h-10">
                     </a>
-
-                    <!-- 모든 제어 요소 그룹 (자동/수동 스위치, 테마 선택기, 소리/종료/초기화 버튼) -->
-                    <div class="flex flex-wrap items-center gap-4 mt-2 sm:mt-0 ml-auto"> <!-- ml-auto로 오른쪽 정렬 -->
-                        <!-- 자동/수동 스위치 -->
+                    <div class="flex flex-wrap items-center gap-4 mt-2 sm:mt-0 ml-auto">
                         <div class="flex items-center space-x-3 bg-secondary/50 p-2 rounded-full">
                             <span id="manualModeLabel" class="text-sm font-bold px-2 transition-colors">수동</span>
                             <label for="autoDeathToggle" class="relative inline-flex items-center cursor-pointer">
@@ -220,22 +212,18 @@
                             </label>
                             <span id="autoModeLabel" class="text-sm font-bold px-2 transition-colors">자동</span>
                         </div>
-                        
-                        <!-- 테마 선택기 -->
                         <div id="theme-selector" class="relative">
                             <button id="theme-btn" class="bg-secondary hover:bg-tertiary text-secondary text-sm font-bold py-1.5 px-4 rounded-full transition-colors flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.121-3.536a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1z" /></svg>
                                 <span>테마</span>
                             </button>
-                            <div id="theme-dropdown" class="absolute left-0 mt-2 w-48 bg-primary border border-tertiary rounded-lg shadow-lg hidden z-10">
+                            <div id="theme-dropdown" class="absolute right-0 mt-2 w-48 bg-primary border border-tertiary rounded-lg shadow-lg hidden z-10">
                                 <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="default">기본 (어둠)</a>
                                 <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="forest">숲속의 아침</a>
                                 <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="ocean">심해 탐험</a>
                                 <a href="#" class="theme-option block px-4 py-2 text-sm text-secondary hover:bg-secondary" data-theme="blackgold">블랙 & 골드</a>
                             </div>
                         </div>
-
-                        <!-- 소리, 종료, 초기화 버튼 -->
                         <div class="flex items-center gap-2">
                             <button id="muteBtn" class="bg-secondary hover:bg-tertiary text-secondary text-sm font-bold py-1.5 px-4 rounded-full transition-colors">소리 끄기</button>
                             <button id="endRaidBtn" class="bg-red-600 hover:bg-red-500 text-white text-sm font-bold py-1.5 px-4 rounded-full transition-colors hidden">레이드 종료</button>
@@ -244,7 +232,7 @@
                     </div>
                 </header>
                 
-                <!-- 레이드 크로니클의 메인 제목 및 시간 표시 (pt-16 제거) -->
+                <!-- 메인 제목 -->
                 <div class="text-center mb-6">
                     <h1 class="text-5xl font-black gradient-text tracking-wider">레이드 크로니클</h1>
                     <div id="totalTime" class="mt-2">
@@ -253,10 +241,12 @@
                     </div>
                 </div>
                 
+                <!-- 결과 요약 컨테이너 -->
                 <div id="summaryContainer" class="summary-container">
                     <div id="summaryContent" class="text-left space-y-4 text-secondary text-lg"></div>
                 </div>
                 
+                <!-- 시간 정보 -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-t border-b border-border-color py-6">
                     <div class="text-center">
                         <p class="text-base text-secondary mb-1">현재 시각 (KST)</p>
@@ -270,8 +260,10 @@
                     </div>
                 </div>
 
+                <!-- 메인 컨트롤 패널 -->
                 <div id="control-panel" class="flex flex-col items-center justify-center min-h-[200px]"></div>
                 
+                <!-- 리저렉션 게이지 -->
                 <div id="resGaugeContainer" class="hidden pt-4 mt-4">
                     <div class="flex justify-between items-center mb-1">
                         <span class="text-lg text-emerald-400 font-bold">리저렉션 유효 시간</span>
@@ -284,6 +276,7 @@
                 
                 <div id="briefing" class="mt-6 text-center text-secondary font-semibold h-6 text-lg"></div>
 
+                <!-- 파티원 관리 -->
                 <div id="bishopSection" class="mt-8">
                     <div class="flex justify-between items-center mb-2 px-2">
                         <h2 class="text-xl font-bold text-primary">파티원 관리</h2>
@@ -294,7 +287,7 @@
                     </div>
                 </div>
                 
-                <!-- 로그 및 메모장 섹션 -->
+                <!-- 로그 및 메모장 -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
                     <div id="log-section" class="bg-secondary/70 rounded-lg flex flex-col">
                         <h2 class="p-4 font-bold text-lg text-primary text-center border-b border-border-color flex-shrink-0">이벤트 로그</h2>
@@ -306,11 +299,46 @@
                     </div>
                 </div>
                 
-                <div id="how-to-guide" class="mt-12">
+                <!-- 서포터즈 허브 -->
+                <div id="supporters-hub" class="mt-12 border-t-2 border-border-color pt-8">
+                    <h2 class="text-4xl font-black text-center gradient-text mb-8">서포터즈 허브</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- 왼쪽: 설명서 및 문의 -->
+                        <div class="bg-secondary/50 p-8 rounded-xl">
+                            <h3 class="text-2xl font-bold text-primary mb-4 border-l-4 border-accent-color-1 pl-4">도움말 & 문의</h3>
+                            <p class="text-secondary mb-6">레이드 크로니클 사용법이 궁금하거나, 버그 제보 및 아이디어 제안이 있으신가요?</p>
+                            <div class="space-y-4">
+                                <button id="guideLink" class="block w-full text-center bg-tertiary hover:bg-interactive text-primary font-bold py-3 px-4 rounded-lg transition">활용 가이드 보기</button>
+                                <button id="contactLink" class="w-full bg-tertiary hover:bg-interactive text-primary font-bold py-3 px-4 rounded-lg transition">개발자에게 문의하기</button>
+                            </div>
+                        </div>
+                        <!-- 오른쪽: 광고 및 후원 -->
+                        <div class="bg-secondary/50 p-8 rounded-xl">
+                             <h3 class="text-2xl font-bold text-primary mb-4 border-l-4 border-accent-color-2 pl-4">이 여정을 응원해주세요</h3>
+                             <p class="text-secondary mb-2">여러분의 응원은 더 나은 도구를 만드는 데 큰 힘이 됩니다. 광고를 클릭하시거나, 따뜻한 커피 한 잔을 선물해주세요.</p>
+                             <!-- 멀티플렉스 광고 영역 -->
+                             <div class="my-4 bg-black/20 p-2 rounded-lg min-h-[100px] flex items-center justify-center">
+                                <ins class="adsbygoogle"
+                                     style="display:block"
+                                     data-ad-format="autorelaxed"
+                                     data-ad-client="ca-pub-8602495420447615"
+                                     data-ad-slot="8008213801"></ins>
+                                <script>
+                                     (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>
+                             </div>
+                             <!-- 후원 버튼 (예시: Toss) -->
+                             <a href="https://toss.me/YOUR_TOSS_ID" target="_blank" class="block w-full text-center bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 px-4 rounded-lg transition">커피 한 잔 선물하기 ☕</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 활용 가이드 (숨겨진 콘텐츠) -->
+                <div id="how-to-guide-content" class="mt-12 hidden transition-all duration-500">
                     <div class="border-t-2 border-border-color pt-8">
                         <h2 class="text-4xl font-black text-center gradient-text mb-8">레이드 크로니클 활용 가이드</h2>
                         <div class="space-y-12 text-secondary leading-relaxed text-lg bg-primary/50 p-8 rounded-xl">
-                            <section>
+                           <section>
                                 <h3 class="text-2xl font-bold text-primary mb-4 border-l-4 border-accent-color-1 pl-4">1. 레이드 크로니클이란?</h3>
                                 <p>레이드 크로니클은 메이플랜드의 자쿰, 혼테일과 같은 보스 원정에서 가장 중요한 요소 중 하나인 '리저렉션'의 복잡한 쿨타임을 관리해주는 스마트 타이머입니다. 파티의 전멸을 막고 안정적인 클리어를 돕기 위해 설계되었습니다. 더 이상 수동으로 시간을 계산하거나 기억할 필요 없이, 이 도구가 모든 것을 자동으로 처리하고 음성으로 알려줍니다.</p>
                             </section>
@@ -341,13 +369,14 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
     
     <!-- Modals -->
-    <div id="contactModal" class="modal-backdrop items-center justify-center hidden">
-        <div class="modal-content max-w-sm">
+    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden modal-backdrop-custom">
+        <div class="backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full text-center border modal-content-custom max-w-sm relative">
             <button id="closeContactModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
             <h3 class="text-2xl font-bold text-yellow-400">문의하기</h3>
             <div class="space-y-4 mt-6">
@@ -370,8 +399,8 @@
     </div>
 
     <!-- Confirmation Modal -->
-    <div id="confirmModal" class="modal-backdrop items-center justify-center hidden">
-        <div class="modal-content max-w-sm">
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[1002] hidden modal-backdrop-custom">
+        <div class="backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full text-center border modal-content-custom max-w-sm relative">
             <h3 id="confirmModalTitle" class="text-2xl font-bold text-yellow-400">확인</h3>
             <p id="confirmModalMessage" class="mt-4 text-lg text-secondary"></p>
             <div class="mt-6 flex justify-end gap-4">
@@ -410,6 +439,7 @@
                 sidebarToggle: document.getElementById('sidebar-toggle'),
                 sidebar: document.getElementById('sidebar'),
                 sidebarOverlay: document.getElementById('sidebar-overlay'),
+                supportersLink: document.getElementById('supportersLink'),
                 guideLink: document.getElementById('guideLink'),
                 contactLink: document.getElementById('contactLink'),
                 contactModal: document.getElementById('contactModal'),
@@ -426,6 +456,7 @@
                 themeBtn: document.getElementById('theme-btn'),
                 themeDropdown: document.getElementById('theme-dropdown'),
                 themeOptions: document.querySelectorAll('.theme-option'),
+                howToGuideContent: document.getElementById('how-to-guide-content'),
             };
 
             let timerInterval = null, isMuted = false, autoDeathTimeoutId = null;
@@ -439,20 +470,17 @@
                     this.storageKey = 'raidChronicleNotepad';
                     this._init();
                 }
-
                 _init() {
                     if (!this.textarea) return;
                     this._load();
                     this.textarea.addEventListener('input', () => this._save());
                 }
-
                 _load() {
                     const savedContent = localStorage.getItem(this.storageKey);
                     if (savedContent) {
                         this.textarea.value = savedContent;
                     }
                 }
-
                 _save() {
                     localStorage.setItem(this.storageKey, this.textarea.value);
                 }
@@ -464,14 +492,12 @@
                     this.currentTheme = localStorage.getItem('raidChronicleTheme') || 'default';
                     this._init();
                 }
-
                 _init() {
                     this.applyTheme(this.currentTheme);
                     dom.themeBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
                         dom.themeDropdown.classList.toggle('hidden');
                     });
-
                     dom.themeOptions.forEach(option => {
                         option.addEventListener('click', (e) => {
                             e.preventDefault();
@@ -480,14 +506,12 @@
                             dom.themeDropdown.classList.add('hidden');
                         });
                     });
-
                     document.addEventListener('click', (e) => {
                         if (!dom.themeBtn.contains(e.target) && !dom.themeDropdown.contains(e.target)) {
                             dom.themeDropdown.classList.add('hidden');
                         }
                     });
                 }
-
                 applyTheme(themeName) {
                     document.body.className = `antialiased theme-${themeName}`;
                     localStorage.setItem('raidChronicleTheme', themeName);
@@ -542,7 +566,7 @@
                 dom.addBishopBtn.disabled = data.state !== 'initial';
                 dom.logSection.parentElement.classList.toggle('hidden', data.state === 'ended');
                 dom.bishopSection.classList.toggle('hidden', data.state === 'ended');
-                
+
                 if (data.state !== 'ended') {
                     dom.summaryContainer.classList.remove('expanded');
                 }
@@ -600,13 +624,16 @@
             function renderControlPanel(data) {
                 let buttonHTML = '', briefingText = '';
 
+                // [수정] 버튼 사이즈 축소
+                const buttonClasses = "w-full max-w-md text-4xl sm:text-5xl font-bold py-6 sm:py-8 px-6 rounded-full shadow-lg border-2 transition-all duration-200 relative overflow-hidden active:transform active:scale-95 active:shadow-inner";
+
                 switch (data.state) {
                     case 'initial':
-                        buttonHTML = `<button id="startRaidBtn" class="main-control-btn btn-start">레이드 시작</button>`;
+                        buttonHTML = `<button id="startRaidBtn" class="${buttonClasses} btn-start">레이드 시작</button>`;
                         briefingText = "파티원을 설정하고 레이드를 시작하세요.";
                         break;
                     case 'running':
-                        buttonHTML = `<button id="deathBtn" class="main-control-btn btn-death">사망자 발생</button>`;
+                        buttonHTML = `<button id="deathBtn" class="${buttonClasses} btn-death">사망자 발생</button>`;
                         briefingText = data.bishops.length > 0 ? `🟢 다음 리저: ${data.bishops[data.currentBishopIndex].name}` : '비숍을 추가해주세요.';
                         break;
                     case 'res-active':
@@ -615,7 +642,7 @@
                         const onCooldown = bishop.cooldownEndsAt && bishop.cooldownEndsAt > now;
                         const cooldownSeconds = onCooldown ? Math.floor((bishop.cooldownEndsAt - now) / 1000) : 0;
                         
-                        buttonHTML = `<button id="useResBtn" class="main-control-btn btn-res" ${onCooldown ? 'disabled' : ''}>${bishop.name} 리저 사용</button>`;
+                        buttonHTML = `<button id="useResBtn" class="${buttonClasses} btn-res" ${onCooldown ? 'disabled' : ''}>${bishop.name} 리저 사용</button>`;
                         briefingText = onCooldown ? `🔴 ${bishop.name} 쿨타임! (${formatTime(cooldownSeconds, false)} 남음)` : `🚨 ${bishop.name}님, 리저렉션을 사용해주세요!`;
                         break;
                     case 'ended':
@@ -837,7 +864,7 @@
             
             function addBishop() {
                 if (raidState.state !== 'initial') return;
-                const newBishopName = `비숍${String.fromCharCode(65 + raidState.bishops.length)}`;
+                const newBishopName = `비숍${raidState.bishops.length + 1}`;
                 raidState.bishops.push({ name: newBishopName, cooldownEndsAt: null, usedAt: null, resCount: 0 });
                 addLog(`${newBishopName}이(가) 파티에 참가했습니다.`, 'info');
                 render(raidState);
@@ -968,14 +995,20 @@
                 if (dom.sidebarOverlay) {
                     dom.sidebarOverlay.addEventListener('click', closeSidebar);
                 }
-                if(dom.guideLink) dom.guideLink.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('how-to-guide').scrollIntoView({ behavior: 'smooth' }); closeSidebar(); });
+                if(dom.supportersLink) dom.supportersLink.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('supporters-hub').scrollIntoView({ behavior: 'smooth' }); closeSidebar(); });
+                if(dom.guideLink) {
+                    dom.guideLink.addEventListener('click', (e) => { 
+                        e.preventDefault(); 
+                        dom.howToGuideContent.classList.toggle('hidden');
+                        if(!dom.howToGuideContent.classList.contains('hidden')) {
+                            dom.howToGuideContent.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                }
                 if(dom.contactLink) {
                     dom.contactLink.addEventListener('click', (e) => { 
                         e.preventDefault(); 
-                        closeSidebar();
-                        setTimeout(() => {
-                            dom.contactModal.classList.remove('hidden');
-                        }, 300);
+                        dom.contactModal.classList.remove('hidden');
                     });
                 }
                 if(dom.closeContactModalBtn) dom.closeContactModalBtn.addEventListener('click', () => dom.contactModal.classList.add('hidden'));
