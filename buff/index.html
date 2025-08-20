@@ -4,13 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>메피 버피 | MLFEE</title>
+    <title>메피 버피 - 메이플랜드 버프 타이머 | MLFEE</title>
     <meta name="description" content="홀리심볼, 샤프 아이즈 등 주요 버프 스킬의 주기를 관리하고, 음성으로 리필 타이밍을 알려주는 실시간 버프 관리 도구입니다.">
     <meta name="keywords" content="메이플랜드, 버프 타이머, 메피, MLFEE, 홀리심볼, 샤프아이즈">
+    <meta property="og:title" content="메피 버피 - 메이플랜드 필수 버프 타이머">
+    <meta property="og:description" content="실시간 동기화와 지능형 시간 안내로 파티의 효율을 극대화하세요.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.mlfee.com/buff/">
+    
+    <!-- 파비콘 (Favicon) 추가 -->
+    <link rel="icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png" type="image/png">
+    
+    <!-- Open Graph 이미지 추가 (소셜 미디어 공유 시 미리보기 이미지) -->
+    <meta property="og:image" content="https://raw.githubusercontent.com/boy1arthur/mlfee-project/refs/heads/main/images/mlfee-logo.png">
+    <meta property="og:image:width" content="1200"> 
+    <meta property="og:image:height" content="630"> 
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- 애드센스 자동 광고 스크립트 -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615"
+     crossorigin="anonymous"></script>
+
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -20,7 +39,8 @@
         }
 
         .app-container,
-        .stopwatch-panel {
+        .stopwatch-panel,
+        .supporters-hub-card {
             background: linear-gradient(145deg, #2d3748, #1a202c);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
@@ -67,9 +87,16 @@
             /* blue-300 */
             text-shadow: 0 0 5px rgba(144, 205, 244, 0.5);
         }
+
+        .hamburger-icon span { transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; }
+        .nav-toggle.active .hamburger-icon span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .nav-toggle.active .hamburger-icon span:nth-child(2) { opacity: 0; }
+        .nav-toggle.active .hamburger-icon span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
     </style>
 </head>
-<!-- ########## 사이드바 메뉴 HTML ########## -->
+<body class="text-gray-200 min-h-screen p-4">
+
+    <!-- ########## 사이드바 메뉴 HTML ########## -->
     <div id="sidebar-toggle" class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-700">
         <div class="hamburger-icon space-y-1.5">
             <span class="block w-6 h-0.5 bg-white"></span>
@@ -78,119 +105,190 @@
         </div>
     </div>
     <nav id="sidebar" class="fixed right-0 top-0 w-72 h-full bg-gray-800/90 backdrop-blur-lg border-l-2 border-gray-700 z-[1000] shadow-2xl transition-transform duration-300 ease-in-out translate-x-full">
-        <h3 class="text-center text-2xl font-bold gradient-text mt-16 mb-8">메뉴</h3>
+        <h3 class="text-center text-2xl font-bold text-cyan-300 mt-16 mb-8">메뉴</h3>
         <a href="https://mlfee.com" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">홈</a>
         <a href="https://mlfee.com/community/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">커뮤니티</a>
         <a href="https://www.mlfee.com/calc/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">수수료 계산기</a>
         <a href="https://www.mlfee.com/timer/" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">리저 타이머</a>
-        <a href="buff/index.html" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
-        <a href="#calculator-guide" id="guide-link" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">설명서</a>
-        <a href="#" id="contact-link" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">문의</a>
+        <a href="#" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">메피 버피</a>
+        <a href="#supporters-hub" id="supporters-link" class="block py-3 px-8 text-lg text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition">서포터즈 허브</a>
     </nav>
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-50 hidden"></div>
     <!-- ########## 사이드바 메뉴 HTML 끝 ########## -->
-<body class="text-gray-200 flex items-center justify-center min-h-screen p-4">
-    <div class="flex flex-col md:flex-row gap-4">
-        <!-- Main Buff Timer Panel -->
-        <div class="app-container w-full max-w-sm rounded-2xl p-4 space-y-4">
-            <header class="text-center">
-                <h1 class="text-2xl font-bold text-blue-400">메피 버피</h1>
-                <p id="realtime-clock" class="text-md text-gray-400 font-mono"></p>
-                <p id="elapsed-time" class="text-sm text-cyan-300 font-semibold h-5"></p>
-                <p id="expected-end-time" class="text-sm text-pink-300 font-semibold h-5"></p>
-            </header>
-            <div id="global-controls" class="grid grid-cols-3 gap-2">
-                <button id="global-start-btn" class="btn bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded-lg flex items-center justify-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    </svg>
-                    <span>시작</span>
-                </button>
-                <button id="global-stop-btn" class="btn bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-lg flex items-center justify-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
-                    </svg>
-                    <span>정지</span>
-                </button>
-                <button id="global-reset-btn" class="btn bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 rounded-lg flex items-center justify-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 9a9 9 0 0114.65-4.65L20 5M20 15a9 9 0 01-14.65 4.65L4 19" />
-                    </svg>
-                    <span>초기화</span>
-                </button>
-            </div>
-
-            <div class="space-y-2">
-                <div id="active-timers-container" class="space-y-2">
-                    <p id="no-timers-message" class="text-gray-500 text-center py-4">활성화된 타이머가 없습니다.</p>
-                </div>
-            </div>
-
-            <div class="space-y-4 pt-4 border-t border-gray-700/50">
-                <h2 class="section-title text-lg font-semibold text-center">스킬 추가하기</h2>
-                <button id="preset-holy-symbol" class="btn w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-2 px-4 rounded-lg flex items-center justify-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2L12 22M22 12L2 12" />
-                    </svg>
-                    <span>홀리심볼</span>
-                </button>
-                <div class="bg-gray-800 p-3 rounded-lg space-y-3">
-                    <h3 class="font-semibold text-white flex items-center space-x-2 justify-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
+    
+    <div class="w-full flex flex-col items-center">
+        <div class="flex flex-col md:flex-row gap-4 w-full justify-center">
+            <!-- Main Buff Timer Panel -->
+            <div class="app-container w-full max-w-sm rounded-2xl p-4 space-y-4">
+                <header class="text-center">
+                    <h1 class="text-2xl font-bold text-blue-400">메피 버피</h1>
+                    <p id="realtime-clock" class="text-md text-gray-400 font-mono"></p>
+                    <p id="elapsed-time" class="text-sm text-cyan-300 font-semibold h-5"></p>
+                    <p id="expected-end-time" class="text-sm text-pink-300 font-semibold h-5"></p>
+                </header>
+                <div id="global-controls" class="grid grid-cols-3 gap-2">
+                    <button id="global-start-btn" class="btn bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded-lg flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                         </svg>
-                        <span>샤프 아이즈</span>
-                    </h3>
-                    <div id="sharp-eyes-levels" class="grid grid-cols-3 gap-2">
-                        <button data-level="10" data-duration="100" class="level-btn btn bg-gray-700 hover:bg-gray-600 py-1 text-sm rounded-md">Lv.10</button>
-                        <button data-level="20" data-duration="200" class="level-btn btn bg-gray-700 hover:bg-gray-600 py-1 text-sm rounded-md">Lv.20</button>
-                        <button data-level="30" data-duration="300" class="level-btn btn bg-gray-700 hover:bg-gray-600 py-1 text-sm rounded-md active">Lv.30</button>
-                    </div>
-                    <button id="add-sharp-eyes" class="btn w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded-md flex items-center justify-center space-x-2 text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        <span>시작</span>
+                    </button>
+                    <button id="global-stop-btn" class="btn bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-lg flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
                         </svg>
-                        <span>추가</span>
+                        <span>정지</span>
                     </button>
-                </div>
-                <form id="custom-timer-form" class="space-y-2">
-                    <input type="text" id="custom-name" placeholder="자유 스킬 이름" required class="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 text-sm">
-                    <input type="number" id="custom-duration" placeholder="지속 시간 (초)" min="1" required class="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 text-sm">
-                    <button type="submit" class="btn w-full bg-teal-600 hover:bg-teal-500 font-bold py-2 rounded-md flex items-center justify-center space-x-2 text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    <button id="global-reset-btn" class="btn bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 rounded-lg flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 9a9 9 0 0114.65-4.65L20 5M20 15a9 9 0 01-14.65 4.65L4 19" />
                         </svg>
-                        <span>추가</span>
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Right Column (Stopwatch & Notepad) -->
-        <div class="flex flex-col gap-4 w-full max-w-sm">
-            <!-- Buff Cast Stopwatch Panel -->
-            <div class="stopwatch-panel rounded-2xl p-4 flex flex-col justify-center items-center space-y-4">
-                <h2 class="text-xl font-bold text-indigo-300 text-center">버프 시전 시간</h2>
-                <p id="cast-time-display" class="font-mono text-5xl text-white">0.00<span class="text-3xl opacity-70">s</span></p>
-                <div class="grid grid-cols-2 gap-2 w-full">
-                    <button id="cast-time-toggle-btn" class="btn bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg flex items-center justify-center space-x-2">
-                        <span id="cast-time-toggle-text">시작</span>
-                    </button>
-                    <button id="cast-time-reset-btn" class="btn bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 rounded-lg flex items-center justify-center space-x-2">
                         <span>초기화</span>
                     </button>
                 </div>
+
+                <div class="space-y-2">
+                    <div id="active-timers-container" class="space-y-2">
+                        <p id="no-timers-message" class="text-gray-500 text-center py-4">활성화된 타이머가 없습니다.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 pt-4 border-t border-gray-700/50">
+                    <h2 class="section-title text-lg font-semibold text-center">스킬 추가하기</h2>
+                    <button id="preset-holy-symbol" class="btn w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-2 px-4 rounded-lg flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L12 22M22 12L2 12" />
+                        </svg>
+                        <span>홀리심볼</span>
+                    </button>
+                    <div class="bg-gray-800 p-3 rounded-lg space-y-3">
+                        <h3 class="font-semibold text-white flex items-center space-x-2 justify-center text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <span>샤프 아이즈</span>
+                        </h3>
+                        <div id="sharp-eyes-levels" class="grid grid-cols-3 gap-2">
+                            <button data-level="10" data-duration="100" class="level-btn btn bg-gray-700 hover:bg-gray-600 py-1 text-sm rounded-md">Lv.10</button>
+                            <button data-level="20" data-duration="200" class="level-btn btn bg-gray-700 hover:bg-gray-600 py-1 text-sm rounded-md">Lv.20</button>
+                            <button data-level="30" data-duration="300" class="level-btn btn bg-gray-700 hover:bg-gray-600 py-1 text-sm rounded-md active">Lv.30</button>
+                        </div>
+                        <button id="add-sharp-eyes" class="btn w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded-md flex items-center justify-center space-x-2 text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <span>추가</span>
+                        </button>
+                    </div>
+                    <form id="custom-timer-form" class="space-y-2">
+                        <input type="text" id="custom-name" placeholder="자유 스킬 이름" required class="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <input type="number" id="custom-duration" placeholder="지속 시간 (초)" min="1" required class="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <button type="submit" class="btn w-full bg-teal-600 hover:bg-teal-500 font-bold py-2 rounded-md flex items-center justify-center space-x-2 text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <span>추가</span>
+                        </button>
+                    </form>
+                </div>
             </div>
 
-            <!-- Notepad Panel -->
-            <div class="app-container rounded-2xl p-4 flex flex-col space-y-4 flex-grow">
-                <h2 class="text-xl font-bold text-purple-300 text-center">메모장</h2>
-                <textarea id="notepad" class="w-full h-full flex-grow bg-gray-900/50 border border-gray-700 rounded-lg p-2 text-gray-300 focus:ring-purple-500 focus:border-purple-500 resize-none" placeholder="여기에 메모를 입력하세요..."></textarea>
+            <!-- Right Column (Stopwatch & Notepad) -->
+            <div class="flex flex-col gap-4 w-full max-w-sm">
+                <!-- Buff Cast Stopwatch Panel -->
+                <div class="stopwatch-panel rounded-2xl p-4 flex flex-col justify-center items-center space-y-4">
+                    <h2 class="text-xl font-bold text-indigo-300 text-center">버프 시전 시간</h2>
+                    <p id="cast-time-display" class="font-mono text-5xl text-white">0.00<span class="text-3xl opacity-70">s</span></p>
+                    <div class="grid grid-cols-2 gap-2 w-full">
+                        <button id="cast-time-toggle-btn" class="btn bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg flex items-center justify-center space-x-2">
+                            <span id="cast-time-toggle-text">시작</span>
+                        </button>
+                        <button id="cast-time-reset-btn" class="btn bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 rounded-lg flex items-center justify-center space-x-2">
+                            <span>초기화</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Notepad Panel -->
+                <div class="app-container rounded-2xl p-4 flex flex-col space-y-4 flex-grow">
+                    <h2 class="text-xl font-bold text-purple-300 text-center">메모장</h2>
+                    <textarea id="notepad" class="w-full h-full flex-grow bg-gray-900/50 border border-gray-700 rounded-lg p-2 text-gray-300 focus:ring-purple-500 focus:border-purple-500 resize-none" placeholder="여기에 메모를 입력하세요..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 서포터즈 허브 -->
+        <div id="supporters-hub" class="w-full max-w-4xl mx-auto mt-8 border-t-2 border-gray-700/50 pt-8">
+            <h2 class="text-3xl font-bold text-center text-cyan-300 mb-8">서포터즈 허브</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- 왼쪽: 설명서 및 문의 -->
+                <div class="supporters-hub-card p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold text-white mb-4 border-l-4 border-cyan-400 pl-4">도움말 & 문의</h3>
+                    <p class="text-gray-400 mb-6">메피 버피 사용법이 궁금하거나, 버그 제보 및 아이디어 제안이 있으신가요?</p>
+                    <div class="space-y-4">
+                        <button id="guide-link-btn" class="btn block w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition">활용 가이드 보기</button>
+                        <button id="contact-link-btn" class="btn block w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition">개발자에게 문의하기</button>
+                    </div>
+                </div>
+                <!-- 오른쪽: 광고 및 후원 -->
+                <div class="supporters-hub-card p-6 rounded-2xl">
+                     <h3 class="text-xl font-bold text-white mb-4 border-l-4 border-blue-400 pl-4">이 여정을 응원해주세요</h3>
+                     <p class="text-gray-400 mb-2">여러분의 응원은 더 나은 도구를 만드는 데 큰 힘이 됩니다. 광고를 클릭하시거나, 따뜻한 커피 한 잔을 선물해주세요.</p>
+                     <!-- 멀티플렉스 광고 영역 -->
+                     <div class="my-4 bg-black/20 p-2 rounded-lg min-h-[100px] flex items-center justify-center">
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-format="autorelaxed"
+                             data-ad-client="ca-pub-8602495420447615"
+                             data-ad-slot="YOUR_MULTIPLEX_AD_SLOT_ID"></ins>
+                        <script>
+                             (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                     </div>
+                     <!-- 후원 버튼 (예시: Toss) -->
+                     <a href="https://toss.me/YOUR_TOSS_ID" target="_blank" class="btn block w-full text-center bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 px-4 rounded-lg transition">커피 한 잔 선물하기 ☕</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 활용 가이드 (숨겨진 콘텐츠) -->
+        <div id="how-to-guide" class="w-full max-w-4xl mx-auto mt-8 hidden transition-all duration-500">
+            <div class="app-container p-8 rounded-2xl">
+                <h2 class="text-3xl font-bold text-center text-cyan-300 mb-6">메피 버피 활용 가이드</h2>
+                <div class="space-y-6 text-gray-300 leading-relaxed">
+                    <p>메피 버피는 파티 사냥의 효율을 극대화하기 위한 버프 관리 도구입니다. 주요 버프 스킬의 남은 시간을 추적하고, 적절한 타이밍에 음성으로 알려주어 버프가 끊기는 상황을 방지합니다.</p>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><b>스킬 추가:</b> '홀리심볼'이나 '샤프 아이즈' 버튼을 눌러 타이머를 추가하세요. 직접 스킬 이름과 시간을 입력하여 커스텀 타이머를 만들 수도 있습니다.</li>
+                        <li><b>전체 제어:</b> 상단의 시작/정지/초기화 버튼으로 모든 타이머를 한 번에 관리할 수 있습니다.</li>
+                        <li><b>시간 조절:</b> 각 타이머 카드 우측의 -1s, +1s 버튼으로 미세한 시간 오차를 보정할 수 있습니다.</li>
+                        <li><b>시전 시간 측정:</b> 우측의 스톱워치를 사용해 자신의 버프 시전 시간을 측정하고 파티원에게 공유해보세요.</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-[1002] hidden">
+        <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center border border-gray-700 relative">
+            <button id="closeContactModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">&times;</button>
+            <h3 class="text-2xl font-bold text-yellow-400">문의하기</h3>
+            <div class="space-y-4 mt-6">
+                <a href="mailto:esgroup129@gmail.com" class="btn w-full flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition">
+                    이메일
+                </a>
+                <a href="https://open.kakao.com/o/s4YH6WFh" target="_blank" class="btn w-full flex items-center justify-center bg-[#FEE500] hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-lg transition">
+                    카카오톡 오픈채팅
+                </a>
+                <a href="https://discord.com/users/930037107823636540" target="_blank" class="btn w-full flex items-center justify-center bg-[#5865F2] hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg transition">
+                    디스코드
+                </a>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -212,34 +310,47 @@
             const castTimeToggleText = document.getElementById('cast-time-toggle-text');
             const presetHolySymbolBtn = document.getElementById('preset-holy-symbol');
             const notepad = document.getElementById('notepad');
-            // --- Sidebar Toggle ---
-const sidebarToggle = document.getElementById('sidebar-toggle');
-const sidebar = document.getElementById('sidebar');
-const sidebarOverlay = document.getElementById('sidebar-overlay');
-const navLinks = document.querySelectorAll('#sidebar a');
+            
+            // Sidebar Elements
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const navLinks = document.querySelectorAll('#sidebar a');
 
-function toggleSidebar() {
-    sidebar.classList.toggle('translate-x-full');
-    sidebarToggle.classList.toggle('active');
-    sidebarOverlay.classList.toggle('hidden');
-}
+            // Supporters Hub & Modal Elements
+            const supportersLink = document.getElementById('supporters-link');
+            const guideLinkBtn = document.getElementById('guide-link-btn');
+            const howToGuide = document.getElementById('how-to-guide');
+            const contactLinkBtn = document.getElementById('contact-link-btn');
+            const contactModal = document.getElementById('contactModal');
+            const closeContactModalBtn = document.getElementById('closeContactModalBtn');
 
-function closeSidebar() {
-    sidebar.classList.add('translate-x-full');
-    sidebarToggle.classList.remove('active');
-    sidebarOverlay.classList.add('hidden');
-}
 
-if (sidebarToggle) {
-    sidebarToggle.addEventListener('click', toggleSidebar);
-}
-if (sidebarOverlay) {
-    sidebarOverlay.addEventListener('click', closeSidebar);
-}
-navLinks.forEach(link => {
-    link.addEventListener('click', closeSidebar);
-});
+            function toggleSidebar() {
+                sidebar.classList.toggle('translate-x-full');
+                sidebarToggle.classList.toggle('active');
+                sidebarOverlay.classList.toggle('hidden');
+            }
 
+            function closeSidebar() {
+                sidebar.classList.add('translate-x-full');
+                sidebarToggle.classList.remove('active');
+                sidebarOverlay.classList.add('hidden');
+            }
+
+            if (sidebarToggle) sidebarToggle.addEventListener('click', toggleSidebar);
+            if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if(link.getAttribute('href').startsWith('#')) {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+                    }
+                    closeSidebar();
+                });
+            });
+            
             // State
             let activeTimers = [];
             let isGlobalTimerRunning = false;
@@ -521,11 +632,6 @@ navLinks.forEach(link => {
                     if (expectedEndTimeDisplay) {
                         expectedEndTimeDisplay.textContent = `예상 종료 시각: ${getOneHourLaterString()}`;
                     }
-            function closeSidebar() {
-                sidebar.classList.add('translate-x-full');
-                sidebarToggle.classList.remove('active');
-                sidebarOverlay.classList.add('hidden');
-            }
                 }
             });
 
@@ -589,8 +695,22 @@ navLinks.forEach(link => {
                 notepad.addEventListener('input', saveNotepad);
             }
 
+            if (guideLinkBtn) guideLinkBtn.addEventListener('click', () => {
+                howToGuide.classList.toggle('hidden');
+                if(!howToGuide.classList.contains('hidden')) {
+                    howToGuide.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+            if (contactLinkBtn) contactLinkBtn.addEventListener('click', () => contactModal.classList.remove('hidden'));
+            if (closeContactModalBtn) closeContactModalBtn.addEventListener('click', () => contactModal.classList.add('hidden'));
+            if (contactModal) contactModal.addEventListener('click', (e) => {
+                if(e.target === contactModal) contactModal.classList.add('hidden');
+            });
+
+
             // --- Start the App ---
             initializeBuffy();
         });
     </script>
 </body>
+</ht
