@@ -36,10 +36,11 @@
         width: 100%;
         height: 100%;
         background-image: linear-gradient(to top, #0A0A0A 15%, transparent 60%), url('https://raw.githubusercontent.com/boy1arthur/mlfee-project/main/images/hyun.jpg');
-        /* 이미지 전체가 보이도록 contain으로 변경하고, 반복되지 않도록 설정했습니다. */
-        background-size: contain;
+        /* 이미지가 좌우를 꽉 채우도록 cover로 변경했습니다. */
+        background-size: cover;
         background-repeat: no-repeat;
-        background-position: center;
+        /* 이미지가 항상 위쪽을 기준으로 표시되도록 수정했습니다. */
+        background-position: center top;
     }
     #particle-canvas {
         position: absolute;
@@ -124,12 +125,12 @@
         <p class="mt-4 text-lg text-slate-400" data-translate="tools_subtitle">당신의 게임 경험을 바꿀 AI 기반 유틸리티</p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="tool-card rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_calc">N빵마스터</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_calc_tagline">수수료 걱정 없는 완벽한 분배</p><a href="/calc/index.html" target="_blank" class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</a></div>
-      <div class="tool-card rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_breaker">혼테일 브레이커</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_breaker_tagline">최적의 공략 순서 시뮬레이터</p><a href="/breaker/index.html" target="_blank" class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</a></div>
-      <div class="tool-card rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_timer">리저 타이머</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_timer_tagline">부활과 버프, 놓치지 마세요</p><a href="/timer/index.html" target="_blank" class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</a></div>
-      <div class="tool-card rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_ledger">혼테일렛저</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_ledger_tagline">보상과 기여도 자동 기록</p><a href="/ledger/index.html" target="_blank" class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</a></div>
-      <div class="tool-card rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_buff">메피 버피</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_buff_tagline">최적의 버프 순서와 타이밍</p><a href="/buff/index.html" target="_blank" class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</a></div>
-      <div class="tool-card rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_janus">프로젝트 야누스</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_janus_desc">새로운 세계관과 인지 테스트</p><a href="/janus/roadmap.html" target="_blank" class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</a></div>
+      <a href="/calc/index.html" target="_blank" class="tool-card block rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_calc">N빵마스터</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_calc_tagline">수수료 걱정 없는 완벽한 분배</p><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
+      <a href="/breaker/index.html" target="_blank" class="tool-card block rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_breaker">혼테일 브레이커</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_breaker_tagline">최적의 공략 순서 시뮬레이터</p><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
+      <a href="/timer/index.html" target="_blank" class="tool-card block rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_timer">리저 타이머</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_timer_tagline">부활과 버프, 놓치지 마세요</p><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
+      <a href="/ledger/index.html" target="_blank" class="tool-card block rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_ledger">혼테일렛저</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_ledger_tagline">보상과 기여도 자동 기록</p><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
+      <a href="/buff/index.html" target="_blank" class="tool-card block rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_buff">메피 버피</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_buff_tagline">최적의 버프 순서와 타이밍</p><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
+      <a href="/janus/roadmap.html" target="_blank" class="tool-card block rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_janus">프로젝트 야누스</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_janus_desc">새로운 세계관과 인지 테스트</p><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
     </div>
   </section>
 
@@ -139,7 +140,7 @@
         <h2 class="text-3xl font-bold tracking-tight" data-translate="journey_title">당신의 아이디어가 다음 도구가 됩니다</h2>
         <p class="mt-4 text-lg text-slate-400" data-translate="journey_subtitle">"이런 기능이 있었으면..." 하는 생각이 있으신가요? 커뮤니티에서 당신의 목소리를 들려주세요. 당신의 불편함이 모두의 편안함이 될 수 있습니다.</p>
         <div class="mt-8">
-            <a href="https://discord.com/users/930037107823636540" target="_blank" class="inline-block px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-lg shadow-lg hover:opacity-90 transition-opacity">
+            <a href="https://discord.com/users/930037107823636540/" target="_blank" class="inline-block px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-lg shadow-lg hover:opacity-90 transition-opacity">
                 <span data-translate="journey_cta_btn">커뮤니티에서 아이디어 제안하기</span>
             </a>
         </div>
