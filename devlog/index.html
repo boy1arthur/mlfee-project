@@ -164,7 +164,6 @@
         import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // [1단계] '비밀 열쇠'가 적용되었습니다.
         const firebaseConfig = {
             apiKey: "AIzaSyDpZwSHo6uU3BLyVZArdm8V8hLWSjdJ8Mc",
             authDomain: "mlfee-devlog.firebaseapp.com",
@@ -175,10 +174,8 @@
             measurementId: "G-VMMRDEGG81"
         };
 
-        // [2단계] 사장님의 '관리자 ID'가 적용되었습니다.
         const ADMIN_UID = "100078454499707733076"; 
         
-        // --- 아래부터는 자동으로 작동하는 코드입니다. ---
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -187,6 +184,9 @@
         const loadingSpinner = document.getElementById('loading-spinner');
         const authContainer = document.getElementById('auth-container');
         const writePostBtn = document.getElementById('write-post-btn');
+
+        // [수정] 페이지 로드 시, 인증 상태 확인 중임을 표시
+        authContainer.innerHTML = `<span class="text-sm text-gray-500">인증 확인 중...</span>`;
 
         initializeWritingFeature(auth, db);
         initializeAuth(auth);
@@ -240,13 +240,16 @@
         function initializeAuth(auth) {
             const provider = new GoogleAuthProvider();
 
+            // 페이지 로드 시 리디렉션 결과 처리
             getRedirectResult(auth).catch((error) => {
                 console.error("로그인 리디렉션 중 오류 발생:", error);
             });
 
+            // 인증 상태 변경 감지
             onAuthStateChanged(auth, (user) => {
-                authContainer.innerHTML = '';
+                authContainer.innerHTML = ''; // 이전 버튼 내용 초기화
                 if (user) {
+                    // 로그인 된 경우
                     const logoutBtn = document.createElement('button');
                     logoutBtn.className = "bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-md text-sm hover:bg-gray-300 transition-colors";
                     logoutBtn.innerHTML = `<i class="fas fa-right-from-bracket mr-1"></i> 로그아웃`;
@@ -259,6 +262,7 @@
                         writePostBtn.classList.add('hidden');
                     }
                 } else {
+                    // 로그아웃 된 경우
                     const loginBtn = document.createElement('button');
                     loginBtn.className = "bg-black text-white font-bold py-2 px-4 rounded-md text-sm hover:bg-gray-800 transition-colors";
                     loginBtn.innerHTML = `<i class="fab fa-google mr-2"></i> 관리자 로그인`;
