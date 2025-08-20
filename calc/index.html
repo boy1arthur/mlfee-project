@@ -30,7 +30,7 @@
         html { scroll-behavior: smooth; }
         body { 
             font-family: 'Inter', 'Noto Sans KR', sans-serif; 
-            background-color: #ffffff;
+            background-color: #f9fafb; /* Light gray background */
             color: #111827;
         }
         .font-serif {
@@ -62,19 +62,36 @@
             overflow: hidden;
             transition: max-height 0.5s ease-in-out;
         }
-        .ad-slot {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f3f4f6;
-            border: 1px dashed #d1d5db;
-            color: #9ca3af;
-            font-size: 0.875rem;
-            min-height: 90px;
+        .supporters-hub-card {
+            background: white;
+            border: 1px solid #e5e7eb;
         }
+        .hamburger-icon span { transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; }
+        .nav-toggle.active .hamburger-icon span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .nav-toggle.active .hamburger-icon span:nth-child(2) { opacity: 0; }
+        .nav-toggle.active .hamburger-icon span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
     </style>
 </head>
 <body class="antialiased">
+
+    <!-- Sidebar Navigation -->
+    <div id="sidebar-toggle" class="nav-toggle fixed top-5 right-5 z-[1001] cursor-pointer w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-gray-200">
+        <div class="hamburger-icon space-y-1.5">
+            <span class="block w-6 h-0.5 bg-gray-800"></span>
+            <span class="block w-6 h-0.5 bg-gray-800"></span>
+            <span class="block w-6 h-0.5 bg-gray-800"></span>
+        </div>
+    </div>
+    <nav id="sidebar" class="fixed right-0 top-0 w-72 h-full bg-white/90 backdrop-blur-lg border-l border-gray-200 z-[1000] shadow-2xl transition-transform duration-300 ease-in-out translate-x-full">
+        <h3 class="text-center text-2xl font-bold text-gray-800 mt-16 mb-8">메뉴</h3>
+        <a href="https://mlfee.com" class="block py-3 px-8 text-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition">홈</a>
+        <a href="https://mlfee.com/community/" class="block py-3 px-8 text-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition">커뮤니티</a>
+        <a href="https://www.mlfee.com/calc/" class="block py-3 px-8 text-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition">N빵마스터</a>
+        <a href="https://www.mlfee.com/timer/" class="block py-3 px-8 text-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition">리저 타이머</a>
+        <a href="https://www.mlfee.com/buff/" class="block py-3 px-8 text-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition">메피 버피</a>
+        <a href="#supporters-hub" id="supporters-link" class="block py-3 px-8 text-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition">서포터즈 허브</a>
+    </nav>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-50 hidden"></div>
 
     <div class="main-content">
         <div class="max-w-4xl mx-auto px-4">
@@ -85,11 +102,6 @@
                     </h1>
                     <p class="text-gray-500 mt-4 text-lg">메이플랜드 수수료 · 정산 · 역산 자동 계산기</p>
                 </header>
-
-                <!-- 중앙 상단 광고 -->
-                <div class="my-8 text-center ad-slot">
-                    <ins class="adsbygoogle" style="display:block; width:100%;" data-ad-client="ca-pub-8602495420447615" data-ad-slot="2222222222" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                </div>
 
                 <!-- 계산기 입력부 -->
                 <div class="bg-white p-6 sm:p-8 rounded-lg border border-gray-200 shadow-sm">
@@ -135,8 +147,44 @@
                 
                 <div class="w-full h-px bg-gray-200 my-12"></div>
 
-                <div id="calculator-guide" class="mt-6">
-                    <div class="bg-gray-50 p-6 sm:p-8 rounded-lg border border-gray-200">
+                <!-- 서포터즈 허브 -->
+                <div id="supporters-hub" class="mt-12">
+                    <h2 class="text-3xl font-bold text-center text-gray-800 mb-8 font-serif">서포터즈 허브</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- 왼쪽: 설명서 및 문의 -->
+                        <div class="supporters-hub-card p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4 border-l-4 border-blue-500 pl-4">도움말 & 문의</h3>
+                            <p class="text-gray-600 mb-6">N빵마스터 사용법이 궁금하거나, 버그 제보 및 아이디어 제안이 있으신가요?</p>
+                            <div class="space-y-4">
+                                <button id="guide-link-btn" class="w-full text-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg transition">활용 가이드 보기</button>
+                                <!-- 문의 기능은 추후 추가 예정 -->
+                            </div>
+                        </div>
+                        <!-- 오른쪽: 광고 및 후원 -->
+                        <div class="supporters-hub-card p-6 rounded-2xl">
+                             <h3 class="text-xl font-bold text-gray-900 mb-4 border-l-4 border-green-500 pl-4">이 여정을 응원해주세요</h3>
+                             <p class="text-gray-600 mb-2">여러분의 응원은 더 나은 도구를 만드는 데 큰 힘이 됩니다. 광고를 클릭하시거나, 따뜻한 커피 한 잔을 선물해주세요.</p>
+                             <!-- [수정] 인아티클 광고 영역 -->
+                             <div class="my-4 bg-gray-100 p-2 rounded-lg min-h-[100px] flex items-center justify-center">
+                                <ins class="adsbygoogle"
+                                     style="display:block; text-align:center;"
+                                     data-ad-layout="in-article"
+                                     data-ad-format="fluid"
+                                     data-ad-client="ca-pub-8602495420447615"
+                                     data-ad-slot="7956242915"></ins>
+                                <script>
+                                     (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>
+                             </div>
+                             <!-- 후원 버튼 (예시: Toss) -->
+                             <a href="https://toss.me/YOUR_TOSS_ID" target="_blank" class="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-lg transition">커피 한 잔 선물하기 ☕</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 활용 가이드 (숨겨진 콘텐츠) -->
+                <div id="calculator-guide" class="mt-8 hidden transition-all duration-500">
+                    <div class="bg-white p-6 sm:p-8 rounded-lg border border-gray-200">
                         <h2 class="text-2xl font-bold text-black mb-4 text-center font-serif">N빵마스터 활용 가이드</h2>
                         <div class="grid md:grid-cols-2 gap-x-8 gap-y-6">
                             <div>
@@ -160,10 +208,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="my-8 text-center ad-slot">
-                    <ins class="adsbygoogle" style="display:block; width:100%;" data-ad-client="ca-pub-8602495420447615" data-ad-slot="4444444444" data-ad-format="auto" data-full-width-responsive="true"></ins>
                 </div>
 
                 <footer class="text-center mt-10 mb-6 text-sm text-gray-500">
@@ -204,14 +248,18 @@
                     errorMessageDiv: document.getElementById('error-message'),
                     parcelOptionsDiv: document.getElementById('parcelOptions'),
                     includeSelfCheckbox: document.getElementById('includeSelf'),
+                    sidebarToggle: document.getElementById('sidebar-toggle'),
+                    sidebar: document.getElementById('sidebar'),
+                    sidebarOverlay: document.getElementById('sidebar-overlay'),
+                    navLinks: document.querySelectorAll('#sidebar a'),
+                    guideLinkBtn: document.getElementById('guide-link-btn'),
+                    calculatorGuide: document.getElementById('calculator-guide'),
                 }
             }
             
             init() {
                 if (!this.elements.calculateBtn) return;
                 this._initEventListeners();
-                (window.adsbygoogle = window.adsbygoogle || []).push({});
-                (window.adsbygoogle = window.adsbygoogle || []).push({});
             }
 
             _initEventListeners() {
@@ -249,6 +297,40 @@
                 this.elements.transactionTypeSelect.addEventListener('change', () => {
                     this.elements.parcelOptionsDiv.classList.toggle('hidden', this.elements.transactionTypeSelect.value !== 'parcel');
                 });
+
+                // Sidebar Listeners
+                this.elements.sidebarToggle.addEventListener('click', () => this._toggleSidebar());
+                this.elements.sidebarOverlay.addEventListener('click', () => this._closeSidebar());
+                this.elements.navLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        if(link.getAttribute('href').startsWith('#')) {
+                            e.preventDefault();
+                            const targetId = link.getAttribute('href');
+                            document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+                        }
+                        this._closeSidebar();
+                    });
+                });
+
+                // Guide Listener
+                this.elements.guideLinkBtn.addEventListener('click', () => {
+                    this.elements.calculatorGuide.classList.toggle('hidden');
+                    if(!this.elements.calculatorGuide.classList.contains('hidden')) {
+                        this.elements.calculatorGuide.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            }
+
+            _toggleSidebar() {
+                this.elements.sidebar.classList.toggle('translate-x-full');
+                this.elements.sidebarToggle.classList.toggle('active');
+                this.elements.sidebarOverlay.classList.toggle('hidden');
+            }
+
+            _closeSidebar() {
+                this.elements.sidebar.classList.add('translate-x-full');
+                this.elements.sidebarToggle.classList.remove('active');
+                this.elements.sidebarOverlay.classList.add('hidden');
             }
             
             // Helper Functions
@@ -290,7 +372,8 @@
                     totalFee += this._calculateFee(remainingAmount, feeSchedule);
                     const rate = (this._getFeeRate(remainingAmount, feeSchedule) * 100).toFixed(1);
                     tradesHTML += `<p class="text-sm">${this._formatNumber(remainingAmount)} x 1회 <span class="text-xs text-gray-500">(${rate}%)</span></p>`;
-                    tradeCount += 1;
+                    // [수정] 자투리 금액은 총 교환 횟수에서 제외합니다.
+                    // tradeCount += 1; 
                 }
                 return { fee: totalFee, html: tradesHTML, tradeCount: tradeCount, leftover: leftover };
             }
@@ -391,7 +474,7 @@
                     let icon = '';
                     if (isFastest && isCheapest) icon = '🥇';
                     else if (isFastest) icon = '⚡️';
-                    else if (isCheapest) icon = '�';
+                    else if (isCheapest) icon = '💰';
 
                     return `
                         <tr class="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 align-top">
@@ -415,7 +498,7 @@
                                 </div>
                             </div>
                             <div class="border border-gray-200 p-6 rounded-xl">
-                                <h3 class="text-xl font-bold text-green-600 border-b border-gray-200 pb-3 mb-4">💰 최적 조합 (수수료 최소)</h3>
+                                <h3 class="text-xl font-bold text-green-600 border-b border-gray-200 pb-3 mb-4">� 최적 조합 (수수료 최소)</h3>
                                 <div class="space-y-1">${addLeftoverHtml(cheapestMethod)}
                                     <hr class="border-gray-200 my-2">
                                     <p class="text-lg">총 수수료: <span class="font-bold text-green-600">${this._formatNumber(cheapestMethod.fee)} 메소</span></p>
