@@ -3,187 +3,316 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MLFEE TIMES | AI와 게임의 생산성 혁신</title>
-  <meta name="description" content="비개발자가 AI를 활용해 메이플랜드 필수 유틸리티를 개발하고, 그 과정을 공유합니다.">
-  <meta name="keywords" content="AI, 메이플랜드, 게임 유틸리티, 개발기, 생산성, 혼테일, 수수료계산기, 리저 타이머">
-  <meta property="og:title" content="MLFEE TIMES | AI와 게임의 생산성 혁신">
-  <meta property="og:description" content="코딩을 몰라도 괜찮아요. AI로 제작한 필수 게임 도구와 개발 실록을 만나보세요.">
-  <meta property="og:image" content="images/mlfee-logo.png">
+  <title>MLFEE | 한 게이머의 여정, 모두를 위한 도구가 되다</title>
+  <meta name="description" content="하나의 불편함에서 시작된 개발 여정. 당신의 게임 경험을 바꿀 AI 유틸리티와 그 탄생 스토리를 만나보세요.">
+  <meta name="keywords" content="AI, 게임 유틸리티, 개발 여정, 후원, N빵마스터, 혼테일 브레이커, SVG 아이콘, mapleland, AI tools, by gamer">
+  <meta property="og:title" content="MLFEE | 한 게이머의 여정, 모두를 위한 도구가 되다">
+  <meta property="og:description" content="하나의 불편함에서 시작된 개발 여정. 당신의 게임 경험을 바꿀 AI 유틸리티와 그 탄생 스토리를 만나보세요.">
+  <meta property="og:image" content="images/mlfee-og-journey.png"> <!-- 1200x630 사이즈의 '달려가는 사진'으로 교체하세요 -->
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://mlfee.com">
   <meta property="og:type" content="website">
   <link rel="icon" href="images/mlfee-logo.png" type="image/png">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    body{font-family:'Inter','Noto Sans KR',sans-serif;background:#f9fafb}
-    .typing-cursor{display:inline-block;width:3px;height:1em;background:#fff;animation:blink 0.8s infinite;vertical-align:bottom;margin-left:2px;}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-    /* 이미지 반응형 안전장치 */
-    img{max-width:100%;height:auto}
+    body {
+      font-family: 'Inter', 'Noto Sans KR', sans-serif;
+      background-color: #0A0A0A;
+      color: #E5E7EB;
+    }
+    .dark body { background-color: #0A0A0A; color: #E5E7EB; }
+    
+    /* Cinematic Hero Section with Ken Burns & Particle Effect */
+    .hero-section {
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(to top, #0A0A0A 6%, transparent 50%), url('https://raw.githubusercontent.com/boy1arthur/mlfee-project/main/images/hyun.jpg');
+        background-size: cover;
+        background-position: center;
+        animation: cinematicZoom 30s infinite alternate;
+    }
+    #particle-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 5; /* 텍스트보다 뒤, 배경보다 앞에 위치 */
+    }
+
+    @keyframes cinematicZoom {
+        0% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    /* Header Style */
+    header {
+      background: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Card Style */
+    .tool-card {
+      background: rgba(23, 23, 23, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+    .tool-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(167, 139, 250, 0.5);
+      background: rgba(23, 23, 23, 1);
+    }
+
+    :lang(ko) { font-family: 'Inter', 'Noto Sans KR', sans-serif; }
+    :lang(ja) { font-family: 'Inter', 'Noto Sans JP', sans-serif; }
+    :lang(en) { font-family: 'Inter', sans-serif; }
   </style>
 </head>
-<body class="antialiased">
+<body class="dark">
 
-<!-- HEADER -->
-<header class="bg-white/90 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-200">
+<header class="sticky top-0 z-50">
   <div class="container mx-auto px-4 flex justify-between items-center h-16">
-    <button id="mobile-menu-btn" class="lg:hidden text-2xl" aria-label="모바일 메뉴 열기"><i class="fas fa-bars"></i></button>
-    <a href="/index.html" class="font-serif text-2xl font-bold">MLFEE TIMES</a>
-    <nav class="hidden lg:flex gap-6 font-medium text-gray-700" aria-label="주요 메뉴">
-      <a href="/devlog/index.html" class="hover:text-black">개발실록</a>
-      <a href="/janus/roadmap.html" class="hover:text-black">야누스 로드맵</a>
-      <a href="/janus/test.html" class="hover:text-black">인지 테스트</a>
-      <div class="relative group">
-        <span class="cursor-pointer hover:text-black">메이플랜드 도구 <i class="fa fa-chevron-down text-xs" aria-hidden="true"></i></span>
-        <div class="hidden group-hover:block absolute bg-white shadow-lg border rounded mt-2 w-48 z-50">
-          <a href="/breaker/index.html" target="_blank" class="block px-4 py-2 hover:bg-gray-50 text-sm">혼테일 브레이커</a>
-          <a href="/ledger/index.html" target="_blank" class="block px-4 py-2 hover:bg-gray-50 text-sm">혼테일렛저</a>
-          <a href="/calc/index.html" target="_blank" class="block px-4 py-2 hover:bg-gray-50 text-sm">N빵마스터</a>
-          <a href="/timer/index.html" target="_blank" class="block px-4 py-2 hover:bg-gray-50 text-sm">리저 타이머</a>
-          <a href="/buff/index.html" target="_blank" class="block px-4 py-2 hover:bg-gray-50 text-sm">메피 버피</a>
-        </div>
+    <a href="/index.html" class="font-serif text-2xl font-bold tracking-wider">MLFEE</a>
+    <nav class="hidden lg:flex items-center gap-6 font-medium text-slate-300">
+      <a href="#tools" class="hover:text-white transition-colors" data-translate="nav_tools">유틸리티</a>
+      <a href="#journey" class="hover:text-white transition-colors" data-translate="nav_journey">다음 아이디어</a>
+      <a href="/devlog/index.html" class="hover:text-white transition-colors" data-translate="nav_devlog">개발실록</a>
+      <div class="relative">
+        <select id="language-switcher" class="text-sm appearance-none bg-transparent border border-slate-600 rounded-md py-1 pl-2 pr-7 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <option value="ko">🇰🇷 한국어</option>
+          <option value="en">🇺🇸 English</option>
+          <option value="ja">�🇵 日本語</option>
+        </select>
+        <!-- 인라인 SVG 아이콘 (Globe) -->
+        <svg class="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3.75h.008v.008H12v-.008ZM3.75 7.5H7.5m3 12c-.312-.312-.623-.633-.928-.962M12 21c.305-.329.616-.65.928-.962m-3.072-1.462c.312.312.623-.633.928-.962M12 3.75c.305.329.616.65.928-.962m-3.072 1.462c.312-.312.623-.633.928-.962M3 12c0 2.485 2.015 4.5 4.5 4.5s4.5-2.015 4.5-4.5S9.985 7.5 7.5 7.5 3 9.515 3 12Zm12 0c0 2.485 2.015 4.5 4.5 4.5s4.5-2.015 4.5-4.5S18.985 7.5 16.5 7.5 12 9.515 12 12Z" /></svg>
       </div>
-      <a href="/about.html" class="hover:text-black">사이트 소개</a>
     </nav>
+    <button id="mobile-menu-btn" class="lg:hidden text-2xl" aria-label="모바일 메뉴 열기">
+      <!-- 인라인 SVG 아이콘 (Bars) -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+    </button>
   </div>
-  <div id="mobile-nav" class="lg:hidden hidden border-t border-gray-200 bg-white">
-    <a href="/devlog/index.html" class="block px-4 py-3 hover:bg-gray-50">개발실록</a>
-    <a href="/janus/roadmap.html" class="block px-4 py-3 hover:bg-gray-50">야누스 로드맵</a>
-    <a href="/janus/test.html" class="block px-4 py-3 hover:bg-gray-50">인지 테스트</a>
-    <a href="/breaker/index.html" target="_blank" class="block px-4 py-3 hover:bg-gray-50">혼테일 브레이커</a>
-    <a href="/ledger/index.html" target="_blank" class="block px-4 py-3 hover:bg-gray-50">혼테일렛저</a>
-    <a href="/calc/index.html" target="_blank" class="block px-4 py-3 hover:bg-gray-50">N빵마스터</a>
-    <a href="/timer/index.html" target="_blank" class="block px-4 py-3 hover:bg-gray-50">리저 타이머</a>
-    <a href="/buff/index.html" target="_blank" class="block px-4 py-3 hover:bg-gray-50">메피 버피</a>
-    <a href="/about.html" class="block px-4 py-3 hover:bg-gray-50">사이트 소개</a>
-  </div>
+  <div id="mobile-nav" class="lg:hidden hidden border-t border-slate-800 bg-black/95"></div>
 </header>
 
-<!-- HERO -->
-<section class="relative bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 text-white py-20 overflow-hidden">
-  <div class="container mx-auto px-6 text-center">
-    <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4" id="hero-title"></h1>
-    <p class="text-lg max-w-2xl mx-auto mb-6">AI와 게임의 만남, 새로운 생산성 시대를 엽니다.</p>
-    <a href="/maple-tools/index.html" class="inline-block px-8 py-3 bg-white text-black rounded-lg shadow-lg hover:scale-105 transition-transform">
-      AI 도구 시작하기
-    </a>
-  </div>
-  <!-- 장식 요소: 스크린리더 패스 -->
-  <div class="absolute -top-20 -left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl" aria-hidden="true"></div>
-  <div class="absolute bottom-0 right-0 w-96 h-96 bg-pink-400/20 rounded-full blur-3xl" aria-hidden="true"></div>
-</section>
-
-<!-- 최신 소식 -->
-<main class="container mx-auto px-4 py-12">
-  <h2 class="text-2xl font-bold border-b-2 border-black pb-2 mb-8">최신 소식</h2>
-  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-    <!-- 개발실록 카드: 실제 스크린샷 -->
-    <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
-      <a href="/posts/devlog-01.html">
-        <img src="images/hy.png"
-             width="672" height="672" loading="eager"
-             alt="수수료 계산기 개발기 미리보기 — 메소 수수료 계산 자동화 사례">
+<main>
+  <!-- HERO -->
+  <section class="hero-section h-screen flex items-end pb-24">
+    <div class="hero-background"></div>
+    <canvas id="particle-canvas"></canvas>
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-6xl font-bold mb-4 tracking-tight text-white" data-translate="hero_title">하나의 불편함에서<br>시작된 여정</h1>
+      <p class="text-lg md:text-xl max-w-2xl mx-auto text-slate-300 mb-8" data-translate="hero_subtitle">게이머의 손이 닿지 못했던 곳에, AI가 답을 주었습니다.</p>
+      <a href="#tools" class="inline-block px-8 py-3 bg-white text-black font-bold rounded-lg shadow-lg hover:bg-gray-200 transition-transform hover:scale-105 transform">
+        <span data-translate="hero_cta">여정의 결과물 보기</span>
       </a>
-      <div class="p-4">
-        <span class="text-sm text-blue-600 font-semibold">개발실록</span>
-        <h3 class="font-serif text-lg font-bold mt-1 mb-2">"수수료로 500만 메소 날렸다?" AI 계산기 개발기</h3>
-        <p class="text-gray-600 text-sm">게임 속 불편함을 AI로 해결한 개발 이야기.</p>
-      </div>
     </div>
+  </section>
 
-    <!-- 인지 테스트: 주제 일치 썸네일 (없으면 images/cool.png 유지 가능) -->
-    <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
-      <a href="/janus/test.html">
-        <img src="images/cool.png"
-             width="672" height="378" loading="lazy"
-             alt="야누스 인지 테스트 시작 화면 미리보기 — 리더십 성향 자가진단">
-      </a>
-      <div class="p-4">
-        <span class="text-sm text-indigo-600 font-semibold">프로젝트 야누스</span>
-        <h3 class="font-serif text-lg font-bold mt-1 mb-2">야누스 인지 테스트</h3>
-        <p class="text-gray-600 text-sm">세계관 속 리더십 유형을 테스트하세요.</p>
-      </div>
+  <!-- Utility Dashboard Section -->
+  <section id="tools" class="container mx-auto px-4 py-20 sm:py-28">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold tracking-tight" data-translate="tools_title">그래서, 직접 만들었습니다</h2>
+        <p class="mt-4 text-lg text-slate-400" data-translate="tools_subtitle">당신의 게임 경험을 바꿀 AI 기반 유틸리티</p>
     </div>
-
-    <!-- 로드맵: QR 이미지 제거 → 주제 일치 프리뷰 (없으면 텍스트 카드로 대체 가능) -->
-    <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
-      <a href="/janus/roadmap.html">
-        <!-- 대체 썸네일이 아직 없다면 kakaoqr.png 사용 금지, 임시로 gitch. 또는 로고 사용 가능 -->
-        <img src="images/mlfee-logo.png"
-             width="630" height="330" loading="lazy"
-             alt="프로젝트 야누스 로드맵 미리보기 — 개발 타임라인과 업데이트 계획">
-      </a>
-      <div class="p-4">
-        <span class="text-sm text-purple-600 font-semibold">프로젝트 야누스</span>
-        <h3 class="font-serif text-lg font-bold mt-1 mb-2">프로젝트 야누스 로드맵</h3>
-        <p class="text-gray-600 text-sm">개발 진행 현황과 업데이트 계획.</p>
-      </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="tool-card rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_calc">N빵마스터</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_calc_tagline">수수료 걱정 없는 완벽한 분배</p><a href="/calc/index.html" target="_blank" class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</a></div>
+      <div class="tool-card rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_breaker">혼테일 브레이커</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_breaker_tagline">최적의 공략 순서 시뮬레이터</p><a href="/breaker/index.html" target="_blank" class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</a></div>
+      <div class="tool-card rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_timer">리저 타이머</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_timer_tagline">부활과 버프, 놓치지 마세요</p><a href="/timer/index.html" target="_blank" class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</a></div>
+      <div class="tool-card rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_ledger">혼테일렛저</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_ledger_tagline">보상과 기여도 자동 기록</p><a href="/ledger/index.html" target="_blank" class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</a></div>
+      <div class="tool-card rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_buff">메피 버피</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_buff_tagline">최적의 버프 순서와 타이밍</p><a href="/buff/index.html" target="_blank" class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</a></div>
+      <div class="tool-card rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_janus">프로젝트 야누스</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_janus_desc">새로운 세계관과 인지 테스트</p><a href="/janus/roadmap.html" target="_blank" class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</a></div>
     </div>
+  </section>
 
-  </div>
+  <!-- Journey & Community Section -->
+  <section id="journey" class="container mx-auto px-4 py-20 sm:py-28">
+    <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl font-bold tracking-tight" data-translate="journey_title">당신의 아이디어가 다음 도구가 됩니다</h2>
+        <p class="mt-4 text-lg text-slate-400" data-translate="journey_subtitle">"이런 기능이 있었으면..." 하는 생각이 있으신가요? 커뮤니티에서 당신의 목소리를 들려주세요. 당신의 불편함이 모두의 편안함이 될 수 있습니다.</p>
+        <div class="mt-8">
+            <a href="https://discord.gg/" target="_blank" class="inline-block px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-lg shadow-lg hover:opacity-90 transition-opacity">
+                <span data-translate="journey_cta_btn">커뮤니티에서 아이디어 제안하기</span>
+            </a>
+        </div>
+    </div>
+  </section>
 </main>
 
-<!-- 메이플랜드 핵심 도구 -->
-<section class="bg-indigo-50 py-12">
-  <div class="container mx-auto px-4 text-center">
-    <h3 class="text-xl font-bold mb-6">메이플랜드 핵심 도구 모음</h3>
-    <div class="flex flex-wrap justify-center gap-4">
-      <a href="/breaker/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">혼테일 브레이커</a>
-      <a href="/ledger/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">혼테일렛저</a>
-      <a href="/calc/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">N빵마스터</a>
-      <a href="/timer/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">리저 타이머</a>
-      <a href="/buff/index.html" target="_blank" class="px-4 py-2 bg-white rounded shadow hover:scale-105 transition">메피 버피</a>
+<footer class="border-t border-slate-800 py-12">
+  <div class="container mx-auto px-4 text-center text-sm text-slate-500 space-y-4">
+    <div class="flex justify-center space-x-6">
+      <a href="/about.html" class="hover:text-slate-300" data-translate="footer_about">소개</a>
+      <a href="/terms.html" class="hover:text-slate-300" data-translate="footer_terms">이용약관</a>
+      <a href="/privacy.html" class="hover:text-slate-300" data-translate="footer_privacy">개인정보처리방침</a>
     </div>
-  </div>
-</section>
-
-<!-- 후원하기 섹션: QR 전용 배치 + 링크 대안 제공 -->
-<section class="bg-white py-12 border-t">
-  <div class="container mx-auto px-4 text-center">
-    <h3 class="text-xl font-bold mb-3">프로젝트를 응원해 주세요</h3>
-    <p class="text-gray-600 mb-6">카카오페이로 간편 후원이 가능합니다.</p>
-    <div class="flex flex-col items-center gap-4">
-      <!-- 주의: 이 이미지는 실제 로드맵 썸네일이 아닌 후원 QR로, 전용 섹션에서만 사용 -->
-      <img src="images/kakaoqr.png"
-           width="240" height="240" loading="lazy"
-           alt="카카오페이 후원 QR 코드 — 모바일 카카오페이 앱으로 스캔하여 후원 페이지로 이동">
-      <!-- 실제 후원 링크가 있다면 href에 설정 -->
-      <a href="#" class="inline-block px-4 py-2 rounded bg-black text-white hover:opacity-90 transition" target="_blank" rel="noopener">
-        카카오페이로 후원 링크 열기
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="bg-white border-t border-gray-200 py-8">
-  <div class="container mx-auto px-4 text-center text-sm text-gray-500 space-y-2">
-    <div class="flex justify-center space-x-4">
-      <a href="/about.html" class="hover:underline">사이트 소개</a>
-      <a href="/terms.html" class="hover:underline">이용약관</a>
-      <a href="/privacy.html" class="hover:underline">개인정보처리방침</a>
-    </div>
-    <p>&copy; 2025 MLFEE TIMES. All rights reserved.</p>
+    <p>&copy; 2025 MLFEE. All rights reserved.</p>
   </div>
 </footer>
 
-<!-- JS -->
 <script>
-  // 모바일 메뉴
-  document.getElementById('mobile-menu-btn').addEventListener('click',()=>{
-    document.getElementById('mobile-nav').classList.toggle('hidden');
+  document.addEventListener('DOMContentLoaded', () => {
+    const translations = {
+      ko: {
+        nav_tools: '유틸리티', nav_journey: '다음 아이디어', nav_devlog: '개발실록',
+        hero_title: '하나의 불편함에서<br>시작된 여정', hero_subtitle: '게이머의 손이 닿지 못했던 곳에, AI가 답을 주었습니다.', hero_cta: '여정의 결과물 보기',
+        tools_title: '그래서, 직접 만들었습니다', tools_subtitle: '당신의 게임 경험을 바꿀 AI 기반 유틸리티',
+        tool_calc: 'N빵마스터', tool_calc_tagline: '수수료 걱정 없는 완벽한 분배',
+        tool_breaker: '혼테일 브레이커', tool_breaker_tagline: '최적의 공략 순서 시뮬레이터',
+        tool_timer: '리저 타이머', tool_timer_tagline: '부활과 버프, 놓치지 마세요',
+        tool_ledger: '혼테일렛저', tool_ledger_tagline: '보상과 기여도 자동 기록',
+        tool_buff: '메피 버피', tool_buff_tagline: '최적의 버프 순서와 타이밍',
+        tool_janus: '프로젝트 야누스', tool_janus_desc: '새로운 세계관과 인지 테스트',
+        launch_btn: '바로가기 →',
+        journey_title: '당신의 아이디어가 다음 도구가 됩니다', journey_subtitle: '"이런 기능이 있었으면..." 하는 생각이 있으신가요? 커뮤니티에서 당신의 목소리를 들려주세요. 당신의 불편함이 모두의 편안함이 될 수 있습니다.',
+        journey_cta_btn: '커뮤니티에서 아이디어 제안하기',
+        footer_about: '소개', footer_terms: '이용약관', footer_privacy: '개인정보처리방침',
+      },
+      en: {
+        nav_tools: 'Utilities', nav_journey: 'Next Idea', nav_devlog: 'Devlog',
+        hero_title: 'A Journey Born From<br>a Single Inconvenience', hero_subtitle: 'Where a gamer\'s reach fell short, AI provided the answer.', hero_cta: 'See the Journey\'s Results',
+        tools_title: 'So, I Built Them Myself', tools_subtitle: 'AI-powered utilities to change your gaming experience',
+        tool_calc: 'Split Master', tool_calc_tagline: 'Perfect distribution without fee worries',
+        tool_breaker: 'Horntail Breaker', tool_breaker_tagline: 'Optimal attack sequence simulator',
+        tool_timer: 'Resurrection Timer', tool_timer_tagline: 'Don\'t miss resurrections and buffs',
+        tool_ledger: 'Horntail Ledger', tool_ledger_tagline: 'Auto-record rewards & contributions',
+        tool_buff: 'Mefi Buffy', tool_buff_tagline: 'Optimal buff order & timing',
+        tool_janus: 'Project Janus', tool_janus_desc: 'A new universe and cognitive tests',
+        launch_btn: 'Launch →',
+        journey_title: 'Your Idea Becomes the Next Tool', journey_subtitle: 'Ever thought, "I wish there was a feature for..."? Let us hear your voice in the community. Your inconvenience can become everyone\'s convenience.',
+        journey_cta_btn: 'Suggest an Idea in the Community',
+        footer_about: 'About', footer_terms: 'Terms', footer_privacy: 'Privacy',
+      },
+      ja: {
+        nav_tools: 'ユーティリティ', nav_journey: '次のアイデア', nav_devlog: '開発記録',
+        hero_title: '一つの不便から<br>始まった旅', hero_subtitle: 'ゲーマーの手が届かなかった場所に、AIが答えをくれました。', hero_cta: '旅の成果を見る',
+        tools_title: 'だから、自分で作りました', tools_subtitle: 'あなたのゲーム体験を変えるAI搭載ユーティリティ',
+        tool_calc: '割り勘マスター', tool_calc_tagline: '手数料の心配ない完璧な分配',
+        tool_breaker: 'ホーンテイルブレーカー', tool_breaker_tagline: '最適攻略順序シミュレーター',
+        tool_timer: 'リザレクションタイマー', tool_timer_tagline: '復活とバフ、お見逃しなく',
+        tool_ledger: 'ホーンテイル元帳', tool_ledger_tagline: '報酬と貢献度を自動記録',
+        tool_buff: 'メピバフィ', tool_buff_tagline: '最適なバフ順序とタイミング',
+        tool_janus: 'プロジェクト・ヤヌス', tool_janus_desc: '新しい世界観と認知テスト',
+        launch_btn: '→ 起動',
+        journey_title: 'あなたのアイデアが次のツールになります', journey_subtitle: '「こんな機能があったらいいな...」と思ったことはありませんか？コミュニティであなたの声を聞かせてください。あなたの不便が、みんなの便利になるかもしれません。',
+        journey_cta_btn: 'コミュニティでアイデアを提案する',
+        footer_about: '紹介', footer_terms: '利用規約', footer_privacy: 'プライバシーポリシー',
+      }
+    };
+
+    // --- Particle Effect Logic ---
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+        constructor(x, y, radius, color, velocity) {
+            this.x = x;
+            this.y = y;
+            this.radius = radius;
+            this.color = color;
+            this.velocity = velocity;
+            this.alpha = 1;
+        }
+
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.alpha;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            ctx.restore();
+        }
+
+        update() {
+            this.x += this.velocity.x;
+            this.y += this.velocity.y;
+            this.alpha -= 0.005;
+            this.draw();
+        }
+    }
+
+    function initParticles() {
+        particles = [];
+        const particleCount = 100;
+        for (let i = 0; i < particleCount; i++) {
+            const radius = Math.random() * 2 + 1;
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const color = `rgba(167, 139, 250, ${Math.random()})`;
+            const velocity = {
+                x: (Math.random() - 0.5) * 0.5,
+                y: (Math.random() - 0.5) * 0.5
+            };
+            particles.push(new Particle(x, y, radius, color, velocity));
+        }
+    }
+
+    function animateParticles() {
+        requestAnimationFrame(animateParticles);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((particle, index) => {
+            if (particle.alpha <= 0) {
+                particles.splice(index, 1);
+                // Create a new particle to maintain count
+                const radius = Math.random() * 2 + 1;
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const color = `rgba(167, 139, 250, ${Math.random()})`;
+                const velocity = { x: (Math.random() - 0.5) * 0.5, y: (Math.random() - 0.5) * 0.5 };
+                particles.push(new Particle(x, y, radius, color, velocity));
+            } else {
+                particle.update();
+            }
+        });
+    }
+
+    initParticles();
+    animateParticles();
+
+
+    // Language Switcher and other JS logic
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    mobileMenuBtn.addEventListener('click', () => { mobileNav.classList.toggle('hidden'); });
+    const languageSwitcher = document.getElementById('language-switcher');
+    function changeLanguage(lang) {
+      if (!translations[lang]) return;
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.dataset.translate;
+        if (translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+      updateMobileNav(lang);
+      localStorage.setItem('preferredLanguage', lang);
+    }
+    function updateMobileNav(lang) { const navItems = [{ key: 'nav_tools', href: '#tools' }, { key: 'nav_journey', href: '#journey' }, { key: 'nav_devlog', href: '/devlog/index.html' }]; mobileNav.innerHTML = navItems.map(item => `<a href="${item.href}" class="block px-4 py-3 hover:bg-slate-700">${translations[lang][item.key]}</a>`).join(''); }
+    const savedLang = localStorage.getItem('preferredLanguage'); const browserLang = navigator.language.split('-')[0]; const initialLang = savedLang || (translations[browserLang] ? browserLang : 'ko'); languageSwitcher.value = initialLang; changeLanguage(initialLang);
+    languageSwitcher.addEventListener('change', (e) => { changeLanguage(e.target.value); });
   });
-  // 히어로 타이핑
-  const heroTitle=document.getElementById('hero-title');
-  const text='"수수료로 500만 메소 날렸다고?" 분노의 AI 계산기 개발기';
-  let i=0;
-  const cursor=document.createElement('span');cursor.className='typing-cursor';heroTitle.appendChild(cursor);
-  (function typing(){if(i<text.length){heroTitle.insertBefore(document.createTextNode(text.charAt(i)),cursor);i++;setTimeout(typing,60);}else{cursor.style.display='none';}})();
 </script>
 </body>
 </html>
+�
