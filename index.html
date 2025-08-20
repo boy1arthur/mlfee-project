@@ -4,11 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MLFEE | 한 게이머의 여정, 모두를 위한 도구가 되다</title>
+  
+  <!-- [필수] 애드센스 자동 광고 스크립트 -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615"
+       crossorigin="anonymous"></script>
+  <!-- ==================================================== -->
+
   <meta name="description" content="하나의 불편함에서 시작된 개발 여정. 당신의 게임 경험을 바꿀 AI 유틸리티와 그 탄생 스토리를 만나보세요.">
   <meta name="keywords" content="AI, 게임 유틸리티, 개발 여정, 후원, N빵마스터, 혼테일 브레이커, SVG 아이콘, mapleland, AI tools, by gamer">
   <meta property="og:title" content="MLFEE | 한 게이머의 여정, 모두를 위한 도구가 되다">
   <meta property="og:description" content="하나의 불편함에서 시작된 개발 여정. 당신의 게임 경험을 바꿀 AI 유틸리티와 그 탄생 스토리를 만나보세요.">
-  <meta property="og:image" content="images/mlfee-og-journey.png"> <!-- 1200x630 사이즈의 '달려가는 사진'으로 교체하세요 -->
+  <meta property="og:image" content="images/mlfee-og-journey.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://mlfee.com">
@@ -24,51 +30,29 @@
     }
     .dark body { background-color: #0A0A0A; color: #E5E7EB; }
     
-    /* Cinematic Hero Section with Dreamlike Particle Effect */
-    .hero-section {
-        position: relative;
-        overflow: hidden;
-    }
+    .hero-section { position: relative; overflow: hidden; }
     .hero-background {
-        position: absolute;
-        top: -5%; /* Parallax 효과를 위한 여백 */
-        left: -5%;
-        width: 110%;
-        height: 110%;
+        position: absolute; top: -5%; left: -5%; width: 110%; height: 110%;
         background-image: linear-gradient(to top, #0A0A0A 15%, transparent 60%), url('https://raw.githubusercontent.com/boy1arthur/mlfee-project/main/images/hyun.jpg');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center top;
+        background-size: cover; background-repeat: no-repeat; background-position: center top;
         transition: transform 0.3s ease-out;
     }
-    #particle-canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 5; /* 텍스트보다 뒤, 배경보다 앞에 위치 */
-    }
-
-    /* Header Style */
+    #particle-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; }
     header {
-      background: rgba(10, 10, 10, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-
-    /* Card Style */
     .tool-card {
-      background: rgba(23, 23, 23, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(8px);
-      transition: all 0.3s ease;
+      background: rgba(23, 23, 23, 0.7); border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px); transition: all 0.3s ease;
+      /* 모든 카드의 높이를 동일하게 유지하기 위한 설정 */
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .tool-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(167, 139, 250, 0.5);
-      background: rgba(23, 23, 23, 1);
+      transform: translateY(-4px); border-color: rgba(167, 139, 250, 0.5); background: rgba(23, 23, 23, 1);
     }
 
     :lang(ko) { font-family: 'Inter', 'Noto Sans KR', sans-serif; }
@@ -91,12 +75,10 @@
           <option value="en">🇺🇸 English</option>
           <option value="ja">🇯🇵 日本語</option>
         </select>
-        <!-- 인라인 SVG 아이콘 (Globe) -->
-        <svg class="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3.75h.008v.008H12v-.008ZM3.75 7.5H7.5m3 12c-.312-.312-.623-.633-.928-.962M12 21c.305-.329.616-.65.928-.962m-3.072-1.462c.312.312.623-.633.928-.962M12 3.75c.305.329.616.65.928-.962m-3.072 1.462c.312-.312.623-.633.928-.962M3 12c0 2.485 2.015 4.5 4.5 4.5s4.5-2.015 4.5-4.5S9.985 7.5 7.5 7.5 3 9.515 3 12Zm12 0c0 2.485 2.015 4.5 4.5 4.5s4.5-2.015 4.5-4.5S18.985 7.5 16.5 7.5 12 9.515 12 12Z" /></svg>
+        <svg class="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3.75h.008v.008H12v-.008ZM3.75 7.5H7.5m3 12c-.312-.312-.623-.633-.928-.962M12 21c.305-.329.616-.65.928-.962m-3.072-1.462c.312-.312.623-.633.928-.962M12 3.75c.305.329.616.65.928-.962m-3.072 1.462c.312-.312.623-.633.928-.962M3 12c0 2.485 2.015 4.5 4.5 4.5s4.5-2.015 4.5-4.5S9.985 7.5 7.5 7.5 3 9.515 3 12Zm12 0c0 2.485 2.015 4.5 4.5 4.5s4.5-2.015 4.5-4.5S18.985 7.5 16.5 7.5 12 9.515 12 12Z" /></svg>
       </div>
     </nav>
     <button id="mobile-menu-btn" class="lg:hidden text-2xl" aria-label="모바일 메뉴 열기">
-      <!-- 인라인 SVG 아이콘 (Bars) -->
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
     </button>
   </div>
@@ -124,14 +106,35 @@
         <p class="mt-4 text-lg text-slate-400" data-translate="tools_subtitle">당신의 게임 경험을 바꿀 AI 기반 유틸리티</p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <a href="/calc/index.html" target="_blank" class="tool-card block rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_calc">N빵마스터</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_calc_tagline">수수료 걱정 없는 완벽한 분배</p><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
-      <a href="/breaker/index.html" target="_blank" class="tool-card block rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_breaker">혼테일 브레이커</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_breaker_tagline">최적의 공략 순서 시뮬레이터</p><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
-      <a href="/timer/index.html" target="_blank" class="tool-card block rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_timer">리저 타이머</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_timer_tagline">부활과 버프, 놓치지 마세요</p><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
-      <a href="/ledger/index.html" target="_blank" class="tool-card block rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_ledger">혼테일렛저</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_ledger_tagline">보상과 기여도 자동 기록</p><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
-      <a href="/buff/index.html" target="_blank" class="tool-card block rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_buff">메피 버피</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_buff_tagline">최적의 버프 순서와 타이밍</p><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
-      <a href="/janus/roadmap.html" target="_blank" class="tool-card block rounded-xl p-6"><h3 class="font-bold text-xl" data-translate="tool_janus">프로젝트 야누스</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_janus_desc">새로운 세계관과 인지 테스트</p><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
+      <a href="/calc/index.html" target="_blank" class="tool-card block rounded-xl p-6"><div><h3 class="font-bold text-xl" data-translate="tool_calc">N빵마스터</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_calc_tagline">수수료 걱정 없는 완벽한 분배</p></div><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
+      <a href="/breaker/index.html" target="_blank" class="tool-card block rounded-xl p-6"><div><h3 class="font-bold text-xl" data-translate="tool_breaker">혼테일 브레이커</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_breaker_tagline">최적의 공략 순서 시뮬레이터</p></div><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
+      <a href="/timer/index.html" target="_blank" class="tool-card block rounded-xl p-6"><div><h3 class="font-bold text-xl" data-translate="tool_timer">리저 타이머</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_timer_tagline">부활과 버프, 놓치지 마세요</p></div><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
+      <a href="/ledger/index.html" target="_blank" class="tool-card block rounded-xl p-6"><div><h3 class="font-bold text-xl" data-translate="tool_ledger">혼테일렛저</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_ledger_tagline">보상과 기여도 자동 기록</p></div><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
+      <a href="/buff/index.html" target="_blank" class="tool-card block rounded-xl p-6"><div><h3 class="font-bold text-xl" data-translate="tool_buff">메피 버피</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_buff_tagline">최적의 버프 순서와 타이밍</p></div><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
+      <a href="/janus/roadmap.html" target="_blank" class="tool-card block rounded-xl p-6"><div><h3 class="font-bold text-xl" data-translate="tool_janus">프로젝트 야누스</h3><p class="text-slate-400 text-sm mt-1" data-translate="tool_janus_desc">새로운 세계관과 인지 테스트</p></div><span class="block mt-4 text-indigo-400 font-semibold" data-translate="launch_btn">바로가기 &rarr;</span></a>
     </div>
+
+    <!-- ==================================================== -->
+    <!-- [적용 완료] '툴킷 서포터' 배너 광고 -->
+    <!-- 제공해주신 실제 광고 단위 코드로 교체했습니다. -->
+    <div class="mt-20 text-center">
+        <h3 class="text-sm tracking-widest uppercase text-slate-500 mb-6">Toolkit Supporters</h3>
+        <div class="max-w-[728px] mx-auto bg-[#111111] p-4 rounded-lg border border-slate-800">
+            <!-- MLFEE_Tools_Supporter_Banner -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-8602495420447615"
+                 data-ad-slot="2045408861"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+    <!-- ==================================================== -->
   </section>
+
 
   <!-- Journey & Community Section -->
   <section id="journey" class="container mx-auto px-4 py-20 sm:py-28">
