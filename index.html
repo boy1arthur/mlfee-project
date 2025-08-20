@@ -37,7 +37,8 @@
         height: 100%;
         background-image: linear-gradient(to top, #0A0A0A 6%, transparent 50%), url('https://raw.githubusercontent.com/boy1arthur/mlfee-project/main/images/hyun.jpg');
         background-size: cover;
-        background-position: center;
+        /* 이미지가 항상 위쪽을 기준으로 표시되도록 수정했습니다. */
+        background-position: center top;
         animation: cinematicZoom 30s infinite alternate;
     }
     #particle-canvas {
