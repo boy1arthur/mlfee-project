@@ -163,17 +163,19 @@
     <script type="module">
         // [1단계] Firebase SDK 스크립트를 가져옵니다.
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        // [수정] signInWithPopup 대신 signInWithRedirect와 getRedirectResult를 가져옵니다.
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // [2단계] 여기에 1단계 설정에서 복사한 firebaseConfig 객체를 붙여넣으세요.
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyDpZwSHo6uU3BLyVZArdm8V8hLWSjdJ8Mc",
+            authDomain: "mlfee-devlog.firebaseapp.com",
+            projectId: "mlfee-devlog",
+            storageBucket: "mlfee-devlog.firebasestorage.app",
+            messagingSenderId: "790588943412",
+            appId: "1:790588943412:web:28c371a5c6bca71bc92e61"
+            measurementId: "G-VMMRDEGG81"
         };
 
         // [3단계] 여기에 본인의 구글 UID를 붙여넣으세요. (로그인 후 개발자 도구 콘솔에서 확인)
@@ -233,6 +235,12 @@
         const authContainer = document.getElementById('auth-container');
         const provider = new GoogleAuthProvider();
 
+        // [수정] 페이지 로드 시 리디렉션 결과를 확인하는 로직 추가
+        getRedirectResult(auth)
+            .catch((error) => {
+                console.error("로그인 리디렉션 중 오류 발생:", error);
+            });
+
         onAuthStateChanged(auth, (user) => {
             authContainer.innerHTML = ''; // 버튼 초기화
             if (user) {
@@ -252,7 +260,8 @@
                 const loginBtn = document.createElement('button');
                 loginBtn.className = "bg-black text-white font-bold py-2 px-4 rounded-md text-sm hover:bg-gray-800 transition-colors";
                 loginBtn.innerHTML = `<i class="fab fa-google mr-2"></i> 관리자 로그인`;
-                loginBtn.onclick = () => signInWithPopup(auth, provider);
+                // [수정] 팝업 방식 대신 리디렉션 방식으로 변경
+                loginBtn.onclick = () => signInWithRedirect(auth, provider);
                 authContainer.appendChild(loginBtn);
                 writePostBtn.classList.add('hidden');
             }
