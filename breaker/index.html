@@ -8,12 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    <!-- 구글 애드센스 스크립트 -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8602495420447615" crossorigin="anonymous"></script>
-
     <style>
         @keyframes shine {
             to { background-position: 200% center; }
@@ -23,11 +19,9 @@
             background-color: #121212;
             color: #e0e0e0;
         }
-        .main-title-container {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-        }
+        html[lang="ja"] body { font-family: 'Noto Sans JP', sans-serif; }
+        html[lang="en"] body { font-family: 'Inter', sans-serif; } /* Inter is a good default for English */
+
         .main-title {
             font-size: 3rem;
             font-weight: 700;
@@ -39,18 +33,6 @@
             -webkit-text-fill-color: transparent;
             animation: shine 8s linear infinite;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-            transition: all 0.3s ease-in-out;
-            cursor: pointer;
-            display: inline-block;
-        }
-        .main-title:hover {
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6);
-            transform: scale(1.02);
-        }
-        .sub-title {
-            font-size: 1.25rem;
-            color: #a0aec0;
-            margin-top: 0.5rem;
         }
         .card {
             background-color: #1e1e1e;
@@ -82,11 +64,6 @@
         .btn.active { background-color: #e53e3e; color: white; border-color: #e53e3e; }
         .btn-danger { background-color: #8B0000; border-color: #ff6b6b; color: #ff6b6b; }
         .btn-danger:hover:not(:disabled) { background-color: #ff6b6b; color: #121212; }
-        .lang-btn.active {
-            background-color: #ffd700;
-            color: #121212;
-            font-weight: 700;
-        }
         .section-title { 
             font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; padding-bottom: 0.5rem;
             text-align: center; color: #ffd700; border-bottom: 1px solid #ffd700;
@@ -124,46 +101,53 @@
         }
         .accordion-icon { transition: transform 0.3s ease-out; }
         .accordion-header.active .accordion-icon { transform: rotate(180deg); }
+        
+        /* Seduction Timer Flash */
+        @keyframes flash {
+            0%, 100% { color: #f87171; }
+            50% { color: #fef2f2; }
+        }
+        .flashing-text {
+            animation: flash 1s infinite;
+        }
+        .phase-btn.selected {
+            background-color: #ffd700;
+            color: #121212;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .lang-btn.selected {
+            background-color: #ffd700;
+            color: #121212;
+            cursor: default;
+        }
     </style>
 </head>
 <body class="p-4">
 
     <div class="w-full max-w-screen-2xl mx-auto space-y-8">
-        <div class="main-title-container">
-            <h1 class="main-title" data-lang="main_title">혼테일 브레이커</h1>
-            <p class="sub-title">by 소년아서</p>
-        </div>
-
-        <!-- 언어 변경 버튼 -->
-        <div class="flex justify-center gap-2 mb-4">
-            <button id="lang-ko" class="btn lang-btn">한국어</button>
-            <button id="lang-en" class="btn lang-btn">English</button>
-            <button id="lang-ja" class="btn lang-btn">日本語</button>
-        </div>
-        
-        <!-- 상단 광고 영역 -->
-        <div class="text-center">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-8602495420447615"
-                 data-ad-slot="1234567890" 
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+        <div class="flex justify-between items-center">
+            <div></div>
+            <div class="text-center">
+                <h1 class="main-title" data-lang-key="mainTitle">혼테일 브레이커</h1>
+                <p class="text-lg text-gray-400 mt-2" data-lang-key="creator">by 소년아서</p>
+            </div>
+            <div id="language-selector" class="flex gap-2">
+                <button data-lang="ko" class="lang-btn btn p-2 text-sm">KR</button>
+                <button data-lang="en" class="lang-btn btn p-2 text-sm">EN</button>
+                <button data-lang="ja" class="lang-btn btn p-2 text-sm">JP</button>
+            </div>
         </div>
         
         <div class="card p-4">
             <div class="flex flex-col md:flex-row justify-around items-center text-center gap-4">
                 <div>
-                    <h3 class="font-bold text-xl text-gray-400 mb-2" data-lang="current_time">현재 시간</h3>
+                    <h3 class="font-bold text-xl text-gray-400 mb-2" data-lang-key="currentTime">현재 시간</h3>
                     <p id="browser-clock" class="text-3xl font-mono"></p>
                 </div>
                 <div>
-                    <h3 class="font-bold text-xl text-gray-400 mb-2" data-lang="horntail_timer">혼테일 제한시간</h3>
-                    <p id="countdown-12h-display" class="text-3xl font-mono text-yellow-400">12시간 00분 00초</p>
-                    <button id="start-12h-countdown" class="btn w-48 mt-2 text-md p-2 rounded" data-lang="start_btn">시작</button>
+                    <h3 class="font-bold text-xl text-gray-400 mb-2" data-lang-key="horntailLimit">혼테일 제한시간</h3>
+                    <p id="countdown-12h-display" class="text-3xl font-mono text-yellow-400"></p>
+                    <button id="start-12h-countdown" class="btn w-48 mt-2 text-md p-2 rounded" data-lang-key="start">시작</button>
                 </div>
             </div>
         </div>
@@ -173,41 +157,85 @@
             <!-- 공대장용 유틸 -->
             <div class="card accordion-item">
                 <div class="accordion-header flex justify-between items-center" data-target="#leader-utils">
-                    <h2 class="text-2xl font-bold text-yellow-400" data-lang="leader_utils">🛡️ 공대장용 유틸</h2>
+                    <h2 class="text-2xl font-bold text-yellow-400" data-lang-key="raidLeaderUtils">🛡️ 공대장용 유틸</h2>
                     <i class="fas fa-chevron-down accordion-icon"></i>
                 </div>
                 <div id="leader-utils" class="accordion-content">
-                    <div class="card-content grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="card-content space-y-8">
+                        <!-- 공무 타이머 -->
                         <div>
-                            <h2 class="section-title" data-lang="gongmu_timer">⚔️ 혼테일 공무 타이머</h2>
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <button id="timer-p1" class="btn timer-btn flex-col h-24"><span class="font-bold text-lg" data-lang="phase1_left">1페이즈 (좌)</span><span class="time-display" data-time="45">45초</span></button>
-                                <button id="timer-p2" class="btn timer-btn flex-col h-24"><span class="font-bold text-lg" data-lang="phase2_right">2페이즈 (우)</span><span class="time-display" data-time="45">45초</span></button>
-                            </div>
-                            <div class="mt-auto border-t-2 border-dashed border-gray-600 pt-4">
-                                <h3 class="text-center font-bold mb-2 text-yellow-400" data-lang="phase3">3페이즈</h3>
-                                <div class="grid grid-cols-2 gap-4 mb-2">
-                                    <button id="timer-left" class="btn timer-btn flex-col h-24"><span class="font-bold text-3xl">L</span><span class="font-semibold" data-lang="left_head">좌머리</span><span class="time-display" data-time="45">45초</span></button>
-                                    <button id="timer-right" class="btn timer-btn flex-col h-24"><span class="font-bold text-3xl">R</span><span class="font-semibold" data-lang="right_head">우머리</span><span class="time-display" data-time="45">45초</span></button>
+                            <h2 class="section-title" data-lang-key="cancelTimerTitle">⚔️ 혼테일 공무 타이머</h2>
+                            <div class="space-y-4 text-center">
+                                <div class="flex justify-center gap-4">
+                                    <button id="timer-p1" class="btn timer-btn flex-col h-24 w-48"><span class="font-bold text-lg" data-lang-key="phase1Left">1페이즈 (좌)</span><span class="time-display" data-time="45">45s</span></button>
+                                    <button id="timer-p2" class="btn timer-btn flex-col h-24 w-48"><span class="font-bold text-lg" data-lang-key="phase2Right">2페이즈 (우)</span><span class="time-display" data-time="45">45s</span></button>
                                 </div>
-                                <button id="timer-center" class="btn timer-btn w-full flex-col h-24"><span class="font-bold text-3xl">C</span><span class="font-semibold" data-lang="center_head">중앙머리</span><span class="time-display" data-time="45">45초</span></button>
+                                <div class="border-t-2 border-dashed border-gray-600 pt-4">
+                                    <h3 class="text-center font-bold mb-2 text-yellow-400" data-lang-key="phase3Body">3페이즈 (본체)</h3>
+                                    <div class="flex justify-center gap-4">
+                                        <button id="timer-left" class="btn timer-btn flex-col h-24 flex-1"><span class="font-bold text-3xl">L</span><span class="font-semibold" data-lang-key="leftHead">좌머리</span><span class="time-display" data-time="45">45s</span></button>
+                                        <button id="timer-center" class="btn timer-btn flex-col h-24 flex-1"><span class="font-bold text-3xl">C</span><span class="font-semibold" data-lang-key="middleHead">중앙머리</span><span class="time-display" data-time="45">45s</span></button>
+                                        <button id="timer-right" class="btn timer-btn flex-col h-24 flex-1"><span class="font-bold text-3xl">R</span><span class="font-semibold" data-lang-key="rightHead">우머리</span><span class="time-display" data-time="45">45s</span></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- 유틸리티 타이머 -->
                         <div>
-                            <h2 class="section-title" data-lang="debuff_timer_title">✨ 버프해제(갈) 타이머</h2>
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <button id="buff-5m" class="btn timer-btn flex-col h-28"><span class="font-bold text-4xl">5</span><span class="font-semibold" data-lang="5min_debuff">5분갈</span><span class="time-display" data-time="300">5:00</span></button>
-                                <button id="buff-3m" class="btn timer-btn flex-col h-28"><span class="font-bold text-4xl">3</span><span class="font-semibold" data-lang="3min_debuff">3분갈</span><span class="time-display" data-time="180">3:00</span></button>
-                            </div>
-                            <button id="buff-restart" class="btn w-full text-lg mb-6" data-lang="simul_restart">동시 재시작</button>
-                            <div class="space-y-4 mt-auto">
-                                <h3 class="text-xl font-bold text-center" data-lang="debuff_expire_time">버프 해제 시간</h3>
-                                <div class="flex justify-between items-center p-3 bg-black/20 rounded-md"><span>5분:</span><span id="buff-5m-expire" class="font-bold">--:--:--</span></div>
-                                <div class="flex justify-between items-center p-3 bg-black/20 rounded-md"><span>3분:</span><span id="buff-3m-expire" class="font-bold">--:--:--</span></div>
+                            <h2 class="section-title" data-lang-key="utilityTimers">✨ 유틸리티 타이머</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                                <!-- 버프 해제 -->
+                                <div class="space-y-4 text-center">
+                                    <h3 class="font-bold text-lg" data-lang-key="dispel">버프 해제</h3>
+                                    <div class="flex gap-4">
+                                        <button id="buff-5m" class="btn timer-btn flex-col h-28 flex-1"><span class="font-bold text-4xl">5</span><span class="font-semibold" data-lang-key="minutes5">5분</span><span class="time-display" data-time="300">5:00</span></button>
+                                        <button id="buff-3m" class="btn timer-btn flex-col h-28 flex-1"><span class="font-bold text-4xl">3</span><span class="font-semibold" data-lang-key="minutes3">3분</span><span class="time-display" data-time="180">3:00</span></button>
+                                    </div>
+                                    <button id="buff-restart" class="btn w-full text-lg" data-lang-key="simultaneousRestart">동시 재시작</button>
+                                </div>
+                                <!-- 만료 시간 -->
+                                <div class="space-y-2 text-center">
+                                    <h3 class="font-bold text-lg" data-lang-key="expireTime">만료 시간</h3>
+                                    <div class="p-3 bg-black/20 rounded-md h-28 flex flex-col justify-center">
+                                        <div class="flex justify-between items-center"><span data-lang-key="buff5min">5분 버프:</span><span id="buff-5m-expire" class="font-bold">--:--:--</span></div>
+                                        <div class="flex justify-between items-center mt-2"><span data-lang-key="buff3min">3분 버프:</span><span id="buff-3m-expire" class="font-bold">--:--:--</span></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="md:col-span-2 mt-4 border-t border-gray-700 pt-4">
-                             <button id="reset-all-timers" class="btn btn-danger w-full" data-lang="reset_all_timers">공무/버프 타이머 전체 초기화</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 유혹조 유틸 -->
+            <div class="card accordion-item">
+                <div class="accordion-header flex justify-between items-center" data-target="#seduction-team-utils">
+                    <h2 class="text-2xl font-bold text-yellow-400" data-lang-key="seduceTeamUtils">🎯 유혹조 유틸</h2>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div id="seduction-team-utils" class="accordion-content">
+                    <div class="card-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                             <div class="space-y-4 text-center">
+                                <h3 class="section-title" data-lang-key="skillCooldown">스킬 쿨타임</h3>
+                                <button id="timer-smokescreen" class="btn timer-btn flex-col h-28 w-full"><span class="font-bold text-3xl" data-lang-key="smokescreen">연막</span><span class="time-display" data-time="600">10:00</span></button>
+                                <button id="timer-heroswill" class="btn timer-btn flex-col h-28 w-full mt-4"><span class="font-bold text-3xl" data-lang-key="herosWill">용사의 의지</span><span class="time-display" data-time="600">10:00</span></button>
+                            </div>
+                            <div class="space-y-4">
+                                <h3 class="section-title" data-lang-key="seduceController">통합 유혹 페이즈 컨트롤러</h3>
+                                <div class="p-4 bg-black/20 rounded-lg text-center">
+                                    <p id="seduction-master-status" class="text-lg font-bold h-7" data-lang-key="statusWaiting">대기 중</p>
+                                    <p id="seduction-master-timer" class="text-5xl font-mono text-red-400 my-2">--:--</p>
+                                    <p id="seduction-master-eta" class="text-md text-gray-400 font-mono h-6"></p>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button data-phase="1" class="phase-btn btn p-2 text-lg" data-lang-key="phase1">1페이즈</button>
+                                    <button data-phase="2" class="phase-btn btn p-2 text-lg" data-lang-key="phase2">2페이즈</button>
+                                    <button data-phase="3" class="phase-btn btn p-2 text-lg" data-lang-key="phase3">3페이즈</button>
+                                </div>
+                                <button id="seduction-master-reset" class="btn btn-danger w-full text-lg" data-lang-key="resetAll">전체 초기화</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -216,20 +244,19 @@
             <!-- 비숍용 유틸 -->
             <div class="card accordion-item">
                 <div class="accordion-header flex justify-between items-center" data-target="#bishop-utils">
-                    <h2 class="text-2xl font-bold text-yellow-400" data-lang="bishop_utils">💖 비숍용 유틸</h2>
+                    <h2 class="text-2xl font-bold text-yellow-400" data-lang-key="bishopUtils">💖 비숍용 유틸</h2>
                     <i class="fas fa-chevron-down accordion-icon"></i>
                 </div>
                 <div id="bishop-utils" class="accordion-content">
                     <div class="card-content">
-                        <h2 class="section-title" data-lang="resurrection_management">리저렉션 관리</h2>
+                        <h2 class="section-title" data-lang-key="resurrectionManagement">리저렉션 관리</h2>
                         <div class="flex items-center justify-center gap-4 mb-6">
-                            <span class="font-semibold" data-lang="resurrection_count">리저렉션 갯수:</span>
+                            <span class="font-semibold" data-lang-key="resurrectionCount">리저렉션 갯수:</span>
                             <button id="res-minus" class="btn w-10 h-10 text-2xl font-bold">-</button>
-                            <span class="text-2xl font-bold w-10 text-center text-yellow-400" id="res-count">4</span>
+                            <span class="text-2xl font-bold w-10 text-center text-yellow-400" id="res-count">1</span>
                             <button id="res-plus" class="btn w-10 h-10 text-2xl font-bold">+</button>
                         </div>
-                        <div id="res-timers-container" class="space-y-3 max-w-lg mx-auto"></div>
-                        <button id="reset-res-timers" class="btn btn-danger max-w-lg w-full mt-6 mx-auto flex" data-lang="reset_res_timers">리저렉션 전체 초기화</button>
+                        <div id="res-timers-container" class="space-y-2 max-w-lg mx-auto"></div>
                     </div>
                 </div>
             </div>
@@ -237,7 +264,7 @@
             <!-- 파티 명단 관리 -->
             <div class="card accordion-item">
                 <div class="accordion-header flex justify-between items-center" data-target="#party-manager">
-                    <h2 class="text-2xl font-bold" data-lang="party_management">📋 파티 명단 관리</h2>
+                    <h2 class="text-2xl font-bold" data-lang-key="partyManagement">📋 파티 명단 관리</h2>
                     <i class="fas fa-chevron-down accordion-icon"></i>
                 </div>
                 <div id="party-manager" class="accordion-content">
@@ -245,24 +272,24 @@
                         <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
                             <div class="flex items-center gap-4">
                                 <div class="flex items-center justify-center gap-2">
-                                    <span class="font-semibold" data-lang="party_count">파티 수:</span>
+                                    <span class="font-semibold" data-lang-key="partyCount">파티 수:</span>
                                     <button id="party-minus-btn" class="btn w-10 h-10 text-xl font-bold">-</button>
                                     <span id="party-count-display" class="text-2xl font-bold w-8 text-center text-yellow-400">4</span>
                                     <button id="party-plus-btn" class="btn w-10 h-10 text-xl font-bold">+</button>
                                 </div>
                             </div>
                             <div>
-                                <button id="copy-list-btn" class="btn" data-lang="copy_party_list">파티 명단 복사</button>
-                                <span id="copy-feedback" class="font-bold ml-2 opacity-0" data-lang="copy_feedback">복사 완료!</span>
+                                <button id="copy-list-btn" class="btn" data-lang-key="copyPartyList">파티 명단 복사</button>
+                                <span id="copy-feedback" class="font-bold ml-2 opacity-0" data-lang-key="copySuccess">복사 완료!</span>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                             <div class="md:col-span-1 flex flex-col">
-                                <h3 class="font-bold text-lg mb-2 text-center" data-lang="waiting_list">대기 명단</h3>
-                                <textarea id="party-list-input" rows="8" class="input-field mb-2" data-lang-placeholder="paste_list_placeholder"></textarea>
+                                <h3 class="font-bold text-lg mb-2 text-center" data-lang-key="waitingList">대기 명단</h3>
+                                <textarea id="party-list-input" rows="8" class="input-field mb-2" data-lang-key="pasteListPlaceholder" placeholder="명단 붙여넣기..."></textarea>
                                 <div class="grid grid-cols-2 gap-2">
-                                    <button id="generate-list-btn" class="btn w-full" data-lang="apply_btn">적용</button>
-                                    <button id="reset-list-btn" class="btn btn-danger w-full" data-lang="reset_btn">초기화</button>
+                                    <button id="generate-list-btn" class="btn w-full" data-lang-key="apply">적용</button>
+                                    <button id="reset-list-btn" class="btn btn-danger w-full" data-lang-key="reset">초기화</button>
                                 </div>
                                 <div id="waiting-list" class="party-list mt-2"></div>
                             </div>
@@ -275,12 +302,12 @@
             <!-- 메모장 -->
             <div class="card accordion-item">
                 <div class="accordion-header flex justify-between items-center" data-target="#memo-pad-container">
-                    <h2 class="text-2xl font-bold" data-lang="memo_pad">📝 메모장</h2>
+                    <h2 class="text-2xl font-bold" data-lang-key="memoPad">📝 메모장</h2>
                     <i class="fas fa-chevron-down accordion-icon"></i>
                 </div>
                 <div id="memo-pad-container" class="accordion-content">
                     <div class="card-content">
-                        <textarea id="memo-pad" class="input-field w-full h-full min-h-[200px]" data-lang-placeholder="memo_placeholder"></textarea>
+                        <textarea id="memo-pad" class="input-field w-full h-full min-h-[200px]" data-lang-key="memoPlaceholder" placeholder="여기에 메모를 입력하세요..."></textarea>
                     </div>
                 </div>
             </div>
@@ -289,622 +316,565 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- 언어 데이터 ---
+            // --- CONSTANTS ---
+            const CONSTANTS = {
+                HORNTAIL_DURATION: 12 * 60 * 60 * 1000,
+                SEDUCTION_FIRST_DELAY: 2 * 60 * 1000,
+                SEDUCTION_INTERVAL: 3 * 60 * 1000,
+                DEATH_TIMER_DURATION: 15 * 60 * 1000,
+                RESURRECTION_COOLDOWN: 30 * 60 * 1000,
+                MAX_PARTIES: 8,
+                MIN_PARTIES: 1,
+            };
+
+            // --- TRANSLATIONS ---
             const translations = {
                 ko: {
-                    main_title: "혼테일 브레이커",
-                    current_time: "현재 시간",
-                    horntail_timer: "혼테일 제한시간",
-                    start_btn: "시작",
-                    leader_utils: "🛡️ 공대장용 유틸",
-                    gongmu_timer: "⚔️ 혼테일 공무 타이머",
-                    phase1_left: "1페이즈 (좌)",
-                    phase2_right: "2페이즈 (우)",
-                    phase3: "3페이즈",
-                    left_head: "좌머리",
-                    right_head: "우머리",
-                    center_head: "중앙머리",
-                    debuff_timer_title: "✨ 버프해제(갈) 타이머",
-                    "5min_debuff": "5분갈",
-                    "3min_debuff": "3분갈",
-                    simul_restart: "동시 재시작",
-                    debuff_expire_time: "버프 해제 시간",
-                    reset_all_timers: "공무/버프 타이머 전체 초기화",
-                    bishop_utils: "💖 비숍용 유틸",
-                    resurrection_management: "리저렉션 관리",
-                    resurrection_count: "리저렉션 갯수:",
-                    reset_res_timers: "리저렉션 전체 초기화",
-                    party_management: "📋 파티 명단 관리",
-                    party_count: "파티 수:",
-                    copy_party_list: "파티 명단 복사",
-                    copy_feedback: "복사 완료!",
-                    waiting_list: "대기 명단",
-                    paste_list_placeholder: "명단 붙여넣기...",
-                    apply_btn: "적용",
-                    reset_btn: "초기화",
-                    memo_pad: "📝 메모장",
-                    memo_placeholder: "여기에 메모를 입력하세요...",
-                    use_btn: "사용",
-                    bishop_placeholder: "비숍",
-                    death_btn: "다이",
-                    party_title: "파티"
+                    mainTitle: '혼테일 브레이커', creator: 'by 소년아서', currentTime: '현재 시간', horntailLimit: '혼테일 제한시간', start: '시작', raidLeaderUtils: '🛡️ 공대장용 유틸', cancelTimerTitle: '⚔️ 혼테일 공무 타이머', phase1Left: '1페이즈 (좌)', phase2Right: '2페이즈 (우)', phase3Body: '3페이즈 (본체)', leftHead: '좌머리', middleHead: '중앙머리', rightHead: '우머리', utilityTimers: '✨ 유틸리티 타이머', dispel: '버프 해제', minutes5: '5분', minutes3: '3분', simultaneousRestart: '동시 재시작', expireTime: '만료 시간', buff5min: '5분 버프:', buff3min: '3분 버프:', seduceTeamUtils: '🎯 유혹조 유틸', skillCooldown: '스킬 쿨타임', smokescreen: '연막', herosWill: '용사의 의지', seduceController: '통합 유혹 페이즈 컨트롤러', statusWaiting: '대기 중', phase1: '1페이즈', phase2: '2페이즈', phase3: '3페이즈', resetAll: '전체 초기화', bishopUtils: '💖 비숍용 유틸', resurrectionManagement: '리저렉션 관리', resurrectionCount: '리저렉션 갯수:', partyManagement: '📋 파티 명단 관리', partyCount: '파티 수:', copyPartyList: '파티 명단 복사', copySuccess: '복사 완료!', waitingList: '대기 명단', pasteListPlaceholder: '명단 붙여넣기...', apply: '적용', reset: '초기화', memoPad: '📝 메모장', memoPlaceholder: '여기에 메모를 입력하세요...', use: '사용', bishopNicknamePlaceholder: '비숍 {i} 닉네임', partyTitle: '{i}파티', deathButton: '다이', statusFirstSeduce: '{phase}페이즈: 첫 유혹까지', statusNextSeduce: '{phase}페이즈: 다음 유혹까지', statusSeducing: '{phase}페이즈: 유혹 발동!', statusAttention: '주의!', etaPrefix: '예상 시각:', timeFormat: '{h}시간 {m}분 {s}초'
                 },
                 en: {
-                    main_title: "Horntail Breaker",
-                    current_time: "Current Time",
-                    horntail_timer: "Horntail Time Limit",
-                    start_btn: "Start",
-                    leader_utils: "🛡️ Raid Leader Utils",
-                    gongmu_timer: "⚔️ Horntail Attack Timers",
-                    phase1_left: "Phase 1 (Left)",
-                    phase2_right: "Phase 2 (Right)",
-                    phase3: "Phase 3",
-                    left_head: "Left Head",
-                    right_head: "Right Head",
-                    center_head: "Center Head",
-                    debuff_timer_title: "✨ Dispel Timers",
-                    "5min_debuff": "5min Dispel",
-                    "3min_debuff": "3min Dispel",
-                    simul_restart: "Simultaneous Restart",
-                    debuff_expire_time: "Dispel Expiration Time",
-                    reset_all_timers: "Reset All Attack/Dispel Timers",
-                    bishop_utils: "💖 Bishop Utils",
-                    resurrection_management: "Resurrection Management",
-                    resurrection_count: "Resurrections:",
-                    reset_res_timers: "Reset All Resurrections",
-                    party_management: "📋 Party Management",
-                    party_count: "Parties:",
-                    copy_party_list: "Copy Party List",
-                    copy_feedback: "Copied!",
-                    waiting_list: "Waiting List",
-                    paste_list_placeholder: "Paste member list...",
-                    apply_btn: "Apply",
-                    reset_btn: "Reset",
-                    memo_pad: "📝 Memo Pad",
-                    memo_placeholder: "Enter your memo here...",
-                    use_btn: "Use",
-                    bishop_placeholder: "Bishop",
-                    death_btn: "Death",
-                    party_title: "Party"
+                    mainTitle: 'Horntail Breaker', creator: 'by sonyeon-aseo', currentTime: 'Current Time', horntailLimit: 'Horntail Time Limit', start: 'Start', raidLeaderUtils: '🛡️ Raid Leader Utils', cancelTimerTitle: '⚔️ Horntail Skill Cancel Timer', phase1Left: 'Phase 1 (Left)', phase2Right: 'Phase 2 (Right)', phase3Body: 'Phase 3 (Main Body)', leftHead: 'Left Head', middleHead: 'Middle Head', rightHead: 'Right Head', utilityTimers: '✨ Utility Timers', dispel: 'Dispel', minutes5: '5 Minutes', minutes3: '3 Minutes', simultaneousRestart: 'Simultaneous Restart', expireTime: 'Expiration Time', buff5min: '5min Buff:', buff3min: '3min Buff:', seduceTeamUtils: '🎯 Seduce Team Utils', skillCooldown: 'Skill Cooldown', smokescreen: 'Smokescreen', herosWill: "Hero's Will", seduceController: 'Unified Seduction Phase Controller', statusWaiting: 'Waiting', phase1: 'Phase 1', phase2: 'Phase 2', phase3: 'Phase 3', resetAll: 'Reset All', bishopUtils: '💖 Bishop Utils', resurrectionManagement: 'Resurrection Management', resurrectionCount: 'Resurrection Count:', partyManagement: '📋 Party Management', partyCount: 'Party Count:', copyPartyList: 'Copy Party List', copySuccess: 'Copied!', waitingList: 'Waiting List', pasteListPlaceholder: 'Paste list here...', apply: 'Apply', reset: 'Reset', memoPad: '📝 Memo Pad', memoPlaceholder: 'Enter your memo here...', use: 'Use', bishopNicknamePlaceholder: 'Bishop {i} Nickname', partyTitle: 'Party {i}', deathButton: 'Death', statusFirstSeduce: 'Phase {phase}: To First Seduce', statusNextSeduce: 'Phase {phase}: To Next Seduce', statusSeducing: 'Phase {phase}: Seducing!', statusAttention: 'Attention!', etaPrefix: 'ETA:', timeFormat: '{h}h {m}m {s}s'
                 },
                 ja: {
-                    main_title: "ホーンテイルブレイカー",
-                    current_time: "現在時刻",
-                    horntail_timer: "ホーンテイル制限時間",
-                    start_btn: "スタート",
-                    leader_utils: "🛡️ 遠征隊長用ユーティリティ",
-                    gongmu_timer: "⚔️ ホーンテイル攻撃タイマー",
-                    phase1_left: "1段階 (左)",
-                    phase2_right: "2段階 (右)",
-                    phase3: "3段階",
-                    left_head: "左頭",
-                    right_head: "右頭",
-                    center_head: "中央頭",
-                    debuff_timer_title: "✨ デバフ解除タイマー",
-                    "5min_debuff": "5分散",
-                    "3min_debuff": "3分散",
-                    simul_restart: "同時再スタート",
-                    debuff_expire_time: "デバフ解除時間",
-                    reset_all_timers: "攻撃/デバフタイマー全体リセット",
-                    bishop_utils: "💖 ビショップ用ユーティリティ",
-                    resurrection_management: "リザレクション管理",
-                    resurrection_count: "リザレクション数:",
-                    reset_res_timers: "リザレクション全体リセット",
-                    party_management: "📋 パーティーリスト管理",
-                    party_count: "パーティー数:",
-                    copy_party_list: "パーティーリストコピー",
-                    copy_feedback: "コピー完了！",
-                    waiting_list: "待機リスト",
-                    paste_list_placeholder: "リストを貼り付け...",
-                    apply_btn: "適用",
-                    reset_btn: "リセット",
-                    memo_pad: "📝 メモ帳",
-                    memo_placeholder: "ここにメモを入力してください...",
-                    use_btn: "使用",
-                    bishop_placeholder: "ビショップ",
-                    death_btn: "死亡",
-                    party_title: "パーティー"
+                    mainTitle: 'ホーンテイルブレイカー', creator: 'by 소년아서', currentTime: '現在時刻', horntailLimit: 'ホーンテイル制限時間', start: '開始', raidLeaderUtils: '🛡️ 遠征隊長ユーティリティ', cancelTimerTitle: '⚔️ ホーンテイル スキル無効化タイマー', phase1Left: '1段階 (左)', phase2Right: '2段階 (右)', phase3Body: '3段階 (本体)', leftHead: '左頭', middleHead: '中央頭', rightHead: '右頭', utilityTimers: '✨ ユーティリティタイマー', dispel: 'ディスペル', minutes5: '5分', minutes3: '3分', simultaneousRestart: '同時再起動', expireTime: '満了時間', buff5min: '5分バフ:', buff3min: '3分バフ:', seduceTeamUtils: '🎯 誘惑組ユーティリティ', skillCooldown: 'スキルクールタイム', smokescreen: '煙幕', herosWill: 'ヒーローズウィル', seduceController: '統合誘惑フェーズコントローラー', statusWaiting: '待機中', phase1: '1段階', phase2: '2段階', phase3: '3段階', resetAll: '全体リセット', bishopUtils: '💖 ビショップユーティリティ', resurrectionManagement: 'リザレクション管理', resurrectionCount: 'リザレクション数:', partyManagement: '📋 パーティーリスト管理', partyCount: 'パーティー数:', copyPartyList: 'パーティーリストコピー', copySuccess: 'コピー完了!', waitingList: '待機リスト', pasteListPlaceholder: 'リストを貼り付け...', apply: '適用', reset: 'リセット', memoPad: '📝 メモ帳', memoPlaceholder: 'ここにメモを入力...', use: '使用', bishopNicknamePlaceholder: 'ビショップ {i} ニックネーム', partyTitle: '{i}パーティー', deathButton: '死亡', statusFirstSeduce: '{phase}段階: 初誘惑まで', statusNextSeduce: '{phase}段階: 次の誘惑まで', statusSeducing: '{phase}段階: 誘惑発動!', statusAttention: '注意!', etaPrefix: '予想時刻:', timeFormat: '{h}時間{m}分{s}秒'
+                }
+            };
+            const langLocaleMap = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP' };
+
+            // --- STATE MANAGEMENT ---
+            const state = {
+                timers: {},
+                resurrection: {
+                    states: {},
+                    count: 1,
+                },
+                party: {
+                    count: 4,
+                },
+                deathTimers: {},
+                seductionMaster: {
+                    interval: null, nextTime: null, isFirst: true, activePhase: null
+                },
+                countdown12hInterval: null,
+                currentLanguage: 'ko'
+            };
+
+            // --- UI ELEMENTS ---
+            const ui = {
+                browserClock: document.getElementById('browser-clock'),
+                countdownDisplay: document.getElementById('countdown-12h-display'),
+                start12hBtn: document.getElementById('start-12h-countdown'),
+                resCountEl: document.getElementById('res-count'),
+                resContainer: document.getElementById('res-timers-container'),
+                seductionStatus: document.getElementById('seduction-master-status'),
+                seductionTimer: document.getElementById('seduction-master-timer'),
+                seductionEta: document.getElementById('seduction-master-eta'),
+                phaseBtns: document.querySelectorAll('.phase-btn'),
+                masterResetBtn: document.getElementById('seduction-master-reset'),
+                partyCountDisplay: document.getElementById('party-count-display'),
+                waitingList: document.getElementById('waiting-list'),
+                partyContainer: document.getElementById('party-container'),
+                partyListInput: document.getElementById('party-list-input'),
+                copyFeedback: document.getElementById('copy-feedback'),
+                memoPad: document.getElementById('memo-pad'),
+            };
+
+            // --- LANGUAGE MANAGER ---
+            const LanguageManager = {
+                set(lang) {
+                    state.currentLanguage = lang;
+                    document.documentElement.lang = lang;
+                    document.querySelectorAll('[data-lang-key]').forEach(el => {
+                        const key = el.dataset.langKey;
+                        const translation = translations[lang][key];
+                        if (translation) {
+                            if (el.placeholder !== undefined) el.placeholder = translation;
+                            else el.textContent = translation;
+                        }
+                    });
+                    
+                    ResurrectionManager.updateUI(); 
+                    PartyManager.updateUI();
+                    
+                    document.querySelectorAll('.lang-btn').forEach(btn => {
+                        btn.classList.toggle('selected', btn.dataset.lang === lang);
+                    });
+                    localStorage.setItem('language', lang);
+                },
+                get() {
+                    return state.currentLanguage;
+                },
+                init() {
+                    const savedLang = localStorage.getItem('language') || 'ko';
+                    this.set(savedLang);
+                    document.getElementById('language-selector').addEventListener('click', (e) => {
+                        if (e.target.dataset.lang) this.set(e.target.dataset.lang);
+                    });
                 }
             };
 
-            let currentLang = 'ko';
-
-            // --- 언어 변경 로직 ---
-            const setLanguage = (lang) => {
-                currentLang = lang;
-                localStorage.setItem('language', lang);
-
-                document.querySelectorAll('[data-lang]').forEach(el => {
-                    const key = el.dataset.lang;
-                    if (translations[lang] && translations[lang][key]) {
-                        el.textContent = translations[lang][key];
+            // --- TIMER MANAGER ---
+            const TimerManager = {
+                formatTime(totalSeconds) {
+                    if (totalSeconds >= 60) {
+                        const minutes = Math.floor(totalSeconds / 60);
+                        const seconds = totalSeconds % 60;
+                        return `${minutes}:${String(seconds).padStart(2, '0')}`;
                     }
-                });
-                
-                document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
-                    const key = el.dataset.langPlaceholder;
-                     if (translations[lang] && translations[lang][key]) {
-                        el.placeholder = translations[lang][key];
-                    }
-                });
-
-                document.querySelectorAll('.lang-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                document.getElementById(`lang-${lang}`).classList.add('active');
-
-                // 동적으로 생성된 요소들 언어 업데이트
-                updateResurrectionButtons();
-                updatePartyLayout();
-            };
-
-            const timers = {};
-            let resurrectionStates = {}; 
-            const deathTimers = {};
-            let countdown12hInterval;
-
-            // --- 일반 타이머 및 시계 로직 ---
-            const browserClockEl = document.getElementById('browser-clock');
-            const countdown12hDisplay = document.getElementById('countdown-12h-display');
-            const start12hBtn = document.getElementById('start-12h-countdown');
-            setInterval(() => {
-                browserClockEl.textContent = new Date().toLocaleTimeString('ko-KR', { hour12: false });
-            }, 1000);
-            start12hBtn.addEventListener('click', () => {
-                if (countdown12hInterval) clearInterval(countdown12hInterval);
-                const endTime = Date.now() + 12 * 60 * 60 * 1000;
-                countdown12hInterval = setInterval(() => {
-                    const diff = endTime - Date.now();
-                    if (diff <= 0) {
-                        clearInterval(countdown12hInterval);
-                        countdown12hDisplay.textContent = "0시간 00분 00초";
-                        return;
-                    }
-                    const hours = Math.floor(diff / (1000 * 60 * 60));
-                    const minutes = Math.floor((diff / 1000 / 60) % 60);
-                    const seconds = Math.floor((diff / 1000) % 60);
+                    return LanguageManager.get() === 'ko' ? `${totalSeconds}초` : `${totalSeconds}s`;
+                },
+                start(id, duration, displayEl, buttonEl, onEnd) {
+                    if (state.timers[id]?.interval) clearInterval(state.timers[id].interval);
                     
-                    let timeString;
-                    if (currentLang === 'ko') {
-                        timeString = `${hours}시간 ${String(minutes).padStart(2, '0')}분 ${String(seconds).padStart(2, '0')}초`;
-                    } else if (currentLang === 'en') {
-                        timeString = `${hours}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
-                    } else { // ja
-                         timeString = `${hours}時間 ${String(minutes).padStart(2, '0')}分 ${String(seconds).padStart(2, '0')}秒`;
-                    }
-                    countdown12hDisplay.textContent = timeString;
+                    const endTime = Date.now() + duration * 1000;
+                    let lastDisplayValue = '';
 
-                }, 1000);
-            });
-            document.querySelectorAll('.timer-btn').forEach(button => {
-                const id = button.id;
-                const timerDisplay = button.querySelector('.time-display');
-                if (!timerDisplay) return;
-                const initialSeconds = parseInt(timerDisplay.dataset.time, 10);
-                button.addEventListener('click', () => {
-                    if (timers[id]) clearInterval(timers[id].interval);
-                    if (timers[id] && timers[id].button) timers[id].button.classList.remove('active');
-                    
-                    button.classList.add('active');
-                    const endTime = Date.now() + initialSeconds * 1000;
-
-                    if (id.includes('buff')) {
-                        document.getElementById(`${id}-expire`).textContent = new Date(endTime).toLocaleTimeString('ko-KR', { hour12: false });
-                    }
-
-                    timers[id] = {
-                        endTime, initialSeconds, display: timerDisplay, button,
+                    state.timers[id] = {
                         interval: setInterval(() => {
-                            const diff = timers[id].endTime - Date.now();
+                            const diff = endTime - Date.now();
                             if (diff <= 0) {
-                                clearInterval(timers[id].interval);
-                                timers[id].display.textContent = formatTime(timers[id].initialSeconds, id.includes('buff'));
-                                timers[id].button.classList.remove('active');
-                                delete timers[id];
+                                this.stop(id, duration, displayEl, buttonEl, onEnd);
                                 return;
                             }
-                            timers[id].display.textContent = formatTime(Math.ceil(diff / 1000), id.includes('buff'));
+                            const newDisplayValue = this.formatTime(Math.ceil(diff / 1000));
+                            if (newDisplayValue !== lastDisplayValue) {
+                                displayEl.textContent = newDisplayValue;
+                                lastDisplayValue = newDisplayValue;
+                            }
                         }, 100)
                     };
-                });
-            });
-            document.getElementById('buff-restart').addEventListener('click', () => {
-                document.getElementById('buff-5m').click();
-                document.getElementById('buff-3m').click();
-            });
-            function formatTime(totalSeconds, isBuff) {
-                if (isBuff || totalSeconds >= 60) {
-                    const minutes = Math.floor(totalSeconds / 60);
-                    const seconds = totalSeconds % 60;
-                    return `${minutes}:${String(seconds).padStart(2, '0')}`;
-                }
-                return `${totalSeconds}${currentLang === 'ko' || currentLang === 'ja' ? '초' : 's'}`;
-            }
-
-            // --- 리저렉션 관리 로직 ---
-            const resMinusBtn = document.getElementById('res-minus');
-            const resPlusBtn = document.getElementById('res-plus');
-            const resCountEl = document.getElementById('res-count');
-            const resContainer = document.getElementById('res-timers-container');
-            let resCount = 4;
-
-            function loadResurrectionState() {
-                const savedState = localStorage.getItem('resurrectionStates');
-                if (savedState) {
-                    resurrectionStates = JSON.parse(savedState);
-                    Object.keys(resurrectionStates).forEach(key => {
-                        if(resurrectionStates[key].interval) delete resurrectionStates[key].interval;
-                    });
-                }
-                const savedCount = localStorage.getItem('resurrectionCount');
-                resCount = savedCount ? parseInt(savedCount, 10) : 4;
-                resCountEl.textContent = resCount;
-            }
-
-            function saveResurrectionState() {
-                const stateToSave = JSON.parse(JSON.stringify(resurrectionStates));
-                 Object.keys(stateToSave).forEach(key => {
-                    delete stateToSave[key].interval;
-                });
-                localStorage.setItem('resurrectionStates', JSON.stringify(stateToSave));
-                localStorage.setItem('resurrectionCount', resCount);
-            }
-
-            function updateResurrectionButtons() {
-                resContainer.innerHTML = '';
-                for (let i = 1; i <= resCount; i++) {
-                    const resId = `res-${i}`;
-                    
-                    if (!resurrectionStates[resId]) {
-                        resurrectionStates[resId] = { nickname: '', endTime: null, interval: null };
+                },
+                stop(id, duration, displayEl, buttonEl, onEnd) {
+                    if (state.timers[id]?.interval) {
+                        clearInterval(state.timers[id].interval);
+                        delete state.timers[id];
                     }
-                    const state = resurrectionStates[resId];
-
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'flex items-center gap-2';
-                    
-                    const nicknameInput = document.createElement('input');
-                    nicknameInput.type = 'text';
-                    nicknameInput.placeholder = `${translations[currentLang].bishop_placeholder} ${i}`;
-                    nicknameInput.className = 'input-field flex-grow';
-                    nicknameInput.value = state.nickname || '';
-                    nicknameInput.addEventListener('input', (e) => {
-                        state.nickname = e.target.value;
-                        saveResurrectionState();
-                    });
-
-                    const button = document.createElement('button');
-                    button.id = resId;
-                    button.className = 'btn text-lg w-40 flex-shrink-0';
-                    
-                    const expireEl = document.createElement('span');
-                    expireEl.id = `${resId}-expire`;
-                    expireEl.className = 'font-bold text-center w-28 flex-shrink-0';
-                    
-                    wrapper.append(nicknameInput, button, expireEl);
-                    resContainer.appendChild(wrapper);
-
-                    button.addEventListener('click', () => handleResurrectionClick(resId, button, expireEl, nicknameInput));
-
-                    if (state.endTime && state.endTime > Date.now()) {
-                        handleResurrectionClick(resId, button, expireEl, nicknameInput, true);
-                    } else {
-                        state.endTime = null;
-                        button.textContent = translations[currentLang].use_btn;
-                        expireEl.textContent = '--:--:--';
-                    }
+                    displayEl.textContent = this.formatTime(duration);
+                    if (buttonEl) buttonEl.classList.remove('active');
+                    if (onEnd) onEnd();
                 }
-                saveResurrectionState();
-            }
+            };
 
-            function handleResurrectionClick(resId, button, expireEl, nicknameInput, isRestart = false) {
-                if (button.disabled && !isRestart) return;
+            // --- SEDUCTION CONTROLLER ---
+            const SeductionController = {
+                runTimer() {
+                    const lang = LanguageManager.get();
+                    const diff = state.seductionMaster.nextTime - Date.now();
+                    
+                    ui.seductionTimer.classList.toggle('flashing-text', diff < 10000 && diff > 0);
 
-                const state = resurrectionStates[resId];
-                if (state.interval) clearInterval(state.interval);
-
-                button.disabled = true;
-                nicknameInput.disabled = true;
-                
-                if (!isRestart) {
-                    state.endTime = Date.now() + 30 * 60 * 1000;
-                    saveResurrectionState();
-                }
-                
-                expireEl.textContent = new Date(state.endTime).toLocaleTimeString('ko-KR', { hour12: false });
-
-                state.interval = setInterval(() => {
-                    const diff = state.endTime - Date.now();
                     if (diff <= 0) {
-                        clearInterval(state.interval);
-                        button.textContent = translations[currentLang].use_btn;
-                        button.disabled = false;
-                        nicknameInput.disabled = false;
-                        expireEl.textContent = '--:--:--';
-                        state.endTime = null;
-                        state.interval = null;
-                        saveResurrectionState();
+                        ui.seductionStatus.textContent = translations[lang].statusSeducing.replace('{phase}', state.seductionMaster.activePhase);
+                        ui.seductionTimer.textContent = translations[lang].statusAttention;
+                        ui.seductionTimer.classList.add('flashing-text');
+                        
+                        setTimeout(() => {
+                            ui.seductionTimer.classList.remove('flashing-text');
+                            state.seductionMaster.nextTime = Date.now() + CONSTANTS.SEDUCTION_INTERVAL;
+                            state.seductionMaster.isFirst = false;
+                            ui.seductionStatus.textContent = translations[lang].statusNextSeduce.replace('{phase}', state.seductionMaster.activePhase);
+                            this.updateETA(state.seductionMaster.nextTime);
+                        }, 2000);
                         return;
                     }
-                    const remainingMinutes = Math.floor(diff / 1000 / 60);
-                    const remainingSeconds = Math.floor(diff / 1000) % 60;
-                    button.textContent = `${String(remainingMinutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-                }, 1000);
-            }
 
-            resMinusBtn.addEventListener('click', () => { 
-                if (resCount > 1) { 
-                    const resIdToRemove = `res-${resCount}`;
-                    if(resurrectionStates[resIdToRemove] && resurrectionStates[resIdToRemove].interval) {
-                        clearInterval(resurrectionStates[resIdToRemove].interval);
+                    const minutes = Math.floor((diff / 1000 / 60) % 60);
+                    const seconds = Math.floor((diff / 1000) % 60);
+                    ui.seductionTimer.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                },
+                updateETA(time) {
+                    const lang = LanguageManager.get();
+                    if (!time) {
+                        ui.seductionEta.textContent = '';
+                        return;
                     }
-                    delete resurrectionStates[resIdToRemove];
-                    resCount--; 
-                    resCountEl.textContent = resCount; 
-                    updateResurrectionButtons(); 
-                } 
-            });
-            resPlusBtn.addEventListener('click', () => { 
-                if (resCount < 10) { 
-                    resCount++; 
-                    resCountEl.textContent = resCount; 
-                    updateResurrectionButtons(); 
-                } 
-            });
-            
-            // --- 파티 관리 로직 ---
-            const partyListInput = document.getElementById('party-list-input');
-            const generateListBtn = document.getElementById('generate-list-btn');
-            const resetListBtn = document.getElementById('reset-list-btn');
-            const waitingListEl = document.getElementById('waiting-list');
-            const partyContainer = document.getElementById('party-container');
-            const copyListBtn = document.getElementById('copy-list-btn');
-            const copyFeedback = document.getElementById('copy-feedback');
-            const partyMinusBtn = document.getElementById('party-minus-btn');
-            const partyPlusBtn = document.getElementById('party-plus-btn');
-            const partyCountDisplay = document.getElementById('party-count-display');
-            
-            let partyCount = 4;
-            const MAX_PARTIES = 8;
-            const MIN_PARTIES = 1;
+                    const eta = new Date(time);
+                    ui.seductionEta.textContent = `${translations[lang].etaPrefix} ${eta.toLocaleTimeString('ko-KR', { hour12: false })}`;
+                },
+                start(phase) {
+                    const lang = LanguageManager.get();
+                    state.seductionMaster.activePhase = phase;
+                    
+                    ui.phaseBtns.forEach(b => b.classList.remove('selected'));
+                    document.querySelector(`.phase-btn[data-phase="${phase}"]`).classList.add('selected');
 
-            const sortableOptions = { group: 'party', animation: 150, ghostClass: 'sortable-ghost' };
-            new Sortable(waitingListEl, sortableOptions);
+                    if (state.seductionMaster.interval) clearInterval(state.seductionMaster.interval);
 
-            function createDraggableItem(name, id) {
-                const item = document.createElement('div');
-                item.className = 'draggable-item';
-                item.dataset.id = id;
-                const nameSpan = document.createElement('span');
-                nameSpan.textContent = name.trim();
-                const controlsDiv = document.createElement('div');
-                controlsDiv.className = 'flex items-center';
-                const timerDisplay = document.createElement('span');
-                timerDisplay.className = 'death-timer-display';
-                const deathBtn = document.createElement('button');
-                deathBtn.className = 'btn btn-death';
-                deathBtn.textContent = translations[currentLang].death_btn;
-                controlsDiv.append(timerDisplay, deathBtn);
-                item.append(nameSpan, controlsDiv);
-                return item;
-            }
+                    state.seductionMaster.isFirst = true;
+                    ui.seductionStatus.textContent = translations[lang].statusFirstSeduce.replace('{phase}', phase);
+                    state.seductionMaster.nextTime = Date.now() + CONSTANTS.SEDUCTION_FIRST_DELAY;
 
-            document.querySelector('.w-full.max-w-screen-2xl').addEventListener('click', (e) => {
-                if (e.target.classList.contains('btn-death')) {
-                    const item = e.target.closest('.draggable-item');
-                    const memberId = item.dataset.id;
-                    const display = item.querySelector('.death-timer-display');
-                    if (deathTimers[memberId]) return;
-                    e.target.disabled = true;
-                    const endTime = Date.now() + 15 * 60 * 1000;
-                    deathTimers[memberId] = {
-                        endTime,
-                        interval: setInterval(() => {
-                            const diff = deathTimers[memberId].endTime - Date.now();
-                            if (diff <= 0) {
-                                clearInterval(deathTimers[memberId].interval);
-                                delete deathTimers[memberId];
-                                display.textContent = '';
-                                e.target.disabled = false;
-                                return;
-                            }
-                            const minutes = Math.floor((diff / 1000 / 60) % 60);
-                            const seconds = Math.floor((diff / 1000) % 60);
-                            display.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                        }, 1000)
-                    };
+                    this.updateETA(state.seductionMaster.nextTime);
+                    this.runTimer();
+                    state.seductionMaster.interval = setInterval(() => this.runTimer(), 1000);
+                },
+                reset() {
+                    const lang = LanguageManager.get();
+                    if (state.seductionMaster.interval) clearInterval(state.seductionMaster.interval);
+                    Object.assign(state.seductionMaster, { interval: null, nextTime: null, isFirst: true, activePhase: null });
+
+                    ui.seductionStatus.textContent = translations[lang].statusWaiting;
+                    ui.seductionTimer.textContent = '--:--';
+                    ui.seductionEta.textContent = '';
+                    ui.seductionTimer.classList.remove('flashing-text');
+                    ui.phaseBtns.forEach(b => b.classList.remove('selected'));
+                },
+                init() {
+                    ui.phaseBtns.forEach(btn => btn.addEventListener('click', () => this.start(btn.dataset.phase)));
+                    ui.masterResetBtn.addEventListener('click', () => this.reset());
                 }
-            });
+            };
 
-            function updatePartyLayout() {
-                const memberStates = new Map();
-                document.querySelectorAll('.draggable-item').forEach(item => {
-                    memberStates.set(item.dataset.id, {
-                        name: item.querySelector('span:first-child').textContent,
-                        listId: item.parentElement.id
+            // --- RESURRECTION MANAGER ---
+            const ResurrectionManager = {
+                updateUI() {
+                    const lang = LanguageManager.get();
+                    ui.resContainer.innerHTML = '';
+                    for (let i = 1; i <= state.resurrection.count; i++) {
+                        const resId = `res-${i}`;
+                        if (!state.resurrection.states[resId]) {
+                            state.resurrection.states[resId] = { nickname: '', endTime: null, interval: null };
+                        }
+                        const resState = state.resurrection.states[resId];
+                        
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'flex items-center gap-2';
+                        
+                        const nicknameInput = document.createElement('input');
+                        nicknameInput.type = 'text';
+                        nicknameInput.placeholder = translations[lang].bishopNicknamePlaceholder.replace('{i}', i);
+                        nicknameInput.className = 'input-field w-full';
+                        nicknameInput.value = resState.nickname || '';
+                        nicknameInput.addEventListener('input', (e) => {
+                            resState.nickname = e.target.value;
+                            this.saveState();
+                        });
+
+                        const button = document.createElement('button');
+                        button.id = resId;
+                        button.className = 'btn text-lg w-32 flex-shrink-0';
+                        
+                        const expireEl = document.createElement('span');
+                        expireEl.id = `${resId}-expire`;
+                        expireEl.className = 'font-bold text-center w-28 flex-shrink-0';
+                        
+                        wrapper.append(nicknameInput, button, expireEl);
+                        ui.resContainer.appendChild(wrapper);
+
+                        button.addEventListener('click', () => this.handleClick(resId, button, expireEl, nicknameInput));
+
+                        if (resState.endTime && resState.endTime > Date.now()) {
+                            this.handleClick(resId, button, expireEl, nicknameInput, true);
+                        } else {
+                            resState.endTime = null;
+                            button.textContent = translations[lang].use;
+                            expireEl.textContent = '--:--:--';
+                        }
+                    }
+                    this.saveState();
+                },
+                handleClick(resId, button, expireEl, nicknameInput, isRestart = false) {
+                    const lang = LanguageManager.get();
+                    if (button.disabled && !isRestart) return;
+
+                    const resState = state.resurrection.states[resId];
+                    if (resState.interval) clearInterval(resState.interval);
+
+                    button.disabled = true;
+                    nicknameInput.disabled = true;
+                    
+                    if (!isRestart) {
+                        resState.endTime = Date.now() + CONSTANTS.RESURRECTION_COOLDOWN;
+                        this.saveState();
+                    }
+                    
+                    expireEl.textContent = new Date(resState.endTime).toLocaleTimeString('ko-KR', { hour12: false });
+
+                    resState.interval = setInterval(() => {
+                        const diff = resState.endTime - Date.now();
+                        if (diff <= 0) {
+                            clearInterval(resState.interval);
+                            button.textContent = translations[lang].use;
+                            button.disabled = false;
+                            nicknameInput.disabled = false;
+                            expireEl.textContent = '--:--:--';
+                            resState.endTime = null;
+                            resState.interval = null;
+                            this.saveState();
+                            return;
+                        }
+                        const remainingMinutes = Math.floor(diff / 1000 / 60);
+                        const remainingSeconds = Math.floor(diff / 1000) % 60;
+                        button.textContent = `${String(remainingMinutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+                    }, 1000);
+                },
+                changeCount(amount) {
+                    const newCount = state.resurrection.count + amount;
+                    if (newCount >= 1 && newCount <= 10) {
+                        if (amount < 0) {
+                            const resIdToRemove = `res-${state.resurrection.count}`;
+                            if (state.resurrection.states[resIdToRemove]?.interval) {
+                                clearInterval(state.resurrection.states[resIdToRemove].interval);
+                            }
+                            delete state.resurrection.states[resIdToRemove];
+                        }
+                        state.resurrection.count = newCount;
+                        ui.resCountEl.textContent = newCount;
+                        this.updateUI();
+                        if (document.getElementById('bishop-utils').style.maxHeight) {
+                            document.getElementById('bishop-utils').style.maxHeight = document.getElementById('bishop-utils').scrollHeight + "px";
+                        }
+                    }
+                },
+                saveState() {
+                    const stateToSave = JSON.parse(JSON.stringify(state.resurrection.states));
+                    Object.keys(stateToSave).forEach(key => delete stateToSave[key].interval);
+                    localStorage.setItem('resurrectionStates', JSON.stringify(stateToSave));
+                    localStorage.setItem('resurrectionCount', state.resurrection.count);
+                },
+                loadState() {
+                    const savedStates = localStorage.getItem('resurrectionStates');
+                    if (savedStates) state.resurrection.states = JSON.parse(savedStates);
+                    const savedCount = localStorage.getItem('resurrectionCount');
+                    state.resurrection.count = savedCount ? parseInt(savedCount, 10) : 1;
+                    ui.resCountEl.textContent = state.resurrection.count;
+                },
+                init() {
+                    this.loadState();
+                    this.updateUI();
+                    document.getElementById('res-minus').addEventListener('click', () => this.changeCount(-1));
+                    document.getElementById('res-plus').addEventListener('click', () => this.changeCount(1));
+                }
+            };
+            
+            // --- PARTY MANAGER ---
+            const PartyManager = {
+                updateUI() {
+                    const lang = LanguageManager.get();
+                    const memberStates = new Map();
+                    document.querySelectorAll('.draggable-item').forEach(item => {
+                        memberStates.set(item.dataset.id, {
+                            name: item.querySelector('span:first-child').textContent,
+                            listId: item.parentElement.id
+                        });
                     });
-                });
 
-                if (document.querySelectorAll('#party-container > div').length > partyCount) {
-                    const lastPartyId = `party-${document.querySelectorAll('#party-container > div').length}`;
-                    document.querySelectorAll(`#${lastPartyId} .draggable-item`).forEach(item => {
-                        if (memberStates.has(item.dataset.id)) {
-                           memberStates.get(item.dataset.id).listId = 'waiting-list';
+                    if (document.querySelectorAll('#party-container > div').length > state.party.count) {
+                        const lastPartyId = `party-${document.querySelectorAll('#party-container > div').length}`;
+                        document.querySelectorAll(`#${lastPartyId} .draggable-item`).forEach(item => {
+                            memberStates.get(item.dataset.id).listId = 'waiting-list';
+                        });
+                    }
+                    
+                    ui.partyContainer.innerHTML = '';
+                    for (let i = 1; i <= state.party.count; i++) {
+                        const partyWrapper = document.createElement('div');
+                        partyWrapper.className = 'flex flex-col';
+                        const partyTitle = document.createElement('h3');
+                        partyTitle.className = 'font-bold text-lg mb-2 text-center';
+                        partyTitle.textContent = translations[lang].partyTitle.replace('{i}', i);
+                        const partyList = document.createElement('div');
+                        partyList.className = 'party-list';
+                        partyList.id = `party-${i}`;
+                        partyWrapper.append(partyTitle, partyList);
+                        ui.partyContainer.appendChild(partyWrapper);
+                        new Sortable(partyList, { group: 'party', animation: 150, ghostClass: 'sortable-ghost' });
+                    }
+                    
+                    const partyGrid = ui.partyContainer.children.length;
+                    ui.partyContainer.style.gridTemplateColumns = `repeat(${Math.min(partyGrid, 4)}, 1fr)`;
+
+                    ui.waitingList.innerHTML = '';
+                    memberStates.forEach((memberState, id) => {
+                        const targetList = document.getElementById(memberState.listId) || ui.waitingList;
+                        targetList.appendChild(this.createDraggableItem(memberState.name, id));
+                    });
+
+                    ui.partyCountDisplay.textContent = state.party.count;
+                },
+                createDraggableItem(name, id) {
+                    const lang = LanguageManager.get();
+                    const item = document.createElement('div');
+                    item.className = 'draggable-item';
+                    item.dataset.id = id;
+                    const nameSpan = document.createElement('span');
+                    nameSpan.textContent = name.trim();
+                    const controlsDiv = document.createElement('div');
+                    controlsDiv.className = 'flex items-center';
+                    const timerDisplay = document.createElement('span');
+                    timerDisplay.className = 'death-timer-display';
+                    const deathBtn = document.createElement('button');
+                    deathBtn.className = 'btn btn-death';
+                    deathBtn.textContent = translations[lang].deathButton;
+                    controlsDiv.append(timerDisplay, deathBtn);
+                    item.append(nameSpan, controlsDiv);
+                    return item;
+                },
+                init() {
+                    this.updateUI();
+                    document.getElementById('party-plus-btn').addEventListener('click', () => { if (state.party.count < CONSTANTS.MAX_PARTIES) { state.party.count++; this.updateUI(); } });
+                    document.getElementById('party-minus-btn').addEventListener('click', () => { if (state.party.count > CONSTANTS.MIN_PARTIES) { state.party.count--; this.updateUI(); } });
+                    document.getElementById('generate-list-btn').addEventListener('click', () => {
+                        const names = ui.partyListInput.value.split('\n').filter(name => name.trim() !== '');
+                        names.forEach(name => {
+                            const uniqueId = `member-${Date.now()}-${Math.random()}`;
+                            ui.waitingList.appendChild(this.createDraggableItem(name, uniqueId));
+                        });
+                        ui.partyListInput.value = '';
+                    });
+                    document.getElementById('reset-list-btn').addEventListener('click', () => {
+                        ui.waitingList.innerHTML = '';
+                        document.querySelectorAll('#party-container .party-list').forEach(list => { list.innerHTML = ''; });
+                        Object.values(state.deathTimers).forEach(timer => clearInterval(timer.interval));
+                        state.deathTimers = {};
+                    });
+                    document.getElementById('copy-list-btn').addEventListener('click', () => {
+                        const lang = LanguageManager.get();
+                        let fullPartyList = '';
+                        document.querySelectorAll('#party-container > div').forEach((listWrapper, index) => {
+                            const list = listWrapper.querySelector('.party-list');
+                            const members = Array.from(list.children).map(item => `- ${item.querySelector("span:first-child").textContent}`);
+                            if (members.length > 0) {
+                                fullPartyList += `[${translations[lang].partyTitle.replace('{i}', index + 1)}]\n${members.join('\n')}\n\n`;
+                            }
+                        });
+                        const waitingMembers = Array.from(ui.waitingList.children).map(item => `- ${item.querySelector("span:first-child").textContent}`);
+                        if (waitingMembers.length > 0) {
+                            fullPartyList += `[${translations[lang].waitingList}]\n${waitingMembers.join('\n')}\n`;
+                        }
+                        if (!fullPartyList.trim()) return;
+                        navigator.clipboard.writeText(fullPartyList.trim()).then(() => {
+                            ui.copyFeedback.style.opacity = '1';
+                            setTimeout(() => { ui.copyFeedback.style.opacity = '0'; }, 2000);
+                        }).catch(err => {
+                            console.error('Failed to copy party list: ', err);
+                            // You can add a user-facing error message here if needed
+                        });
+                    });
+                    document.querySelector('.w-full.max-w-screen-2xl').addEventListener('click', (e) => {
+                        if (e.target.classList.contains('btn-death')) {
+                            const item = e.target.closest('.draggable-item');
+                            const memberId = item.dataset.id;
+                            const display = item.querySelector('.death-timer-display');
+                            if (state.deathTimers[memberId]) return;
+                            e.target.disabled = true;
+                            const endTime = Date.now() + CONSTANTS.DEATH_TIMER_DURATION;
+                            state.deathTimers[memberId] = {
+                                interval: setInterval(() => {
+                                    const diff = endTime - Date.now();
+                                    if (diff <= 0) {
+                                        clearInterval(state.deathTimers[memberId].interval);
+                                        delete state.deathTimers[memberId];
+                                        display.textContent = '';
+                                        e.target.disabled = false;
+                                        return;
+                                    }
+                                    const minutes = Math.floor((diff / 1000 / 60) % 60);
+                                    const seconds = Math.floor((diff / 1000) % 60);
+                                    display.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                                }, 1000)
+                            };
                         }
                     });
                 }
-                
-                partyContainer.innerHTML = '';
-                for (let i = 1; i <= partyCount; i++) {
-                    const partyWrapper = document.createElement('div');
-                    partyWrapper.className = 'flex flex-col';
-                    const partyTitle = document.createElement('h3');
-                    partyTitle.className = 'font-bold text-lg mb-2 text-center';
-                    partyTitle.textContent = `${i}${translations[currentLang].party_title}`;
-                    const partyList = document.createElement('div');
-                    partyList.className = 'party-list';
-                    partyList.id = `party-${i}`;
-                    partyWrapper.append(partyTitle, partyList);
-                    partyContainer.appendChild(partyWrapper);
-                    new Sortable(partyList, sortableOptions);
-                }
-                
-                const partyGrid = partyContainer.children.length;
-                partyContainer.style.gridTemplateColumns = `repeat(${Math.min(partyGrid, 4)}, 1fr)`;
+            };
 
-                waitingListEl.innerHTML = '';
-                memberStates.forEach((state, id) => {
-                    const targetList = document.getElementById(state.listId) || waitingListEl;
-                    targetList.appendChild(createDraggableItem(state.name, id));
+            // --- GENERAL INITIALIZATION ---
+            function initializeApp() {
+                const updateCountdownDisplay = (h, m, s) => {
+                    const lang = LanguageManager.get();
+                    let format = translations[lang].timeFormat;
+                    if (!format) format = translations['ko'].timeFormat;
+                    
+                    const timeString = format
+                        .replace('{h}', h)
+                        .replace('{m}', String(m).padStart(2, '0'))
+                        .replace('{s}', String(s).padStart(2, '0'));
+
+                    ui.countdownDisplay.textContent = timeString;
+                };
+
+                ui.start12hBtn.addEventListener('click', () => {
+                    if (state.countdown12hInterval) clearInterval(state.countdown12hInterval);
+                    const endTime = Date.now() + CONSTANTS.HORNTAIL_DURATION;
+                    state.countdown12hInterval = setInterval(() => {
+                        const diff = endTime - Date.now();
+                        if (diff <= 0) {
+                            clearInterval(state.countdown12hInterval);
+                            updateCountdownDisplay(0, 0, 0);
+                            return;
+                        }
+                        const hours = Math.floor(diff / (1000 * 60 * 60));
+                        const minutes = Math.floor((diff / 1000 / 60) % 60);
+                        const seconds = Math.floor((diff / 1000) % 60);
+                        updateCountdownDisplay(hours, minutes, seconds);
+                    }, 1000);
                 });
 
-                partyCountDisplay.textContent = partyCount;
-            }
-            
-            partyPlusBtn.addEventListener('click', () => { if (partyCount < MAX_PARTIES) { partyCount++; updatePartyLayout(); } });
-            partyMinusBtn.addEventListener('click', () => { if (partyCount > MIN_PARTIES) { partyCount--; updatePartyLayout(); } });
+                // Initialize Clock
+                setInterval(() => {
+                    const lang = LanguageManager.get();
+                    const locale = langLocaleMap[lang] || 'ko-KR';
+                    ui.browserClock.textContent = new Date().toLocaleTimeString(locale, { hour12: false });
+                }, 1000);
 
-            generateListBtn.addEventListener('click', () => {
-                const names = partyListInput.value.split('\n').filter(name => name.trim() !== '');
-                names.forEach(name => {
-                    const uniqueId = `member-${Date.now()}-${Math.random()}`;
-                    waitingListEl.appendChild(createDraggableItem(name, uniqueId));
-                });
-                partyListInput.value = '';
-            });
+                // Initialize modules
+                LanguageManager.init();
+                ResurrectionManager.init();
+                PartyManager.init();
+                SeductionController.init();
 
-            resetListBtn.addEventListener('click', () => {
-                waitingListEl.innerHTML = '';
-                document.querySelectorAll('#party-container .party-list').forEach(list => { list.innerHTML = ''; });
-                for (const key in deathTimers) {
-                    clearInterval(deathTimers[key].interval);
-                    delete deathTimers[key];
-                }
-            });
-
-            copyListBtn.addEventListener('click', () => {
-                let fullPartyList = '';
-                document.querySelectorAll('#party-container > div').forEach((listWrapper, index) => {
-                    const list = listWrapper.querySelector('.party-list');
-                    const members = Array.from(list.children).map(item => `- ${item.querySelector("span:first-child").textContent}`);
-                    if (members.length > 0) {
-                        fullPartyList += `[${index + 1}${translations[currentLang].party_title}]\n${members.join('\n')}\n\n`;
+                // Initialize simple timers
+                document.querySelectorAll('.timer-btn').forEach(button => {
+                    const id = button.id;
+                    const timerDisplay = button.querySelector('.time-display');
+                    const initialSeconds = parseInt(timerDisplay.dataset.time, 10);
+                    if (isNaN(initialSeconds)) {
+                        console.error(`Invalid time data for button #${id}`);
+                        return;
                     }
-                });
-                const waitingMembers = Array.from(waitingListEl.children).map(item => `- ${item.querySelector("span:first-child").textContent}`);
-                if (waitingMembers.length > 0) {
-                    fullPartyList += `[${translations[currentLang].waiting_list}]\n${waitingMembers.join('\n')}\n`;
-                }
-                if (!fullPartyList.trim()) return;
-                
-                try {
-                    navigator.clipboard.writeText(fullPartyList.trim()).then(() => {
-                        copyFeedback.style.opacity = '1';
-                        setTimeout(() => { copyFeedback.style.opacity = '0'; }, 2000);
+                    button.addEventListener('click', () => {
+                        button.classList.add('active');
+                        TimerManager.start(id, initialSeconds, timerDisplay, button, () => {
+                            if (id.includes('buff')) document.getElementById(`${id}-expire`).textContent = '--:--:--';
+                        });
+                        if (id.includes('buff')) document.getElementById(`${id}-expire`).textContent = new Date(Date.now() + initialSeconds * 1000).toLocaleTimeString('ko-KR', { hour12: false });
                     });
-                } catch (err) {
-                    const textArea = document.createElement("textarea");
-                    textArea.value = fullPartyList.trim();
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    try {
-                        document.execCommand('copy');
-                        copyFeedback.style.opacity = '1';
-                        setTimeout(() => { copyFeedback.style.opacity = '0'; }, 2000);
-                    } catch (err) {
-                        console.error('Fallback copy failed', err);
-                    }
-                    document.body.removeChild(textArea);
-                }
-            });
+                });
+                document.getElementById('buff-restart').addEventListener('click', () => {
+                    document.getElementById('buff-5m').click();
+                    document.getElementById('buff-3m').click();
+                });
+                
+                // Initialize Memo Pad
+                ui.memoPad.value = localStorage.getItem('memoContent') || '';
+                ui.memoPad.addEventListener('input', () => localStorage.setItem('memoContent', ui.memoPad.value));
 
-            // --- 메모장 자동 저장 ---
-            const memoPad = document.getElementById('memo-pad');
-            function loadMemo() {
-                const savedMemo = localStorage.getItem('memoContent');
-                if (savedMemo) {
-                    memoPad.value = savedMemo;
-                }
-            }
-            function saveMemo() {
-                localStorage.setItem('memoContent', memoPad.value);
-            }
-            memoPad.addEventListener('input', saveMemo);
-
-            // --- 아코디언 (접이식 메뉴) 로직 ---
-            function setupAccordions() {
+                // Initialize Accordions
                 const accordionItems = document.querySelectorAll('.accordion-item');
                 const accordionStates = JSON.parse(localStorage.getItem('accordionStates')) || {};
-
                 accordionItems.forEach(item => {
                     const header = item.querySelector('.accordion-header');
                     const content = item.querySelector('.accordion-content');
                     const targetId = header.dataset.target.substring(1);
-
                     if (accordionStates[targetId] === 'open') {
                         header.classList.add('active');
                         content.style.maxHeight = content.scrollHeight + "px";
                     }
-
                     header.addEventListener('click', () => {
-                        const isActive = header.classList.contains('active');
-                        if (isActive) {
-                            header.classList.remove('active');
-                            content.style.maxHeight = null;
-                            accordionStates[targetId] = 'closed';
-                        } else {
-                            header.classList.add('active');
-                            content.style.maxHeight = content.scrollHeight + "px";
-                            accordionStates[targetId] = 'open';
-                        }
+                        header.classList.toggle('active');
+                        const isOpen = header.classList.contains('active');
+                        content.style.maxHeight = isOpen ? content.scrollHeight + "px" : null;
+                        accordionStates[targetId] = isOpen ? 'open' : 'closed';
                         localStorage.setItem('accordionStates', JSON.stringify(accordionStates));
                     });
                 });
+
+                // Set initial countdown display
+                updateCountdownDisplay(12, 0, 0);
             }
 
-            // --- 타이머 초기화 로직 ---
-            document.getElementById('reset-all-timers').addEventListener('click', () => {
-                Object.keys(timers).forEach(id => {
-                    clearInterval(timers[id].interval);
-                    const button = timers[id].button;
-                    const display = timers[id].display;
-                    const initialSeconds = timers[id].initialSeconds;
-                    
-                    display.textContent = formatTime(initialSeconds, id.includes('buff'));
-                    button.classList.remove('active');
-
-                    if (id.includes('buff')) {
-                        document.getElementById(`${id}-expire`).textContent = '--:--:--';
-                    }
-                });
-                for (const key in timers) { delete timers[key]; }
-            });
-
-            document.getElementById('reset-res-timers').addEventListener('click', () => {
-                Object.keys(resurrectionStates).forEach(key => {
-                    if (resurrectionStates[key] && resurrectionStates[key].interval) {
-                        clearInterval(resurrectionStates[key].interval);
-                    }
-                });
-                resurrectionStates = {};
-                localStorage.removeItem('resurrectionStates');
-                updateResurrectionButtons();
-            });
-
-            // --- 초기화 ---
-            document.getElementById('lang-ko').addEventListener('click', () => setLanguage('ko'));
-            document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
-            document.getElementById('lang-ja').addEventListener('click', () => setLanguage('ja'));
-
-            const savedLang = localStorage.getItem('language') || 'ko';
-            setLanguage(savedLang);
-
-            loadResurrectionState();
-            updateResurrectionButtons();
-            updatePartyLayout();
-            loadMemo();
-            setupAccordions();
+            initializeApp();
         });
     </script>
 </body>
