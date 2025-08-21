@@ -20,7 +20,7 @@
             color: #e0e0e0;
         }
         html[lang="ja"] body { font-family: 'Noto Sans JP', sans-serif; }
-        html[lang="en"] body { font-family: 'Inter', sans-serif; } /* Inter is a good default for English */
+        html[lang="en"] body { font-family: 'Inter', sans-serif; }
 
         .main-title {
             font-size: 3rem;
@@ -110,15 +110,31 @@
         .flashing-text {
             animation: flash 1s infinite;
         }
-        .phase-btn.selected {
-            background-color: #ffd700;
-            color: #121212;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
         .lang-btn.selected {
             background-color: #ffd700;
             color: #121212;
             cursor: default;
+        }
+        .seduction-log {
+            background-color: #2a2a2a;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            height: 120px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        .time-adjust-btn {
+            background-color: #444;
+            color: #e0e0e0;
+            border: 1px solid #666;
+            width: 2rem;
+            height: 2rem;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+        .time-adjust-btn:hover {
+            background-color: #555;
         }
     </style>
 </head>
@@ -223,18 +239,24 @@
                                 <button id="timer-heroswill" class="btn timer-btn flex-col h-28 w-full mt-4"><span class="font-bold text-3xl" data-lang-key="herosWill">용사의 의지</span><span class="time-display" data-time="600">10:00</span></button>
                             </div>
                             <div class="space-y-4">
-                                <h3 class="section-title" data-lang-key="seduceController">통합 유혹 페이즈 컨트롤러</h3>
+                                <h3 class="section-title" data-lang-key="seduceController">실시간 유혹 추적기</h3>
                                 <div class="p-4 bg-black/20 rounded-lg text-center">
                                     <p id="seduction-master-status" class="text-lg font-bold h-7" data-lang-key="statusWaiting">대기 중</p>
-                                    <p id="seduction-master-timer" class="text-5xl font-mono text-red-400 my-2">--:--</p>
-                                    <p id="seduction-master-eta" class="text-md text-gray-400 font-mono h-6"></p>
+                                    <div class="flex items-center justify-center gap-2">
+                                        <p id="seduction-master-timer" class="text-5xl font-mono text-red-400 my-2">--:--</p>
+                                        <div class="flex flex-col gap-1">
+                                            <button id="seduction-time-up" class="btn time-adjust-btn">▲</button>
+                                            <button id="seduction-time-down" class="btn time-adjust-btn">▼</button>
+                                        </div>
+                                    </div>
+                                    <p id="seduction-master-eta" class="text-md text-gray-400 font-mono h-6 cursor-pointer" title="클릭하여 복사"></p>
+                                    <div id="seduction-log" class="seduction-log text-left mt-2"></div>
                                 </div>
-                                <div class="grid grid-cols-3 gap-2">
-                                    <button data-phase="1" class="phase-btn btn p-2 text-lg" data-lang-key="phase1">1페이즈</button>
-                                    <button data-phase="2" class="phase-btn btn p-2 text-lg" data-lang-key="phase2">2페이즈</button>
-                                    <button data-phase="3" class="phase-btn btn p-2 text-lg" data-lang-key="phase3">3페이즈</button>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button id="seduction-start-btn" class="btn text-lg" data-lang-key="raidStart">레이드 시작</button>
+                                    <button id="seduction-confirm-btn" class="btn text-lg" data-lang-key="personalSeduction" disabled>개인유혹</button>
                                 </div>
-                                <button id="seduction-master-reset" class="btn btn-danger w-full text-lg" data-lang-key="resetAll">전체 초기화</button>
+                                <button id="seduction-master-reset" class="btn btn-danger w-full text-lg" data-lang-key="resetAll">초기화</button>
                             </div>
                         </div>
                     </div>
@@ -320,7 +342,7 @@
             const CONSTANTS = {
                 HORNTAIL_DURATION: 12 * 60 * 60 * 1000,
                 SEDUCTION_FIRST_DELAY: 2 * 60 * 1000,
-                SEDUCTION_INTERVAL: 3 * 60 * 1000,
+                SEDUCTION_PREDICTION_INTERVAL: 3 * 60 * 1000,
                 DEATH_TIMER_DURATION: 15 * 60 * 1000,
                 RESURRECTION_COOLDOWN: 30 * 60 * 1000,
                 MAX_PARTIES: 8,
@@ -330,13 +352,13 @@
             // --- TRANSLATIONS ---
             const translations = {
                 ko: {
-                    mainTitle: '혼테일 브레이커', creator: 'by 소년아서', currentTime: '현재 시간', horntailLimit: '혼테일 제한시간', start: '시작', raidLeaderUtils: '🛡️ 공대장용 유틸', cancelTimerTitle: '⚔️ 혼테일 공무 타이머', phase1Left: '1페이즈 (좌)', phase2Right: '2페이즈 (우)', phase3Body: '3페이즈 (본체)', leftHead: '좌머리', middleHead: '중앙머리', rightHead: '우머리', utilityTimers: '✨ 유틸리티 타이머', dispel: '버프 해제', minutes5: '5분', minutes3: '3분', simultaneousRestart: '동시 재시작', expireTime: '만료 시간', buff5min: '5분 버프:', buff3min: '3분 버프:', seduceTeamUtils: '🎯 유혹조 유틸', skillCooldown: '스킬 쿨타임', smokescreen: '연막', herosWill: '용사의 의지', seduceController: '통합 유혹 페이즈 컨트롤러', statusWaiting: '대기 중', phase1: '1페이즈', phase2: '2페이즈', phase3: '3페이즈', resetAll: '전체 초기화', bishopUtils: '💖 비숍용 유틸', resurrectionManagement: '리저렉션 관리', resurrectionCount: '리저렉션 갯수:', partyManagement: '📋 파티 명단 관리', partyCount: '파티 수:', copyPartyList: '파티 명단 복사', copySuccess: '복사 완료!', waitingList: '대기 명단', pasteListPlaceholder: '명단 붙여넣기...', apply: '적용', reset: '초기화', memoPad: '📝 메모장', memoPlaceholder: '여기에 메모를 입력하세요...', use: '사용', bishopNicknamePlaceholder: '비숍 {i} 닉네임', partyTitle: '{i}파티', deathButton: '다이', statusFirstSeduce: '{phase}페이즈: 첫 유혹까지', statusNextSeduce: '{phase}페이즈: 다음 유혹까지', statusSeducing: '{phase}페이즈: 유혹 발동!', statusAttention: '주의!', etaPrefix: '예상 시각:', timeFormat: '{h}시간 {m}분 {s}초'
+                    mainTitle: '혼테일 브레이커', creator: 'by 소년아서', currentTime: '현재 시간', horntailLimit: '혼테일 제한시간', start: '시작', raidLeaderUtils: '🛡️ 공대장용 유틸', cancelTimerTitle: '⚔️ 혼테일 공무 타이머', phase1Left: '1페이즈 (좌)', phase2Right: '2페이즈 (우)', phase3Body: '3페이즈 (본체)', leftHead: '좌머리', middleHead: '중앙머리', rightHead: '우머리', utilityTimers: '✨ 유틸리티 타이머', dispel: '버프 해제', minutes5: '5분', minutes3: '3분', simultaneousRestart: '동시 재시작', expireTime: '만료 시간', buff5min: '5분 버프:', buff3min: '3분 버프:', seduceTeamUtils: '🎯 유혹조 유틸', skillCooldown: '스킬 쿨타임', smokescreen: '연막', herosWill: '용사의 의지', seduceController: '실시간 유혹 추적기', statusWaiting: '대기 중', startTracking: '레이드 시작', resetAll: '초기화', bishopUtils: '💖 비숍용 유틸', resurrectionManagement: '리저렉션 관리', resurrectionCount: '리저렉션 갯수:', partyManagement: '📋 파티 명단 관리', partyCount: '파티 수:', copyPartyList: '파티 명단 복사', copySuccess: '복사 완료!', waitingList: '대기 명단', pasteListPlaceholder: '명단 붙여넣기...', apply: '적용', reset: '초기화', memoPad: '📝 메모장', memoPlaceholder: '여기에 메모를 입력하세요...', use: '사용', bishopNicknamePlaceholder: '비숍 {i} 닉네임', partyTitle: '{i}파티', deathButton: '다이', statusFirstSeduce: '첫 유혹 카운트다운', statusTracking: '경과 시간 (스톱워치)', etaPrefix: '예상:', timeFormat: '{h}시간 {m}분 {s}초', personalSeduction: '개인유혹'
                 },
                 en: {
-                    mainTitle: 'Horntail Breaker', creator: 'by sonyeon-aseo', currentTime: 'Current Time', horntailLimit: 'Horntail Time Limit', start: 'Start', raidLeaderUtils: '🛡️ Raid Leader Utils', cancelTimerTitle: '⚔️ Horntail Skill Cancel Timer', phase1Left: 'Phase 1 (Left)', phase2Right: 'Phase 2 (Right)', phase3Body: 'Phase 3 (Main Body)', leftHead: 'Left Head', middleHead: 'Middle Head', rightHead: 'Right Head', utilityTimers: '✨ Utility Timers', dispel: 'Dispel', minutes5: '5 Minutes', minutes3: '3 Minutes', simultaneousRestart: 'Simultaneous Restart', expireTime: 'Expiration Time', buff5min: '5min Buff:', buff3min: '3min Buff:', seduceTeamUtils: '🎯 Seduce Team Utils', skillCooldown: 'Skill Cooldown', smokescreen: 'Smokescreen', herosWill: "Hero's Will", seduceController: 'Unified Seduction Phase Controller', statusWaiting: 'Waiting', phase1: 'Phase 1', phase2: 'Phase 2', phase3: 'Phase 3', resetAll: 'Reset All', bishopUtils: '💖 Bishop Utils', resurrectionManagement: 'Resurrection Management', resurrectionCount: 'Resurrection Count:', partyManagement: '📋 Party Management', partyCount: 'Party Count:', copyPartyList: 'Copy Party List', copySuccess: 'Copied!', waitingList: 'Waiting List', pasteListPlaceholder: 'Paste list here...', apply: 'Apply', reset: 'Reset', memoPad: '📝 Memo Pad', memoPlaceholder: 'Enter your memo here...', use: 'Use', bishopNicknamePlaceholder: 'Bishop {i} Nickname', partyTitle: 'Party {i}', deathButton: 'Death', statusFirstSeduce: 'Phase {phase}: To First Seduce', statusNextSeduce: 'Phase {phase}: To Next Seduce', statusSeducing: 'Phase {phase}: Seducing!', statusAttention: 'Attention!', etaPrefix: 'ETA:', timeFormat: '{h}h {m}m {s}s'
+                    mainTitle: 'Horntail Breaker', creator: 'by sonyeon-aseo', currentTime: 'Current Time', horntailLimit: 'Horntail Time Limit', start: 'Start', raidLeaderUtils: '🛡️ Raid Leader Utils', cancelTimerTitle: '⚔️ Horntail Skill Cancel Timer', phase1Left: 'Phase 1 (Left)', phase2Right: 'Phase 2 (Right)', phase3Body: 'Phase 3 (Main Body)', leftHead: 'Left Head', middleHead: 'Middle Head', rightHead: 'Right Head', utilityTimers: '✨ Utility Timers', dispel: 'Dispel', minutes5: '5 Minutes', minutes3: '3 Minutes', simultaneousRestart: 'Simultaneous Restart', expireTime: 'Expiration Time', buff5min: '5min Buff:', buff3min: '3min Buff:', seduceTeamUtils: '🎯 Seduce Team Utils', skillCooldown: 'Skill Cooldown', smokescreen: 'Smokescreen', herosWill: "Hero's Will", seduceController: 'Real-time Seduction Tracker', statusWaiting: 'Waiting', startTracking: 'Raid Start', resetAll: 'Reset', bishopUtils: '💖 Bishop Utils', resurrectionManagement: 'Resurrection Management', resurrectionCount: 'Resurrection Count:', partyManagement: '📋 Party Management', partyCount: 'Party Count:', copyPartyList: 'Copy Party List', copySuccess: 'Copied!', waitingList: 'Waiting List', pasteListPlaceholder: 'Paste list here...', apply: 'Apply', reset: 'Reset', memoPad: '📝 Memo Pad', memoPlaceholder: 'Enter your memo here...', use: 'Use', bishopNicknamePlaceholder: 'Bishop {i} Nickname', partyTitle: 'Party {i}', deathButton: 'Death', statusFirstSeduce: 'First Seduction Countdown', statusTracking: 'Elapsed Time (Stopwatch)', etaPrefix: 'ETA:', timeFormat: '{h}h {m}m {s}s', personalSeduction: 'Personal Seduction'
                 },
                 ja: {
-                    mainTitle: 'ホーンテイルブレイカー', creator: 'by 소년아서', currentTime: '現在時刻', horntailLimit: 'ホーンテイル制限時間', start: '開始', raidLeaderUtils: '🛡️ 遠征隊長ユーティリティ', cancelTimerTitle: '⚔️ ホーンテイル スキル無効化タイマー', phase1Left: '1段階 (左)', phase2Right: '2段階 (右)', phase3Body: '3段階 (本体)', leftHead: '左頭', middleHead: '中央頭', rightHead: '右頭', utilityTimers: '✨ ユーティリティタイマー', dispel: 'ディスペル', minutes5: '5分', minutes3: '3分', simultaneousRestart: '同時再起動', expireTime: '満了時間', buff5min: '5分バフ:', buff3min: '3分バフ:', seduceTeamUtils: '🎯 誘惑組ユーティリティ', skillCooldown: 'スキルクールタイム', smokescreen: '煙幕', herosWill: 'ヒーローズウィル', seduceController: '統合誘惑フェーズコントローラー', statusWaiting: '待機中', phase1: '1段階', phase2: '2段階', phase3: '3段階', resetAll: '全体リセット', bishopUtils: '💖 ビショップユーティリティ', resurrectionManagement: 'リザレクション管理', resurrectionCount: 'リザレクション数:', partyManagement: '📋 パーティーリスト管理', partyCount: 'パーティー数:', copyPartyList: 'パーティーリストコピー', copySuccess: 'コピー完了!', waitingList: '待機リスト', pasteListPlaceholder: 'リストを貼り付け...', apply: '適用', reset: 'リセット', memoPad: '📝 メモ帳', memoPlaceholder: 'ここにメモを入力...', use: '使用', bishopNicknamePlaceholder: 'ビショップ {i} ニックネーム', partyTitle: '{i}パーティー', deathButton: '死亡', statusFirstSeduce: '{phase}段階: 初誘惑まで', statusNextSeduce: '{phase}段階: 次の誘惑まで', statusSeducing: '{phase}段階: 誘惑発動!', statusAttention: '注意!', etaPrefix: '予想時刻:', timeFormat: '{h}時間{m}分{s}秒'
+                    mainTitle: 'ホーンテイルブレイカー', creator: 'by 소년아서', currentTime: '現在時刻', horntailLimit: 'ホーンテイル制限時間', start: '開始', raidLeaderUtils: '🛡️ 遠征隊長ユーティリティ', cancelTimerTitle: '⚔️ ホーンテイル スキル無効化タイマー', phase1Left: '1段階 (左)', phase2Right: '2段階 (右)', phase3Body: '3段階 (本体)', leftHead: '左頭', middleHead: '中央頭', rightHead: '右頭', utilityTimers: '✨ ユーティリティタイマー', dispel: 'ディスペル', minutes5: '5分', minutes3: '3分', simultaneousRestart: '同時再起動', expireTime: '満了時間', buff5min: '5分バフ:', buff3min: '3分バフ:', seduceTeamUtils: '🎯 誘惑組ユーティリティ', skillCooldown: 'スキルクールタイム', smokescreen: '煙幕', herosWill: 'ヒーローズウィル', seduceController: 'リアルタイム誘惑トラッカー', statusWaiting: '待機中', startTracking: 'レイド開始', resetAll: 'リセット', bishopUtils: '💖 ビショップユーティリティ', resurrectionManagement: 'リザレクション管理', resurrectionCount: 'リザレクション数:', partyManagement: '📋 パーティーリスト管理', partyCount: 'パーティー数:', copyPartyList: 'パーティーリストコピー', copySuccess: 'コピー完了!', waitingList: '待機リスト', pasteListPlaceholder: 'リストを貼り付け...', apply: '適用', reset: 'リセット', memoPad: '📝 メモ帳', memoPlaceholder: 'ここにメモを入力...', use: '使用', bishopNicknamePlaceholder: 'ビショップ {i} ニックネーム', partyTitle: '{i}パーティー', deathButton: '死亡', statusFirstSeduce: '最初の誘惑カウントダウン', statusTracking: '経過時間 (ストップウォッチ)', etaPrefix: '予想:', timeFormat: '{h}時間{m}分{s}秒', personalSeduction: '個人誘惑'
                 }
             };
             const langLocaleMap = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP' };
@@ -344,17 +366,10 @@
             // --- STATE MANAGEMENT ---
             const state = {
                 timers: {},
-                resurrection: {
-                    states: {},
-                    count: 1,
-                },
-                party: {
-                    count: 4,
-                },
+                resurrection: { states: {}, count: 1 },
+                party: { count: 4 },
                 deathTimers: {},
-                seductionMaster: {
-                    interval: null, nextTime: null, isFirst: true, activePhase: null
-                },
+                seductionMaster: { interval: null, startTime: null, lastSeduceTime: null, count: 0, mode: 'idle' }, // modes: idle, initial_countdown, tracking
                 countdown12hInterval: null,
                 currentLanguage: 'ko'
             };
@@ -369,8 +384,12 @@
                 seductionStatus: document.getElementById('seduction-master-status'),
                 seductionTimer: document.getElementById('seduction-master-timer'),
                 seductionEta: document.getElementById('seduction-master-eta'),
-                phaseBtns: document.querySelectorAll('.phase-btn'),
+                seductionLog: document.getElementById('seduction-log'),
+                seductionStartBtn: document.getElementById('seduction-start-btn'),
+                seductionConfirmBtn: document.getElementById('seduction-confirm-btn'),
                 masterResetBtn: document.getElementById('seduction-master-reset'),
+                seductionTimeUp: document.getElementById('seduction-time-up'),
+                seductionTimeDown: document.getElementById('seduction-time-down'),
                 partyCountDisplay: document.getElementById('party-count-display'),
                 waitingList: document.getElementById('waiting-list'),
                 partyContainer: document.getElementById('party-container'),
@@ -458,29 +477,55 @@
             // --- SEDUCTION CONTROLLER ---
             const SeductionController = {
                 runTimer() {
-                    const lang = LanguageManager.get();
-                    const diff = state.seductionMaster.nextTime - Date.now();
-                    
-                    ui.seductionTimer.classList.toggle('flashing-text', diff < 10000 && diff > 0);
+                    const now = Date.now();
+                    let diff, displayTime;
 
-                    if (diff <= 0) {
-                        ui.seductionStatus.textContent = translations[lang].statusSeducing.replace('{phase}', state.seductionMaster.activePhase);
-                        ui.seductionTimer.textContent = translations[lang].statusAttention;
-                        ui.seductionTimer.classList.add('flashing-text');
-                        
-                        setTimeout(() => {
-                            ui.seductionTimer.classList.remove('flashing-text');
-                            state.seductionMaster.nextTime = Date.now() + CONSTANTS.SEDUCTION_INTERVAL;
-                            state.seductionMaster.isFirst = false;
-                            ui.seductionStatus.textContent = translations[lang].statusNextSeduce.replace('{phase}', state.seductionMaster.activePhase);
-                            this.updateETA(state.seductionMaster.nextTime);
-                        }, 2000);
-                        return;
+                    if (state.seductionMaster.mode === 'initial_countdown') {
+                        diff = (state.seductionMaster.startTime + CONSTANTS.SEDUCTION_FIRST_DELAY) - now;
+                        displayTime = this.formatMS(diff);
+                        if (diff <= 0) {
+                            this.transitionToMode('tracking');
+                        }
+                    } else if (state.seductionMaster.mode === 'tracking') {
+                        diff = now - state.seductionMaster.startTime;
+                        displayTime = this.formatMS(diff);
+                    } else {
+                        displayTime = '--:--';
                     }
-
-                    const minutes = Math.floor((diff / 1000 / 60) % 60);
-                    const seconds = Math.floor((diff / 1000) % 60);
-                    ui.seductionTimer.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    ui.seductionTimer.textContent = displayTime;
+                },
+                transitionToMode(newMode) {
+                    const lang = LanguageManager.get();
+                    state.seductionMaster.mode = newMode;
+                    state.seductionMaster.startTime = Date.now();
+                    
+                    if (newMode === 'initial_countdown') {
+                        ui.seductionStatus.textContent = translations[lang].statusFirstSeduce;
+                        ui.seductionConfirmBtn.disabled = false;
+                    } else if (newMode === 'tracking') {
+                        ui.seductionStatus.textContent = translations[lang].statusTracking;
+                    }
+                },
+                confirmSeduction() {
+                    const now = Date.now();
+                    state.seductionMaster.count++;
+                    
+                    let intervalText = '';
+                    if (state.seductionMaster.lastSeduceTime) {
+                        const interval = (now - state.seductionMaster.lastSeduceTime) / 1000;
+                        const min = Math.floor(interval / 60);
+                        const sec = Math.round(interval % 60);
+                        intervalText = ` (+${min}m ${sec}s)`;
+                    }
+                    
+                    const logEntry = document.createElement('div');
+                    logEntry.textContent = `[${state.seductionMaster.count}] ${new Date(now).toLocaleTimeString('ko-KR')} ${intervalText}`;
+                    ui.seductionLog.appendChild(logEntry);
+                    ui.seductionLog.scrollTop = ui.seductionLog.scrollHeight;
+                    
+                    state.seductionMaster.lastSeduceTime = now;
+                    this.updateETA(now + CONSTANTS.SEDUCTION_PREDICTION_INTERVAL);
+                    this.transitionToMode('tracking');
                 },
                 updateETA(time) {
                     const lang = LanguageManager.get();
@@ -489,39 +534,54 @@
                         return;
                     }
                     const eta = new Date(time);
-                    ui.seductionEta.textContent = `${translations[lang].etaPrefix} ${eta.toLocaleTimeString('ko-KR', { hour12: false })}`;
+                    ui.seductionEta.textContent = `${translations[lang].etaPrefix} ${eta.toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit' })}`;
                 },
-                start(phase) {
-                    const lang = LanguageManager.get();
-                    state.seductionMaster.activePhase = phase;
-                    
-                    ui.phaseBtns.forEach(b => b.classList.remove('selected'));
-                    document.querySelector(`.phase-btn[data-phase="${phase}"]`).classList.add('selected');
-
-                    if (state.seductionMaster.interval) clearInterval(state.seductionMaster.interval);
-
-                    state.seductionMaster.isFirst = true;
-                    ui.seductionStatus.textContent = translations[lang].statusFirstSeduce.replace('{phase}', phase);
-                    state.seductionMaster.nextTime = Date.now() + CONSTANTS.SEDUCTION_FIRST_DELAY;
-
-                    this.updateETA(state.seductionMaster.nextTime);
-                    this.runTimer();
-                    state.seductionMaster.interval = setInterval(() => this.runTimer(), 1000);
+                start() {
+                    this.reset();
+                    this.transitionToMode('initial_countdown');
+                    if (!state.seductionMaster.interval) {
+                        state.seductionMaster.interval = setInterval(() => this.runTimer(), 100);
+                    }
                 },
                 reset() {
                     const lang = LanguageManager.get();
                     if (state.seductionMaster.interval) clearInterval(state.seductionMaster.interval);
-                    Object.assign(state.seductionMaster, { interval: null, nextTime: null, isFirst: true, activePhase: null });
-
+                    Object.assign(state.seductionMaster, { interval: null, startTime: null, lastSeduceTime: null, count: 0, mode: 'idle' });
+                    
                     ui.seductionStatus.textContent = translations[lang].statusWaiting;
                     ui.seductionTimer.textContent = '--:--';
                     ui.seductionEta.textContent = '';
-                    ui.seductionTimer.classList.remove('flashing-text');
-                    ui.phaseBtns.forEach(b => b.classList.remove('selected'));
+                    ui.seductionLog.innerHTML = '';
+                    ui.seductionConfirmBtn.disabled = true;
+                },
+                adjustTime(seconds) {
+                    if (state.seductionMaster.mode !== 'idle') {
+                        state.seductionMaster.startTime -= seconds * 1000;
+                        this.runTimer();
+                    }
+                },
+                formatMS(ms) {
+                    if (ms < 0) ms = 0;
+                    const totalSeconds = Math.floor(ms / 1000);
+                    const minutes = Math.floor(totalSeconds / 60);
+                    const seconds = totalSeconds % 60;
+                    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
                 },
                 init() {
-                    ui.phaseBtns.forEach(btn => btn.addEventListener('click', () => this.start(btn.dataset.phase)));
+                    ui.seductionStartBtn.addEventListener('click', () => this.start());
+                    ui.seductionConfirmBtn.addEventListener('click', () => this.confirmSeduction());
                     ui.masterResetBtn.addEventListener('click', () => this.reset());
+                    ui.seductionTimeUp.addEventListener('click', () => this.adjustTime(-1));
+                    ui.seductionTimeDown.addEventListener('click', () => this.adjustTime(1));
+                    ui.seductionEta.addEventListener('click', () => {
+                        const etaText = ui.seductionEta.textContent;
+                        const timeMatch = etaText.match(/\d{2}:\d{2}/);
+                        if (timeMatch) {
+                            navigator.clipboard.writeText(timeMatch[0]).then(() => {
+                                // Optional: Show feedback
+                            }).catch(err => console.error('Copy failed', err));
+                        }
+                    });
                 }
             };
 
@@ -794,6 +854,21 @@
                     ui.countdownDisplay.textContent = timeString;
                 };
 
+                // Initialize Clock
+                setInterval(() => {
+                    const lang = LanguageManager.get();
+                    const locale = langLocaleMap[lang] || 'ko-KR';
+                    ui.browserClock.textContent = new Date().toLocaleTimeString(locale, { hour12: false });
+                }, 1000);
+
+                // Initialize modules
+                LanguageManager.init();
+                ResurrectionManager.init();
+                PartyManager.init();
+                SeductionController.init();
+
+                // Initialize 12h countdown
+                updateCountdownDisplay(12, 0, 0);
                 ui.start12hBtn.addEventListener('click', () => {
                     if (state.countdown12hInterval) clearInterval(state.countdown12hInterval);
                     const endTime = Date.now() + CONSTANTS.HORNTAIL_DURATION;
@@ -810,19 +885,6 @@
                         updateCountdownDisplay(hours, minutes, seconds);
                     }, 1000);
                 });
-
-                // Initialize Clock
-                setInterval(() => {
-                    const lang = LanguageManager.get();
-                    const locale = langLocaleMap[lang] || 'ko-KR';
-                    ui.browserClock.textContent = new Date().toLocaleTimeString(locale, { hour12: false });
-                }, 1000);
-
-                // Initialize modules
-                LanguageManager.init();
-                ResurrectionManager.init();
-                PartyManager.init();
-                SeductionController.init();
 
                 // Initialize simple timers
                 document.querySelectorAll('.timer-btn').forEach(button => {
@@ -869,9 +931,6 @@
                         localStorage.setItem('accordionStates', JSON.stringify(accordionStates));
                     });
                 });
-
-                // Set initial countdown display
-                updateCountdownDisplay(12, 0, 0);
             }
 
             initializeApp();
